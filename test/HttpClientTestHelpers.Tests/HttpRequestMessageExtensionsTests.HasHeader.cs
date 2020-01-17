@@ -3,7 +3,7 @@ using System.Net.Http;
 
 using Xunit;
 
-namespace HttpClient.TestHelpers.Tests
+namespace HttpClientTestHelpers.Tests
 {
     public partial class HttpRequestMessageExtensionsTests
     {

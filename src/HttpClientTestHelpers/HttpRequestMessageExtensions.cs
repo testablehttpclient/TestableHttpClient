@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace HttpClient.TestHelpers
+namespace HttpClientTestHelpers
 {
     /// <summary>
     /// A set of static methods for checking values on a <see cref="HttpRequestMessage"/>.
