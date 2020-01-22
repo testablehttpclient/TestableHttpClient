@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace HttpClientTestHelpers
 {
@@ -105,12 +106,45 @@ namespace HttpClientTestHelpers
                 throw new ArgumentNullException(nameof(httpRequestMessage));
             }
 
-            if(string.IsNullOrEmpty(headerName))
+            if (string.IsNullOrEmpty(headerName))
             {
                 throw new ArgumentNullException(nameof(headerName));
             }
 
             return httpRequestMessage.Headers.Contains(headerName);
+        }
+
+        /// <summary>
+        /// Determines whether the request uri matches a pattern.
+        /// </summary>
+        /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
+        /// <param name="pattern">A pattern to match with the request uri, support * as wildcards.</param>
+        /// <returns>true when the request uri matches the pattern; otherwise, false.</returns>
+        public static bool HasMatchingUri(this HttpRequestMessage httpRequestMessage, string pattern)
+        {
+            if (httpRequestMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpRequestMessage));
+            }
+
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            if (pattern == "*")
+            {
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(pattern))
+            {
+                return false;
+            }
+
+            var regex = Regex.Escape(pattern).Replace("\\*", "(.*)");
+
+            return Regex.IsMatch(httpRequestMessage.RequestUri.AbsoluteUri, regex);
         }
     }
 }
