@@ -35,5 +35,51 @@ namespace HttpClientTestHelpers
         {
             response = httpResponseMessage ?? throw new ArgumentNullException(nameof(httpResponseMessage));
         }
+
+        /// <summary>
+        /// Validates that requests have been made, throws an exception when no requests were made.
+        /// </summary>
+        public void ShouldHaveMadeRequests()
+        {
+            _ = new HttpRequestMessageAsserter(Requests).WithUriPattern("*");
+        }
+
+        /// <summary>
+        /// Validates that requests to a specific uri have been made, throws an exception when no requests were made.
+        /// </summary>
+        /// <param name="pattern">The uri pattern to validate against, the pattern supports *.</param>
+        /// <returns>An <seealso cref="HttpRequestMessageAsserter"/> which can be used for further validations.</returns>
+        public HttpRequestMessageAsserter ShouldHaveMadeRequestsTo(string pattern)
+        {
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            return new HttpRequestMessageAsserter(Requests).WithUriPattern(pattern);
+        }
+
+        /// <summary>
+        /// Validates that no requests have been made, throws an exception when requests were made.
+        /// </summary>
+        public void ShouldNotHaveMadeRequests()
+        {
+            _ = new HttpRequestMessageAsserter(Requests, true).WithUriPattern("*");
+        }
+
+        /// <summary>
+        /// Validates that no requests to a specific uri have been made, throws an exception when requests were made.
+        /// </summary>
+        /// <param name="pattern">The uri pattern to validate against, the pattern supports *.</param>
+        /// <returns>An <seealso cref="HttpRequestMessageAsserter"/> which can be used for further validations.</returns>
+        public HttpRequestMessageAsserter ShouldNotHaveMadeRequestsTo(string pattern)
+        {
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            return new HttpRequestMessageAsserter(Requests, true).WithUriPattern(pattern);
+        }
     }
 }

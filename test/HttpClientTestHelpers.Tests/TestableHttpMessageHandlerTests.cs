@@ -64,7 +64,119 @@ namespace HttpClientTestHelpers.Tests
             Assert.Same(response, result);
         }
 
+        [Fact]
+        public void ShouldHaveMadeRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+
+            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests());
+        }
+
+        [Fact]
+        public async Task ShouldHaveMadeRequests_WhenRequestsWereMade_DoesNotThrowExceptions()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            using var client = new HttpClient(sut);
+
+            _ = await client.GetAsync(new Uri("https://example.com"));
+
+            sut.ShouldHaveMadeRequests();
+        }
+
+        [Fact]
+        public void ShouldHaveMadeRequestsTo_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+
+            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com"));
+        }
+
+        [Fact]
+        public async Task ShouldHaveMadeRequestsTo_WhenMatchinRequestsWereMade_ReturnsHttpRequestMessageAsserter()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            using var client = new HttpClient(sut);
+
+            _ = await client.GetAsync(new Uri("https://example.com"));
+
+            var result = sut.ShouldHaveMadeRequestsTo("https://example.com");
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
+
+        [Fact]
+        public void ShouldNotHaveMadeRequests_WhenNoRequestsWereMade_DoesNotThrowExceptions()
+        {
+            using var sut = new TestableHttpMessageHandler();
+
+            sut.ShouldNotHaveMadeRequests();
+        }
+
+        [Fact]
+        public async Task ShouldNotHaveMadeRequests_WhenASingleRequestWasMade_ThrowsHttpRequestMessageAssertionException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            using var client = new HttpClient(sut);
+
+            _ = await client.GetAsync(new Uri("https://example.com"));
+
+            var result = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequests());
+            Assert.Equal("Expected no requests to be made, but one request was made.", result.Message);
+        }
+
+        [Fact]
+        public async Task ShouldNotHaveMadeRequests_WhenMultipleRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            using var client = new HttpClient(sut);
+
+            _ = await client.GetAsync(new Uri("https://example.com"));
+            _ = await client.GetAsync(new Uri("https://example.com"));
+
+            var result = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequests());
+            Assert.Equal("Expected no requests to be made, but 2 requests were made.", result.Message);
+        }
+
+        [Fact]
+        public void ShouldNotHaveMadeRequestsTo_WhenNoRequestsWereMade_ReturnsHttpRequestMessageAsserter()
+        {
+            using var sut = new TestableHttpMessageHandler();
+
+            var result = sut.ShouldNotHaveMadeRequestsTo("https://example.com");
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
+
+        [Fact]
+        public async Task ShouldNotHaveMadeRequestsTo_WhenMatchinRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            using var client = new HttpClient(sut);
+
+            _ = await client.GetAsync(new Uri("https://example.com"));
+
+            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequestsTo("https://example.com"));
+        }
+
 #nullable disable
+        [Fact]
+        public void ShouldHaveMadeRequestsTo_WhenGivenPatternIsNull_ThrowsArgumentNullException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+
+            Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequestsTo(null));
+        }
+
+        [Fact]
+        public void ShouldNotHaveMadeRequestsTo_WhenGivenPatternIsNull_ThrowsArgumentNullException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+
+            Assert.Throws<ArgumentNullException>(() => sut.ShouldNotHaveMadeRequestsTo(null));
+        }
+
         [Fact]
         public void RespondWith_NullValue_ThrowsArgumentNullException()
         {
