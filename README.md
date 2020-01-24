@@ -1,2 +1,5 @@
 # httpclienttesthelpers
-A simple library to make testing with HttpClient and related classes easier
+Using HttpClient in code that is unittested is seen as rather difficult, this library aims to make it easier to assert the calls that are made via an HttpClient.
+
+This library is largly based on the HttpTest functionality from [Flurl](https://flurl.dev), but is focused around the use of HttpClient directly. Since I intend to replace my usage of Flurl.Http with this library, I kept the interface very similar.
+

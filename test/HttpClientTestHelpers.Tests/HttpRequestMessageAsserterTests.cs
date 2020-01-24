@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 
 using Xunit;
@@ -8,11 +9,25 @@ namespace HttpClientTestHelpers.Tests
 {
     public class HttpRequestMessageAsserterTests
     {
-#nullable disable
         [Fact]
         public void Constructor_NullRequestList_ThrowsArgumentNullException()
         {
+#nullable disable
             Assert.Throws<ArgumentNullException>(() => new HttpRequestMessageAsserter(null));
+#nullable restore
+        }
+
+#nullable disable
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithUriPattern_NullOrEmptyPattern_ThrowsArgumentNullException(string pattern)
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithUriPattern(pattern));
+
+            Assert.Equal("pattern", exception.ParamName);
         }
 #nullable restore
 
@@ -51,20 +66,20 @@ namespace HttpClientTestHelpers.Tests
             Assert.Equal("Expected at least one request to be made, but no requests were made.", exception.Message);
         }
 
-#nullable disable
         [Fact]
-        public void WithHttpmethod_NullHttpMethod_ThrowsArgumentNullException()
+        public void WithHttpMethod_NullHttpMethod_ThrowsArgumentNullException()
         {
             var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
 
+#nullable disable
             var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpMethod(null));
+#nullable restore
 
             Assert.Equal("httpMethod", exception.ParamName);
         }
-#nullable restore
 
         [Fact]
-        public void WithHttpmethod_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHttpMethod_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
         {
             var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
 
@@ -74,7 +89,7 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Fact]
-        public void WithHttpmethod_RequestsWithIncorrectHttpMethod_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHttpMethod_RequestsWithIncorrectHttpMethod_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com")) });
 
@@ -89,6 +104,49 @@ namespace HttpClientTestHelpers.Tests
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com")) });
 
             var result = sut.WithHttpMethod(HttpMethod.Get);
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
+
+        [Fact]
+        public void WithHttpVersion_NullHttpVersion_ThrowsArgumentNullException()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+#nullable disable
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpVersion(null));
+#nullable restore
+
+            Assert.Equal("httpVersion", exception.ParamName);
+        }
+
+        [Fact]
+        public void WithHttpVersion_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpVersion(HttpVersion.Version11));
+
+            Assert.Equal("Expected at least one request to be made with HTTP Version '1.1', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHttpVersion_RequestsWithIncorrectHttpVersion_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage { Version = HttpVersion.Version20 } });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpVersion(HttpVersion.Version11));
+
+            Assert.Equal("Expected at least one request to be made with HTTP Version '1.1', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHttpVersion_RequestsWithCorrectVersion_ReturnsHttpRequestMessageAsserter()
+        {
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage { Version = HttpVersion.Version11 } });
+
+            var result = sut.WithHttpVersion(HttpVersion.Version11);
 
             Assert.NotNull(result);
             Assert.IsType<HttpRequestMessageAsserter>(result);

@@ -106,6 +106,11 @@ namespace HttpClientTestHelpers
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter WithUriPattern(string pattern)
         {
+            if(string.IsNullOrEmpty(pattern))
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
             string condition = string.Empty;
             if (pattern != "*")
             {
@@ -127,6 +132,21 @@ namespace HttpClientTestHelpers
             }
 
             return With(x => x.HasHttpMethod(httpMethod), $"HTTP Method '{httpMethod}'");
+        }
+
+        /// <summary>
+        /// Asserts wheter requests were made using a specific HTTP Version.
+        /// </summary>
+        /// <param name="httpVersion">The <seealso cref="System.Net.HttpVersion"/> that is expected.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithHttpVersion(Version httpVersion)
+        {
+            if(httpVersion == null)
+            {
+                throw new ArgumentNullException(nameof(httpVersion));
+            }
+
+            return With(x => x.HasHttpVersion(httpVersion), $"HTTP Version '{httpVersion}'");
         }
     }
 }
