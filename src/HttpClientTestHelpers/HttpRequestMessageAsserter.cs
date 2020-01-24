@@ -60,8 +60,10 @@ namespace HttpClientTestHelpers
             {
                 var expected = count switch
                 {
+                    null => "at least one request to be made",
                     0 => "no requests to be made",
-                    _ => "at least one request to be made",
+                    1 => "one request to be made",
+                    _ => $"{count} requests to be made"
                 };
                 var actual = actualCount switch
                 {
@@ -100,7 +102,7 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
-        /// Asserts wheter requests were made to a given URI based on a pattern.
+        /// Asserts whether requests were made to a given URI based on a pattern.
         /// </summary>
         /// <param name="pattern">The uri pattern that is expected.</param>
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
@@ -120,7 +122,7 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
-        /// Asserts wheter requests were made with a given HTTP Method.
+        /// Asserts whether requests were made with a given HTTP Method.
         /// </summary>
         /// <param name="httpMethod">The <seealso cref="HttpMethod"/> that is expected.</param>
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
@@ -135,7 +137,7 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
-        /// Asserts wheter requests were made using a specific HTTP Version.
+        /// Asserts whether requests were made using a specific HTTP Version.
         /// </summary>
         /// <param name="httpVersion">The <seealso cref="System.Net.HttpVersion"/> that is expected.</param>
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
@@ -150,7 +152,7 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
-        /// Asserts wheter requests were made with a specific header name. Values are ignored.
+        /// Asserts whether requests were made with a specific header name. Values are ignored.
         /// </summary>
         /// <param name="headerName">The name of the header that is expected.</param>
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
@@ -163,6 +165,12 @@ namespace HttpClientTestHelpers
             return With(x => x.HasHeader(headerName), $"header '{headerName}'");
         }
 
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name and value.
+        /// </summary>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter WithHeader(string headerName, string headerValue)
         {
             if (string.IsNullOrEmpty(headerName))
@@ -174,6 +182,22 @@ namespace HttpClientTestHelpers
                 throw new ArgumentNullException(nameof(headerValue));
             }
             return With(x => x.HasHeader(headerName, headerValue), $"header '{headerName}' and value '{headerValue}'");
+        }
+
+        /// <summary>
+        /// Asserts that a specific amount of requests were made.
+        /// </summary>
+        /// <param name="count">The number of requests that are expected, should be a positive value.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter Times(int count)
+        {
+            if(count < 0)
+            {
+                throw new ArgumentException("Count should not be less than zero", nameof(count));
+            }
+
+            Assert(count);
+            return this;
         }
     }
 }

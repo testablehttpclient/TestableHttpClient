@@ -82,3 +82,6 @@ csharp_style_prefer_switch_expression = true:suggestion
 
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = true
+
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = silent
