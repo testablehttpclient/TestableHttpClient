@@ -151,5 +151,136 @@ namespace HttpClientTestHelpers.Tests
             Assert.NotNull(result);
             Assert.IsType<HttpRequestMessageAsserter>(result);
         }
+
+#nullable disable
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeader_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName));
+
+            Assert.Equal("headerName", exception.ParamName);
+        }
+#nullable restore
+
+        [Fact]
+        public void WithHeader_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("api-version"));
+
+            Assert.Equal("Expected at least one request to be made with header 'api-version', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHeader_NoMatchingRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage() });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("api-version"));
+
+            Assert.Equal("Expected at least one request to be made with header 'api-version', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHeader_MatchingRequest_ReturnsHttpRequestMessageAsserter()
+        {
+            var request = new HttpRequestMessage();
+            request.Headers.Add("api-version", "1.0");
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var result = sut.WithHeader("api-version");
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
+
+#nullable disable
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeaderNameAndValue_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName, "someValue"));
+
+            Assert.Equal("headerName", exception.ParamName);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeaderNameAndValue_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", headerValue));
+
+            Assert.Equal("headerValue", exception.ParamName);
+        }
+#nullable restore
+
+        [Fact]
+        public void WithHeaderNameAndValue_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("someHeader", "someValue"));
+
+            Assert.Equal("Expected at least one request to be made with header 'someHeader' and value 'someValue', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHeaderNameAndValue_RequestWithoutHeaders_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var request = new HttpRequestMessage();
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("api-version", "1.0"));
+
+            Assert.Equal("Expected at least one request to be made with header 'api-version' and value '1.0', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHeaderNameAndValue_RequestWithNotMatchingHeaderName_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var request = new HttpRequestMessage();
+            request.Headers.Add("no-api-version", "1.0");
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("api-version", "1.0"));
+
+            Assert.Equal("Expected at least one request to be made with header 'api-version' and value '1.0', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHeaderNameAndValue_RequestWithNotMatchingHeaderValue_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var request = new HttpRequestMessage();
+            request.Headers.Add("api-version", "unknown");
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("api-version", "1.0"));
+
+            Assert.Equal("Expected at least one request to be made with header 'api-version' and value '1.0', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHeaderNameAndValue_RequestWithMatchinHeader_ReturnsHttpRequestMessageAssert()
+        {
+            var request = new HttpRequestMessage();
+            request.Headers.Add("api-version", "1.0");
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var result = sut.WithHeader("api-version", "1.0");
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
     }
 }

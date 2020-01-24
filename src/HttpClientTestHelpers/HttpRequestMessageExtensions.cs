@@ -115,6 +115,39 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
+        /// Determines whether a specific header with a specific value is set on a request.
+        /// </summary>
+        /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
+        /// <param name="headerName">The name of the header to locate on the request.</param>
+        /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
+        /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
+        public static bool HasHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
+        {
+            if (httpRequestMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpRequestMessage));
+            }
+
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+
+            if (string.IsNullOrEmpty(headerValue))
+            {
+                throw new ArgumentNullException(nameof(headerValue));
+            }
+
+            if (httpRequestMessage.Headers.TryGetValues(headerName, out var values))
+            {
+                var value = string.Join(" ", values);
+                return Matches(value, headerValue);
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether the request uri matches a pattern.
         /// </summary>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
@@ -127,24 +160,20 @@ namespace HttpClientTestHelpers
                 throw new ArgumentNullException(nameof(httpRequestMessage));
             }
 
-            if (pattern == null)
+            return pattern switch
             {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+                null => throw new ArgumentNullException(nameof(pattern)),
+                "" => false,
+                "*" => true,
+                _ => Matches(httpRequestMessage.RequestUri.AbsoluteUri, pattern),
+            };
+        }
 
-            if (pattern == "*")
-            {
-                return true;
-            }
-
-            if (string.IsNullOrEmpty(pattern))
-            {
-                return false;
-            }
-
+        private static bool Matches(string value, string pattern)
+        {
             var regex = Regex.Escape(pattern).Replace("\\*", "(.*)");
 
-            return Regex.IsMatch(httpRequestMessage.RequestUri.AbsoluteUri, regex);
+            return Regex.IsMatch(value, regex);
         }
     }
 }

@@ -106,12 +106,12 @@ namespace HttpClientTestHelpers
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter WithUriPattern(string pattern)
         {
-            if(string.IsNullOrEmpty(pattern))
+            if (string.IsNullOrEmpty(pattern))
             {
                 throw new ArgumentNullException(nameof(pattern));
             }
 
-            string condition = string.Empty;
+            var condition = string.Empty;
             if (pattern != "*")
             {
                 condition = $"uri pattern '{pattern}'";
@@ -141,12 +141,39 @@ namespace HttpClientTestHelpers
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter WithHttpVersion(Version httpVersion)
         {
-            if(httpVersion == null)
+            if (httpVersion == null)
             {
                 throw new ArgumentNullException(nameof(httpVersion));
             }
 
             return With(x => x.HasHttpVersion(httpVersion), $"HTTP Version '{httpVersion}'");
+        }
+
+        /// <summary>
+        /// Asserts wheter requests were made with a specific header name. Values are ignored.
+        /// </summary>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithHeader(string headerName)
+        {
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+            return With(x => x.HasHeader(headerName), $"header '{headerName}'");
+        }
+
+        public HttpRequestMessageAsserter WithHeader(string headerName, string headerValue)
+        {
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+            if (string.IsNullOrEmpty(headerValue))
+            {
+                throw new ArgumentNullException(nameof(headerValue));
+            }
+            return With(x => x.HasHeader(headerName, headerValue), $"header '{headerName}' and value '{headerValue}'");
         }
     }
 }
