@@ -50,5 +50,48 @@ namespace HttpClientTestHelpers.Tests
             var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithUriPattern("*"));
             Assert.Equal("Expected at least one request to be made, but no requests were made.", exception.Message);
         }
+
+#nullable disable
+        [Fact]
+        public void WithHttpmethod_NullHttpMethod_ThrowsArgumentNullException()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpMethod(null));
+
+            Assert.Equal("httpMethod", exception.ParamName);
+        }
+#nullable restore
+
+        [Fact]
+        public void WithHttpmethod_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpMethod(HttpMethod.Get));
+
+            Assert.Equal("Expected at least one request to be made with HTTP Method 'GET', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHttpmethod_RequestsWithIncorrectHttpMethod_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com")) });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpMethod(HttpMethod.Get));
+
+            Assert.Equal("Expected at least one request to be made with HTTP Method 'GET', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithHttpMethod_RequestsWithCorrectMethod_ReturnsHttpRequestMessageAsserter()
+        {
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com")) });
+
+            var result = sut.WithHttpMethod(HttpMethod.Get);
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
     }
 }

@@ -5,22 +5,37 @@ using System.Net.Http;
 
 namespace HttpClientTestHelpers
 {
+    /// <summary>
+    /// This class makes it easy to create assertions on a collection of <seealso cref="HttpRequestMessage"/>s.
+    /// </summary>
     public class HttpRequestMessageAsserter
     {
         private readonly List<string> _expectedConditions = new List<string>();
         private readonly bool _negate = false;
 
+        /// <summary>
+        /// Construct a new HttpRequestMessageAsserter.
+        /// </summary>
+        /// <param name="httpRequestMessages">The list of requests to assert on.</param>
         public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages)
+            : this(httpRequestMessages, false)
         {
-            Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
+        /// <summary>
+        /// Construct a new HttpRequestMessageAsserter.
+        /// </summary>
+        /// <param name="httpRequestMessages">The list of requests to assert on.</param>
+        /// <param name="negate">Whether or not all assertions should be negated.</param>
         public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, bool negate)
         {
             Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
             _negate = negate;
         }
 
+        /// <summary>
+        /// The list of requests received from <seealso cref="TestableHttpMessageHandler"/>.
+        /// </summary>
         public IEnumerable<HttpRequestMessage> Requests { get; private set; }
 
         private void Assert(int? count = null)
@@ -66,16 +81,52 @@ namespace HttpClientTestHelpers
             }
         }
 
-        public HttpRequestMessageAsserter WithUriPattern(string pattern)
+        /// <summary>
+        /// Asserts whether requests comply with a specific filter.
+        /// </summary>
+        /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
+        /// <param name="condition">The name of the conditon, used in the exception message.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter With(Func<HttpRequestMessage, bool> requestFilter, string condition)
         {
-            if (pattern != "*")
+            if (!string.IsNullOrEmpty(condition))
             {
-                _expectedConditions.Add($"uri pattern '{pattern}'");
+                _expectedConditions.Add(condition);
             }
 
-            Requests = Requests.Where(x => x.HasMatchingUri(pattern));
+            Requests = Requests.Where(requestFilter);
             Assert();
             return this;
+        }
+
+        /// <summary>
+        /// Asserts wheter requests were made to a given URI based on a pattern.
+        /// </summary>
+        /// <param name="pattern">The uri pattern that is expected.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithUriPattern(string pattern)
+        {
+            string condition = string.Empty;
+            if (pattern != "*")
+            {
+                condition = $"uri pattern '{pattern}'";
+            }
+            return With(x => x.HasMatchingUri(pattern), condition);
+        }
+
+        /// <summary>
+        /// Asserts wheter requests were made with a given HTTP Method.
+        /// </summary>
+        /// <param name="httpMethod">The <seealso cref="HttpMethod"/> that is expected.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithHttpMethod(HttpMethod httpMethod)
+        {
+            if (httpMethod == null)
+            {
+                throw new ArgumentNullException(nameof(httpMethod));
+            }
+
+            return With(x => x.HasHttpMethod(httpMethod), $"HTTP Method '{httpMethod}'");
         }
     }
 }
