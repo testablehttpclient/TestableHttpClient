@@ -185,5 +185,16 @@ namespace HttpClientTestHelpers.Tests
             Assert.Equal("httpResponseMessage", exception.ParamName);
         }
 #nullable restore
+
+        [Fact]
+        public async Task SimulateTimout_WhenRequestIsMade_ThrowsTaskCancelationExceptionWithOperationCanceledMessage()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            sut.SimulateTimeout();
+            using var client = new HttpClient(sut);
+
+            var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync("https://example.com"));
+            Assert.Equal(new OperationCanceledException().Message, exception.Message);
+        }
     }
 }

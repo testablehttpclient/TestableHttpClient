@@ -9,6 +9,5 @@ The following assertions should be able in the first release:
 - WithContentType: Or headers in the body of a httprequestmessage
 
 Preferably the follwing setup for responses:
-- Simulate timeout
 - easier response body creation?
 

@@ -24,6 +24,11 @@ namespace HttpClientTestHelpers
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             httpRequestMessages.Enqueue(request);
+
+            if(response is TimeoutHttpResponseMessage)
+            {
+                throw new TaskCanceledException(new OperationCanceledException().Message);
+            }
             return Task.FromResult(response);
         }
 
@@ -34,6 +39,14 @@ namespace HttpClientTestHelpers
         public void RespondWith(HttpResponseMessage httpResponseMessage)
         {
             response = httpResponseMessage ?? throw new ArgumentNullException(nameof(httpResponseMessage));
+        }
+
+        /// <summary>
+        /// Simulate a timeout on the request by throwing a TaskCanceledException when a request is received.
+        /// </summary>
+        public void SimulateTimeout()
+        {
+            response = new TimeoutHttpResponseMessage();
         }
 
         /// <summary>
@@ -80,6 +93,10 @@ namespace HttpClientTestHelpers
             }
 
             return new HttpRequestMessageAsserter(Requests, true).WithUriPattern(pattern);
+        }
+
+        private class TimeoutHttpResponseMessage : HttpResponseMessage
+        {
         }
     }
 }
