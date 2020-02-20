@@ -154,24 +154,26 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Asserts whether requests were made with a specific header name. Values are ignored.
         /// </summary>
+        /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
         /// <param name="headerName">The name of the header that is expected.</param>
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
-        public HttpRequestMessageAsserter WithHeader(string headerName)
+        public HttpRequestMessageAsserter WithRequestHeader(string headerName)
         {
             if (string.IsNullOrEmpty(headerName))
             {
                 throw new ArgumentNullException(nameof(headerName));
             }
-            return With(x => x.HasRequestHeader(headerName), $"header '{headerName}'");
+            return With(x => x.HasRequestHeader(headerName), $"request header '{headerName}'");
         }
 
         /// <summary>
         /// Asserts whether requests were made with a specific header name and value.
         /// </summary>
+        /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
         /// <param name="headerName">The name of the header that is expected.</param>
         /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
-        public HttpRequestMessageAsserter WithHeader(string headerName, string headerValue)
+        public HttpRequestMessageAsserter WithRequestHeader(string headerName, string headerValue)
         {
             if (string.IsNullOrEmpty(headerName))
             {
@@ -181,7 +183,7 @@ namespace HttpClientTestHelpers
             {
                 throw new ArgumentNullException(nameof(headerValue));
             }
-            return With(x => x.HasRequestHeader(headerName, headerValue), $"header '{headerName}' and value '{headerValue}'");
+            return With(x => x.HasRequestHeader(headerName, headerValue), $"request header '{headerName}' and value '{headerValue}'");
         }
 
         /// <summary>
