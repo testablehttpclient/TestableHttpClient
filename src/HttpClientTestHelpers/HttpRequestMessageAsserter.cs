@@ -191,7 +191,7 @@ namespace HttpClientTestHelpers
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter Times(int count)
         {
-            if(count < 0)
+            if (count < 0)
             {
                 throw new ArgumentException("Count should not be less than zero", nameof(count));
             }
