@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
 namespace HttpClientTestHelpers
@@ -112,7 +113,7 @@ namespace HttpClientTestHelpers
                 throw new ArgumentNullException(nameof(headerName));
             }
 
-            return httpRequestMessage.Headers.Contains(headerName);
+            return httpRequestMessage.Headers.HasHeader(headerName);
         }
 
         /// <summary>
@@ -140,13 +141,7 @@ namespace HttpClientTestHelpers
                 throw new ArgumentNullException(nameof(headerValue));
             }
 
-            if (httpRequestMessage.Headers.TryGetValues(headerName, out var values))
-            {
-                var value = string.Join(" ", values);
-                return Matches(value, headerValue);
-            }
-
-            return false;
+            return httpRequestMessage.Headers.HasHeader(headerName, headerValue);
         }
 
         /// <summary>
@@ -173,7 +168,7 @@ namespace HttpClientTestHelpers
                 return false;
             }
 
-            return httpRequestMessage.Content.Headers.Contains(headerName);
+            return httpRequestMessage.Content.Headers.HasHeader(headerName);
         }
 
         /// <summary>
@@ -206,7 +201,17 @@ namespace HttpClientTestHelpers
                 return false;
             }
 
-            if (httpRequestMessage.Content.Headers.TryGetValues(headerName, out var values))
+            return httpRequestMessage.Content.Headers.HasHeader(headerName, headerValue);
+        }
+
+        private static bool HasHeader(this HttpHeaders headers, string headerName)
+        {
+            return headers.Contains(headerName);
+        }
+
+        private static bool HasHeader(this HttpHeaders headers, string headerName, string headerValue)
+        {
+            if (headers.TryGetValues(headerName, out var values))
             {
                 var value = string.Join(" ", values);
                 return Matches(value, headerValue);
