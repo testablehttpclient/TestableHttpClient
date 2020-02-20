@@ -162,7 +162,7 @@ namespace HttpClientTestHelpers
             {
                 throw new ArgumentNullException(nameof(headerName));
             }
-            return With(x => x.HasHeader(headerName), $"header '{headerName}'");
+            return With(x => x.HasRequestHeader(headerName), $"header '{headerName}'");
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace HttpClientTestHelpers
             {
                 throw new ArgumentNullException(nameof(headerValue));
             }
-            return With(x => x.HasHeader(headerName, headerValue), $"header '{headerName}' and value '{headerValue}'");
+            return With(x => x.HasRequestHeader(headerName, headerValue), $"header '{headerName}' and value '{headerValue}'");
         }
 
         /// <summary>

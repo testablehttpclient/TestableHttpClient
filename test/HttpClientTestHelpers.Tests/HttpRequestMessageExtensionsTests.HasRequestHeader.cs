@@ -9,70 +9,70 @@ namespace HttpClientTestHelpers.Tests
     {
 #nullable disable
         [Fact]
-        public void HasHeader_NullRequest_ThrowsArgumentNullException()
+        public void HasRequestHeader_NullRequest_ThrowsArgumentNullException()
         {
             HttpRequestMessage sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHeader("host"));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader("host"));
             Assert.Equal("httpRequestMessage", exception.ParamName);
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void HasHeader_NullHeaderName_ThrowsArgumentNullException(string headerName)
+        public void HasRequestHeader_NullHeaderName_ThrowsArgumentNullException(string headerName)
         {
             using var sut = new HttpRequestMessage();
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHeader(headerName));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader(headerName));
             Assert.Equal("headerName", exception.ParamName);
         }
 
         [Fact]
-        public void HasHeader_NullRequestNonNullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
+        public void HasRequestHeader_NullRequestNonNullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
         {
             HttpRequestMessage sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHeader("host", "value"));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader("host", "value"));
             Assert.Equal("httpRequestMessage", exception.ParamName);
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void HasHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException(string headerName)
+        public void HasRequestHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException(string headerName)
         {
             using var sut = new HttpRequestMessage();
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHeader(headerName, "value"));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader(headerName, "value"));
             Assert.Equal("headerName", exception.ParamName);
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void HasHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException(string headerValue)
+        public void HasRequestHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException(string headerValue)
         {
             using var sut = new HttpRequestMessage();
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHeader("Host", headerValue));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader("Host", headerValue));
             Assert.Equal("headerValue", exception.ParamName);
         }
 #nullable restore
 
         [Fact]
-        public void HasHeader_ExistingHeaderName_ReturnsTrue()
+        public void HasRequestHeader_ExistingHeaderName_ReturnsTrue()
         {
             using var sut = new HttpRequestMessage();
             sut.Headers.Host = "example.com";
 
-            Assert.True(sut.HasHeader("Host"));
+            Assert.True(sut.HasRequestHeader("Host"));
         }
 
         [Fact]
-        public void HasHeader_NotExistingHeaderName_ReturnsFalse()
+        public void HasRequestHeader_NotExistingHeaderName_ReturnsFalse()
         {
             using var sut = new HttpRequestMessage();
 
-            Assert.False(sut.HasHeader("Host"));
+            Assert.False(sut.HasRequestHeader("Host"));
         }
 
         [Theory]
@@ -80,24 +80,24 @@ namespace HttpClientTestHelpers.Tests
         [InlineData("example*")]
         [InlineData("*.com")]
         [InlineData("*")]
-        public void HasHeader_ExistingHeaderNameMatchingValue_ReturnsTrue(string value)
+        public void HasRequestHeader_ExistingHeaderNameMatchingValue_ReturnsTrue(string value)
         {
             using var sut = new HttpRequestMessage();
             sut.Headers.Host = "example.com";
 
-            Assert.True(sut.HasHeader("Host", value));
+            Assert.True(sut.HasRequestHeader("Host", value));
         }
 
         [Theory]
         [InlineData("example.com")]
         [InlineData("example*")]
         [InlineData("*.com")]
-        public void HasHeader_ExistingHeaderNameNotMatchingValue_ReturnsFalse(string value)
+        public void HasRequestHeader_ExistingHeaderNameNotMatchingValue_ReturnsFalse(string value)
         {
             using var sut = new HttpRequestMessage();
             sut.Headers.Host = "myhost.net";
 
-            Assert.False(sut.HasHeader("Host", value));
+            Assert.False(sut.HasRequestHeader("Host", value));
         }
     }
 }

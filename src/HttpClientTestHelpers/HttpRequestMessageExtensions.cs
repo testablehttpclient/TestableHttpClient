@@ -96,10 +96,11 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Determines whether a specific header is set on a request.
         /// </summary>
+        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
         /// <param name="headerName">The name of the header to locate on the request.</param>
         /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
-        public static bool HasHeader(this HttpRequestMessage httpRequestMessage, string headerName)
+        public static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName)
         {
             if (httpRequestMessage == null)
             {
@@ -117,11 +118,12 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Determines whether a specific header with a specific value is set on a request.
         /// </summary>
+        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
         /// <param name="headerName">The name of the header to locate on the request.</param>
         /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
         /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
-        public static bool HasHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
+        public static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
         {
             if (httpRequestMessage == null)
             {
