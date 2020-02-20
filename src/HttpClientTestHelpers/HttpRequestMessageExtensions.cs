@@ -150,6 +150,72 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
+        /// Determines whether a specific header is set on a request.
+        /// </summary>
+        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
+        /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
+        /// <param name="headerName">The name of the header to locate on the request.</param>
+        /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
+        public static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName)
+        {
+            if (httpRequestMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpRequestMessage));
+            }
+
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+
+            if (httpRequestMessage.Content == null)
+            {
+                return false;
+            }
+
+            return httpRequestMessage.Content.Headers.Contains(headerName);
+        }
+
+        /// <summary>
+        /// Determines whether a specific header with a specific value is set on a request.
+        /// </summary>
+        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
+        /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
+        /// <param name="headerName">The name of the header to locate on the request.</param>
+        /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
+        /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
+        public static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
+        {
+            if (httpRequestMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpRequestMessage));
+            }
+
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+
+            if (string.IsNullOrEmpty(headerValue))
+            {
+                throw new ArgumentNullException(nameof(headerValue));
+            }
+
+            if (httpRequestMessage.Content == null)
+            {
+                return false;
+            }
+
+            if (httpRequestMessage.Content.Headers.TryGetValues(headerName, out var values))
+            {
+                var value = string.Join(" ", values);
+                return Matches(value, headerValue);
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether the request uri matches a pattern.
         /// </summary>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
