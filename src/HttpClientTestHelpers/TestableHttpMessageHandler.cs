@@ -25,7 +25,7 @@ namespace HttpClientTestHelpers
         {
             httpRequestMessages.Enqueue(request);
 
-            if(response is TimeoutHttpResponseMessage)
+            if (response is TimeoutHttpResponseMessage)
             {
                 throw new TaskCanceledException(new OperationCanceledException().Message);
             }
