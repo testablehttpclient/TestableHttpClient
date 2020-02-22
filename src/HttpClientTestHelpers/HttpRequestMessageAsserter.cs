@@ -222,6 +222,39 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
+        /// Asserts whether requests were made with a specific header name. Values are ignored.
+        /// </summary>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithHeader(string headerName)
+        {
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+            return With(x => x.HasRequestHeader(headerName) || x.HasContentHeader(headerName), $"header '{headerName}'");
+        }
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name and value.
+        /// </summary>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithHeader(string headerName, string headerValue)
+        {
+            if (string.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException(nameof(headerName));
+            }
+            if (string.IsNullOrEmpty(headerValue))
+            {
+                throw new ArgumentNullException(nameof(headerValue));
+            }
+            return With(x => x.HasRequestHeader(headerName, headerValue) || x.HasContentHeader(headerName, headerValue), $"header '{headerName}' and value '{headerValue}'");
+        }
+
+        /// <summary>
         /// Asserts that a specific amount of requests were made.
         /// </summary>
         /// <param name="count">The number of requests that are expected, should be a positive value.</param>
