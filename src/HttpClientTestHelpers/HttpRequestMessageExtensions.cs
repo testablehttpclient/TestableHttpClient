@@ -206,7 +206,7 @@ namespace HttpClientTestHelpers
 
         private static bool HasHeader(this HttpHeaders headers, string headerName)
         {
-            return headers.Contains(headerName);
+            return headers.TryGetValues(headerName, out _);
         }
 
         private static bool HasHeader(this HttpHeaders headers, string headerName, string headerValue)

@@ -67,12 +67,14 @@ namespace HttpClientTestHelpers.Tests
             Assert.True(sut.HasRequestHeader("Host"));
         }
 
-        [Fact]
-        public void HasRequestHeader_NotExistingHeaderName_ReturnsFalse()
+        [Theory]
+        [InlineData("Host")]
+        [InlineData("Content-Type")]
+        public void HasRequestHeader_NotExistingHeaderName_ReturnsFalse(string headerName)
         {
             using var sut = new HttpRequestMessage();
 
-            Assert.False(sut.HasRequestHeader("Host"));
+            Assert.False(sut.HasRequestHeader(headerName));
         }
 
         [Theory]
@@ -86,6 +88,14 @@ namespace HttpClientTestHelpers.Tests
             sut.Headers.Host = "example.com";
 
             Assert.True(sut.HasRequestHeader("Host", value));
+        }
+
+        [Fact]
+        public void HasRequestHeader_NotExitingHeaderNameAndValue_ReturnsFalse()
+        {
+            using var sut = new HttpRequestMessage();
+
+            Assert.False(sut.HasRequestHeader("Content-Type"));
         }
 
         [Theory]
