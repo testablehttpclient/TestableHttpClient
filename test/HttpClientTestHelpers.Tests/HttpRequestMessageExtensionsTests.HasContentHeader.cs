@@ -68,13 +68,15 @@ namespace HttpClientTestHelpers.Tests
             Assert.True(sut.HasContentHeader("Content-Disposition"));
         }
 
-        [Fact]
-        public void HasContentHeader_NotExistingHeaderName_ReturnsFalse()
+        [Theory]
+        [InlineData("Host")]
+        [InlineData("Content-Disposition")]
+        public void HasContentHeader_NotExistingHeaderName_ReturnsFalse(string headerName)
         {
             using var sut = new HttpRequestMessage();
             sut.Content = new StringContent("");
 
-            Assert.False(sut.HasContentHeader("Content-Disposition"));
+            Assert.False(sut.HasContentHeader(headerName));
         }
 
         [Fact]
@@ -101,6 +103,15 @@ namespace HttpClientTestHelpers.Tests
             };
 
             Assert.True(sut.HasContentHeader("Content-Disposition", value));
+        }
+
+        [Fact]
+        public void HasContentHeader_NotExitingHeaderNameAndValue_ReturnsFalse()
+        {
+            using var sut = new HttpRequestMessage();
+            sut.Content = new StringContent("");
+
+            Assert.False(sut.HasContentHeader("Host", "inline"));
         }
 
         [Theory]

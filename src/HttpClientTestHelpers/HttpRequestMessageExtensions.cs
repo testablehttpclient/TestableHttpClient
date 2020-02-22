@@ -113,7 +113,7 @@ namespace HttpClientTestHelpers
                 throw new ArgumentNullException(nameof(headerName));
             }
 
-            return httpRequestMessage.Headers.HasHeader(headerName);
+            return httpRequestMessage.Headers.TryGetValues(headerName, out _);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace HttpClientTestHelpers
                 return false;
             }
 
-            return httpRequestMessage.Content.Headers.HasHeader(headerName);
+            return httpRequestMessage.Content.Headers.TryGetValues(headerName, out _);
         }
 
         /// <summary>
