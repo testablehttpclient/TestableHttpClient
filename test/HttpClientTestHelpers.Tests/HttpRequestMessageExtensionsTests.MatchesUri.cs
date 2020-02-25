@@ -35,7 +35,7 @@ namespace HttpClientTestHelpers.Tests
 
         [Theory]
         [InlineData("*")]
-        [InlineData("https://example.com")]
+        [InlineData("https://example.com*")]
         [InlineData("https://example.com/")]
         [InlineData("https://example.com/*")]
         [InlineData("https://*/")]
@@ -58,6 +58,7 @@ namespace HttpClientTestHelpers.Tests
         [Theory]
         [InlineData("")]
         [InlineData("http://example.com")]
+        [InlineData("https://example.com")] // Missing slash at the end.
         [InlineData("http://*")]
         [InlineData("https://*/api/test")]
         public void HasMatchingUri_WithPatternThatDoesnotMatch_ReturnsFalse(string pattern)

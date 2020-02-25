@@ -34,27 +34,27 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithUriPattern_RequestWithMatchingUri_DoesNotThrowException()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com")) });
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) });
 
-            sut.WithUriPattern("https://example.com");
+            sut.WithUriPattern("https://example.com/");
         }
 
         [Fact]
         public void WithUriPattern_RequestWithMatchingUriAndNegationTurnedOn_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com")) }, true);
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) }, true);
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithUriPattern("https://example.com"));
-            Assert.Equal("Expected no requests to be made with uri pattern 'https://example.com', but one request was made.", exception.Message);
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithUriPattern("https://example.com/"));
+            Assert.Equal("Expected no requests to be made with uri pattern 'https://example.com/', but one request was made.", exception.Message);
         }
 
         [Fact]
         public void WithUriPattern_RequestWithNotMatchingUri_ThrowsHttpRequestMessageassertionExceptionWithSpecificMessage()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com")) });
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithUriPattern("https://test.org"));
-            Assert.Equal("Expected at least one request to be made with uri pattern 'https://test.org', but no requests were made.", exception.Message);
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithUriPattern("https://test.org/"));
+            Assert.Equal("Expected at least one request to be made with uri pattern 'https://test.org/', but no requests were made.", exception.Message);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithHttpMethod_RequestsWithIncorrectHttpMethod_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com")) });
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/")) });
 
             var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpMethod(HttpMethod.Get));
 
@@ -101,7 +101,7 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithHttpMethod_RequestsWithCorrectMethod_ReturnsHttpRequestMessageAsserter()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com")) });
+            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) });
 
             var result = sut.WithHttpMethod(HttpMethod.Get);
 
@@ -402,13 +402,13 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Fact]
-        public void WithContentHeaderNameAndValue_RequestWithMatchinHeader_ReturnsHttpRequestMessageAssert()
+        public void WithContentHeaderNameAndValue_RequestWithMatchingHeader_ReturnsHttpRequestMessageAssert()
         {
             var request = new HttpRequestMessage();
             request.Content = new StringContent("", Encoding.UTF8, "application/json");
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
-            var result = sut.WithContentHeader("Content-Type", "application/json");
+            var result = sut.WithContentHeader("Content-Type", "application/json; charset=utf-8");
 
             Assert.NotNull(result);
             Assert.IsType<HttpRequestMessageAsserter>(result);
@@ -540,7 +540,7 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Theory]
-        [InlineData("Content-Type", "application/json")]
+        [InlineData("Content-Type", "application/json; charset=utf-8")]
         [InlineData("Host", "Test")]
         public void WithHeaderNameAndValue_RequestWithMatchinHeader_ReturnsHttpRequestMessageAssert(string name, string value)
         {
