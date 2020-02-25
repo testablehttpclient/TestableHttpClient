@@ -14,7 +14,7 @@ namespace HttpClientTestHelpers.Tests
         {
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com/");
 
             _ = await client.SendAsync(request);
 
@@ -26,10 +26,10 @@ namespace HttpClientTestHelpers.Tests
         {
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
-            using var request1 = new HttpRequestMessage(HttpMethod.Get, "https://example1.com");
-            using var request2 = new HttpRequestMessage(HttpMethod.Post, "https://example2.com");
-            using var request3 = new HttpRequestMessage(HttpMethod.Delete, "https://example3.com");
-            using var request4 = new HttpRequestMessage(HttpMethod.Head, "https://example4.com");
+            using var request1 = new HttpRequestMessage(HttpMethod.Get, "https://example1.com/");
+            using var request2 = new HttpRequestMessage(HttpMethod.Post, "https://example2.com/");
+            using var request3 = new HttpRequestMessage(HttpMethod.Delete, "https://example3.com/");
+            using var request4 = new HttpRequestMessage(HttpMethod.Head, "https://example4.com/");
 
             _ = await client.SendAsync(request1);
             _ = await client.SendAsync(request2);
@@ -45,7 +45,7 @@ namespace HttpClientTestHelpers.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com"));
+            var result = await client.GetAsync(new Uri("https://example.com/"));
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
@@ -58,7 +58,7 @@ namespace HttpClientTestHelpers.Tests
             sut.RespondWith(response);
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com"));
+            var result = await client.GetAsync(new Uri("https://example.com/"));
 
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.Same(response, result);
@@ -78,7 +78,7 @@ namespace HttpClientTestHelpers.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com"));
+            _ = await client.GetAsync(new Uri("https://example.com/"));
 
             sut.ShouldHaveMadeRequests();
         }
@@ -88,7 +88,7 @@ namespace HttpClientTestHelpers.Tests
         {
             using var sut = new TestableHttpMessageHandler();
 
-            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com"));
+            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/"));
         }
 
         [Fact]
@@ -97,9 +97,9 @@ namespace HttpClientTestHelpers.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com"));
+            _ = await client.GetAsync(new Uri("https://example.com/"));
 
-            var result = sut.ShouldHaveMadeRequestsTo("https://example.com");
+            var result = sut.ShouldHaveMadeRequestsTo("https://example.com/");
 
             Assert.NotNull(result);
             Assert.IsType<HttpRequestMessageAsserter>(result);
@@ -119,7 +119,7 @@ namespace HttpClientTestHelpers.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com"));
+            _ = await client.GetAsync(new Uri("https://example.com/"));
 
             var result = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequests());
             Assert.Equal("Expected no requests to be made, but one request was made.", result.Message);
@@ -131,8 +131,8 @@ namespace HttpClientTestHelpers.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com"));
-            _ = await client.GetAsync(new Uri("https://example.com"));
+            _ = await client.GetAsync(new Uri("https://example.com/"));
+            _ = await client.GetAsync(new Uri("https://example.com/"));
 
             var result = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequests());
             Assert.Equal("Expected no requests to be made, but 2 requests were made.", result.Message);
@@ -143,7 +143,7 @@ namespace HttpClientTestHelpers.Tests
         {
             using var sut = new TestableHttpMessageHandler();
 
-            var result = sut.ShouldNotHaveMadeRequestsTo("https://example.com");
+            var result = sut.ShouldNotHaveMadeRequestsTo("https://example.com/");
 
             Assert.NotNull(result);
             Assert.IsType<HttpRequestMessageAsserter>(result);
@@ -155,9 +155,9 @@ namespace HttpClientTestHelpers.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com"));
+            _ = await client.GetAsync(new Uri("https://example.com/"));
 
-            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequestsTo("https://example.com"));
+            Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequestsTo("https://example.com/"));
         }
 
 #nullable disable
@@ -193,7 +193,7 @@ namespace HttpClientTestHelpers.Tests
             sut.SimulateTimeout();
             using var client = new HttpClient(sut);
 
-            var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync(new Uri("https://example.com")));
+            var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync(new Uri("https://example.com/")));
             Assert.Equal(new OperationCanceledException().Message, exception.Message);
         }
     }

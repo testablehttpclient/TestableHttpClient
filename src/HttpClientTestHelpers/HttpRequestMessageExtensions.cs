@@ -246,7 +246,7 @@ namespace HttpClientTestHelpers
         {
             var regex = Regex.Escape(pattern).Replace("\\*", "(.*)");
 
-            return Regex.IsMatch(value, regex);
+            return Regex.IsMatch(value, $"^{regex}$");
         }
     }
 }
