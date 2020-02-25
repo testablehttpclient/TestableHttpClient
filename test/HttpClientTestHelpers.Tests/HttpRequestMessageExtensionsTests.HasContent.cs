@@ -79,7 +79,8 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Theory]
-        [InlineData("test")]
+        [InlineData("admin")]
+        [InlineData("*test*")]
         public void HasContent_NotMatchingPattern_ReturnsFalse(string pattern)
         {
             using var sut = new HttpRequestMessage

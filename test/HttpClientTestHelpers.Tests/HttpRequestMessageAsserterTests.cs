@@ -555,6 +555,47 @@ namespace HttpClientTestHelpers.Tests
             Assert.IsType<HttpRequestMessageAsserter>(result);
         }
 
+#nullable disable
+        [Fact]
+        public void WithConten_NullPattern_ThrowsArgumentNullException()
+        {
+            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContent(null));
+
+            Assert.Equal("pattern", exception.ParamName);
+        }
+#nullable restore
+
+        [Fact]
+        public void WithContent_RequestWithNotMatchingContent_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        {
+            var request = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContent("some content"));
+
+            Assert.Equal("Expected at least one request to be made with content 'some content', but no requests were made.", exception.Message);
+        }
+
+        [Fact]
+        public void WithContent_RequestWithMatchingContent_ReturnsHttpRequestMessageAsserter()
+        {
+            var request = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
+            var sut = new HttpRequestMessageAsserter(new[] { request });
+
+            var result = sut.WithContent("");
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
+        }
+
         [Fact]
         public void Times_ValueLessThan0_ThrowsArgumentException()
         {
