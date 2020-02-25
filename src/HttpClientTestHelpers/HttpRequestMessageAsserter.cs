@@ -255,6 +255,21 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
+        /// Asserts whether requests were made with specific content.
+        /// </summary>
+        /// <param name="pattern">The expected content, supports wildcards.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithContent(string pattern)
+        {
+            if(pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            return With(x => x.HasContent(pattern), $"content '{pattern}'");
+        }
+
+        /// <summary>
         /// Asserts that a specific amount of requests were made.
         /// </summary>
         /// <param name="count">The number of requests that are expected, should be a positive value.</param>
