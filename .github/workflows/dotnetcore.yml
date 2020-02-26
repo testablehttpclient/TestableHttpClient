@@ -33,7 +33,7 @@ jobs:
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-build
     - name: Pack
-      run: dotnet pack --output ./artifacts --configuration Release --no-build
+      run: dotnet pack --output ./artifacts --configuration Release --no-build -property:Version=${{ steps.gitversion.outputs.semVer }}
     - uses: actions/upload-artifact@v1
       with:
         name: artifacts
