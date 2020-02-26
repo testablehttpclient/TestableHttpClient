@@ -95,4 +95,4 @@ jobs:
         name: artifacts
         path: ./artifacts
     - name: Publish packages
-      run: dotnet nuget push ./artifacts/**.nupkg --source https://apiint.nugettest.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}
+      run: dotnet nuget push ./artifacts/**.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}
