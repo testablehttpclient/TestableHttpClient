@@ -27,7 +27,7 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: restore
-      run: dotnet restore --configuration Release
+      run: dotnet restore
     - name: build
       run: dotnet build --configuration Release --no-restore -property:Version=${{ steps.gitversion.outputs.semVer }}
     - name: Test with dotnet
