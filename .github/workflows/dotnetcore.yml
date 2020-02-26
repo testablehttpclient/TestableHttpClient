@@ -57,7 +57,7 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release -p:Version=${{ steps.gitversion.outputs.semVer }}
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-build
 
@@ -73,7 +73,7 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Pack
-      run: dotnet pack --output ./artifacts --configuration Release
+      run: dotnet pack --output ./artifacts --configuration Release -p:Version=${{ steps.gitversion.outputs.semVer }}
     - uses: actions/upload-artifact@v1
       with:
         name: artifacts
