@@ -48,6 +48,7 @@ namespace HttpClientTestHelpers.Tests
             var result = await client.GetAsync(new Uri("https://example.com/"));
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
         }
 
         [Fact]

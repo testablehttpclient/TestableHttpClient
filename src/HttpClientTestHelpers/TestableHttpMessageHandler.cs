@@ -14,7 +14,10 @@ namespace HttpClientTestHelpers
     public class TestableHttpMessageHandler : HttpMessageHandler
     {
         private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new ConcurrentQueue<HttpRequestMessage>();
-        private HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+        private HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(string.Empty)
+        };
 
         /// <summary>
         /// Gets the collection of captured requests made using this HttpMessageHandler.
