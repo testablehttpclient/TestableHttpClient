@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+
 using Xunit;
 
 namespace HttpClientTestHelpers.Tests
@@ -61,8 +62,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void HasContentHeader_ExistingHeaderName_ReturnsTrue()
         {
-            using var sut = new HttpRequestMessage();
-            sut.Content = new StringContent("");
+            using var sut = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
             sut.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
 
             Assert.True(sut.HasContentHeader("Content-Disposition"));
@@ -73,8 +76,10 @@ namespace HttpClientTestHelpers.Tests
         [InlineData("Content-Disposition")]
         public void HasContentHeader_NotExistingHeaderName_ReturnsFalse(string headerName)
         {
-            using var sut = new HttpRequestMessage();
-            sut.Content = new StringContent("");
+            using var sut = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
 
             Assert.False(sut.HasContentHeader(headerName));
         }
@@ -82,8 +87,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void HasContentHeader_NoContent_ReturnsFalse()
         {
-            using var sut = new HttpRequestMessage();
-            sut.Content = null;
+            using var sut = new HttpRequestMessage
+            {
+                Content = null
+            };
 
             Assert.False(sut.HasContentHeader("Content-Disposition"));
         }
@@ -95,8 +102,10 @@ namespace HttpClientTestHelpers.Tests
         [InlineData("*")]
         public void HasContentHeader_ExistingHeaderNameMatchingValue_ReturnsTrue(string value)
         {
-            using var sut = new HttpRequestMessage();
-            sut.Content = new StringContent("");
+            using var sut = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
             sut.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline")
             {
                 FileName = "empty.file"
@@ -108,8 +117,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void HasContentHeader_NotExitingHeaderNameAndValue_ReturnsFalse()
         {
-            using var sut = new HttpRequestMessage();
-            sut.Content = new StringContent("");
+            using var sut = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
 
             Assert.False(sut.HasContentHeader("Host", "inline"));
         }
@@ -120,8 +131,10 @@ namespace HttpClientTestHelpers.Tests
         [InlineData("*; filename=empty.file")]
         public void HasContentHeader_ExistingHeaderNameNotMatchingValue_ReturnsFalse(string value)
         {
-            using var sut = new HttpRequestMessage();
-            sut.Content = new StringContent("");
+            using var sut = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
             sut.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
                 FileName = "attachment.file"

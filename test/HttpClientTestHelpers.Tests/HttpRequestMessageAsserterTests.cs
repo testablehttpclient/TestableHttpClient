@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+
 using Xunit;
 
 namespace HttpClientTestHelpers.Tests
@@ -320,8 +321,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithContentHeader_MatchingRequest_ReturnsHttpRequestMessageAsserter()
         {
-            var request = new HttpRequestMessage();
-            request.Content = new StringContent("");
+            var request = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
             var result = sut.WithContentHeader("Content-Type");
@@ -380,8 +383,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithContentHeaderNameAndValue_RequestWithNotMatchingHeaderName_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
         {
-            var request = new HttpRequestMessage();
-            request.Content = new StringContent("");
+            var request = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
             var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "application/json"));
@@ -392,8 +397,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithContentHeaderNameAndValue_RequestWithNotMatchingHeaderValue_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
         {
-            var request = new HttpRequestMessage();
-            request.Content = new StringContent("");
+            var request = new HttpRequestMessage
+            {
+                Content = new StringContent("")
+            };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
             var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "application/json"));
@@ -404,8 +411,10 @@ namespace HttpClientTestHelpers.Tests
         [Fact]
         public void WithContentHeaderNameAndValue_RequestWithMatchingHeader_ReturnsHttpRequestMessageAssert()
         {
-            var request = new HttpRequestMessage();
-            request.Content = new StringContent("", Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage
+            {
+                Content = new StringContent("", Encoding.UTF8, "application/json")
+            };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
             var result = sut.WithContentHeader("Content-Type", "application/json; charset=utf-8");
