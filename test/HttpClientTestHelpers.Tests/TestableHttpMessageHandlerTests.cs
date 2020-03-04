@@ -74,14 +74,17 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Fact]
-        public async Task ShouldHaveMadeRequests_WhenRequestsWereMade_DoesNotThrowExceptions()
+        public async Task ShouldHaveMadeRequests_WhenRequestsWereMade_ReturnsHttpRequestMessageAsserter()
         {
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
             _ = await client.GetAsync(new Uri("https://example.com/"));
 
-            sut.ShouldHaveMadeRequests();
+            var result = sut.ShouldHaveMadeRequests();
+
+            Assert.NotNull(result);
+            Assert.IsType<HttpRequestMessageAsserter>(result);
         }
 
         [Fact]
@@ -140,14 +143,11 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Fact]
-        public void ShouldNotHaveMadeRequestsTo_WhenNoRequestsWereMade_ReturnsHttpRequestMessageAsserter()
+        public void ShouldNotHaveMadeRequestsTo_WhenNoRequestsWereMade_DoesNotThrowExceptions()
         {
             using var sut = new TestableHttpMessageHandler();
 
-            var result = sut.ShouldNotHaveMadeRequestsTo("https://example.com/");
-
-            Assert.NotNull(result);
-            Assert.IsType<HttpRequestMessageAsserter>(result);
+            sut.ShouldNotHaveMadeRequestsTo("https://example.com/");
         }
 
         [Fact]

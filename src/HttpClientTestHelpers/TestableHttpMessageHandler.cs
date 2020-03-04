@@ -55,9 +55,9 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Validates that requests have been made, throws an exception when no requests were made.
         /// </summary>
-        public void ShouldHaveMadeRequests()
+        public HttpRequestMessageAsserter ShouldHaveMadeRequests()
         {
-            _ = new HttpRequestMessageAsserter(Requests).WithUriPattern("*");
+            return new HttpRequestMessageAsserter(Requests).WithUriPattern("*");
         }
 
         /// <summary>
@@ -88,14 +88,14 @@ namespace HttpClientTestHelpers
         /// </summary>
         /// <param name="pattern">The uri pattern to validate against, the pattern supports *.</param>
         /// <returns>An <seealso cref="HttpRequestMessageAsserter"/> which can be used for further validations.</returns>
-        public HttpRequestMessageAsserter ShouldNotHaveMadeRequestsTo(string pattern)
+        public void ShouldNotHaveMadeRequestsTo(string pattern)
         {
             if (pattern == null)
             {
                 throw new ArgumentNullException(nameof(pattern));
             }
 
-            return new HttpRequestMessageAsserter(Requests, true).WithUriPattern(pattern);
+            _ = new HttpRequestMessageAsserter(Requests, true).WithUriPattern(pattern);
         }
 
         private class TimeoutHttpResponseMessage : HttpResponseMessage

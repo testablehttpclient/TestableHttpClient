@@ -261,7 +261,7 @@ namespace HttpClientTestHelpers
         /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter WithContent(string pattern)
         {
-            if(pattern == null)
+            if (pattern == null)
             {
                 throw new ArgumentNullException(nameof(pattern));
             }
