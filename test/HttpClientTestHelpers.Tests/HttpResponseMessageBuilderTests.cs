@@ -43,6 +43,27 @@ namespace HttpClientTestHelpers.Tests
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
+#nullable disable
+        [Fact]
+        public void WithHeaders_WhenPassingNull_ArgumentNullExceptionIsThrown()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeaders(null));
+            Assert.Equal("responseHeaderBuilder", exception.ParamName);
+        }
+#nullable restore
+
+        [Fact]
+        public void WithHeaders_CreatesHttpResponseMessageWithCorrectHeaders()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithHeaders(x => x.Location = new Uri("https://example.com/")).Build();
+
+            Assert.Equal("https://example.com/", result.Headers.Location.AbsoluteUri);
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]

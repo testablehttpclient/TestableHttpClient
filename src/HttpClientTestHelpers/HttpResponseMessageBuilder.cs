@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace HttpClientTestHelpers
 {
@@ -17,6 +18,17 @@ namespace HttpClientTestHelpers
         public HttpResponseMessageBuilder WithStatusCode(HttpStatusCode statusCode)
         {
             httpResponseMessage.StatusCode = statusCode;
+            return this;
+        }
+
+        public HttpResponseMessageBuilder WithHeaders(Action<HttpResponseHeaders> responseHeaderBuilder)
+        {
+            if(responseHeaderBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(responseHeaderBuilder));
+            }
+
+            responseHeaderBuilder(httpResponseMessage.Headers);
             return this;
         }
 
