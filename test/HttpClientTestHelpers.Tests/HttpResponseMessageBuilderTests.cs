@@ -19,7 +19,7 @@ namespace HttpClientTestHelpers.Tests
             Assert.Equal(HttpVersion.Version11, result.Version);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Empty(result.Headers);
-            Assert.Null(result.Content);
+            Assert.NotNull(result.Content);
             Assert.Null(result.RequestMessage);
         }
 

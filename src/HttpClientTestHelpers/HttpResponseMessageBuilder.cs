@@ -12,7 +12,10 @@ namespace HttpClientTestHelpers
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The HttpResponseMessage is only created and passed to the consumer.")]
     public sealed class HttpResponseMessageBuilder
     {
-        private readonly HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+        private readonly HttpResponseMessage httpResponseMessage = new HttpResponseMessage
+        {
+            Content = new StringContent("")
+        };
 
         /// <summary>
         /// Specifies the version of the response.

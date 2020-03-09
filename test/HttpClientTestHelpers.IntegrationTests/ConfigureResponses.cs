@@ -22,7 +22,7 @@ namespace HttpClientTestHelpers.IntegrationTests
         }
 
         [Fact]
-        public async Task UsingTestHandlerWithCustomRepsonse_ReturnsCustomResponse()
+        public async Task UsingTestHandlerWithCustomResponse_ReturnsCustomResponse()
         {
             using var testHandler = new TestableHttpMessageHandler();
             using var response = new HttpResponseMessage(HttpStatusCode.Created)
@@ -30,6 +30,23 @@ namespace HttpClientTestHelpers.IntegrationTests
                 Content = new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain")
             };
             testHandler.RespondWith(response);
+
+            using var httpClient = new HttpClient(testHandler);
+            var result = await httpClient.GetAsync("http://httpbin.org/status/201");
+
+            Assert.Equal(HttpStatusCode.Created, result.StatusCode);
+            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
+        public async Task UsingTestHandlerWithCustomResponseUsingBuilder_ReturnsCustomResponse()
+        {
+            using var testHandler = new TestableHttpMessageHandler();
+            testHandler.RespondWith(response =>
+            {
+                response.WithStatusCode(HttpStatusCode.Created)
+                        .WithContent(new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain"));
+            });
 
             using var httpClient = new HttpClient(testHandler);
             var result = await httpClient.GetAsync("http://httpbin.org/status/201");
