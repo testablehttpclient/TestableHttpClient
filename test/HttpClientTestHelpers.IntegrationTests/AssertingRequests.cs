@@ -162,6 +162,17 @@ namespace HttpClientTestHelpers.IntegrationTests
         }
 
         [Fact]
+        public async Task AssertJsonContent()
+        {
+            var testHandler = new TestableHttpMessageHandler();
+            var client = new HttpClient(testHandler);
+
+            _ = await client.PostAsync("https://httpbin.org/post", new StringContent("{}", Encoding.UTF8, "application/json"));
+
+            testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
+        }
+
+        [Fact]
         public async Task CustomAssertions()
         {
             var testHandler = new TestableHttpMessageHandler();
