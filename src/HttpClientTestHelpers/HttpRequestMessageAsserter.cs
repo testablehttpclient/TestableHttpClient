@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 
 namespace HttpClientTestHelpers
 {
@@ -267,6 +268,17 @@ namespace HttpClientTestHelpers
             }
 
             return With(x => x.HasContent(pattern), $"content '{pattern}'");
+        }
+
+        /// <summary>
+        /// Asserts wheter requests are made with specific json content.
+        /// </summary>
+        /// <param name="jsonObject">The object representation of the expected request content.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
+        public HttpRequestMessageAsserter WithJsonContent(object? jsonObject)
+        {
+            var jsonString = JsonSerializer.Serialize(jsonObject);
+            return With(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), $"json content '{jsonString}'");
         }
 
         /// <summary>
