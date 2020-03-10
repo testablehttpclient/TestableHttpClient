@@ -45,6 +45,22 @@ namespace HttpClientTestHelpers
         }
 
         /// <summary>
+        /// Configure the <see cref="HttpResponseMessage"/> that should be returned for each request using a <see cref="HttpResponseMessageBuilder"/>.
+        /// </summary>
+        /// <param name="httpResponseMessageBuilderAction">An action that calls methods on the <see cref="HttpResponseMessageBuilder"/>.</param>
+        public void RespondWith(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
+        {
+            if (httpResponseMessageBuilderAction == null)
+            {
+                throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
+            }
+
+            var builder = new HttpResponseMessageBuilder();
+            httpResponseMessageBuilderAction(builder);
+            response = builder.Build();
+        }
+
+        /// <summary>
         /// Simulate a timeout on the request by throwing a TaskCanceledException when a request is received.
         /// </summary>
         public void SimulateTimeout()
