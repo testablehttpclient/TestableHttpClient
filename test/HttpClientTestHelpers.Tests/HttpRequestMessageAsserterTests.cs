@@ -688,7 +688,7 @@ namespace HttpClientTestHelpers.Tests
             };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string, string>("username", "alice") }));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" }));
 
             Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
         }
@@ -698,12 +698,12 @@ namespace HttpClientTestHelpers.Tests
         {
             var request = new HttpRequestMessage
             {
-                Content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("username", "alice") })
+                Content = new FormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" })
             };
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("plain/text");
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string, string>("username", "alice") }));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" }));
 
             Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
         }
