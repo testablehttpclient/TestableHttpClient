@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+
 using Xunit;
 
 namespace HttpClientTestHelpers.Tests
@@ -94,6 +97,107 @@ namespace HttpClientTestHelpers.Tests
             var result = sut.WithContent(content).Build();
 
             Assert.Same(content, result.Content);
+        }
+
+#nullable disable
+        [Fact]
+        public void WithStringContent_NullContent_ThrowsArgumentNullException()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithStringContent(null));
+            Assert.Equal("content", exception.ParamName);
+        }
+#nullable restore
+
+        [Fact]
+        public async Task WithStringContent_CreatesHttpResponseMessageWithStringContent()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithStringContent("My content").Build();
+
+            Assert.Equal("My content", await result.Content.ReadAsStringAsync());
+            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+        }
+
+        [Fact]
+        public void WithStringContent_WithNullEncoding_CreateHttpResponseMessageWithDefaultEncoding()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithStringContent("", null).Build();
+
+            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+        }
+
+        [Fact]
+        public void WithStringContent_WithEncoding_CreatesHttpResponseMessageWithContentTypeHeader()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithStringContent("", Encoding.ASCII).Build();
+
+            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("us-ascii", result.Content.Headers.ContentType.CharSet);
+        }
+
+        [Fact]
+        public void WithStringContent_WithNullMediaType_CreateHttpResponseMessageWithDefaultMediaType()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithStringContent("", null, null).Build();
+
+            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+        }
+
+        [Fact]
+        public void WithStringContent_WithMediaType_CreatesHttpResponseMessageWithContentTypeHeader()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithStringContent("", null, "application/json").Build();
+
+            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+        }
+
+        [Fact]
+        public async Task WithJsonContent_Null_CreatesHttpResponseMessageWithNullJsonAndDefaultContentType()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithJsonContent(null).Build();
+
+            Assert.Equal("null", await result.Content.ReadAsStringAsync());
+            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
+        }
+
+        [Fact]
+        public async Task WithJsonContent_ObjectAndNullMediaType_CreatesHttpResponseMessageWithJsonAndDefaultContentType()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithJsonContent(Array.Empty<object>(), null).Build();
+
+            Assert.Equal("[]", await result.Content.ReadAsStringAsync());
+            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
+        }
+
+        [Fact]
+        public async Task WithJsonContent_ObjectAnCustomMediaType_CreatesHttpResponseMessageWithJsonAndContentType()
+        {
+            var sut = new HttpResponseMessageBuilder();
+
+            var result = sut.WithJsonContent(new { }, "text/json").Build();
+
+            Assert.Equal("{}", await result.Content.ReadAsStringAsync());
+            Assert.Equal("text/json", result.Content.Headers.ContentType.MediaType);
+            Assert.Null(result.Content.Headers.ContentType.CharSet);
         }
 
         [Fact]

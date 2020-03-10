@@ -45,7 +45,7 @@ namespace HttpClientTestHelpers.IntegrationTests
             testHandler.RespondWith(response =>
             {
                 response.WithStatusCode(HttpStatusCode.Created)
-                        .WithContent(new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain"));
+                        .WithStringContent("HttpClient testing is easy");
             });
 
             using var httpClient = new HttpClient(testHandler);
@@ -59,33 +59,21 @@ namespace HttpClientTestHelpers.IntegrationTests
         public async Task UsingTestHandlerWithMultipleCustomRepsonse_ReturnsLastCustomResponse()
         {
             using var testHandler = new TestableHttpMessageHandler();
-            using var response = new HttpResponseMessage(HttpStatusCode.Created)
-            {
-                Content = new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain")
-            };
-            using var realResponse = new HttpResponseMessage(HttpStatusCode.NotFound)
-            {
-                Content = new StringContent("Not Found")
-            };
-            testHandler.RespondWith(response);
-            testHandler.RespondWith(realResponse);
+            testHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
+            testHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.NotFound).WithJsonContent("Not Found"));
 
             using var httpClient = new HttpClient(testHandler);
             var result = await httpClient.GetAsync("http://httpbin.org/status/201");
 
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
-            Assert.Equal("Not Found", await result.Content.ReadAsStringAsync());
+            Assert.Equal("\"Not Found\"", await result.Content.ReadAsStringAsync());
         }
 
         [Fact]
         public async Task UsingTestHandlerWithCustomResponse_AlwaysReturnsSameCustomResponse()
         {
             using var testHandler = new TestableHttpMessageHandler();
-            using var response = new HttpResponseMessage(HttpStatusCode.Created)
-            {
-                Content = new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain")
-            };
-            testHandler.RespondWith(response);
+            testHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
 
             using var httpClient = new HttpClient(testHandler);
             var urls = new[]

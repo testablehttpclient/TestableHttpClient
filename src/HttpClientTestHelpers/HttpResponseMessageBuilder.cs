@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace HttpClientTestHelpers
 {
@@ -46,7 +48,7 @@ namespace HttpClientTestHelpers
         /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
         public HttpResponseMessageBuilder WithHeaders(Action<HttpResponseHeaders> responseHeaderBuilder)
         {
-            if(responseHeaderBuilder == null)
+            if (responseHeaderBuilder == null)
             {
                 throw new ArgumentNullException(nameof(responseHeaderBuilder));
             }
@@ -81,6 +83,70 @@ namespace HttpClientTestHelpers
         {
             httpResponseMessage.Content = content;
             return this;
+        }
+
+        /// <summary>
+        /// Specifies string content for the response.
+        /// </summary>
+        /// <param name="content">The content of the response.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithStringContent(string content)
+        {
+            return WithStringContent(content, null, null);
+        }
+
+        /// <summary>
+        /// Specifies string content for the response, with a specific encoding.
+        /// </summary>
+        /// <param name="content">The content of the response.</param>
+        /// <param name="encoding">The encoding for this response, defaults to utf-8 when null is passed.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithStringContent(string content, Encoding? encoding)
+        {
+            return WithStringContent(content, encoding, null);
+        }
+
+        /// <summary>
+        /// Specifies string content for the response.
+        /// </summary>
+        /// <param name="content">The content of the response.</param>
+        /// <param name="encoding">The encoding for this response, defaults to utf-8 when null is passed.</param>
+        /// <param name="mediaType">The mediatype for this response, defaults to text/plain when null is passed.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithStringContent(string content, Encoding? encoding, string? mediaType)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            return WithContent(new StringContent(content, encoding, mediaType));
+        }
+
+        /// <summary>
+        /// Specifies json content for the response.
+        /// </summary>
+        /// <param name="jsonObject">The json object that should be serialized.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithJsonContent(object? jsonObject)
+        {
+            return WithJsonContent(jsonObject, null);
+        }
+
+        /// <summary>
+        /// Specifies json content for the response.
+        /// </summary>
+        /// <param name="jsonObject">The json object that should be serialized.</param>
+        /// <param name="mediaType">The media type for this content, defaults to application/json when null is passed.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithJsonContent(object? jsonObject, string? mediaType)
+        {
+            var json = JsonSerializer.SerializeToUtf8Bytes(jsonObject);
+
+            var content = new ByteArrayContent(json);
+            content.Headers.ContentType = new MediaTypeHeaderValue(mediaType ?? "application/json");
+
+            return WithContent(content);
         }
 
         /// <summary>

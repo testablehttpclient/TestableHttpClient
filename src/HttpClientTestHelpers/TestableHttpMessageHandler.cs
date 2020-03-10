@@ -50,7 +50,7 @@ namespace HttpClientTestHelpers
         /// <param name="httpResponseMessageBuilderAction">An action that calls methods on the <see cref="HttpResponseMessageBuilder"/>.</param>
         public void RespondWith(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
         {
-            if(httpResponseMessageBuilderAction == null)
+            if (httpResponseMessageBuilderAction == null)
             {
                 throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
             }
