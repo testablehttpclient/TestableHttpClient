@@ -281,6 +281,19 @@ namespace HttpClientTestHelpers
             return With(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), $"json content '{jsonString}'");
         }
 
+        public HttpRequestMessageAsserter WithFormUrlEncodedContent(IEnumerable<KeyValuePair<string, string>> nameValueCollection)
+        {
+            if (nameValueCollection == null)
+            {
+                throw new ArgumentNullException(nameof(nameValueCollection));
+            }
+
+            using var content = new FormUrlEncodedContent(nameValueCollection);
+            var contentString = content.ReadAsStringAsync().Result;
+
+            return With(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), $"form url encoded content '{contentString}'");
+        }
+
         /// <summary>
         /// Asserts that a specific amount of requests were made.
         /// </summary>
