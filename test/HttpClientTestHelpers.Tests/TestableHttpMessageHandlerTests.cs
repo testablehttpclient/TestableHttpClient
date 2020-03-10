@@ -66,6 +66,34 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Fact]
+        public async Task ResponseWith_EmptyResponseBuilder_SetsDefaultResponse()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            sut.RespondWith(_ => { });
+
+            using var client = new HttpClient(sut);
+
+            var result = await client.GetAsync(new Uri("https://example.com/"));
+
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
+        public async Task ResponseWith_UsingResponseBuilder_SetsModifiedResponse()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            sut.RespondWith(response => response.WithStatusCode(HttpStatusCode.BadRequest));
+
+            using var client = new HttpClient(sut);
+
+            var result = await client.GetAsync(new Uri("https://example.com/"));
+
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+        }
+
+        [Fact]
         public void ShouldHaveMadeRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
         {
             using var sut = new TestableHttpMessageHandler();
@@ -179,12 +207,25 @@ namespace HttpClientTestHelpers.Tests
         }
 
         [Fact]
-        public void RespondWith_NullValue_ThrowsArgumentNullException()
+        public void RespondWith_NullHttpResponseMessage_ThrowsArgumentNullException()
         {
             using var sut = new TestableHttpMessageHandler();
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(null));
+            HttpResponseMessage response = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(response));
             Assert.Equal("httpResponseMessage", exception.ParamName);
         }
+
+        [Fact]
+        public void RespondsWith_NullBuilder_ThrowsArgumentNullException()
+        {
+            using var sut = new TestableHttpMessageHandler();
+            Action<HttpResponseMessageBuilder> responseBuilder = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(responseBuilder));
+            Assert.Equal("httpResponseMessageBuilderAction", exception.ParamName);
+        }
+
 #nullable restore
 
         [Fact]
