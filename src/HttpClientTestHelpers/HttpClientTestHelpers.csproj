@@ -14,7 +14,7 @@
     <Description>A simple library to make testing HttpClient and related classes easier.</Description>
     <PackageProjectUrl>https://github.com/dnperfors/httpclienttesthelpers</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dnperfors/httpclienttesthelpers</RepositoryUrl>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE">
+    <None Include="..\..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
