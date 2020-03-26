@@ -12,8 +12,8 @@
     <Product />
     <Copyright>Copyright (c) 2020 David Perfors</Copyright>
     <Description>A simple library to make testing HttpClient and related classes easier.</Description>
-    <PackageProjectUrl>https://github.com/dnperfors/httpclienttesthelpers</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/dnperfors/httpclienttesthelpers</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dnperfors/TestableHttpClient</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dnperfors/TestableHttpClient</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 

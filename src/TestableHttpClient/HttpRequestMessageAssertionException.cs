@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HttpClientTestHelpers
+namespace TestableHttpClient
 {
     public class HttpRequestMessageAssertionException : Exception
     {

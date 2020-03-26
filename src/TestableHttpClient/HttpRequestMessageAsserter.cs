@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 
-namespace HttpClientTestHelpers
+namespace TestableHttpClient
 {
     /// <summary>
     /// This class makes it easy to create assertions on a collection of <seealso cref="HttpRequestMessage"/>s.

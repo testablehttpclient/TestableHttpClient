@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace HttpClientTestHelpers
+namespace TestableHttpClient
 {
     /// <summary>
     /// This class helps creating an <see cref="HttpResponseMessage"/> using a fluent interface.

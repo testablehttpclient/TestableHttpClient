@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HttpClientTestHelpers
+namespace TestableHttpClient
 {
     /// <summary>
     /// A testable HTTP message handler that captures all requests and always returns the same response.
