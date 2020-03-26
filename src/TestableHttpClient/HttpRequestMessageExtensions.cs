@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
-namespace HttpClientTestHelpers
+namespace TestableHttpClient
 {
     /// <summary>
     /// A set of static methods for checking values on a <see cref="HttpRequestMessage"/>.
@@ -97,7 +97,7 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Determines whether a specific header is set on a request.
         /// </summary>
-        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
+        /// <remarks>This method only checks headers in <see cref="HttpRequestHeaders"/></remarks>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the request header on.</param>
         /// <param name="headerName">The name of the header to locate on the request.</param>
         /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
@@ -119,7 +119,7 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Determines whether a specific header with a specific value is set on a request.
         /// </summary>
-        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
+        /// <remarks>This method only checks headers in <see cref="HttpRequestHeaders"/></remarks>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the request header on.</param>
         /// <param name="headerName">The name of the header to locate on the request.</param>
         /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
@@ -147,7 +147,7 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Determines whether a specific header is set on a request.
         /// </summary>
-        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
+        /// <remarks>This method only checks headers in <see cref="HttpContentHeaders"/></remarks>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the content header on.</param>
         /// <param name="headerName">The name of the header to locate on the request content.</param>
         /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
@@ -174,7 +174,7 @@ namespace HttpClientTestHelpers
         /// <summary>
         /// Determines whether a specific header with a specific value is set on a request.
         /// </summary>
-        /// <remarks>This method only checks headers in <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
+        /// <remarks>This method only checks headers in <see cref="HttpContentHeaders"/></remarks>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the content header on.</param>
         /// <param name="headerName">The name of the header to locate on the request content.</param>
         /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>

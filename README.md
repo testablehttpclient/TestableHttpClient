@@ -1,4 +1,4 @@
-# httpclienttesthelpers
+# TestableHttpClient
 
 Using HttpClient in code that is unit tested is seen as rather difficult, this library aims to make it easier to assert the calls that are made via an HttpClient.
 
@@ -7,7 +7,7 @@ Using HttpClient in code that is unit tested is seen as rather difficult, this l
 This library is released as a NuGet package and can be installed via the NuGet manager in Visual Studio or by running the following command:
 
 ```
-dotnet add package HttpClientTestHelpers
+dotnet add package TestableHttpClient
 ```
 
 ## How to use
@@ -21,7 +21,7 @@ var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 ```
 
-More examples can be found in the [IntegrationTests project](https://github.com/dnperfors/httpclienttesthelpers/tree/master/test/HttpClientTestHelpers.IntegrationTests)
+More examples can be found in the [IntegrationTests project](https://github.com/dnperfors/TestableHttpClient/tree/master/test/TestableHttpClient.IntegrationTests)
 
 ## Contributing
 
@@ -29,13 +29,13 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can help u
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [releases on this repository](https://github.com/dnperfors/httpclienttesthelpers/releases).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [releases on this repository](https://github.com/dnperfors/TestableHttpClient/releases).
 
 ## Authors
 
 * **David Perfors** - [dnperfors](https://github.com/dnperfors)
 
-See also the list of [contributors](https://github.com/dnperfors/httpclienttesthelpers/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/dnperfors/TestableHttpClient/contributors) who participated in this project.
 
 ## License
 

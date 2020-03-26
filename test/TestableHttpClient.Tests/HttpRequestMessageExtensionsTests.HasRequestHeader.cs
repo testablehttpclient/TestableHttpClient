@@ -1,9 +1,8 @@
 using System;
 using System.Net.Http;
-
 using Xunit;
 
-namespace HttpClientTestHelpers.Tests
+namespace TestableHttpClient.Tests
 {
     public partial class HttpRequestMessageExtensionsTests
     {

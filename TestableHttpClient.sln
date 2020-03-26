@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C8914F8-D732-462B-978E-3BB5DBE547D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpClientTestHelpers", "src\HttpClientTestHelpers\HttpClientTestHelpers.csproj", "{FD5111E1-2970-4DC4-84DD-E4966E17DCB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestableHttpClient", "src\TestableHttpClient\TestableHttpClient.csproj", "{FD5111E1-2970-4DC4-84DD-E4966E17DCB3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BBCED492-E92B-4FA8-A4A5-B5A76091F25E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpClientTestHelpers.Tests", "test\HttpClientTestHelpers.Tests\HttpClientTestHelpers.Tests.csproj", "{70673E72-C346-4AC2-946D-D9F99816FC72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestableHttpClient.Tests", "test\TestableHttpClient.Tests\TestableHttpClient.Tests.csproj", "{70673E72-C346-4AC2-946D-D9F99816FC72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{800147F1-758C-406D-AF75-CB20EB7CDB18}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClientTestHelpers.IntegrationTests", "test\HttpClientTestHelpers.IntegrationTests\HttpClientTestHelpers.IntegrationTests.csproj", "{37A6C1C0-1117-43DE-BD15-290BC8AD32BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestableHttpClient.IntegrationTests", "test\TestableHttpClient.IntegrationTests\TestableHttpClient.IntegrationTests.csproj", "{37A6C1C0-1117-43DE-BD15-290BC8AD32BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\HttpClientTestHelpers\HttpClientTestHelpers.csproj" />
+    <ProjectReference Include="..\..\src\TestableHttpClient\TestableHttpClient.csproj" />
   </ItemGroup>
 
 </Project>
