@@ -21,7 +21,7 @@ var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 ```
 
-More examples can be found in the [IntegrationTests project](https://github.com/dnperfors/TestableHttpClient/tree/master/test/TestableHttpClient.IntegrationTests)
+More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
 
 ## Contributing
 
