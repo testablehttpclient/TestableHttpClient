@@ -1,5 +1,7 @@
 # TestableHttpClient
 
+![GitHub](https://img.shields.io/github/license/dnperfors/TestableHttpClient) ![Nuget](https://img.shields.io/nuget/v/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dnperfors/TestableHttpClient/.NET%20Core)
+
 Using HttpClient in code that is unit tested is seen as rather difficult, this library aims to make it easier to assert the calls that are made via an HttpClient.
 
 ## How to install
