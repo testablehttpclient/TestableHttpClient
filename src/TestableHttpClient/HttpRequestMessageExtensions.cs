@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
 
 namespace TestableHttpClient
 {
@@ -204,22 +203,6 @@ namespace TestableHttpClient
             return httpRequestMessage.Content.Headers.HasHeader(headerName, headerValue);
         }
 
-        private static bool HasHeader(this HttpHeaders headers, string headerName)
-        {
-            return headers.TryGetValues(headerName, out _);
-        }
-
-        private static bool HasHeader(this HttpHeaders headers, string headerName, string headerValue)
-        {
-            if (headers.TryGetValues(headerName, out var values))
-            {
-                var value = string.Join(" ", values);
-                return Matches(value, headerValue);
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Determines whether the request uri matches a pattern.
         /// </summary>
@@ -238,7 +221,7 @@ namespace TestableHttpClient
                 null => throw new ArgumentNullException(nameof(pattern)),
                 "" => false,
                 "*" => true,
-                _ => Matches(httpRequestMessage.RequestUri.AbsoluteUri, pattern),
+                _ => StringMatcher.Matches(httpRequestMessage.RequestUri.AbsoluteUri, pattern),
             };
         }
 
@@ -271,15 +254,8 @@ namespace TestableHttpClient
             {
                 "" => stringContent == pattern,
                 "*" => true,
-                _ => Matches(stringContent, pattern),
+                _ => StringMatcher.Matches(stringContent, pattern),
             };
-        }
-
-        private static bool Matches(string value, string pattern)
-        {
-            var regex = Regex.Escape(pattern).Replace("\\*", "(.*)");
-
-            return Regex.IsMatch(value, $"^{regex}$");
         }
     }
 }
