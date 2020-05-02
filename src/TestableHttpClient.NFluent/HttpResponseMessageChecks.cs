@@ -4,6 +4,7 @@ using System.Net.Http;
 
 using NFluent;
 using NFluent.Extensibility;
+using NFluent.Kernel;
 
 namespace TestableHttpClient.NFluent
 {
@@ -18,6 +19,20 @@ namespace TestableHttpClient.NFluent
                 .FailWhen(sut => sut != expected, "The {0} is not the expected status code.")
                 .DefineExpectedResult(expected, "The expected status code:", "The forbidden status code:")
                 .OnNegate("The {0} should not be the forbidden status code.")
+                .EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(context);
+        }
+
+        public static ICheckLink<ICheck<HttpResponseMessage>> HasReasonPhrase(this ICheck<HttpResponseMessage> context, string expectedReasonPhrase)
+        {
+            ExtensibilityHelper.BeginCheck(context)
+                .SetSutName("response")
+                .FailIfNull()
+                .CheckSutAttributes(sut => sut.ReasonPhrase, "reason phrase")
+                .FailWhen(sut => sut != expectedReasonPhrase, "The {0} is not the expected reason phrase.")
+                .DefineExpectedResult(expectedReasonPhrase, "The expected reason phrase:", "The forbidden reason phrase:")
+                .OnNegate("The {0} should not be the forbidden reason phrase.")
                 .EndCheck();
 
             return ExtensibilityHelper.BuildCheckLink(context);
