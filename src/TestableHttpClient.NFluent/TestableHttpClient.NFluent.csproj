@@ -32,4 +32,6 @@
     </None>
   </ItemGroup>
 
+  <Import Project="..\..\SharedUtilities\SharedUtilities.projitems" Label="Shared" />
+
 </Project>

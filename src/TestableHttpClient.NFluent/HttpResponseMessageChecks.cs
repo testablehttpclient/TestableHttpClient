@@ -4,7 +4,6 @@ using System.Net.Http;
 
 using NFluent;
 using NFluent.Extensibility;
-using NFluent.Kernel;
 
 namespace TestableHttpClient.NFluent
 {
@@ -47,6 +46,45 @@ namespace TestableHttpClient.NFluent
                 .FailWhen(sut => sut != expected, "The {0} is not the expected version.")
                 .DefineExpectedResult(expected, "The expected version:", "The forbidden version:")
                 .OnNegate("The {0} should not be the forbidden version.")
+                .EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(context);
+        }
+
+        public static ICheckLink<ICheck<HttpResponseMessage>> HasResponseHeader(this ICheck<HttpResponseMessage> context, string expectedHeader)
+        {
+            ExtensibilityHelper.BeginCheck(context)
+                .SetSutName("response")
+                .FailIfNull()
+                .CheckSutAttributes(sut => sut.Headers, "headers")
+                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
+                .DefineExpectedResult(expectedHeader, "The expected header:", "The forbidden header:")
+                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
+                .EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(context);
+        }
+
+        public static ICheckLink<ICheck<HttpResponseMessage>> HasResponseHeader(this ICheck<HttpResponseMessage> context, string expectedHeader, string expectedValue)
+        {
+            ExtensibilityHelper.BeginCheck(context)
+                .SetSutName("response")
+                .FailIfNull()
+                .CheckSutAttributes(sut => sut.Headers, "headers")
+                .FailWhen(sut =>
+                {
+                    if (sut.TryGetValues(expectedHeader, out var values))
+                    {
+                        var stringValues = string.Join(" ", values);
+                        if (StringMatcher.Matches(stringValues, expectedValue))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }, "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
+                .DefineExpectedResult($"{expectedHeader}: {expectedValue}", "The expected header:", "The forbidden header:")
+                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
                 .EndCheck();
 
             return ExtensibilityHelper.BuildCheckLink(context);
