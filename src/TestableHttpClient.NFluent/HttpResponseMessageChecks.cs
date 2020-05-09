@@ -132,5 +132,66 @@ namespace TestableHttpClient.NFluent
 
             return ExtensibilityHelper.BuildCheckLink(context);
         }
+
+        public static ICheckLink<ICheck<HttpResponseMessage>> HasContent(this ICheck<HttpResponseMessage> context)
+        {
+            ExtensibilityHelper.BeginCheck(context)
+                .SetSutName("response")
+                .FailIfNull()
+                .FailWhen(sut => sut.Content == null, "The {0} has no content, but content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                .OnNegate("The {0} has content, but no content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                .EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(context);
+        }
+
+        public static ICheckLink<ICheck<HttpResponseMessage>> HasContent(this ICheck<HttpResponseMessage> context, string expectedContent)
+        {
+            var check = ExtensibilityHelper.BeginCheck(context)
+                .SetSutName("response")
+                .FailIfNull()
+                .CheckSutAttributes(sut => sut.Content, "content");
+
+            if (expectedContent == null)
+            {
+                check.FailWhen(sut => sut != null, "The {0} should be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                    .OnNegate("The {0} should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock);
+
+            }
+            else if (expectedContent.Contains("*"))
+            {
+                check.FailWhen(sut =>
+                {
+                    if (sut == null)
+                    {
+                        return true;
+                    }
+                    var content = sut.ReadAsStringAsync().Result;
+
+                    return !StringMatcher.Matches(content, expectedContent);
+                }, "The {0} does not match the expected pattern.", MessageOption.NoCheckedBlock)
+                .DefineExpectedResult(expectedContent, "The expected content pattern:", "The forbidden content pattern:")
+                .OnNegate("The {0} should not match the forbidden pattern.", MessageOption.NoCheckedBlock);
+            }
+            else
+            {
+                check.FailWhen(sut =>
+                {
+                    if (sut == null)
+                    {
+                        return true;
+                    }
+                    var content = sut.ReadAsStringAsync().Result;
+
+                    return !StringMatcher.Matches(content, expectedContent);
+                }, "The {0} should be the expected content.", MessageOption.NoCheckedBlock)
+                .DefineExpectedResult(expectedContent, "The expected content:", "The forbidden content:")
+                .OnNegate("The {0} should not be the forbidden content.", MessageOption.NoCheckedBlock);
+            }
+            check.EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(context);
+        }
+
     }
 }
