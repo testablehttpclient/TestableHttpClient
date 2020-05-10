@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
@@ -7,54 +8,147 @@ using NFluent.Extensibility;
 
 namespace TestableHttpClient.NFluent
 {
+    /// <summary>
+    /// A set of NFluent checks to validate <see cref="HttpResponseMessages"/>.
+    /// </summary>
     public static class HttpResponseMessageChecks
     {
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasHttpStatusCode(this ICheck<HttpResponseMessage?> context, HttpStatusCode expected)
+        /// <summary>
+        /// Verify that the response has a specific status code.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedStatusCode">The expected <see cref="HttpStatusCode"/>.</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasHttpStatusCode(this ICheck<HttpResponseMessage?> check, HttpStatusCode expectedStatusCode)
         {
-            ExtensibilityHelper.BeginCheck(context)
+            ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
                 .CheckSutAttributes(sut => sut.StatusCode, "status code")
-                .FailWhen(sut => sut != expected, "The {0} is not the expected status code.")
-                .DefineExpectedResult(expected, "The expected status code:", "The forbidden status code:")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailWhen(sut => sut != expectedStatusCode, "The {0} is not the expected status code.")
+                .DefineExpectedResult(expectedStatusCode, "The expected status code:", "The forbidden status code:")
                 .OnNegate("The {0} should not be the forbidden status code.")
                 .EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasReasonPhrase(this ICheck<HttpResponseMessage?> context, string expectedReasonPhrase)
+        /// <summary>
+        /// Verify that the response has a specific reason phrase.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedReasonPhrase">The expected reason phrase.</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasReasonPhrase(this ICheck<HttpResponseMessage?> check, string expectedReasonPhrase)
         {
-            ExtensibilityHelper.BeginCheck(context)
+            ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
                 .CheckSutAttributes(sut => sut.ReasonPhrase, "reason phrase")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailWhen(sut => sut != expectedReasonPhrase, "The {0} is not the expected reason phrase.")
                 .DefineExpectedResult(expectedReasonPhrase, "The expected reason phrase:", "The forbidden reason phrase:")
                 .OnNegate("The {0} should not be the forbidden reason phrase.")
                 .EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasHttpVersion(this ICheck<HttpResponseMessage?> context, Version expected)
+        /// <summary>
+        /// Verify that the response has a specific HTTP version.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedHttpVersion">The expected <see cref="HttpVersion"/>.</param>
+        /// <returns>A check link./returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasHttpVersion(this ICheck<HttpResponseMessage?> check, Version expectedHttpVersion)
         {
-            ExtensibilityHelper.BeginCheck(context)
+            ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
                 .CheckSutAttributes(sut => sut.Version, "version")
-                .FailWhen(sut => sut != expected, "The {0} is not the expected version.")
-                .DefineExpectedResult(expected, "The expected version:", "The forbidden version:")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailWhen(sut => sut != expectedHttpVersion, "The {0} is not the expected version.")
+                .DefineExpectedResult(expectedHttpVersion, "The expected version:", "The forbidden version:")
                 .OnNegate("The {0} should not be the forbidden version.")
                 .EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasResponseHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader)
+        /// <summary>
+        /// Verify that the response has a response header with a given name.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedHeader">The name of the response header.</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasResponseHeader(this ICheck<HttpResponseMessage?> check, string expectedHeader)
         {
-            ExtensibilityHelper.BeginCheck(context)
+            ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
+                .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                .CheckSutAttributes(sut => sut.Headers, "headers")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
+                .DefineExpectedResult(expectedHeader, "The expected header:", "The forbidden header:")
+                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
+                .EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(check);
+        }
+
+        /// <summary>
+        /// Verify that the response has a response header with a given name and value.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedHeader">The name of the response header.</param>
+        /// <param name="expectedValue">The value of the response header, this could be a pattern that includes an astrix ('*').</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasResponseHeader(this ICheck<HttpResponseMessage?> check, string expectedHeader, string expectedValue)
+        {
+            ExtensibilityHelper.BeginCheck(check)
+                .SetSutName("response")
+                .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                .CheckSutAttributes(sut => sut.Headers, "headers")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailWhen(sut =>
+                {
+                    if (sut.TryGetValues(expectedHeader, out var values))
+                    {
+                        var stringValues = string.Join(" ", values);
+                        if (StringMatcher.Matches(stringValues, expectedValue))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }, "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
+                .DefineExpectedResult($"{expectedHeader}: {expectedValue}", "The expected header:", "The forbidden header:")
+                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
+                .EndCheck();
+
+            return ExtensibilityHelper.BuildCheckLink(check);
+        }
+
+        /// <summary>
+        /// Verify that the response has a content header with a given name.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedHeader">The name of the response header.</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContentHeader(this ICheck<HttpResponseMessage?> check, string expectedHeader)
+        {
+            ExtensibilityHelper.BeginCheck(check)
+                .SetSutName("response")
+                .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                .CheckSutAttributes(sut => sut.Content, "content")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailIfNull()
                 .CheckSutAttributes(sut => sut.Headers, "headers")
                 .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
@@ -62,13 +156,24 @@ namespace TestableHttpClient.NFluent
                 .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
                 .EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasResponseHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader, string expectedValue)
+        /// <summary>
+        /// Verify that the response has a content header with a given name and value.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedHeader">The name of the response header.</param>
+        /// <param name="expectedValue">The value of the response header, this could be a pattern that includes an astrix ('*').</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContentHeader(this ICheck<HttpResponseMessage?> check, string expectedHeader, string expectedValue)
         {
-            ExtensibilityHelper.BeginCheck(context)
+            ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
+                .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                .CheckSutAttributes(sut => sut.Content, "content")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailIfNull()
                 .CheckSutAttributes(sut => sut.Headers, "headers")
                 .FailWhen(sut =>
@@ -87,80 +192,52 @@ namespace TestableHttpClient.NFluent
                 .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
                 .EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContentHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader)
+        /// <summary>
+        /// Verify that the response has content.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> check)
         {
-            ExtensibilityHelper.BeginCheck(context)
+            ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
-                .CheckSutAttributes(sut => sut.Content, "content")
-                .FailIfNull()
-                .CheckSutAttributes(sut => sut.Headers, "headers")
-                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
-                .DefineExpectedResult(expectedHeader, "The expected header:", "The forbidden header:")
-                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
-                .EndCheck();
-
-            return ExtensibilityHelper.BuildCheckLink(context);
-        }
-
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContentHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader, string expectedValue)
-        {
-            ExtensibilityHelper.BeginCheck(context)
-                .SetSutName("response")
-                .FailIfNull()
-                .CheckSutAttributes(sut => sut.Content, "content")
-                .FailIfNull()
-                .CheckSutAttributes(sut => sut.Headers, "headers")
-                .FailWhen(sut =>
-                {
-                    if (sut.TryGetValues(expectedHeader, out var values))
-                    {
-                        var stringValues = string.Join(" ", values);
-                        if (StringMatcher.Matches(stringValues, expectedValue))
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                }, "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
-                .DefineExpectedResult($"{expectedHeader}: {expectedValue}", "The expected header:", "The forbidden header:")
-                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
-                .EndCheck();
-
-            return ExtensibilityHelper.BuildCheckLink(context);
-        }
-
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> context)
-        {
-            ExtensibilityHelper.BeginCheck(context)
-                .SetSutName("response")
-                .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
                 .FailWhen(sut => sut.Content == null, "The {0} has no content, but content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .OnNegate("The {0} has content, but no content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
                 .EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> context, string? expectedContent)
+        /// <summary>
+        /// Verify that the response has content with a specific value.
+        /// </summary>
+        /// <param name="check">The fluent check to be extended.</param>
+        /// <param name="expectedContent">The content that the response should contain, this could be a pattern that includes an astrix ('*').</param>
+        /// <returns>A check link.</returns>
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> check, string? expectedContent)
         {
-            var check = ExtensibilityHelper.BeginCheck(context)
+            var checkLogic = ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
                 .CheckSutAttributes(sut => sut.Content, "content");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             if (expectedContent == null)
             {
-                check.FailWhen(sut => sut != null, "The {0} should be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                checkLogic.FailWhen(sut => sut != null, "The {0} should be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
                     .OnNegate("The {0} should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock);
 
             }
             else if (expectedContent.Contains("*"))
             {
-                check.FailWhen(sut =>
+                checkLogic.FailWhen(sut =>
                 {
                     if (sut == null)
                     {
@@ -175,7 +252,7 @@ namespace TestableHttpClient.NFluent
             }
             else
             {
-                check.FailWhen(sut =>
+                checkLogic.FailWhen(sut =>
                 {
                     if (sut == null)
                     {
@@ -188,9 +265,9 @@ namespace TestableHttpClient.NFluent
                 .DefineExpectedResult(expectedContent, "The expected content:", "The forbidden content:")
                 .OnNegate("The {0} should not be the forbidden content.", MessageOption.NoCheckedBlock);
             }
-            check.EndCheck();
+            checkLogic.EndCheck();
 
-            return ExtensibilityHelper.BuildCheckLink(context);
+            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
     }
