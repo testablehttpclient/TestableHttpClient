@@ -9,7 +9,7 @@ namespace TestableHttpClient.NFluent
 {
     public static class HttpResponseMessageChecks
     {
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasHttpStatusCode(this ICheck<HttpResponseMessage> context, HttpStatusCode expected)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasHttpStatusCode(this ICheck<HttpResponseMessage?> context, HttpStatusCode expected)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -23,7 +23,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasReasonPhrase(this ICheck<HttpResponseMessage> context, string expectedReasonPhrase)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasReasonPhrase(this ICheck<HttpResponseMessage?> context, string expectedReasonPhrase)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -37,7 +37,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasHttpVersion(this ICheck<HttpResponseMessage> context, Version expected)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasHttpVersion(this ICheck<HttpResponseMessage?> context, Version expected)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -51,7 +51,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasResponseHeader(this ICheck<HttpResponseMessage> context, string expectedHeader)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasResponseHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -65,7 +65,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasResponseHeader(this ICheck<HttpResponseMessage> context, string expectedHeader, string expectedValue)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasResponseHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader, string expectedValue)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -90,7 +90,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasContentHeader(this ICheck<HttpResponseMessage> context, string expectedHeader)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContentHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -106,7 +106,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasContentHeader(this ICheck<HttpResponseMessage> context, string expectedHeader, string expectedValue)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContentHeader(this ICheck<HttpResponseMessage?> context, string expectedHeader, string expectedValue)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -133,7 +133,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasContent(this ICheck<HttpResponseMessage> context)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> context)
         {
             ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")
@@ -145,7 +145,7 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(context);
         }
 
-        public static ICheckLink<ICheck<HttpResponseMessage>> HasContent(this ICheck<HttpResponseMessage> context, string expectedContent)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> context, string? expectedContent)
         {
             var check = ExtensibilityHelper.BeginCheck(context)
                 .SetSutName("response")

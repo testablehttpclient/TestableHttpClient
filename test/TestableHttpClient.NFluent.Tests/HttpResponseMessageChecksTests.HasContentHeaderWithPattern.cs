@@ -12,7 +12,7 @@ namespace TestableHttpClient.NFluent.Tests
         [Fact]
         public void HasContentHeaderAndValue_WhenHttpResponseMessageIsNull_DoesFail()
         {
-            HttpResponseMessage sut = null;
+            HttpResponseMessage? sut = null;
 
             Check.ThatCode(() => Check.That(sut).HasContentHeader("Content-Disposition", "inline"))
                 .IsAFailingCheckWithMessage(

@@ -11,7 +11,7 @@ namespace TestableHttpClient.NFluent.Tests
         [Fact]
         public void HasReasonPhrase_WhenHttpResponseMessageIsNull_DoesFail()
         {
-            HttpResponseMessage sut = null;
+            HttpResponseMessage? sut = null;
 
             Check.ThatCode(() => Check.That(sut).HasReasonPhrase("OK"))
                 .IsAFailingCheckWithMessage(

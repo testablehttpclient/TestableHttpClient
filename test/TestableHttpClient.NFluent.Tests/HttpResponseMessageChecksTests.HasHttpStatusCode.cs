@@ -13,7 +13,7 @@ namespace TestableHttpClient.NFluent.Tests
         [Fact]
         public void HasHttpStatusCode_WhenResponseMessageIsNull_DoesFail()
         {
-            HttpResponseMessage httpResponseMessage = null;
+            HttpResponseMessage? httpResponseMessage = null;
 
             Check.ThatCode(() => Check.That(httpResponseMessage).HasHttpStatusCode(HttpStatusCode.OK))
                 .IsAFailingCheckWithMessage(
