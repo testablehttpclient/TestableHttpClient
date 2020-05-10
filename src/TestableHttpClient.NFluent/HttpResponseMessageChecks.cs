@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
@@ -9,7 +8,7 @@ using NFluent.Extensibility;
 namespace TestableHttpClient.NFluent
 {
     /// <summary>
-    /// A set of NFluent checks to validate <see cref="HttpResponseMessages"/>.
+    /// A set of NFluent checks to validate <see cref="HttpResponseMessage"/>s.
     /// </summary>
     public static class HttpResponseMessageChecks
     {
