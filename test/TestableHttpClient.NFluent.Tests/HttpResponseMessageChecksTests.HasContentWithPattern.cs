@@ -30,6 +30,8 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content should be the expected content.",
+                    "The checked response's content:",
+                    "\t[null]",
                     "The expected content:",
                     "\t[\"\"]"
                 );
@@ -116,6 +118,8 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content should be the expected content.",
+                    "The checked response's content:",
+                    "\t[\"Greetings Martian\"]",
                     "The expected content:",
                     $"\t[\"{expectedContent}\"]"
                 );
@@ -135,6 +139,8 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content should not be the forbidden content.",
+                    "The checked response's content:",
+                    $"\t[\"{content}\"]",
                     "The forbidden content:",
                     $"\t[\"{content}\"]"
                 );
@@ -181,6 +187,8 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content does not match the expected pattern.",
+                    "The checked response's content:",
+                    "\t[\"Greetings Martian\"]",
                     "The expected content pattern:",
                     $"\t[\"{pattern}\"]"
                 );
@@ -201,6 +209,8 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content should not match the forbidden pattern.",
+                    "The checked response's content:",
+                    "\t[\"Hello World\"]",
                     "The forbidden content pattern:",
                     $"\t[\"{pattern}\"]"
                 );

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-
+using System.Runtime.CompilerServices;
 using NFluent;
 using NFluent.Extensibility;
 
@@ -90,11 +91,11 @@ namespace TestableHttpClient.NFluent
                 .SetSutName("response")
                 .FailIfNull()
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                .CheckSutAttributes(sut => sut.Headers, "headers")
+                .CheckSutAttributes(sut => sut.Headers.Select(x => x.Key).ToArray(), "headers")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
+                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.")
                 .DefineExpectedResult(expectedHeader, "The expected header:", "The forbidden header:")
-                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
+                .OnNegate("The {0} should not contain the forbidden header.")
                 .EndCheck();
 
             return ExtensibilityHelper.BuildCheckLink(check);
@@ -149,10 +150,10 @@ namespace TestableHttpClient.NFluent
                 .CheckSutAttributes(sut => sut.Content, "content")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailIfNull()
-                .CheckSutAttributes(sut => sut.Headers, "headers")
-                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.", MessageOption.NoCheckedBlock)
+                .CheckSutAttributes(sut => sut.Headers.Select(x => x.Key).ToArray(), "headers")
+                .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.")
                 .DefineExpectedResult(expectedHeader, "The expected header:", "The forbidden header:")
-                .OnNegate("The {0} should not contain the forbidden header.", MessageOption.NoCheckedBlock)
+                .OnNegate("The {0} should not contain the forbidden header.")
                 .EndCheck();
 
             return ExtensibilityHelper.BuildCheckLink(check);
@@ -223,48 +224,37 @@ namespace TestableHttpClient.NFluent
         {
             var checkLogic = ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
-                .FailIfNull()
-#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                .CheckSutAttributes(sut => sut.Content, "content");
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailIfNull();
 
             if (expectedContent == null)
             {
-                checkLogic.FailWhen(sut => sut != null, "The {0} should be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
-                    .OnNegate("The {0} should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock);
-
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                checkLogic.CheckSutAttributes(sut => sut.Content, "content")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    .FailWhen(sut => sut != null, "The {0} should be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                    .OnNegate("The {0} should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                    .EndCheck();
             }
             else if (expectedContent.Contains("*"))
             {
-                checkLogic.FailWhen(sut =>
-                {
-                    if (sut == null)
-                    {
-                        return true;
-                    }
-                    var content = sut.ReadAsStringAsync().Result;
-
-                    return !StringMatcher.Matches(content, expectedContent);
-                }, "The {0} does not match the expected pattern.", MessageOption.NoCheckedBlock)
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result, "content")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailWhen(sut => sut == null || !StringMatcher.Matches(sut, expectedContent), "The {0} does not match the expected pattern.")
                 .DefineExpectedResult(expectedContent, "The expected content pattern:", "The forbidden content pattern:")
-                .OnNegate("The {0} should not match the forbidden pattern.", MessageOption.NoCheckedBlock);
+                .OnNegate("The {0} should not match the forbidden pattern.")
+                .EndCheck();
             }
             else
             {
-                checkLogic.FailWhen(sut =>
-                {
-                    if (sut == null)
-                    {
-                        return true;
-                    }
-                    var content = sut.ReadAsStringAsync().Result;
-
-                    return !StringMatcher.Matches(content, expectedContent);
-                }, "The {0} should be the expected content.", MessageOption.NoCheckedBlock)
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
+                checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result, "content")
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                .FailWhen(sut => sut == null || !StringMatcher.Matches(sut, expectedContent), "The {0} should be the expected content.")
                 .DefineExpectedResult(expectedContent, "The expected content:", "The forbidden content:")
-                .OnNegate("The {0} should not be the forbidden content.", MessageOption.NoCheckedBlock);
+                .OnNegate("The {0} should not be the forbidden content.")
+                .EndCheck();
             }
-            checkLogic.EndCheck();
 
             return ExtensibilityHelper.BuildCheckLink(check);
         }

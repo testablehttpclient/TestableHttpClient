@@ -34,11 +34,14 @@ namespace TestableHttpClient.NFluent.Tests
         public void HasResponseHeader_WhenHeaderIsNotPresent_DoesFail()
         {
             using var sut = new HttpResponseMessage();
+            sut.Headers.ConnectionClose = true;
 
             Check.ThatCode(() => Check.That(sut).HasResponseHeader("Server"))
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's headers does not contain the expected header.",
+                    "The checked response's headers:",
+                    "\t{\"Connection\"} (1 item)",
                     "The expected header:",
                     "\t[\"Server\"]"
                 );
@@ -63,6 +66,8 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's headers should not contain the forbidden header.",
+                    "The checked response's headers:",
+                    "\t{\"Server\"} (1 item)",
                     "The forbidden header:",
                     "\t[\"Server\"]"
                 );
