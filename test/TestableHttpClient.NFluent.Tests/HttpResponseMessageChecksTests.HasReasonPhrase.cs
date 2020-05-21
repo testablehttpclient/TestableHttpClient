@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http;
+
 using NFluent;
 using NFluent.Helpers;
+
 using Xunit;
 
 namespace TestableHttpClient.NFluent.Tests
@@ -23,7 +25,7 @@ namespace TestableHttpClient.NFluent.Tests
         [Fact]
         public void HasReasonPhrase_WhenReasonPhraseIsCorrect_DoesNotFail()
         {
-            using var sut =new HttpResponseMessage(HttpStatusCode.OK);
+            using var sut = new HttpResponseMessage(HttpStatusCode.OK);
 
             Check.That(sut).HasReasonPhrase("OK");
         }

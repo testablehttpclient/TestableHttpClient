@@ -63,8 +63,10 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content's headers does not contain the expected header.",
+                    "The checked response's content's headers:",
+                    "\t{[Content-Type: text/plain; charset=utf-8]} (1 item)",
                     "The expected header:",
-                    "\t[\"Content-Disposition: inline\"]"
+                    "\t[Content-Disposition: inline]"
                 );
         }
 
@@ -81,8 +83,10 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content's headers does not contain the expected header.",
+                    "The checked response's content's headers:",
+                    "\t{[Content-Type: text/plain; charset=utf-8], [Content-Disposition: attachment]} (2 items)",
                     "The expected header:",
-                    "\t[\"Content-Disposition: inline\"]"
+                    "\t[Content-Disposition: inline]"
                 );
         }
 
@@ -123,8 +127,10 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content's headers should not contain the forbidden header.",
+                    "The checked response's content's headers:",
+                    "\t{[Content-Type: text/plain; charset=utf-8], [Content-Disposition: inline]} (2 items)",
                     "The forbidden header:",
-                    "\t[\"Content-Disposition: inline\"]"
+                    "\t[Content-Disposition: inline]"
                 );
         }
     }

@@ -42,8 +42,10 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's headers does not contain the expected header.",
+                    "The checked response's headers:",
+                    "\t{} (0 item)",
                     "The expected header:",
-                    "\t[\"Server: nginx\"]"
+                    "\t[Server: nginx]"
                 );
         }
 
@@ -57,8 +59,10 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's headers does not contain the expected header.",
+                    "The checked response's headers:",
+                    "\t{[Server: kestrel]} (1 item)",
                     "The expected header:",
-                    "\t[\"Server: nginx\"]"
+                    "\t[Server: nginx]"
                 );
         }
 
@@ -90,8 +94,10 @@ namespace TestableHttpClient.NFluent.Tests
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's headers should not contain the forbidden header.",
+                    "The checked response's headers:",
+                    "\t{[Server: nginx]} (1 item)",
                     "The forbidden header:",
-                    "\t[\"Server: nginx\"]"
+                    "\t[Server: nginx]"
                 );
         }
     }
