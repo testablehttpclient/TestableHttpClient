@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 
 using NFluent;
 using NFluent.Extensibility;
@@ -116,23 +114,23 @@ namespace TestableHttpClient.NFluent
                 .SetSutName("response")
                 .FailIfNull()
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                .CheckSutAttributes(sut => sut.Headers.Select(x => new KeyValuePair<string, string>(x.Key, string.Join(" ", x.Value))), "headers")
+                .CheckSutAttributes(sut => sut.Headers.Select(x => new Header(x.Key, x.Value)), "headers")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailWhen(sut =>
                 {
-                    if (sut.Any(x => x.Key == expectedHeader))
+                    if (sut.Any(x => x.Name == expectedHeader))
                     {
-                        var header = sut.First(x => x.Key == expectedHeader);
+                        var header = sut.First(x => x.Name == expectedHeader);
                         if (StringMatcher.Matches(header.Value, expectedValue))
                         {
                             return false;
 
                         }
                     }
-                
+
                     return true;
                 }, "The {0} does not contain the expected header.")
-                .DefineExpectedResult(new KeyValuePair<string, string>(expectedHeader, expectedValue), "The expected header:", "The forbidden header:")
+                .DefineExpectedResult(new Header(expectedHeader, expectedValue), "The expected header:", "The forbidden header:")
                 .OnNegate("The {0} should not contain the forbidden header.")
                 .EndCheck();
 
@@ -179,12 +177,12 @@ namespace TestableHttpClient.NFluent
                 .CheckSutAttributes(sut => sut.Content, "content")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailIfNull()
-                .CheckSutAttributes(sut => sut.Headers.Select(x => new KeyValuePair<string, string>(x.Key, string.Join(" ", x.Value))), "headers")
+                .CheckSutAttributes(sut => sut.Headers.Select(x => new Header(x.Key, x.Value)), "headers")
                 .FailWhen(sut =>
                 {
-                    if(sut.Any(x=> x.Key == expectedHeader))
+                    if (sut.Any(x => x.Name == expectedHeader))
                     {
-                        var header = sut.First(x => x.Key == expectedHeader);
+                        var header = sut.First(x => x.Name == expectedHeader);
                         if (StringMatcher.Matches(header.Value, expectedValue))
                         {
                             return false;
@@ -192,7 +190,7 @@ namespace TestableHttpClient.NFluent
                     }
                     return true;
                 }, "The {0} does not contain the expected header.")
-                .DefineExpectedResult(new KeyValuePair<string, string>(expectedHeader, expectedValue), "The expected header:", "The forbidden header:")
+                .DefineExpectedResult(new Header(expectedHeader, expectedValue), "The expected header:", "The forbidden header:")
                 .OnNegate("The {0} should not contain the forbidden header.")
                 .EndCheck();
 
