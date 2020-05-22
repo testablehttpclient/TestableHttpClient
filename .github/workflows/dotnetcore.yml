@@ -26,12 +26,16 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.300
-    - name: restore
+    - name: Restore dotnet tools
+      run: dotnet tool restore
+    - name: Restore dependencies
       run: dotnet restore
-    - name: build
+    - name: Build source code
       run: dotnet build --configuration Release --no-restore -property:Version=${{ steps.gitversion.outputs.semVer }}
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-build
+    - name: Check source file format
+      run: dotnet format --folder . --check --dry-run # --folder is used to supress warnings: https://github.com/dotnet/format/issues/584
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build -property:Version=${{ steps.gitversion.outputs.semVer }}
     - uses: actions/upload-artifact@v1
