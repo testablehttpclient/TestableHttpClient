@@ -25,7 +25,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.300
     - name: restore
       run: dotnet restore
     - name: build
@@ -49,10 +49,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.300
     - uses: actions/download-artifact@v1
       with:
         name: artifacts
         path: ./artifacts
     - name: Publish packages
-      run: dotnet nuget push ./artifacts/**.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}
+      run: dotnet nuget push './artifacts/**/*.nupkg' --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}
