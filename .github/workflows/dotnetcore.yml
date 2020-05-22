@@ -2,6 +2,10 @@ name: .NET Core
 
 on: [push]
 
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,13 +29,17 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-    - name: restore
+        dotnet-version: 3.1.300
+    - name: Restore dotnet tools
+      run: dotnet tool restore
+    - name: Restore dependencies
       run: dotnet restore
-    - name: build
+    - name: Build source code
       run: dotnet build --configuration Release --no-restore -property:Version=${{ steps.gitversion.outputs.semVer }}
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-build
+    - name: Check source file format
+      run: dotnet format --folder . --check --dry-run # --folder is used to supress warnings: https://github.com/dotnet/format/issues/584
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build -property:Version=${{ steps.gitversion.outputs.semVer }}
     - uses: actions/upload-artifact@v1
@@ -49,10 +57,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.300
     - uses: actions/download-artifact@v1
       with:
         name: artifacts
         path: ./artifacts
     - name: Publish packages
-      run: dotnet nuget push ./artifacts/**.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}
+      run: dotnet nuget push './artifacts/**/*.nupkg' --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}

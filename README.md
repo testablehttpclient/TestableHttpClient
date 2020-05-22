@@ -1,18 +1,26 @@
 # TestableHttpClient
 
-![GitHub](https://img.shields.io/github/license/dnperfors/TestableHttpClient) ![Nuget](https://img.shields.io/nuget/v/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dnperfors/TestableHttpClient/.NET%20Core)
+![GitHub](https://img.shields.io/github/license/dnperfors/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dnperfors/TestableHttpClient/.NET%20Core)
 
-Using HttpClient in code that is unit tested is seen as rather difficult, this library aims to make it easier to assert the calls that are made via an HttpClient.
+Using HttpClient in code that is unit tested is seen as rather difficult, these libraries aims to make it easier to assert the calls that are made via an HttpClient and to make assertions on the HttpResponseMessages.
+
+This repository contains multiple related libraries. The separation is mainly made in order to separate dependencies and not to force a specific library to the user.
+
+|Libary|Description|Main dependency|Nuget|
+|------|-----------|---------------|-----|
+|TestableHttpClient|Basic library for mocking HttpMessageHandler and to make manual assertions on HttpResponseMessage.|None|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient)|
+|TestableHttpClient.NFluent|Library containing [NFluent](https://github.com/tpierrain/NFluent) checks for HttpResponseMessage. Currently there is no dependency between the two libraries.|NFluent|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient.NFluent)|
 
 ## How to install
 
-This library is released as a NuGet package and can be installed via the NuGet manager in Visual Studio or by running the following command:
+The libraries are released as a NuGet packages and can be installed via the NuGet manager in Visual Studio or by running one of the following commands:
 
 ```
 dotnet add package TestableHttpClient
+dotnet add package TestableHttpClient.NFluent
 ```
 
-## How to use
+## How to use TestableHttpClient
 
 ```c#
 var testHandler = new TestableHttpMessageHandler();
@@ -25,6 +33,16 @@ testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 
 More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
 
+## How to use TestableHttpClient.NFluent
+
+```c#
+var client = new HttpClient();
+
+var result = await httpClient.GetAsync("https://httpbin.org/status/200");
+
+Check.That(result).HasStatusCode(HttpStatusCode.OK).And.HasContentHeader("Content-Type", "*/json*");
+```
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can help us out.
@@ -32,6 +50,8 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can help u
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [releases on this repository](https://github.com/dnperfors/TestableHttpClient/releases).
+
+Note that currently every library will always be released when a new tag is created, even though it might not have any changes.
 
 ## Authors
 
@@ -45,5 +65,5 @@ This project is released under the MIT license, see [LICENSE.md](LICENSE.md) for
 
 ## Acknowledgments
 
-This library is largely inspired by the HttpTest functionality from [Flurl](https://flurl.dev).  
+This project is largely inspired by the HttpTest functionality from [Flurl](https://flurl.dev).  
 A lot of the ideas came from the thread about unit testing HttpClient code in [this dotnet issue](https://github.com/dotnet/runtime/issues/14535).
