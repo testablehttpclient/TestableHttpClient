@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <Description>A simple library to make testing HttpClient and related classes easier.</Description>
+    <PackageTags>httpclient;unittesting;dotnet;mock</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
