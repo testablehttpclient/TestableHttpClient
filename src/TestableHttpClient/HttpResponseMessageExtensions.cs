@@ -200,6 +200,20 @@ namespace TestableHttpClient
         }
 
         /// <summary>
+        /// Determines whether the response has content.
+        /// </summary>
+        /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check for content.</param>
+        /// <returns>true when the response has content; otherwise, false.</returns>
+        public static bool HasContent(this HttpResponseMessage httpResponseMessage)
+        {
+            if (httpResponseMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpResponseMessage));
+            }
+            return httpResponseMessage.Content != null;
+        }
+
+        /// <summary>
         /// Determines whether the response content matches a string pattern.
         /// </summary>
         /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct content on.</param>

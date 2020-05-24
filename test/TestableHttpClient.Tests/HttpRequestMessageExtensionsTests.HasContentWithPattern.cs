@@ -9,7 +9,7 @@ namespace TestableHttpClient.Tests
     {
 #nullable disable
         [Fact]
-        public void HasContent_NullRequest_ThrowsArgumentNullException()
+        public void HasContentWithPattern_NullRequest_ThrowsArgumentNullException()
         {
             HttpRequestMessage sut = null;
 
@@ -18,7 +18,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void HasContent_NullExpectedContent_ThrowsArgumentNullException()
+        public void HasContentWithPattern_NullExpectedContent_ThrowsArgumentNullException()
         {
             using var sut = new HttpRequestMessage();
 
@@ -28,7 +28,7 @@ namespace TestableHttpClient.Tests
 #nullable enable
 
         [Fact]
-        public void HasContent_NoContent_ReturnsFalse()
+        public void HasContentWithPattern_NoContent_ReturnsFalse()
         {
             using var sut = new HttpRequestMessage();
 
@@ -39,7 +39,7 @@ namespace TestableHttpClient.Tests
         [InlineData("")]
         [InlineData("Some text")]
         [InlineData("{\"key\":\"value\"}")]
-        public void HasContent_ExactlyMatchingStringContent_ReturnsTrue(string content)
+        public void HasContentWithPattern_ExactlyMatchingStringContent_ReturnsTrue(string content)
         {
             using var sut = new HttpRequestMessage
             {
@@ -53,7 +53,7 @@ namespace TestableHttpClient.Tests
         [InlineData("")]
         [InlineData("Some text")]
         [InlineData("{\"key\":\"value\"}")]
-        public void HasContent_NotMatchingStringContent_ReturnsFalse(string content)
+        public void HasContentWithPattern_NotMatchingStringContent_ReturnsFalse(string content)
         {
             using var sut = new HttpRequestMessage
             {
@@ -67,7 +67,7 @@ namespace TestableHttpClient.Tests
         [InlineData("*")]
         [InlineData("username=*&password=*")]
         [InlineData("*admin*")]
-        public void HasContent_MatchingPattern_ReturnsTrue(string pattern)
+        public void HasContentWithPattern_MatchingPattern_ReturnsTrue(string pattern)
         {
             using var sut = new HttpRequestMessage
             {
@@ -80,7 +80,7 @@ namespace TestableHttpClient.Tests
         [Theory]
         [InlineData("admin")]
         [InlineData("*test*")]
-        public void HasContent_NotMatchingPattern_ReturnsFalse(string pattern)
+        public void HasContentWithPattern_NotMatchingPattern_ReturnsFalse(string pattern)
         {
             using var sut = new HttpRequestMessage
             {
