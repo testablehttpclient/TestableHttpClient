@@ -37,7 +37,7 @@ namespace TestableHttpClient.NFluent.Tests
                     "\t[\"\"]"
                 );
         }
-        
+
 #nullable disable
         [Fact]
         public void HasContentWithPattern_WhenExpectedContentIsNull_DoesFail()

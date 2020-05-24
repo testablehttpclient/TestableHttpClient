@@ -232,7 +232,7 @@ namespace TestableHttpClient
         /// <returns>true when the request has content; otherwise, false.</returns>
         public static bool HasContent(this HttpRequestMessage httpRequestMessage)
         {
-            if(httpRequestMessage == null)
+            if (httpRequestMessage == null)
             {
                 throw new ArgumentNullException(nameof(httpRequestMessage));
             }
