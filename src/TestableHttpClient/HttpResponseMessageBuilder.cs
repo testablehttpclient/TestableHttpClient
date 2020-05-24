@@ -24,7 +24,18 @@ namespace TestableHttpClient
         /// </summary>
         /// <param name="httpVersion">The <see cref="HttpVersion"/> of the response.</param>
         /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        [Obsolete("Renamed to WithHttpVersion.", true)]
         public HttpResponseMessageBuilder WithVersion(Version httpVersion)
+        {
+            return WithHttpVersion(httpVersion);
+        }
+
+        /// <summary>
+        /// Specifies the version of the response.
+        /// </summary>
+        /// <param name="httpVersion">The <see cref="HttpVersion"/> of the response.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithHttpVersion(Version httpVersion)
         {
             httpResponseMessage.Version = httpVersion;
             return this;
@@ -35,7 +46,18 @@ namespace TestableHttpClient
         /// </summary>
         /// <param name="statusCode">The <see cref="HttpStatusCode"/> of the response.</param>
         /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
-        public HttpResponseMessageBuilder WithStatusCode(HttpStatusCode statusCode)
+        [Obsolete("Renamed to WithHttpStatusCode.", true)]
+        public HttpResponseMessageBuilder WithStatusCode(HttpStatusCode httpStatusCode)
+        {
+            return WithHttpStatusCode(httpStatusCode);
+        }
+
+        /// <summary>
+        /// Specifies the status code of the response.
+        /// </summary>
+        /// <param name="statusCode">The <see cref="HttpStatusCode"/> of the response.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithHttpStatusCode(HttpStatusCode statusCode)
         {
             httpResponseMessage.StatusCode = statusCode;
             return this;
@@ -46,7 +68,18 @@ namespace TestableHttpClient
         /// </summary>
         /// <param name="responseHeaderBuilder">The builder for configuring the response headers.</param>
         /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        [Obsolete("Renamed to WithResponseHeaders.", true)]
         public HttpResponseMessageBuilder WithHeaders(Action<HttpResponseHeaders> responseHeaderBuilder)
+        {
+            return WithResponseHeaders(responseHeaderBuilder);
+        }
+
+        /// <summary>
+        /// Configure request headers using a builder by directly accessing the <see cref="HttpResponseHeaders"/>.
+        /// </summary>
+        /// <param name="responseHeaderBuilder">The builder for configuring the response headers.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithResponseHeaders(Action<HttpResponseHeaders> responseHeaderBuilder)
         {
             if (responseHeaderBuilder == null)
             {
@@ -63,7 +96,19 @@ namespace TestableHttpClient
         /// <param name="header">The name of the header to add.</param>
         /// <param name="value">The value of the header to add.</param>
         /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        [Obsolete("Renamed to WithResponseHeader.", true)]
         public HttpResponseMessageBuilder WithHeader(string header, string value)
+        {
+            return WithResponseHeader(header, value);
+        }
+
+        /// <summary>
+        /// Adds a request header to the response.
+        /// </summary>
+        /// <param name="header">The name of the header to add.</param>
+        /// <param name="value">The value of the header to add.</param>
+        /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
+        public HttpResponseMessageBuilder WithResponseHeader(string header, string value)
         {
             if (string.IsNullOrEmpty(header))
             {
