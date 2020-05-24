@@ -36,6 +36,7 @@ namespace TestableHttpClient
         /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct version on.</param>
         /// <param name="httpVersion">The expected version.</param>
         /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
+        [Obsolete("Use overload with System.Version instead.", true)]
         public static bool HasHttpVersion(this HttpResponseMessage httpResponseMessage, string httpVersion)
         {
             if (httpResponseMessage == null)
