@@ -44,7 +44,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             testHandler.RespondWith(response =>
             {
-                response.WithStatusCode(HttpStatusCode.Created)
+                response.WithHttpStatusCode(HttpStatusCode.Created)
                         .WithStringContent("HttpClient testing is easy");
             });
 
@@ -59,8 +59,8 @@ namespace TestableHttpClient.IntegrationTests
         public async Task UsingTestHandlerWithMultipleCustomRepsonse_ReturnsLastCustomResponse()
         {
             using var testHandler = new TestableHttpMessageHandler();
-            testHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
-            testHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.NotFound).WithJsonContent("Not Found"));
+            testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
+            testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.NotFound).WithJsonContent("Not Found"));
 
             using var httpClient = new HttpClient(testHandler);
             var result = await httpClient.GetAsync("http://httpbin.org/status/201");
@@ -73,7 +73,7 @@ namespace TestableHttpClient.IntegrationTests
         public async Task UsingTestHandlerWithCustomResponse_AlwaysReturnsSameCustomResponse()
         {
             using var testHandler = new TestableHttpMessageHandler();
-            testHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
+            testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
 
             using var httpClient = new HttpClient(testHandler);
             var urls = new[]

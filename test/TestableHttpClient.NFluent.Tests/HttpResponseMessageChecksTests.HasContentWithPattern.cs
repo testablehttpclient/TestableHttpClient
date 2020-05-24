@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
 using NFluent;
 using NFluent.Helpers;
@@ -37,51 +38,28 @@ namespace TestableHttpClient.NFluent.Tests
                 );
         }
 
+#nullable disable
         [Fact]
-        public void HasContentWithPattern_WhenContentIsNullAndExpectedContentIsNull_DoesNotFail()
+        public void HasContentWithPattern_WhenExpectedContentIsNull_DoesFail()
         {
             using var sut = new HttpResponseMessage();
 
-            Check.That(sut).HasContent(null);
+            Check.ThatCode(() => Check.That(sut).HasContent(null))
+                .IsAFailingCheckWithMessage(
+                "",
+                "The expected content should not be null, but it is."
+                );
         }
 
         [Fact]
-        public void HasContentWithPattern_WhenContentIsNullAndExpectedContentIsNullAndNotIsUsed_DoesFail()
+        public void HasContentWithPattern_WhenExpectedContentIsNullAndNotIsUsed_DoesFail()
         {
             using var sut = new HttpResponseMessage();
 
             Check.ThatCode(() => Check.That(sut).Not.HasContent(null))
-                .IsAFailingCheckWithMessage(
-                    "",
-                    "The checked response's content should not be null."
-                );
+                .Throws<InvalidOperationException>();
         }
-
-        [Fact]
-        public void HasContentWithPattern_WhenContentIsNotNullAndExpectedContentIsNull_DoesFail()
-        {
-            using var sut = new HttpResponseMessage
-            {
-                Content = new StringContent("")
-            };
-
-            Check.ThatCode(() => Check.That(sut).HasContent(null))
-                .IsAFailingCheckWithMessage(
-                    "",
-                    "The checked response's content should be null."
-                );
-        }
-
-        [Fact]
-        public void HasContentWithPattern_WhenContentIsNotNullAndExpectedContentIsNullAndNotIsUsed_DoesNotFail()
-        {
-            using var sut = new HttpResponseMessage
-            {
-                Content = new StringContent("")
-            };
-
-            Check.That(sut).Not.HasContent(null);
-        }
+#nullable restore
 
         [Fact]
         public void HasContentWithPattern_WhenContentIsNullAndNotIsUsed_DoesNotFail()

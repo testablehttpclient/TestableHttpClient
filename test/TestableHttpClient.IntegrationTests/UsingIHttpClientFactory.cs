@@ -15,7 +15,7 @@ namespace TestableHttpClient.IntegrationTests
         {
             // Create TestableHttpMessageHandler as usual.
             var testableHttpMessageHandler = new TestableHttpMessageHandler();
-            testableHttpMessageHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.OK));
+            testableHttpMessageHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.OK));
 
             // Create a mock for IHttpClientFactory
             var httpClientFactoryMock = new Mock<IHttpClientFactory>();
@@ -34,10 +34,10 @@ namespace TestableHttpClient.IntegrationTests
         public async Task ConfigureMultiplehttpClientFactories()
         {
             var testableGithubHandler = new TestableHttpMessageHandler();
-            testableGithubHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.OK).WithHeader("Server", "github"));
+            testableGithubHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.OK).WithResponseHeader("Server", "github"));
 
             var testableHttpBinHandler = new TestableHttpMessageHandler();
-            testableHttpBinHandler.RespondWith(response => response.WithStatusCode(HttpStatusCode.NotFound).WithHeader("Server", "httpbin"));
+            testableHttpBinHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.NotFound).WithResponseHeader("Server", "httpbin"));
 
             // Create a mock for IHttpClientFactory
             var httpClientFactoryMock = new Mock<IHttpClientFactory>();

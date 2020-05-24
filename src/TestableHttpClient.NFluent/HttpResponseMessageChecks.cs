@@ -222,7 +222,7 @@ namespace TestableHttpClient.NFluent
         /// <param name="check">The fluent check to be extended.</param>
         /// <param name="expectedContent">The content that the response should contain, this could be a pattern that includes an astrix ('*').</param>
         /// <returns>A check link.</returns>
-        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> check, string? expectedContent)
+        public static ICheckLink<ICheck<HttpResponseMessage?>> HasContent(this ICheck<HttpResponseMessage?> check, string expectedContent)
         {
             var checkLogic = ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
@@ -230,11 +230,9 @@ namespace TestableHttpClient.NFluent
 
             if (expectedContent == null)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                checkLogic.CheckSutAttributes(sut => sut.Content, "content")
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-                    .FailWhen(sut => sut != null, "The {0} should be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
-                    .OnNegate("The {0} should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                checkLogic
+                    .Fail("The expected content should not be null, but it is.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                    .CantBeNegated($"{nameof(HasContent)} with {nameof(expectedContent)} set to null")
                     .EndCheck();
             }
             else if (expectedContent.Contains("*"))

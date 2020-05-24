@@ -226,6 +226,21 @@ namespace TestableHttpClient
         }
 
         /// <summary>
+        /// Determines whether the request has content.
+        /// </summary>
+        /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check for content.</param>
+        /// <returns>true when the request has content; otherwise, false.</returns>
+        public static bool HasContent(this HttpRequestMessage httpRequestMessage)
+        {
+            if (httpRequestMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpRequestMessage));
+            }
+
+            return httpRequestMessage.Content != null;
+        }
+
+        /// <summary>
         /// Determines whether the request content matches a string pattern.
         /// </summary>
         /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct content on.</param>

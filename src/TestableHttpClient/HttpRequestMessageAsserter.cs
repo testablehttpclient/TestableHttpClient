@@ -281,6 +281,11 @@ namespace TestableHttpClient
             return With(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), $"json content '{jsonString}'");
         }
 
+        /// <summary>
+        /// Asserts wheter requests are made with specific url encoded content.
+        /// </summary>
+        /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
+        /// <returns>The <seealso cref="HttpRequestMessageAsserter"/> for further assertions.</returns>
         public HttpRequestMessageAsserter WithFormUrlEncodedContent(IEnumerable<KeyValuePair<string, string>> nameValueCollection)
         {
             if (nameValueCollection == null)

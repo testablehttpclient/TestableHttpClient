@@ -19,6 +19,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
+        [Obsolete("Tests obsolete message", true)]
         public void HasHttpVersion_WithString_NullResponse_ThrowsArgumentNullException()
         {
             HttpResponseMessage sut = null;
@@ -39,6 +40,7 @@ namespace TestableHttpClient.Tests
         [Theory]
         [InlineData(null)]
         [InlineData("")]
+        [Obsolete("Tests obsolete message", true)]
         public void HasHttpVersion_WithString_NullVersion_ThrowsArgumentNullException(string httpVersion)
         {
             using var sut = new HttpResponseMessage { Version = HttpVersion.Unknown };
@@ -57,6 +59,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
+        [Obsolete("Tests obsolete message", true)]
         public void HasHttpVersion_WithString_CorrectVersion_ReturnsTrue()
         {
             using var sut = new HttpResponseMessage { Version = HttpVersion.Version11 };
@@ -73,6 +76,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
+        [Obsolete("Tests obsolete message", true)]
         public void HasHttpVersion_WithString_IncorrectVersion_ReturnsFalse()
         {
             using var sut = new HttpResponseMessage { Version = HttpVersion.Version11 };

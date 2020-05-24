@@ -27,42 +27,42 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void WithVersion_CreatesHttpResponseMessageWithCorrectVersion()
+        public void WithHttpVersion_CreatesHttpResponseMessageWithCorrectVersion()
         {
             var sut = new HttpResponseMessageBuilder();
 
-            var result = sut.WithVersion(HttpVersion.Version20).Build();
+            var result = sut.WithHttpVersion(HttpVersion.Version20).Build();
 
             Assert.Equal(HttpVersion.Version20, result.Version);
         }
 
         [Fact]
-        public void WithStatusCode_CreatesHttpResponseMessageWithCorrectStatusCode()
+        public void WithHttpStatusCode_CreatesHttpResponseMessageWithCorrectStatusCode()
         {
             var sut = new HttpResponseMessageBuilder();
 
-            var result = sut.WithStatusCode(HttpStatusCode.BadRequest).Build();
+            var result = sut.WithHttpStatusCode(HttpStatusCode.BadRequest).Build();
 
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
 #nullable disable
         [Fact]
-        public void WithHeaders_WhenPassingNull_ArgumentNullExceptionIsThrown()
+        public void WithResponseHeaders_WhenPassingNull_ArgumentNullExceptionIsThrown()
         {
             var sut = new HttpResponseMessageBuilder();
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeaders(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithResponseHeaders(null));
             Assert.Equal("responseHeaderBuilder", exception.ParamName);
         }
 #nullable restore
 
         [Fact]
-        public void WithHeaders_CreatesHttpResponseMessageWithCorrectHeaders()
+        public void WithResponseHeaders_CreatesHttpResponseMessageWithCorrectHeaders()
         {
             var sut = new HttpResponseMessageBuilder();
 
-            var result = sut.WithHeaders(x => x.Location = new Uri("https://example.com/")).Build();
+            var result = sut.WithResponseHeaders(x => x.Location = new Uri("https://example.com/")).Build();
 
             Assert.Equal("https://example.com/", result.Headers.Location.AbsoluteUri);
         }
@@ -70,20 +70,20 @@ namespace TestableHttpClient.Tests
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void WithHeader_NullOrEmptyName_ThrowsArgumentException(string headerName)
+        public void WithResponseHeader_NullOrEmptyName_ThrowsArgumentException(string headerName)
         {
             var sut = new HttpResponseMessageBuilder();
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName, "value"));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithResponseHeader(headerName, "value"));
             Assert.Equal("header", exception.ParamName);
         }
 
         [Fact]
-        public void WithHeader_CreatesHttpResponseMessageWithHeaderAddedToTheList()
+        public void WithResponseHeader_CreatesHttpResponseMessageWithHeaderAddedToTheList()
         {
             var sut = new HttpResponseMessageBuilder();
 
-            var result = sut.WithHeader("Location", "https://example.com/").Build();
+            var result = sut.WithResponseHeader("Location", "https://example.com/").Build();
 
             Assert.Equal("https://example.com/", result.Headers.GetValues("Location").Single());
         }

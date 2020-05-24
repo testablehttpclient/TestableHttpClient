@@ -83,7 +83,7 @@ namespace TestableHttpClient.Tests
         public async Task ResponseWith_UsingResponseBuilder_SetsModifiedResponse()
         {
             using var sut = new TestableHttpMessageHandler();
-            sut.RespondWith(response => response.WithStatusCode(HttpStatusCode.BadRequest));
+            sut.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.BadRequest));
 
             using var client = new HttpClient(sut);
 
