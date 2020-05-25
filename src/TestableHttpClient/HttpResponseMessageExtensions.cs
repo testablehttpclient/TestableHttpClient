@@ -31,28 +31,6 @@ namespace TestableHttpClient
         }
 
         /// <summary>
-        /// Determines whether a specific HttpVersion is set on a response.
-        /// </summary>
-        /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct version on.</param>
-        /// <param name="httpVersion">The expected version.</param>
-        /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
-        [Obsolete("Use overload with System.Version instead.", true)]
-        public static bool HasHttpVersion(this HttpResponseMessage httpResponseMessage, string httpVersion)
-        {
-            if (httpResponseMessage == null)
-            {
-                throw new ArgumentNullException(nameof(httpResponseMessage));
-            }
-
-            if (string.IsNullOrEmpty(httpVersion))
-            {
-                throw new ArgumentNullException(nameof(httpVersion));
-            }
-
-            return HasHttpVersion(httpResponseMessage, new Version(httpVersion));
-        }
-
-        /// <summary>
         /// Determines whether a specific status code is set on a response.
         /// </summary>
         /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct version on.</param>
