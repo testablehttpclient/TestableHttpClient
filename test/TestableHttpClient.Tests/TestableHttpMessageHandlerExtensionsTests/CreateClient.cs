@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 
 using Xunit;
 
@@ -36,7 +34,7 @@ namespace TestableHttpClient.Tests
         private static object? GetPrivateHandler(HttpClient client)
         {
             var handlerField = client.GetType().BaseType?.GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
-            if(handlerField == null)
+            if (handlerField == null)
             {
                 Assert.True(false, "Can't find the private _handler field on HttpClient.");
                 return null;
