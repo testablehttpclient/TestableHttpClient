@@ -5,6 +5,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Introduced `IHttpRequestMessagesCheck` as the public interface for all checks on requests made to `TestableHttpMessageHandler`. It contains the following api:
+  - `With(Func<HttpRequestMessage, bool>, string)`
+  - `Times(int)`
+- Moved some api's from `TestableHttpMessageHandler` to `TestableHttpMessageHandlerAssertionExtensions`:
+  - `ShouldHaveMadeRequests(this TestableHttpMessageHandler)`
+  - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string)`
+  - `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)`
+  - `ShouldNotHaveMadeRequestsTo(this TestableHttpMessageHandler, string)`
+- Moved most methods from `HttpRequestMessageAsserter` to `HttpRequestMessagesCheckExtensions`:
+  - `WithRequestUri(this IHttpRequestMessagesCheck, string)` which is renamed from `WithUriPattern(this IHttpRequestMessagesCheck, string)`
+  - `WithHttpMethod(this IHttpRequestMessagesCheck, HttpMethod)`
+  - `WithHttpVersion(this IHttpRequestMessagesCheck, Version)`
+  - `WithRequestHeader(this IHttpRequestMessagesCheck, string)`
+  - `WithRequestHeader(this IHttpRequestMessagesCheck, string, string)`
+  - `WithContentHeader(this IHttpRequestMessagesCheck, string)`
+  - `WithContentHeader(this IHttpRequestMessagesCheck, string, string)`
+  - `WithHeader(this IHttpRequestMessagesCheck, string)`
+  - `WithHeader(this IHttpRequestMessagesCheck, string, string)`
+  - `WithContent(this IHttpRequestMessagesCheck, string)`
+  - `WithJsonContent(this IHttpRequestMessagesCheck, object)`
+  - `WithFormUrlEncodedContent(this IHttpRequestMessagesCheck, IEnumerable<KeyValuePair<string, string>)`
+
+### Deprecated
+- `WithUriPattern(this IHttpRequestMessagesCheck, string)` will be removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
+
+### Removed
+- `HttpRequestMessageAsserter` is made internal.
 
 ## [0.4] - 2020-05-26
 ### Removed 
