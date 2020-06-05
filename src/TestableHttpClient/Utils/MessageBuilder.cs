@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace TestableHttpClient.Utils
 {
@@ -24,7 +22,7 @@ namespace TestableHttpClient.Utils
             };
 
             var expectedConditions = string.Empty;
-            if(conditions.Any())
+            if (conditions.Any())
             {
                 expectedConditions = $" with {string.Join(", ", conditions)}";
             }
