@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
+using TestableHttpClient.Utils;
+
 namespace TestableHttpClient
 {
     /// <summary>
@@ -38,47 +40,27 @@ namespace TestableHttpClient
         /// </summary>
         public IEnumerable<HttpRequestMessage> Requests { get; private set; }
 
-        private void Assert(int? count = null)
+        private void Assert(int? expectedCount = null)
         {
             var actualCount = Requests.Count();
-            var pass = count switch
+            var pass = expectedCount switch
             {
-                null => Requests.Any(),
-                _ => actualCount == count,
+                null => actualCount > 0,
+                _ => actualCount == expectedCount,
             };
 
             if (_negate)
             {
-                if (!count.HasValue)
+                if (!expectedCount.HasValue)
                 {
-                    count = 0;
+                    expectedCount = 0;
                 }
                 pass = !pass;
             }
 
             if (!pass)
             {
-                var expected = count switch
-                {
-                    null => "at least one request to be made",
-                    0 => "no requests to be made",
-                    1 => "one request to be made",
-                    _ => $"{count} requests to be made"
-                };
-                var actual = actualCount switch
-                {
-                    0 => "no requests were made",
-                    1 => "one request was made",
-                    _ => $"{actualCount} requests were made",
-                };
-
-                if (_expectedConditions.Any())
-                {
-                    var conditions = string.Join(", ", _expectedConditions);
-                    expected += $" with {conditions}";
-                }
-
-                var message = $"Expected {expected}, but {actual}.";
+                var message = MessageBuilder.BuildMessage(expectedCount, actualCount, _expectedConditions);
                 throw new HttpRequestMessageAssertionException(message);
             }
         }

@@ -1,9 +1,10 @@
 # TestableHttpClient.NFluent
 
-In integration tests, asserting HttpResponseMessages can be a real challenge, especially since error messages are sometimes not very clear. NFluent is known for giving clear error messages and `TestableHttpClient.NFluent` is designed to easily verify HttpResponseMessages and give clear error messages.
+In integration tests, asserting HttpResponseMessages can be a real challenge, especially since error messages are sometimes not very clear. NFluent is known for giving clear error messages.
+`TestableHttpClient.NFluent` is designed to make it easier to check `HttpResponseMessage`s and `TestableHttpClient`s and give clear error messages.
 
 For example when the following check fails:
-```c#
+```csharp
 Check.That(response).HasResponseHeader("Server");
 ```
 it will return the following message:
@@ -24,12 +25,25 @@ dotnet add package TestableHttpClient.NFluent
 
 ## How to use
 
-```c#
+### Asserting HttpResponseMessages
+
+```csharp
 var client = new HttpClient();
 
 var result = await httpClient.GetAsync("https://httpbin.org/status/200");
 
 Check.That(result).HasStatusCode(HttpStatusCode.OK).And.HasContentHeader("Content-Type", "*/json*");
+```
+
+### Asserting TestableHttpMessageHandler
+
+```csharp
+var handler = new TestableHttpMessageHandler();
+var client = new HttpClient(handler);
+
+_ = await httpClient.GetAsync("https://httpbin.org/status/200");
+
+Check.That(handler).HasMadeRequestsTo("https://httpbin.org*").WithHttpMethod(HttpMethod.Get);
 ```
 
 ## Authors
@@ -40,4 +54,4 @@ See also the list of [contributors](https://github.com/dnperfors/TestableHttpCli
 
 ## License
 
-This project is released under the MIT license, see [LICENSE.md](LICENSE.md) for more information.
+This project is released under the MIT license, see [LICENSE.md](../../LICENSE.md) for more information.

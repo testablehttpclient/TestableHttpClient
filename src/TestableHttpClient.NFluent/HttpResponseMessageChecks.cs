@@ -6,6 +6,8 @@ using System.Net.Http;
 using NFluent;
 using NFluent.Extensibility;
 
+using TestableHttpClient.Utils;
+
 namespace TestableHttpClient.NFluent
 {
     /// <summary>

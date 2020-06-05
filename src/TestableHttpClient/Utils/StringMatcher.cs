@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace TestableHttpClient
+namespace TestableHttpClient.Utils
 {
     internal static class StringMatcher
     {

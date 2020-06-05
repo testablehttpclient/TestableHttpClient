@@ -9,7 +9,7 @@ This repository contains multiple related libraries. The separation is mainly ma
 |Libary|Description|Main dependency|Nuget|
 |------|-----------|---------------|-----|
 |TestableHttpClient|Basic library for mocking HttpMessageHandler and to make manual assertions on HttpResponseMessage.|None|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient)|
-|TestableHttpClient.NFluent|Library containing [NFluent](https://github.com/tpierrain/NFluent) checks for HttpResponseMessage. Currently there is no dependency between the two libraries.|NFluent|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient.NFluent)|
+|TestableHttpClient.NFluent|Library containing [NFluent](https://github.com/tpierrain/NFluent) checks for HttpResponseMessage and TestableHttpMessageHandler.|NFluent|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient.NFluent)|
 
 ## How to install
 
@@ -22,9 +22,9 @@ dotnet add package TestableHttpClient.NFluent
 
 ## How to use TestableHttpClient
 
-```c#
+```csharp
 var testHandler = new TestableHttpMessageHandler();
-var httpClient = new HttpClient(testHandler);
+var httpClient = new HttpClient(testHandler); // or testHandler.CreateClient();
 
 var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 
@@ -33,14 +33,25 @@ testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 
 More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
 
-## How to use TestableHttpClient.NFluent
+## How to use TestableHttpClient.NFluent to test responses
 
-```c#
+```csharp
 var client = new HttpClient();
 
 var result = await httpClient.GetAsync("https://httpbin.org/status/200");
 
 Check.That(result).HasStatusCode(HttpStatusCode.OK).And.HasContentHeader("Content-Type", "*/json*");
+```
+
+## How to use TestableHttpClient.NFluent to which requests are made
+
+```csharp
+var testHandler = new TestableHttpMessageHandler();
+var httpClient = new HttpClient(testHandler); // or testHandler.CreateClient();
+
+var result = await httpClient.GetAsync("http://httpbin.org/status/200");
+
+Check.That(testHandler).HasMadeRequestsTo("https://httpbin.org/*");
 ```
 
 ## Contributing

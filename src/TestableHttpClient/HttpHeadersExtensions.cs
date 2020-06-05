@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Headers;
 
+using TestableHttpClient.Utils;
+
 namespace TestableHttpClient
 {
     internal static class HttpHeadersExtensions

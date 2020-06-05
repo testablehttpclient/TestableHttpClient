@@ -2,6 +2,8 @@
 
 Creating unittest for code that uses `HttpClient` can be difficult to test. It requires a custom HttpMessageHandler or a mocked version. TestableHttpClient provides a testable version of HttpMessageHandler and several helper functions to configure the `TestableHttpHandler` and several ways to assert which requests were made.
 
+When you use [NFluent](https://n-fluent.net/) for asserting, then you would be interested in the package [TestableHttpClient.NFluent](https://www.nuget.org/packages/TestableHttpClient.NFluent/).
+
 ## Howto install
 
 TestableHttpClient is released as a NuGet packages and can be installed via the NuGet manager in VisualStudio or by running the following command on the command line:
@@ -11,7 +13,7 @@ dotnet add package TestableHttpClient
 
 ## How to use
 
-```c#
+```csharp
 var testHandler = new TestableHttpMessageHandler();
 var httpClient = new HttpClient(testHandler); // or testHandler.CreateClient()
 
@@ -20,7 +22,7 @@ var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 ```
 
-More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
+More examples can be found in the [IntegrationTests project](../../test/TestableHttpClient.IntegrationTests/)
 
 ## Authors
 
@@ -30,7 +32,7 @@ See also the list of [contributors](https://github.com/dnperfors/TestableHttpCli
 
 ## License
 
-This project is released under the MIT license, see [LICENSE.md](LICENSE.md) for more information.
+This project is released under the MIT license, see [LICENSE.md](../../LICENSE.md) for more information.
 
 ## Acknowledgments
 
