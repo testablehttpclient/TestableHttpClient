@@ -70,15 +70,15 @@ namespace TestableHttpClient.IntegrationTests
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
-            testHandler.ShouldHaveMadeRequests().WithUriPattern("https://*");
-            testHandler.ShouldHaveMadeRequests().WithUriPattern("https://*.org/get");
-            testHandler.ShouldHaveMadeRequests().WithUriPattern("https://httpbin.org/*");
-            testHandler.ShouldHaveMadeRequests().WithUriPattern("*://httpbin.org/get");
-            testHandler.ShouldHaveMadeRequests().WithUriPattern("https://httpbin.org/get");
-            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithUriPattern("http://httpbin.org/get"));
-            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithUriPattern("https://httpbin.org/"));
-            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithUriPattern("https://*/post"));
-            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithUriPattern("https://example.org/"));
+            testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*");
+            testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*.org/get");
+            testHandler.ShouldHaveMadeRequests().WithRequestUri("https://httpbin.org/*");
+            testHandler.ShouldHaveMadeRequests().WithRequestUri("*://httpbin.org/get");
+            testHandler.ShouldHaveMadeRequests().WithRequestUri("https://httpbin.org/get");
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("http://httpbin.org/get"));
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("https://httpbin.org/"));
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*/post"));
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("https://example.org/"));
         }
 
         [Fact]
@@ -90,8 +90,8 @@ namespace TestableHttpClient.IntegrationTests
             _ = await client.GetAsync("https://httpbin.org/get");
 
             testHandler.ShouldHaveMadeRequestsTo("https://*")
-                       .WithUriPattern("*://httpbin.org/*")
-                       .WithUriPattern("*/get");
+                       .WithRequestUri("*://httpbin.org/*")
+                       .WithRequestUri("*/get");
         }
 
         [Fact]

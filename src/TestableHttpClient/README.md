@@ -13,7 +13,7 @@ dotnet add package TestableHttpClient
 
 ```c#
 var testHandler = new TestableHttpMessageHandler();
-var httpClient = new HttpClient(testHandler);
+var httpClient = new HttpClient(testHandler); // or testHandler.CreateClient()
 
 var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 
