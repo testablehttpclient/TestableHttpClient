@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Http;
 
+using TestableHttpClient.Utils;
+
 namespace TestableHttpClient
 {
     /// <summary>
