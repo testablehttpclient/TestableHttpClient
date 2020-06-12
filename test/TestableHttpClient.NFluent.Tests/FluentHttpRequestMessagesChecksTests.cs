@@ -23,7 +23,7 @@ namespace TestableHttpClient.NFluent.Tests
 
 #nullable disable
         [Fact]
-        public void When_NullPredicate_Fails()
+        public void With_NullPredicate_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
             Check.ThatCode(() => sut.With(null, "check"))
@@ -33,7 +33,7 @@ namespace TestableHttpClient.NFluent.Tests
 #nullable restore
 
         [Fact]
-        public void When_PredicateThatDoesNotMatchAnyRequests_Fails()
+        public void With_PredicateThatDoesNotMatchAnyRequests_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -43,7 +43,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void When_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
+        public void With_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -53,14 +53,54 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void When_PredicateThatDoesMatchAnyRequests_DoesNotFail()
+        public void With_PredicateThatDoesMatchAnyRequests_DoesNotFail()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
             Check.ThatCode(() => sut.With(x => x != null, string.Empty)).Not.IsAFailingCheck();
         }
 
+#nullable disable
         [Fact]
+        public void With_WithRequestExpectations_NullPredicate_Fails()
+        {
+            var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
+            Check.ThatCode(() => sut.With(null, 1, "check"))
+                .IsAFailingCheckWithMessage("",
+                "The predicate should not be null.");
+        }
+#nullable restore
+
+        [Fact]
+        public void With_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_Fails()
+        {
+            var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+
+            Check.ThatCode(() => sut.With(x => x == null, 1, string.Empty))
+                .IsAFailingCheckWithMessage("",
+                "Expected one request to be made, but no requests were made.");
+        }
+
+        [Fact]
+        public void With_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
+        {
+            var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+
+            Check.ThatCode(() => sut.With(x => x == null, 1, "custom check"))
+                .IsAFailingCheckWithMessage("",
+                "Expected one request to be made with custom check, but no requests were made.");
+        }
+
+        [Fact]
+        public void With_WithRequestExpectation_PredicateThatDoesMatchAnyRequests_DoesNotFail()
+        {
+            var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+
+            Check.ThatCode(() => sut.With(x => x != null, 1, string.Empty)).Not.IsAFailingCheck();
+        }
+
+        [Fact]
+        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
         public void Times_NegativeNumber_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
@@ -72,6 +112,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
+        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
         public void Times_MatchingNumber_DoesNotFail()
         {
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
@@ -79,6 +120,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
+        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
         public void Times_NotMatchingNumber_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());

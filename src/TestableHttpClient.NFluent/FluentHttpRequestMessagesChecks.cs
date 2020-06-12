@@ -22,14 +22,14 @@ namespace TestableHttpClient.NFluent
         public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages)
             : base(httpRequestMessages, Check.Reporter, false)
         {
-            if (httpRequestMessages == null)
-            {
-                throw new ArgumentNullException(nameof(httpRequestMessages));
-            }
-            requests = httpRequestMessages;
+            requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message)
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message) => With(predicate, null, message);
+
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int expectedNumberOfRequests, string message) => With(predicate, (int?)expectedNumberOfRequests, message);
+
+        private IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int? expectedNumberOfRequests, string message)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -41,10 +41,11 @@ namespace TestableHttpClient.NFluent
                 .FailWhen(_ => predicate == null, "The predicate should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
                 .Analyze((sut, _) => requests = requests.Where(predicate));
 
-            AnalyzeNumberOfRequests(checkLogic, null);
+            AnalyzeNumberOfRequests(checkLogic, expectedNumberOfRequests);
             return this;
         }
 
+        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
         public IHttpRequestMessagesCheck Times(int count)
         {
             var checkLogic = ExtensibilityHelper.BeginCheck(this)
