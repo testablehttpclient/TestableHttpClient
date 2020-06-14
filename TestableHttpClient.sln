@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGELOG.md = CHANGELOG.md
 		LICENSE = LICENSE
 		README.md = README.md
+		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestableHttpClient.IntegrationTests", "test\TestableHttpClient.IntegrationTests\TestableHttpClient.IntegrationTests.csproj", "{37A6C1C0-1117-43DE-BD15-290BC8AD32BE}"

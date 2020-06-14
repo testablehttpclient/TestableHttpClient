@@ -19,13 +19,6 @@ jobs:
       uses: actions/checkout@v2
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9
-      with:
-          versionSpec: '5.1.x'
-    - name: Use GitVersion
-      id: gitversion # step id used as reference for output values
-      uses: gittools/actions/gitversion/execute@v0.9
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -35,13 +28,13 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
-      run: dotnet build --configuration Release --no-restore -property:Version=${{ steps.gitversion.outputs.semVer }}
+      run: dotnet build --configuration Release --no-restore
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-build
     - name: Check source file format
       run: dotnet format --folder . --check --dry-run # --folder is used to supress warnings: https://github.com/dotnet/format/issues/584
     - name: Pack
-      run: dotnet pack --output ./artifacts --configuration Release --no-build -property:Version=${{ steps.gitversion.outputs.semVer }}
+      run: dotnet pack --output ./artifacts --configuration Release --no-build
     - uses: actions/upload-artifact@v1
       with:
         name: artifacts
