@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net.Http;
 
 namespace TestableHttpClient
@@ -24,6 +25,9 @@ namespace TestableHttpClient
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition);
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition);
 
         /// <summary>
         /// Asserts that a specific amount of requests were made.

@@ -81,7 +81,7 @@ namespace TestableHttpClient
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => With(requestFilter, (int?)expectedNumberOfRequests, condition);
 
-        private IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
         {
             if (!string.IsNullOrEmpty(condition))
             {

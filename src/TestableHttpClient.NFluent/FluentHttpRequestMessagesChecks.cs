@@ -29,7 +29,7 @@ namespace TestableHttpClient.NFluent
 
         public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int expectedNumberOfRequests, string message) => With(predicate, (int?)expectedNumberOfRequests, message);
 
-        private IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int? expectedNumberOfRequests, string message)
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int? expectedNumberOfRequests, string message)
         {
             if (!string.IsNullOrEmpty(message))
             {
