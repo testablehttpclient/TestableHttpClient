@@ -6,6 +6,7 @@
         <Configuration>
           <Format>opencover</Format>
           <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+          <UseSourceLink>false</UseSourceLink>
         </Configuration>
       </DataCollector>
     </DataCollectors>

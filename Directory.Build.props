@@ -13,8 +13,12 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <DevelopmentDependency>false</DevelopmentDependency>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    
     <IncludeSource>true</IncludeSource>
     <RepositoryUrl>https://github.com/dnperfors/TestableHttpClient</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
