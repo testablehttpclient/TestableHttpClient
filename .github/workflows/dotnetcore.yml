@@ -9,7 +9,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
     - name: Dump GitHub context
       env:
@@ -22,23 +21,33 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.300
+        dotnet-version: 3.1.301
     - name: Restore dotnet tools
       run: dotnet tool restore
+    - name: Prepare sonarqube
+      run: dotnet sonarscanner begin -d:sonar.host.url=https://sonarcloud.io -organization:dnperfors-github -key:dnperfors_TestableHttpClient -version:`dotnet gitversion -showvariable semver` -d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
       run: dotnet build --configuration Release --no-restore
     - name: Test with dotnet
-      run: dotnet test --configuration Release --no-build
+      run: dotnet test --configuration Release --no-build --collect="Code Coverage"
+    - name: Upload sonarqube results
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet sonarscanner end -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
     - name: Check source file format
       run: dotnet format --folder . --check --dry-run # --folder is used to supress warnings: https://github.com/dotnet/format/issues/584
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: artifacts
         path: ./artifacts
+    - uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: ./**/TestResults/**/coverage.opencover.xml
 
   publish:
     runs-on: ubuntu-latest
@@ -46,12 +55,12 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.300
-    - uses: actions/download-artifact@v1
+        dotnet-version: 3.1.301
+    - uses: actions/download-artifact@v2
       with:
         name: artifacts
         path: ./artifacts
