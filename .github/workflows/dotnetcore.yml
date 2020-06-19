@@ -9,7 +9,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
     - name: Dump GitHub context
       env:
@@ -25,12 +24,18 @@ jobs:
         dotnet-version: 3.1.301
     - name: Restore dotnet tools
       run: dotnet tool restore
+    - name: Prepare sonarqube
+      run: dotnet sonarscanner begin -d:sonar.host.url=https://sonarcloud.io -organization:dnperfors-github -key:dnperfors_TestableHttpClient -version:`dotnet gitversion -showvariable semver` -d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
       run: dotnet build --configuration Release --no-restore
     - name: Test with dotnet
       run: dotnet test --configuration Release --no-build --collect="Code Coverage"
+    - name: Upload sonarqube results
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet sonarscanner end -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
     - name: Check source file format
       run: dotnet format --folder . --check --dry-run # --folder is used to supress warnings: https://github.com/dotnet/format/issues/584
     - name: Pack
