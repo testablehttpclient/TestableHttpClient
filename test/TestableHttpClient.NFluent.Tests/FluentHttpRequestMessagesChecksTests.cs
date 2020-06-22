@@ -28,7 +28,7 @@ namespace TestableHttpClient.NFluent.Tests
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
             Check.ThatCode(() => sut.With(null, "check"))
                 .IsAFailingCheckWithMessage("",
-                "The predicate should not be null.");
+                "The request filter should not be null.");
         }
 #nullable restore
 
@@ -67,7 +67,7 @@ namespace TestableHttpClient.NFluent.Tests
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
             Check.ThatCode(() => sut.With(null, 1, "check"))
                 .IsAFailingCheckWithMessage("",
-                "The predicate should not be null.");
+                "The request filter should not be null.");
         }
 #nullable restore
 

@@ -25,21 +25,21 @@ namespace TestableHttpClient.NFluent
             requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message) => With(predicate, null, message);
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition) => With(requestFilter, null, condition);
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int expectedNumberOfRequests, string message) => With(predicate, (int?)expectedNumberOfRequests, message);
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => With(requestFilter, (int?)expectedNumberOfRequests, condition);
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, int? expectedNumberOfRequests, string message)
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
         {
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(condition))
             {
-                requestConditions.Add(message);
+                requestConditions.Add(condition);
             }
 
             var checkLogic = ExtensibilityHelper.BeginCheck(this)
                 .CantBeNegated(nameof(With))
-                .FailWhen(_ => predicate == null, "The predicate should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
-                .Analyze((sut, _) => requests = requests.Where(predicate));
+                .FailWhen(_ => requestFilter == null, "The request filter should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                .Analyze((sut, _) => requests = requests.Where(requestFilter));
 
             AnalyzeNumberOfRequests(checkLogic, expectedNumberOfRequests);
             return this;
