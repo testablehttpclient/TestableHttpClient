@@ -180,7 +180,7 @@ namespace TestableHttpClient.IntegrationTests
 
             _ = await client.PostAsync("https://httpbin.org/post", new StringContent("", Encoding.UTF8, "application/json"));
 
-            testHandler.ShouldHaveMadeRequests().With(x => x.HasContentHeader("Content-Type", "application/json") || x.HasContentHeader("Content-Type", "application/json; *"), "");
+            testHandler.ShouldHaveMadeRequests().WithFilter(x => x.HasContentHeader("Content-Type", "application/json") || x.HasContentHeader("Content-Type", "application/json; *"), "");
         }
     }
 }

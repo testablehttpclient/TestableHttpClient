@@ -39,7 +39,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader(headerName, "someValue"));
 
             Assert.Equal("headerName", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader(headerName, "someValue", 1));
 
             Assert.Equal("headerName", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader("someHeader", headerValue));
 
             Assert.Equal("headerValue", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Theory]
@@ -78,7 +78,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader("someHeader", headerValue, 1));
 
             Assert.Equal("headerValue", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -89,7 +89,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithRequestHeader("someHeader", "someValue");
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "request header 'someHeader' and value 'someValue'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "request header 'someHeader' and value 'someValue'"));
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithRequestHeader("someHeader", "someValue", 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "request header 'someHeader' and value 'someValue'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "request header 'someHeader' and value 'someValue'"));
         }
     }
 }

@@ -65,7 +65,7 @@ namespace TestableHttpClient.Tests
         public void With_NullPredicate_ThrowsArgumentNullException()
         {
             var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.With(null, "check"));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFilter(null, "check"));
             Assert.Equal("predicate", exception.ParamName);
         }
 #nullable restore
@@ -75,7 +75,7 @@ namespace TestableHttpClient.Tests
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.With(x => x == null, string.Empty));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, string.Empty));
             Assert.Equal("Expected at least one request to be made, but no requests were made.", exception.Message);
         }
 
@@ -84,7 +84,7 @@ namespace TestableHttpClient.Tests
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.With(x => x == null, "custom check"));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, "custom check"));
             Assert.Equal("Expected at least one request to be made with custom check, but no requests were made.", exception.Message);
         }
 
@@ -93,7 +93,7 @@ namespace TestableHttpClient.Tests
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
-            sut.With(x => x != null, string.Empty);
+            sut.WithFilter(x => x != null, string.Empty);
         }
 
 #nullable disable
@@ -101,7 +101,7 @@ namespace TestableHttpClient.Tests
         public void With_WithRequestExpectations_NullPredicate_ThrowsArgumentNullException()
         {
             var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
-            Assert.Throws<ArgumentNullException>("predicate", () => sut.With(null, 1, "check"));
+            Assert.Throws<ArgumentNullException>("predicate", () => sut.WithFilter(null, 1, "check"));
         }
 #nullable restore
 
@@ -110,7 +110,7 @@ namespace TestableHttpClient.Tests
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.With(x => x == null, 1, string.Empty));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, 1, string.Empty));
             Assert.Equal("Expected one request to be made, but no requests were made.", exception.Message);
         }
 
@@ -119,7 +119,7 @@ namespace TestableHttpClient.Tests
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.With(x => x == null, 1, "custom check"));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, 1, "custom check"));
             Assert.Equal("Expected one request to be made with custom check, but no requests were made.", exception.Message);
         }
 
@@ -128,7 +128,7 @@ namespace TestableHttpClient.Tests
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
-            sut.With(x => x != null, 1, string.Empty);
+            sut.WithFilter(x => x != null, 1, string.Empty);
         }
     }
 }

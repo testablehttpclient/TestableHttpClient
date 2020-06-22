@@ -39,7 +39,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithJsonContent(null);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "json content 'null'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "json content 'null'"));
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithJsonContent(null, 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "json content 'null'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "json content 'null'"));
         }
 
         [Fact]

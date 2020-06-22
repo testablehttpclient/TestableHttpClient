@@ -71,7 +71,7 @@ namespace TestableHttpClient
         /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition) => With(requestFilter, null, condition);
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
@@ -79,9 +79,9 @@ namespace TestableHttpClient
         /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => With(requestFilter, (int?)expectedNumberOfRequests, condition);
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
         {
             if (!string.IsNullOrEmpty(condition))
             {

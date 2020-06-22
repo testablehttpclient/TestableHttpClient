@@ -41,7 +41,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithFormUrlEncodedContent(null));
 
             Assert.Equal("nameValueCollection", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithFormUrlEncodedContent(null, 1));
 
             Assert.Equal("nameValueCollection", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -63,7 +63,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" });
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "form url encoded content 'username=alice'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "form url encoded content 'username=alice'"));
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" }, 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "form url encoded content 'username=alice'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "form url encoded content 'username=alice'"));
         }
 
         [Fact]

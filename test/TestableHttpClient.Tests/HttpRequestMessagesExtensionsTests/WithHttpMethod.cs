@@ -38,7 +38,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null));
 
             Assert.Equal("httpMethod", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null, 1));
 
             Assert.Equal("httpMethod", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -60,7 +60,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithHttpMethod(HttpMethod.Get);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "HTTP Method 'GET'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "HTTP Method 'GET'"));
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithHttpMethod(HttpMethod.Get, 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "HTTP Method 'GET'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "HTTP Method 'GET'"));
         }
     }
 }

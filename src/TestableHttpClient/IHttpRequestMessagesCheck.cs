@@ -15,7 +15,7 @@ namespace TestableHttpClient
         /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition);
+        IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition);
 
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
@@ -24,7 +24,7 @@ namespace TestableHttpClient
         /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition);
+        IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition);
 
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
@@ -33,7 +33,7 @@ namespace TestableHttpClient
         /// <param name="expectedNumberOfRequests">The expected number of requests, when null is passed "at least one" is presumed.</param>
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition);
+        IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition);
 
         /// <summary>
         /// Asserts that a specific amount of requests were made.

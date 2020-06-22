@@ -36,7 +36,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpVersion(null));
 
             Assert.Equal("httpVersion", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpVersion(null, 1));
 
             Assert.Equal("httpVersion", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -58,7 +58,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithHttpVersion(HttpVersion.Version11);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "HTTP Version '1.1'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "HTTP Version '1.1'"));
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithHttpVersion(HttpVersion.Version11, 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "HTTP Version '1.1'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "HTTP Version '1.1'"));
         }
     }
 }

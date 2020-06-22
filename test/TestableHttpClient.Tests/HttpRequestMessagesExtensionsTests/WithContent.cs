@@ -37,7 +37,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithContent(null));
 
             Assert.Equal("pattern", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithContent(null, 1));
 
             Assert.Equal("pattern", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -59,7 +59,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithContent("some content");
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "content 'some content'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "content 'some content'"));
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithContent("some content", 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "content 'some content'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "content 'some content'"));
         }
     }
 }

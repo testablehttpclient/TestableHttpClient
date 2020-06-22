@@ -25,11 +25,11 @@ namespace TestableHttpClient.NFluent
             requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition) => With(requestFilter, null, condition);
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => With(requestFilter, (int?)expectedNumberOfRequests, condition);
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
         {
             if (!string.IsNullOrEmpty(condition))
             {
@@ -37,7 +37,7 @@ namespace TestableHttpClient.NFluent
             }
 
             var checkLogic = ExtensibilityHelper.BeginCheck(this)
-                .CantBeNegated(nameof(With))
+                .CantBeNegated(nameof(WithFilter))
                 .FailWhen(_ => requestFilter == null, "The request filter should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
                 .Analyze((sut, _) => requests = requests.Where(requestFilter));
 

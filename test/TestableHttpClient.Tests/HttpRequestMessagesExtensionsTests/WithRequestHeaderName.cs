@@ -39,7 +39,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader(headerName));
 
             Assert.Equal("headerName", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader(headerName, 1));
 
             Assert.Equal("headerName", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -63,7 +63,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithRequestHeader("api-version");
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "request header 'api-version'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "request header 'api-version'"));
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithRequestHeader("api-version", 1);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "request header 'api-version'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "request header 'api-version'"));
         }
     }
 }

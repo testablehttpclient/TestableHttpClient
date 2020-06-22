@@ -54,7 +54,7 @@ namespace TestableHttpClient
                 condition = $"uri pattern '{pattern}'";
             }
 
-            return check.With(x => x.HasMatchingUri(pattern), numberOfRequests, condition);
+            return check.WithFilter(x => x.HasMatchingUri(pattern), numberOfRequests, condition);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(httpMethod));
             }
 
-            return check.With(x => x.HasHttpMethod(httpMethod), numberOfRequests, $"HTTP Method '{httpMethod}'");
+            return check.WithFilter(x => x.HasHttpMethod(httpMethod), numberOfRequests, $"HTTP Method '{httpMethod}'");
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(httpVersion));
             }
 
-            return check.With(x => x.HasHttpVersion(httpVersion), numberOfRequests, $"HTTP Version '{httpVersion}'");
+            return check.WithFilter(x => x.HasHttpVersion(httpVersion), numberOfRequests, $"HTTP Version '{httpVersion}'");
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(headerName));
             }
 
-            return check.With(x => x.HasRequestHeader(headerName), numberOfRequests, $"request header '{headerName}'");
+            return check.WithFilter(x => x.HasRequestHeader(headerName), numberOfRequests, $"request header '{headerName}'");
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(headerValue));
             }
 
-            return check.With(x => x.HasRequestHeader(headerName, headerValue), numberOfRequests, $"request header '{headerName}' and value '{headerValue}'");
+            return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue), numberOfRequests, $"request header '{headerName}' and value '{headerValue}'");
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(headerName));
             }
 
-            return check.With(x => x.HasContentHeader(headerName), numberOfRequests, $"content header '{headerName}'");
+            return check.WithFilter(x => x.HasContentHeader(headerName), numberOfRequests, $"content header '{headerName}'");
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(headerValue));
             }
 
-            return check.With(x => x.HasContentHeader(headerName, headerValue), numberOfRequests, $"content header '{headerName}' and value '{headerValue}'");
+            return check.WithFilter(x => x.HasContentHeader(headerName, headerValue), numberOfRequests, $"content header '{headerName}' and value '{headerValue}'");
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(headerName));
             }
 
-            return check.With(x => x.HasRequestHeader(headerName) || x.HasContentHeader(headerName), numberOfRequests, $"header '{headerName}'");
+            return check.WithFilter(x => x.HasRequestHeader(headerName) || x.HasContentHeader(headerName), numberOfRequests, $"header '{headerName}'");
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(headerValue));
             }
 
-            return check.With(x => x.HasRequestHeader(headerName, headerValue) || x.HasContentHeader(headerName, headerValue), numberOfRequests, $"header '{headerName}' and value '{headerValue}'");
+            return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue) || x.HasContentHeader(headerName, headerValue), numberOfRequests, $"header '{headerName}' and value '{headerValue}'");
         }
 
         /// <summary>
@@ -371,7 +371,7 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(pattern));
             }
 
-            return check.With(x => x.HasContent(pattern), numberOfRequests, $"content '{pattern}'");
+            return check.WithFilter(x => x.HasContent(pattern), numberOfRequests, $"content '{pattern}'");
         }
 
         /// <summary>
@@ -399,7 +399,7 @@ namespace TestableHttpClient
             }
 
             var jsonString = JsonSerializer.Serialize(jsonObject);
-            return check.With(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), numberOfRequests, $"json content '{jsonString}'");
+            return check.WithFilter(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), numberOfRequests, $"json content '{jsonString}'");
         }
 
         /// <summary>
@@ -434,7 +434,7 @@ namespace TestableHttpClient
             using var content = new FormUrlEncodedContent(nameValueCollection);
             var contentString = content.ReadAsStringAsync().Result;
 
-            return check.With(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), numberOfRequests, $"form url encoded content '{contentString}'");
+            return check.WithFilter(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), numberOfRequests, $"form url encoded content '{contentString}'");
         }
     }
 }

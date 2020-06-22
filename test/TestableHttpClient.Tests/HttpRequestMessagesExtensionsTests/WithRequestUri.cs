@@ -39,7 +39,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestUri(pattern));
 
             Assert.Equal("pattern", exception.ParamName);
-            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
@@ -50,7 +50,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithRequestUri("https://example.com/");
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), null, "uri pattern 'https://example.com/'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "uri pattern 'https://example.com/'"));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             sut.Object.WithRequestUri("https://example.com/", 2);
 
-            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)2, "uri pattern 'https://example.com/'"));
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)2, "uri pattern 'https://example.com/'"));
         }
     }
 }
