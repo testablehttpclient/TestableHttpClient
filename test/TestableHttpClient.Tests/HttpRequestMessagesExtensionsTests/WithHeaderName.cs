@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Net.Http;
+
+using Moq;
 
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithHeader_NullCheck_ThrowsArgumentNullException()
+        public void WithHeader_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
             IHttpRequestMessagesCheck sut = null;
 
@@ -19,53 +19,61 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             Assert.Equal("check", exception.ParamName);
         }
 
+        [Fact]
+        public void WithHeader_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
+        {
+            IHttpRequestMessagesCheck sut = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", 1));
+
+            Assert.Equal("check", exception.ParamName);
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void WithHeader_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
+        public void WithHeader_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName));
 
             Assert.Equal("headerName", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeader_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, 1));
+
+            Assert.Equal("headerName", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
         [Fact]
-        public void WithHeader_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHeader_WithoutNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("Content-Type"));
+            sut.Object.WithHeader("Content-Type");
 
-            Assert.Equal("Expected at least one request to be made with header 'Content-Type', but no requests were made.", exception.Message);
+            sut.Verify(x => x.With(Its.AnyPredicate(), null, "header 'Content-Type'"));
         }
 
         [Fact]
-        public void WithHeader_NoMatchingRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHeader_WithNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage() });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("Content-Type"));
+            sut.Object.WithHeader("Content-Type", 1);
 
-            Assert.Equal("Expected at least one request to be made with header 'Content-Type', but no requests were made.", exception.Message);
-        }
-
-        [Theory]
-        [InlineData("Host")]
-        [InlineData("Content-Type")]
-        public void WithHeader_MatchingRequest_ReturnsHttpRequestMessageAsserter(string headerName)
-        {
-            var request = new HttpRequestMessage();
-            request.Headers.Host = "host";
-            request.Content = new StringContent("");
-            var sut = new HttpRequestMessageAsserter(new[] { request });
-
-            var result = sut.WithHeader(headerName);
-
-            Assert.NotNull(result);
-            Assert.IsType<HttpRequestMessageAsserter>(result);
+            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "header 'Content-Type'"));
         }
     }
 }

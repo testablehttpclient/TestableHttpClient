@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Text;
 
+using Moq;
+
 using Xunit;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
@@ -10,7 +12,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithJsonContent_NullChecker_ThrowsArgumentNullException()
+        public void WithJsonContent_WithoutNumberOfRequests_NullChecker_ThrowsArgumentNullException()
         {
             IHttpRequestMessagesCheck sut = null;
 
@@ -18,7 +20,37 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
 
             Assert.Equal("check", exception.ParamName);
         }
+
+        [Fact]
+        public void WithJsonContent_WithNumberOfRequests_NullChecker_ThrowsArgumentNullException()
+        {
+            IHttpRequestMessagesCheck sut = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithJsonContent(null, 1));
+
+            Assert.Equal("check", exception.ParamName);
+        }
 #nullable restore
+
+        [Fact]
+        public void WithJsonContent_WithoutNumberOfRequests_CallsWithCorrectly()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            sut.Object.WithJsonContent(null);
+
+            sut.Verify(x => x.With(Its.AnyPredicate(), null, "json content 'null'"));
+        }
+
+        [Fact]
+        public void WithJsonContent_WithNumberOfRequests_CallsWithCorrectly()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            sut.Object.WithJsonContent(null, 1);
+
+            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "json content 'null'"));
+        }
 
         [Fact]
         public void WithJsonContent_RequestWithMatchingContent_ReturnsHttpRequestMessageAsserter()

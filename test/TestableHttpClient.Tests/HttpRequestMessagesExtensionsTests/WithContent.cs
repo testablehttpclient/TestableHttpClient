@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Net.Http;
+
+using Moq;
 
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithContent_NullCheck_ThrowsArgumentNullException()
+        public void WithContent_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
             IHttpRequestMessagesCheck sut = null;
 
@@ -20,43 +20,56 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         }
 
         [Fact]
-        public void WithContent_NullPattern_ThrowsArgumentNullException()
+        public void WithContent_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            IHttpRequestMessagesCheck sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContent(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContent("*", 1));
+
+            Assert.Equal("check", exception.ParamName);
+        }
+
+        [Fact]
+        public void WithContent_WithoutNumberOfRequests_NullPattern_ThrowsArgumentNullException()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithContent(null));
 
             Assert.Equal("pattern", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Fact]
+        public void WithContent_WithNumberOfRequests_NullPattern_ThrowsArgumentNullException()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithContent(null, 1));
+
+            Assert.Equal("pattern", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
         [Fact]
-        public void WithContent_RequestWithNotMatchingContent_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithContent_WithoutNumberOfRequests_CallsWithCorrectly()
         {
-            var request = new HttpRequestMessage
-            {
-                Content = new StringContent("")
-            };
-            var sut = new HttpRequestMessageAsserter(new[] { request });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContent("some content"));
+            sut.Object.WithContent("some content");
 
-            Assert.Equal("Expected at least one request to be made with content 'some content', but no requests were made.", exception.Message);
+            sut.Verify(x => x.With(Its.AnyPredicate(), null, "content 'some content'"));
         }
 
         [Fact]
-        public void WithContent_RequestWithMatchingContent_ReturnsHttpRequestMessageAsserter()
+        public void WithContent_WithNumberOfRequests_CallsWithCorrectly()
         {
-            var request = new HttpRequestMessage
-            {
-                Content = new StringContent("")
-            };
-            var sut = new HttpRequestMessageAsserter(new[] { request });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var result = sut.WithContent("");
+            sut.Object.WithContent("some content", 1);
 
-            Assert.NotNull(result);
-            Assert.IsType<HttpRequestMessageAsserter>(result);
+            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "content 'some content'"));
         }
     }
 }

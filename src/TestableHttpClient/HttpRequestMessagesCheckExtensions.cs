@@ -27,6 +27,13 @@ namespace TestableHttpClient
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, null);
 
+        /// <summary>
+        /// Asserts whether requests were made to a given URI based on a pattern.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="pattern">The uri pattern that is expected.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int numberOfRequests) => WithRequestUri(check, pattern, (int?)numberOfRequests);
 
         private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int? numberOfRequests)
@@ -58,9 +65,16 @@ namespace TestableHttpClient
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHttpMethod(this IHttpRequestMessagesCheck check, HttpMethod httpMethod) => WithHttpMethod(check, httpMethod, null);
 
+        /// <summary>
+        /// Asserts whether requests were made with a given HTTP Method.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="httpMethod">The <seealso cref="HttpMethod"/> that is expected.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHttpMethod(this IHttpRequestMessagesCheck check, HttpMethod httpMethod, int numberOfRequests) => WithHttpMethod(check, httpMethod, (int?)numberOfRequests);
 
-        public static IHttpRequestMessagesCheck WithHttpMethod(this IHttpRequestMessagesCheck check, HttpMethod httpMethod, int? numberOfRequests)
+        private static IHttpRequestMessagesCheck WithHttpMethod(this IHttpRequestMessagesCheck check, HttpMethod httpMethod, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -82,8 +96,17 @@ namespace TestableHttpClient
         /// <param name="httpVersion">The <seealso cref="System.Net.HttpVersion"/> that is expected.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHttpVersion(this IHttpRequestMessagesCheck check, Version httpVersion) => WithHttpVersion(check, httpVersion, null);
+
+        /// <summary>
+        /// Asserts whether requests were made using a specific HTTP Version.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="httpVersion">The <seealso cref="System.Net.HttpVersion"/> that is expected.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHttpVersion(this IHttpRequestMessagesCheck check, Version httpVersion, int numberOfRequests) => WithHttpVersion(check, httpVersion, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithHttpVersion(this IHttpRequestMessagesCheck check, Version httpVersion, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithHttpVersion(this IHttpRequestMessagesCheck check, Version httpVersion, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -106,8 +129,18 @@ namespace TestableHttpClient
         /// <param name="headerName">The name of the header that is expected.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName) => WithRequestHeader(check, headerName, (int?)null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name. Values are ignored.
+        /// </summary>
+        /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int numberOfRequests) => WithRequestHeader(check, headerName, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -131,8 +164,19 @@ namespace TestableHttpClient
         /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithRequestHeader(check, headerName, headerValue, null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name and value.
+        /// </summary>
+        /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int numberOfRequests) => WithRequestHeader(check, headerName, headerValue, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -160,8 +204,18 @@ namespace TestableHttpClient
         /// <param name="headerName">The name of the header that is expected.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName) => WithContentHeader(check, headerName, (int?)null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name. Values are ignored.
+        /// </summary>
+        /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeader"/></remarks>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int numberOfRequests) => WithContentHeader(check, headerName, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -185,8 +239,19 @@ namespace TestableHttpClient
         /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithContentHeader(check, headerName, headerValue, (int?)null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name and value.
+        /// </summary>
+        /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeader"/></remarks>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int numberOfRequests) => WithContentHeader(check, headerName, headerValue, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -213,8 +278,17 @@ namespace TestableHttpClient
         /// <param name="headerName">The name of the header that is expected.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName) => WithHeader(check, headerName, (int?)null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name. Values are ignored.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, int numberOfRequests) => WithHeader(check, headerName, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -237,8 +311,18 @@ namespace TestableHttpClient
         /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithHeader(check, headerName, headerValue, (int?)null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a specific header name and value.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="headerName">The name of the header that is expected.</param>
+        /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int numberOfRequests) => WithHeader(check, headerName, headerValue, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -265,8 +349,17 @@ namespace TestableHttpClient
         /// <param name="pattern">The expected content, supports wildcards.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern) => WithContent(check, pattern, null);
+
+        /// <summary>
+        /// Asserts whether requests were made with specific content.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="pattern">The expected content, supports wildcards.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern, int numberOfRequests) => WithContent(check, pattern, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -288,8 +381,17 @@ namespace TestableHttpClient
         /// <param name="jsonObject">The object representation of the expected request content.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject) => WithJsonContent(check, jsonObject, null);
+
+        /// <summary>
+        /// Asserts wheter requests are made with specific json content.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="jsonObject">The object representation of the expected request content.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int numberOfRequests) => WithJsonContent(check, jsonObject, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -307,8 +409,17 @@ namespace TestableHttpClient
         /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection) => WithFormUrlEncodedContent(check, nameValueCollection, null);
+
+        /// <summary>
+        /// Asserts wheter requests are made with specific url encoded content.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
+        /// <param name="numberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection, int numberOfRequests) => WithFormUrlEncodedContent(check, nameValueCollection, (int?)numberOfRequests);
-        public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection, int? numberOfRequests)
+
+        private static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection, int? numberOfRequests)
         {
             if (check == null)
             {
@@ -323,7 +434,7 @@ namespace TestableHttpClient
             using var content = new FormUrlEncodedContent(nameValueCollection);
             var contentString = content.ReadAsStringAsync().Result;
 
-            return check.With(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), numberOfRequests,$"form url encoded content '{contentString}'");
+            return check.With(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), numberOfRequests, $"form url encoded content '{contentString}'");
         }
     }
 }

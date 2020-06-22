@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
+
+using Moq;
 
 using Xunit;
 
@@ -11,7 +10,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithHeaderNameAndValue_NullCheck_ThrowsArgumentNullException()
+        public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
             IHttpRequestMessagesCheck sut = null;
 
@@ -20,94 +19,87 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
             Assert.Equal("check", exception.ParamName);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void WithHeaderNameAndValue_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
+        [Fact]
+        public void WithHeaderNameAndValue_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            IHttpRequestMessagesCheck sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName, "someValue"));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", "someValue", 1));
 
-            Assert.Equal("headerName", exception.ParamName);
+            Assert.Equal("check", exception.ParamName);
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void WithHeaderNameAndValue_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
+        public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", headerValue));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, "someValue"));
+
+            Assert.Equal("headerName", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeaderNameAndValue_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, "someValue", 1));
+
+            Assert.Equal("headerName", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader("someHeader", headerValue));
 
             Assert.Equal("headerValue", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithHeaderNameAndValue_WithNumberOfRequests_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader("someHeader", headerValue, 1));
+
+            Assert.Equal("headerValue", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
         [Fact]
-        public void WithHeaderNameAndValue_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHeaderNameAndValue_WithoutNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("someHeader", "someValue"));
+            sut.Object.WithHeader("someHeader", "someValue");
 
-            Assert.Equal("Expected at least one request to be made with header 'someHeader' and value 'someValue', but no requests were made.", exception.Message);
+            sut.Verify(x => x.With(Its.AnyPredicate(), null, "header 'someHeader' and value 'someValue'"));
         }
 
         [Fact]
-        public void WithHeaderNameAndValue_RequestWithoutHeaders_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHeaderNameAndValue_WithNumberOfRequests_CallsWithCorrectly()
         {
-            var request = new HttpRequestMessage();
-            var sut = new HttpRequestMessageAsserter(new[] { request });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("Content-Type", "application/json"));
+            sut.Object.WithHeader("someHeader", "someValue", 1);
 
-            Assert.Equal("Expected at least one request to be made with header 'Content-Type' and value 'application/json', but no requests were made.", exception.Message);
-        }
-
-        [Fact]
-        public void WithHeaderNameAndValue_RequestWithNotMatchingHeaderName_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
-        {
-            var request = new HttpRequestMessage();
-            request.Headers.Host = "test";
-            request.Content = new StringContent("");
-            var sut = new HttpRequestMessageAsserter(new[] { request });
-
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader("Content-Disposition", "inline"));
-
-            Assert.Equal("Expected at least one request to be made with header 'Content-Disposition' and value 'inline', but no requests were made.", exception.Message);
-        }
-
-        [Theory]
-        [InlineData("Content-Type", "application/json")]
-        [InlineData("Host", "Test")]
-        public void WithHeaderNameAndValue_RequestWithNotMatchingHeaderValue_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage(string name, string value)
-        {
-            var request = new HttpRequestMessage();
-            request.Headers.Host = "example";
-            request.Content = new StringContent("");
-            var sut = new HttpRequestMessageAsserter(new[] { request });
-
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHeader(name, value));
-
-            Assert.Equal($"Expected at least one request to be made with header '{name}' and value '{value}', but no requests were made.", exception.Message);
-        }
-
-        [Theory]
-        [InlineData("Content-Type", "application/json; charset=utf-8")]
-        [InlineData("Host", "Test")]
-        public void WithHeaderNameAndValue_RequestWithMatchinHeader_ReturnsHttpRequestMessageAssert(string name, string value)
-        {
-            var request = new HttpRequestMessage();
-            request.Headers.Host = "Test";
-            request.Content = new StringContent("", Encoding.UTF8, "application/json");
-            var sut = new HttpRequestMessageAsserter(new[] { request });
-
-            var result = sut.WithHeader(name, value);
-
-            Assert.NotNull(result);
-            Assert.IsType<HttpRequestMessageAsserter>(result);
+            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "header 'someHeader' and value 'someValue'"));
         }
     }
 }

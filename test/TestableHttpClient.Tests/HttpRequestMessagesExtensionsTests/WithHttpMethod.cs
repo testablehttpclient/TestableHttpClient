@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
+
+using Moq;
 
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithHttpMethod_NullCheck_ThrowsArgumentNullException()
+        public void WithHttpMethod_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
             IHttpRequestMessagesCheck sut = null;
 
@@ -20,45 +21,56 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         }
 
         [Fact]
-        public void WithHttpMethod_NullHttpMethod_ThrowsArgumentNullException()
+        public void WithHttpMethod_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            IHttpRequestMessagesCheck sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpMethod(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpMethod(HttpMethod.Get, 1));
+
+            Assert.Equal("check", exception.ParamName);
+        }
+
+        [Fact]
+        public void WithHttpMethod_WithoutNumberOfRequests_NullHttpMethod_ThrowsArgumentNullException()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null));
 
             Assert.Equal("httpMethod", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Fact]
+        public void WithHttpMethod_WithNumberOfRequests_NullHttpMethod_ThrowsArgumentNullException()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null, 1));
+
+            Assert.Equal("httpMethod", exception.ParamName);
+            sut.Verify(x => x.With(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
         [Fact]
-        public void WithHttpMethod_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHttpMethod_WithoutNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpMethod(HttpMethod.Get));
+            sut.Object.WithHttpMethod(HttpMethod.Get);
 
-            Assert.Equal("Expected at least one request to be made with HTTP Method 'GET', but no requests were made.", exception.Message);
+            sut.Verify(x => x.With(Its.AnyPredicate(), null, "HTTP Method 'GET'"));
         }
 
         [Fact]
-        public void WithHttpMethod_RequestsWithIncorrectHttpMethod_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHttpMethod_WithNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/")) });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpMethod(HttpMethod.Get));
+            sut.Object.WithHttpMethod(HttpMethod.Get, 1);
 
-            Assert.Equal("Expected at least one request to be made with HTTP Method 'GET', but no requests were made.", exception.Message);
-        }
-
-        [Fact]
-        public void WithHttpMethod_RequestsWithCorrectMethod_ReturnsHttpRequestMessageAsserter()
-        {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) });
-
-            var result = sut.WithHttpMethod(HttpMethod.Get);
-
-            Assert.NotNull(result);
-            Assert.IsType<HttpRequestMessageAsserter>(result);
+            sut.Verify(x => x.With(Its.AnyPredicate(), (int?)1, "HTTP Method 'GET'"));
         }
     }
 }
