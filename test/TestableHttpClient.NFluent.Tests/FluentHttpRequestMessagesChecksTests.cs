@@ -23,7 +23,7 @@ namespace TestableHttpClient.NFluent.Tests
 
 #nullable disable
         [Fact]
-        public void With_NullPredicate_Fails()
+        public void WithFilter_NullPredicate_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
             Check.ThatCode(() => sut.WithFilter(null, "check"))
@@ -33,7 +33,7 @@ namespace TestableHttpClient.NFluent.Tests
 #nullable restore
 
         [Fact]
-        public void With_PredicateThatDoesNotMatchAnyRequests_Fails()
+        public void WithFilter_PredicateThatDoesNotMatchAnyRequests_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -43,7 +43,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void With_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
+        public void WithFilter_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -53,7 +53,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void With_PredicateThatDoesMatchAnyRequests_DoesNotFail()
+        public void WithFilter_PredicateThatDoesMatchAnyRequests_DoesNotFail()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -62,7 +62,7 @@ namespace TestableHttpClient.NFluent.Tests
 
 #nullable disable
         [Fact]
-        public void With_WithRequestExpectations_NullPredicate_Fails()
+        public void WithFilter_WithRequestExpectations_NullPredicate_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
             Check.ThatCode(() => sut.WithFilter(null, 1, "check"))
@@ -72,7 +72,7 @@ namespace TestableHttpClient.NFluent.Tests
 #nullable restore
 
         [Fact]
-        public void With_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_Fails()
+        public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_Fails()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -82,7 +82,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void With_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
+        public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_FailsWithMessage()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -92,7 +92,7 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void With_WithRequestExpectation_PredicateThatDoesMatchAnyRequests_DoesNotFail()
+        public void WithFilter_WithRequestExpectation_PredicateThatDoesMatchAnyRequests_DoesNotFail()
         {
             var sut = new FluentHttpRequestMessagesChecks(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 

@@ -62,7 +62,7 @@ namespace TestableHttpClient.Tests
 
 #nullable disable
         [Fact]
-        public void With_NullPredicate_ThrowsArgumentNullException()
+        public void WithFilter_NullPredicate_ThrowsArgumentNullException()
         {
             var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
             var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFilter(null, "check"));
@@ -71,7 +71,7 @@ namespace TestableHttpClient.Tests
 #nullable restore
 
         [Fact]
-        public void With_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
+        public void WithFilter_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -80,7 +80,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void With_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
+        public void WithFilter_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -89,7 +89,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void With_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
+        public void WithFilter_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -98,7 +98,7 @@ namespace TestableHttpClient.Tests
 
 #nullable disable
         [Fact]
-        public void With_WithRequestExpectations_NullPredicate_ThrowsArgumentNullException()
+        public void WithFilter_WithRequestExpectations_NullPredicate_ThrowsArgumentNullException()
         {
             var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
             Assert.Throws<ArgumentNullException>("predicate", () => sut.WithFilter(null, 1, "check"));
@@ -106,7 +106,7 @@ namespace TestableHttpClient.Tests
 #nullable restore
 
         [Fact]
-        public void With_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
+        public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -115,7 +115,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void With_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
+        public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
@@ -124,7 +124,7 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void With_WithRequestExpectation_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
+        public void WithFilter_WithRequestExpectation_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
         {
             var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
 
