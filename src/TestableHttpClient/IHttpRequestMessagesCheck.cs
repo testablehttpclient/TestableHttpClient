@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Net.Http;
 
 namespace TestableHttpClient
@@ -9,6 +8,17 @@ namespace TestableHttpClient
     /// </summary>
     public interface IHttpRequestMessagesCheck
     {
+        /// <summary>
+        /// Asserts whether requests comply with a specific filter.
+        /// </summary>
+        /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
+        /// <param name="condition">The name of the conditon, used in the exception message.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+        [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
+#pragma warning disable CA1716 // Identifiers should not match keywords
+        IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition);
+#pragma warning restore CA1716 // Identifiers should not match keywords
+
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
         /// </summary>

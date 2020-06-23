@@ -25,6 +25,9 @@ namespace TestableHttpClient.NFluent
             requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
+        [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, condition);
+
         public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
         public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);

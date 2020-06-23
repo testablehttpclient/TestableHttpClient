@@ -65,6 +65,9 @@ namespace TestableHttpClient
             }
         }
 
+        [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, condition);
+
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
         /// </summary>
@@ -98,7 +101,7 @@ namespace TestableHttpClient
         /// </summary>
         /// <param name="count">The number of requests that are expected, should be a positive value.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
+        [Obsolete("Times as a seperate check is no longer supported, use the WithFilter overload with expectdNumberOfRequests.", true)]
         public IHttpRequestMessagesCheck Times(int count)
         {
             if (count < 0)
