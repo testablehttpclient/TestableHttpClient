@@ -5,12 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Deprecated
+- `WithUriPattern(this IHttpRequestMessagesCheck, string)` will be removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
+- `With(Func<HttpRequestMessage, bool>, string)` will be removed in favour of `WithFilter(Func<HttpRequestMessage, bool>, string)`, since it conflicts with the language keyword `with`.
+- `Times(int)` will be removed in favour of the `With*` methods with an `int` parameter.
+
 ### Added
 - It is now possible to use NFluent to check `TestableHttpMessageHandler` by using `Check.That(handler).HasMadeRequests()` and `Check.That(handler).HasMadeRequestsTo("https://github.com/dnperfors/testablehttpclient")`. All existing `With` checks are supported.
+- All `With*` methods got an extra overload to specify the exact number of expected requests. This is instead of the `Times` method.
+
 ### Changed
 - Introduced `IHttpRequestMessagesCheck` as the public interface for all checks on requests made to `TestableHttpMessageHandler`. It contains the following api:
-  - `With(Func<HttpRequestMessage, bool>, string)`
-  - `Times(int)`
+  - `WithFilter(Func<HttpRequestMessage, bool>, string)`
+  - `WithFilter(Func<HttpRequestMessage, bool>, int, string)`
+  - `WithFilter(Func<HttpRequestMessage, bool>, int?, string)`
 - Moved some api's from `TestableHttpMessageHandler` to `TestableHttpMessageHandlerAssertionExtensions`:
   - `ShouldHaveMadeRequests(this TestableHttpMessageHandler)`
   - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string)`
@@ -29,9 +37,6 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - `WithContent(this IHttpRequestMessagesCheck, string)`
   - `WithJsonContent(this IHttpRequestMessagesCheck, object)`
   - `WithFormUrlEncodedContent(this IHttpRequestMessagesCheck, IEnumerable<KeyValuePair<string, string>)`
-
-### Deprecated
-- `WithUriPattern(this IHttpRequestMessagesCheck, string)` will be removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
 
 ### Removed
 - `HttpRequestMessageAsserter` is made internal.

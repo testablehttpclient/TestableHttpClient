@@ -22,29 +22,33 @@ namespace TestableHttpClient.NFluent
         public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages)
             : base(httpRequestMessages, Check.Reporter, false)
         {
-            if (httpRequestMessages == null)
-            {
-                throw new ArgumentNullException(nameof(httpRequestMessages));
-            }
-            requests = httpRequestMessages;
+            requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message)
+        [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message) => WithFilter(predicate, message);
+
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
+
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
+
+        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
         {
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(condition))
             {
-                requestConditions.Add(message);
+                requestConditions.Add(condition);
             }
 
             var checkLogic = ExtensibilityHelper.BeginCheck(this)
-                .CantBeNegated(nameof(With))
-                .FailWhen(_ => predicate == null, "The predicate should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
-                .Analyze((sut, _) => requests = requests.Where(predicate));
+                .CantBeNegated(nameof(WithFilter))
+                .FailWhen(_ => requestFilter == null, "The request filter should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                .Analyze((sut, _) => requests = requests.Where(requestFilter));
 
-            AnalyzeNumberOfRequests(checkLogic, null);
+            AnalyzeNumberOfRequests(checkLogic, expectedNumberOfRequests);
             return this;
         }
 
+        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
         public IHttpRequestMessagesCheck Times(int count)
         {
             var checkLogic = ExtensibilityHelper.BeginCheck(this)

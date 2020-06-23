@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
+
+using Moq;
 
 using Xunit;
 
@@ -11,7 +11,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithHttpVersion_NullCheck_ThrowsArgumentNulLException()
+        public void WithHttpVersion_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNulLException()
         {
             IHttpRequestMessagesCheck sut = null;
             var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpVersion(HttpVersion.Version11));
@@ -20,45 +20,55 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         }
 
         [Fact]
-        public void WithHttpVersion_NullHttpVersion_ThrowsArgumentNullException()
+        public void WithHttpVersion_WithNumberOfRequests_NullCheck_ThrowsArgumentNulLException()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            IHttpRequestMessagesCheck sut = null;
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpVersion(HttpVersion.Version11, 1));
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpVersion(null));
+            Assert.Equal("check", exception.ParamName);
+        }
+
+        [Fact]
+        public void WithHttpVersion_WithoutNumberOfRequests_NullHttpVersion_ThrowsArgumentNullException()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpVersion(null));
 
             Assert.Equal("httpVersion", exception.ParamName);
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Fact]
+        public void WithHttpVersion_WithNumberOfRequests_NullHttpVersion_ThrowsArgumentNullException()
+        {
+            var sut = new Mock<IHttpRequestMessagesCheck>();
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpVersion(null, 1));
+
+            Assert.Equal("httpVersion", exception.ParamName);
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
         [Fact]
-        public void WithHttpVersion_NoRequests_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHttpVersion_WithoutNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpVersion(HttpVersion.Version11));
+            sut.Object.WithHttpVersion(HttpVersion.Version11);
 
-            Assert.Equal("Expected at least one request to be made with HTTP Version '1.1', but no requests were made.", exception.Message);
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "HTTP Version '1.1'"));
         }
 
         [Fact]
-        public void WithHttpVersion_RequestsWithIncorrectHttpVersion_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithHttpVersion_WithNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage { Version = HttpVersion.Version20 } });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithHttpVersion(HttpVersion.Version11));
+            sut.Object.WithHttpVersion(HttpVersion.Version11, 1);
 
-            Assert.Equal("Expected at least one request to be made with HTTP Version '1.1', but no requests were made.", exception.Message);
-        }
-
-        [Fact]
-        public void WithHttpVersion_RequestsWithCorrectVersion_ReturnsHttpRequestMessageAsserter()
-        {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage { Version = HttpVersion.Version11 } });
-
-            var result = sut.WithHttpVersion(HttpVersion.Version11);
-
-            Assert.NotNull(result);
-            Assert.IsType<HttpRequestMessageAsserter>(result);
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "HTTP Version '1.1'"));
         }
     }
 }

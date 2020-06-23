@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Net.Http;
+
+using Moq;
 
 using Xunit;
 
@@ -10,11 +10,21 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
     {
 #nullable disable
         [Fact]
-        public void WithRequestUri_NullCheck_ThrowsArgumentNullException()
+        public void WithRequestUri_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
         {
             IHttpRequestMessagesCheck sut = null;
 
             var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestUri("*"));
+
+            Assert.Equal("check", exception.ParamName);
+        }
+
+        [Fact]
+        public void WithRequestUri_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
+        {
+            IHttpRequestMessagesCheck sut = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestUri("*", 2));
 
             Assert.Equal("check", exception.ParamName);
         }
@@ -24,47 +34,33 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         [InlineData("")]
         public void WithRequestUri_NullOrEmptyPattern_ThrowsArgumentNullException(string pattern)
         {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestUri(pattern));
+            var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestUri(pattern));
 
             Assert.Equal("pattern", exception.ParamName);
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
         }
 #nullable restore
 
         [Fact]
-        public void WithRequestUri_RequestWithMatchingUri_DoesNotThrowException()
+        public void WithRequestUri_WithoutNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) });
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            sut.WithRequestUri("https://example.com/");
+            sut.Object.WithRequestUri("https://example.com/");
+
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "uri pattern 'https://example.com/'"));
         }
 
         [Fact]
-        public void WithRequestUri_RequestWithMatchingUriAndNegationTurnedOn_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
+        public void WithRequestUri_WithNumberOfRequests_CallsWithCorrectly()
         {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) }, true);
+            var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestUri("https://example.com/"));
-            Assert.Equal("Expected no requests to be made with uri pattern 'https://example.com/', but one request was made.", exception.Message);
-        }
+            sut.Object.WithRequestUri("https://example.com/", 2);
 
-        [Fact]
-        public void WithRequestUri_RequestWithNotMatchingUri_ThrowsHttpRequestMessageassertionExceptionWithSpecificMessage()
-        {
-            var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/")) });
-
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestUri("https://test.org/"));
-            Assert.Equal("Expected at least one request to be made with uri pattern 'https://test.org/', but no requests were made.", exception.Message);
-        }
-
-        [Fact]
-        public void WithRequestUri_RequestWithStarPatternAndNoRequests_ThrowsHttpRequestMessageassertionExceptionWithSpecificMessage()
-        {
-            var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
-
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestUri("*"));
-            Assert.Equal("Expected at least one request to be made, but no requests were made.", exception.Message);
+            sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)2, "uri pattern 'https://example.com/'"));
         }
     }
 }
