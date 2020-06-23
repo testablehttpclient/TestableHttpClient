@@ -65,8 +65,14 @@ namespace TestableHttpClient
             }
         }
 
+        /// <summary>
+        /// Asserts whether requests comply with a specific filter.
+        /// </summary>
+        /// <param name="predicate">The filter to filter requests with before asserting.</param>
+        /// <param name="message">The name of the conditon, used in the exception message.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, condition);
+        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message) => WithFilter(predicate, message);
 
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
