@@ -260,6 +260,5 @@ namespace TestableHttpClient.NFluent
 
             return ExtensibilityHelper.BuildCheckLink(check);
         }
-
     }
 }

@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace TestableHttpClient
 {
-    public class HttpRequestMessageAssertionException : Exception
+    [Serializable]
+    [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Not intended for public usage, but could be used for catching.")]
+    public sealed class HttpRequestMessageAssertionException : Exception
     {
-        private HttpRequestMessageAssertionException()
+        internal HttpRequestMessageAssertionException(string message) : base(message)
         {
         }
 
-        public HttpRequestMessageAssertionException(string message) : base(message)
-        {
-        }
-
-        public HttpRequestMessageAssertionException(string message, Exception innerException) : base(message, innerException)
+        private HttpRequestMessageAssertionException(SerializationInfo serializationInfo, StreamingContext streamingContext)
+            : base(serializationInfo, streamingContext)
         {
         }
     }
