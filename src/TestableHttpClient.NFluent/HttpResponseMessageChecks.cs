@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -118,23 +119,7 @@ namespace TestableHttpClient.NFluent
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
                 .CheckSutAttributes(sut => sut.Headers.Select(x => new Header(x.Key, x.Value)), "headers")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                .FailWhen(sut =>
-                {
-                    if (sut.Any(x => x.Name == expectedHeader))
-                    {
-                        var header = sut.First(x => x.Name == expectedHeader);
-                        if (StringMatcher.Matches(header.Value, expectedValue))
-                        {
-                            return false;
-
-                        }
-                    }
-
-                    return true;
-                }, "The {0} does not contain the expected header.")
-                .DefineExpectedResult(new Header(expectedHeader, expectedValue), "The expected header:", "The forbidden header:")
-                .OnNegate("The {0} should not contain the forbidden header.")
-                .EndCheck();
+                .HasHeaderWithValue(expectedHeader, expectedValue);
 
             return ExtensibilityHelper.BuildCheckLink(check);
         }
@@ -180,7 +165,14 @@ namespace TestableHttpClient.NFluent
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .FailIfNull()
                 .CheckSutAttributes(sut => sut.Headers.Select(x => new Header(x.Key, x.Value)), "headers")
-                .FailWhen(sut =>
+                .HasHeaderWithValue(expectedHeader, expectedValue);
+
+            return ExtensibilityHelper.BuildCheckLink(check);
+        }
+
+        private static void HasHeaderWithValue(this ICheckLogic<IEnumerable<Header>> checkLogic, string expectedHeader, string expectedValue)
+        {
+            checkLogic.FailWhen(sut =>
                 {
                     if (sut.Any(x => x.Name == expectedHeader))
                     {
@@ -195,8 +187,6 @@ namespace TestableHttpClient.NFluent
                 .DefineExpectedResult(new Header(expectedHeader, expectedValue), "The expected header:", "The forbidden header:")
                 .OnNegate("The {0} should not contain the forbidden header.")
                 .EndCheck();
-
-            return ExtensibilityHelper.BuildCheckLink(check);
         }
 
         /// <summary>
