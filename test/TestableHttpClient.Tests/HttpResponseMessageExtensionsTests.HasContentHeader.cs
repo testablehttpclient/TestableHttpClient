@@ -125,6 +125,17 @@ namespace TestableHttpClient.Tests
             Assert.False(sut.HasContentHeader("Host", "inline"));
         }
 
+        [Fact]
+        public void HasContentHeader_WithValue_NoContent_ReturnsFalse()
+        {
+            using var sut = new HttpResponseMessage
+            {
+                Content = null
+            };
+
+            Assert.False(sut.HasContentHeader("Content-Disposition", "inline"));
+        }
+
         [Theory]
         [InlineData("inline; filename=emtpy.file")]
         [InlineData("inline; *")]

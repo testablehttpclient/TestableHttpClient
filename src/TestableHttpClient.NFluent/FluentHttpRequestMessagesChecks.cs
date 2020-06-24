@@ -48,7 +48,7 @@ namespace TestableHttpClient.NFluent
             return this;
         }
 
-        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.")]
+        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.", true)]
         public IHttpRequestMessagesCheck Times(int count)
         {
             var checkLogic = ExtensibilityHelper.BeginCheck(this)
