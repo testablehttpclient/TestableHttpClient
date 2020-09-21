@@ -8,7 +8,7 @@ using Moq;
 
 using Xunit;
 
-namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
+namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests
 {
     public class WithFormUrlEncodedContent
     {

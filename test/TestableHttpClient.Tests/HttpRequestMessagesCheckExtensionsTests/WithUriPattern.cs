@@ -4,7 +4,7 @@ using System.Net.Http;
 
 using Xunit;
 
-namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
+namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests
 {
     [Obsolete("Renamed to WithRequestUri")]
     public class WithUriPattern

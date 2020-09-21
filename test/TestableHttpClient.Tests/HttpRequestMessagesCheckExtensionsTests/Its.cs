@@ -3,7 +3,7 @@ using System.Net.Http;
 
 using Moq;
 
-namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
+namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests
 {
     public static class Its
     {
