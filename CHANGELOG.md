@@ -4,6 +4,10 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+### Changed
+- TestableHttpClient is now being tested against multiple .net versions, currently these are: .net core 2.1 and .net core 3.1.
+
 ## [0.5] - 2020-06-25
 ### Deprecated
 - `WithUriPattern(this IHttpRequestMessagesCheck, string)` will be removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
