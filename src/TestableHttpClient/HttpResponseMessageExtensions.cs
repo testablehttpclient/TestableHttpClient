@@ -218,7 +218,12 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(pattern));
             }
 
-            var stringContent = httpResponseMessage.Content?.ReadAsStringAsync()?.Result ?? string.Empty;
+            var stringContent = string.Empty;
+            
+            if(httpResponseMessage.Content != null)
+            {
+                stringContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            }
 
             return pattern switch
             {
