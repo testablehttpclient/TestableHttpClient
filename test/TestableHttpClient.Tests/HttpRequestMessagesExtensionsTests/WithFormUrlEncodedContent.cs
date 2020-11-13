@@ -61,7 +61,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         {
             var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            sut.Object.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" });
+            sut.Object.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") });
 
             sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "form url encoded content 'username=alice'"));
         }
@@ -71,7 +71,7 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         {
             var sut = new Mock<IHttpRequestMessagesCheck>();
 
-            sut.Object.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" }, 1);
+            sut.Object.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }, 1);
 
             sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "form url encoded content 'username=alice'"));
         }
@@ -81,11 +81,11 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         {
             var request = new HttpRequestMessage
             {
-                Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>())
+                Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>())
             };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
-            var result = sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>());
+            var result = sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>());
 
             Assert.NotNull(result);
             Assert.IsType<HttpRequestMessageAsserter>(result);
@@ -96,11 +96,11 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         {
             var request = new HttpRequestMessage
             {
-                Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>())
+                Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>())
             };
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" }));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }));
 
             Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
         }
@@ -110,12 +110,12 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesExtensionsTests
         {
             var request = new HttpRequestMessage
             {
-                Content = new FormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" })
+                Content = new FormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") })
             };
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("plain/text");
             var sut = new HttpRequestMessageAsserter(new[] { request });
 
-            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new Dictionary<string, string> { ["username"] = "alice" }));
+            var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }));
 
             Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
         }

@@ -408,7 +408,7 @@ namespace TestableHttpClient
         /// <param name="check">The implementation that hold all the request messages.</param>
         /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection) => WithFormUrlEncodedContent(check, nameValueCollection, null);
+        public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection) => WithFormUrlEncodedContent(check, nameValueCollection, null);
 
         /// <summary>
         /// Asserts wheter requests are made with specific url encoded content.
@@ -417,9 +417,9 @@ namespace TestableHttpClient
         /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
         /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection, int expectedNumberOfRequests) => WithFormUrlEncodedContent(check, nameValueCollection, (int?)expectedNumberOfRequests);
+        public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection, int expectedNumberOfRequests) => WithFormUrlEncodedContent(check, nameValueCollection, (int?)expectedNumberOfRequests);
 
-        private static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string, string>> nameValueCollection, int? expectedNumberOfRequests)
+        private static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection, int? expectedNumberOfRequests)
         {
             if (check == null)
             {

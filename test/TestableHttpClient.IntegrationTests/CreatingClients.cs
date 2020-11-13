@@ -15,18 +15,22 @@ namespace TestableHttpClient.IntegrationTests
 
             await client.GetAsync("https://httpbin.org/get");
 
+#if NETCOREAPP2_1
+            testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version20);
+#else
             testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version11);
+#endif
         }
 
         [Fact]
         public async Task CreateClientWithConfiguration()
         {
             var testableHttpMessageHandler = new TestableHttpMessageHandler();
-            var client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestVersion = HttpVersion.Version20);
+            var client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
 
             await client.GetAsync("https://httpbin.org/get");
 
-            testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version20);
+            testableHttpMessageHandler.ShouldHaveMadeRequests().WithRequestHeader("test", "test");
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TestableHttpClient.NFluent.Tests
     public partial class HttpResponseMessageChecksTests
     {
         [Fact]
-        public void HasContentWithPattern_WhenHttpResponseMessageIsNull_DoesFail()
+        public void HasContentWithEmptyPattern_WhenHttpResponseMessageIsNull_DoesFail()
         {
             HttpResponseMessage? sut = null;
 
@@ -23,18 +23,37 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void HasContentWithPattern_WhenContentIsNull_DoesFail()
+        public void HasContentWithEmptyPattern_WhenContentIsNull_DoesNotFail()
         {
             using var sut = new HttpResponseMessage();
 
-            Check.ThatCode(() => Check.That(sut).HasContent(""))
+            Check.That(sut).HasContent("");
+        }
+
+        [Fact]
+        public void HasContentWithEmptyPattern_WhenContentIsEmpty_DoesNotFail()
+        {
+            using var sut = new HttpResponseMessage
+            {
+                Content = new StringContent("")
+            };
+
+            Check.That(sut).HasContent("");
+        }
+
+        [Fact]
+        public void HasContentWithEmptyPattern_WhenContentIsNull_DoesFail()
+        {
+            using var sut = new HttpResponseMessage();
+
+            Check.ThatCode(() => Check.That(sut).HasContent("Some content"))
                 .IsAFailingCheckWithMessage(
                     "",
                     "The checked response's content should be the expected content.",
                     "The checked response's content:",
-                    "\t[null]",
+                    "\t[\"\"]",
                     "The expected content:",
-                    "\t[\"\"]"
+                    "\t[\"Some content\"]"
                 );
         }
 
@@ -66,7 +85,15 @@ namespace TestableHttpClient.NFluent.Tests
         {
             using var sut = new HttpResponseMessage();
 
-            Check.That(sut).Not.HasContent("");
+            Check.ThatCode(() => Check.That(sut).Not.HasContent(""))
+                .IsAFailingCheckWithMessage(
+                    "",
+                    "The checked response's content should not be the forbidden content.",
+                    "The checked response's content:",
+                    $"\t[\"\"]",
+                    "The forbidden content:",
+                    $"\t[\"\"]"
+                );
         }
 
         [Theory]

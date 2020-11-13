@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿#if !NETCOREAPP2_1
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -126,3 +127,4 @@ namespace TestableHttpClient.IntegrationTests
         }
     }
 }
+#endif

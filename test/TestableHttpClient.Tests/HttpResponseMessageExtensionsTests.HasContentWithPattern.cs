@@ -28,11 +28,11 @@ namespace TestableHttpClient.Tests
 #nullable enable
 
         [Fact]
-        public void HasContentWithPattern_NoContent_ReturnsFalse()
+        public void HasContentWithPattern_NoContentAndEmptyPattern_ReturnsTrue()
         {
             using var sut = new HttpResponseMessage();
 
-            Assert.False(sut.HasContent(""));
+            Assert.True(sut.HasContent(""));
         }
 
         [Theory]

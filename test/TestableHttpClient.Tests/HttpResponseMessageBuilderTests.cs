@@ -64,7 +64,7 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithResponseHeaders(x => x.Location = new Uri("https://example.com/")).Build();
 
-            Assert.Equal("https://example.com/", result.Headers.Location.AbsoluteUri);
+            Assert.Equal("https://example.com/", result.Headers.Location?.AbsoluteUri);
         }
 
         [Theory]
@@ -118,8 +118,8 @@ namespace TestableHttpClient.Tests
             var result = sut.WithStringContent("My content").Build();
 
             Assert.Equal("My content", await result.Content.ReadAsStringAsync());
-            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
-            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+            Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
         }
 
         [Fact]
@@ -129,8 +129,8 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithStringContent("", null).Build();
 
-            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
-            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+            Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
         }
 
         [Fact]
@@ -140,8 +140,8 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithStringContent("", Encoding.ASCII).Build();
 
-            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
-            Assert.Equal("us-ascii", result.Content.Headers.ContentType.CharSet);
+            Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
+            Assert.Equal("us-ascii", result.Content.Headers.ContentType?.CharSet);
         }
 
         [Fact]
@@ -151,8 +151,8 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithStringContent("", null, null).Build();
 
-            Assert.Equal("text/plain", result.Content.Headers.ContentType.MediaType);
-            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+            Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
         }
 
         [Fact]
@@ -162,8 +162,8 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithStringContent("", null, "application/json").Build();
 
-            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
-            Assert.Equal("utf-8", result.Content.Headers.ContentType.CharSet);
+            Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
+            Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace TestableHttpClient.Tests
             var result = sut.WithJsonContent(null).Build();
 
             Assert.Equal("null", await result.Content.ReadAsStringAsync());
-            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace TestableHttpClient.Tests
             var result = sut.WithJsonContent(Array.Empty<object>(), null).Build();
 
             Assert.Equal("[]", await result.Content.ReadAsStringAsync());
-            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
+            Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
         }
 
         [Fact]
@@ -196,8 +196,8 @@ namespace TestableHttpClient.Tests
             var result = sut.WithJsonContent(new { }, "text/json").Build();
 
             Assert.Equal("{}", await result.Content.ReadAsStringAsync());
-            Assert.Equal("text/json", result.Content.Headers.ContentType.MediaType);
-            Assert.Null(result.Content.Headers.ContentType.CharSet);
+            Assert.Equal("text/json", result.Content.Headers.ContentType?.MediaType);
+            Assert.Null(result.Content.Headers.ContentType?.CharSet);
         }
 
         [Fact]
