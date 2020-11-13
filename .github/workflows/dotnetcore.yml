@@ -41,7 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: dotnet sonarscanner end -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
     - name: Check source file format
-      run: dotnet format --folder . --check --dry-run # --folder is used to supress warnings: https://github.com/dotnet/format/issues/584
+      run: dotnet format --check
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build
     - uses: actions/upload-artifact@v2

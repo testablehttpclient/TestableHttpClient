@@ -219,8 +219,8 @@ namespace TestableHttpClient
             }
 
             var stringContent = string.Empty;
-            
-            if(httpResponseMessage.Content != null)
+
+            if (httpResponseMessage.Content != null)
             {
                 stringContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
             }
