@@ -146,15 +146,6 @@ namespace TestableHttpClient.NFluent
             return ExtensibilityHelper.BuildCheckLink(check);
         }
 
-        private static IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetHeaders(this HttpContent httpContent)
-        {
-            if (httpContent == null)
-            {
-                return Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>();
-            }
-            return httpContent.Headers;
-        }
-
         /// <summary>
         /// Verify that the response has a content header with a given name and value.
         /// </summary>
@@ -173,6 +164,15 @@ namespace TestableHttpClient.NFluent
                 .HasHeaderWithValue(expectedHeader, expectedValue);
 
             return ExtensibilityHelper.BuildCheckLink(check);
+        }
+
+        private static IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetHeaders(this HttpContent httpContent)
+        {
+            if (httpContent == null)
+            {
+                return Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>();
+            }
+            return httpContent.Headers;
         }
 
         private static void HasHeaderWithValue(this ICheckLogic<IEnumerable<Header>> checkLogic, string expectedHeader, string expectedValue)
