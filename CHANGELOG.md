@@ -6,7 +6,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [unreleased]
 ### Changed
-- TestableHttpClient is now being tested against multiple .net versions, currently these are: .net core 2.1 and .net core 3.1.
+- TestableHttpClient is now being tested against multiple .net versions, currently these are: .NET Core 2.1, .NET Core 3.1 and .NET 5.0.
+- `HasContent()` and `HasContent(string)` now return `false` when the actual content results in an empty string.
 
 ## [0.5] - 2020-06-25
 ### Deprecated

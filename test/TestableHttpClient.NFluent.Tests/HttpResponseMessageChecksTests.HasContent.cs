@@ -34,11 +34,26 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void HasContent_WhenContentIsNotNull_DoesNotFail()
+        public void HasContent_WhenContentIsNullAndNotEmpty_DoesFail()
         {
             using var sut = new HttpResponseMessage
             {
                 Content = new StringContent("")
+            };
+
+            Check.ThatCode(() => Check.That(sut).HasContent())
+                .IsAFailingCheckWithMessage(
+                    "",
+                    "The checked response has no content, but content was expected."
+                );
+        }
+
+        [Fact]
+        public void HasContent_WhenContentIsNotEmpty_DoesNotFail()
+        {
+            using var sut = new HttpResponseMessage
+            {
+                Content = new StringContent("Some Content")
             };
 
             Check.That(sut).HasContent();
@@ -53,11 +68,22 @@ namespace TestableHttpClient.NFluent.Tests
         }
 
         [Fact]
-        public void HasContent_WhenContentIsNotNullAndNotIsUsed_DoesFail()
+        public void HasContent_WhenContentIsEmptyAndNotIsUsed_DoesNotFail()
         {
             using var sut = new HttpResponseMessage
             {
                 Content = new StringContent("")
+            };
+
+            Check.That(sut).Not.HasContent();
+        }
+
+        [Fact]
+        public void HasContent_WhenContentIsNotNullAndNotIsUsed_DoesFail()
+        {
+            using var sut = new HttpResponseMessage
+            {
+                Content = new StringContent("Some content")
             };
 
             Check.ThatCode(() => Check.That(sut).Not.HasContent())

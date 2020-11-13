@@ -12,8 +12,8 @@ namespace TestableHttpClient
         {
         }
 
-        private HttpRequestMessageAssertionException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
+        [ExcludeFromCodeCoverage]
+        private HttpRequestMessageAssertionException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

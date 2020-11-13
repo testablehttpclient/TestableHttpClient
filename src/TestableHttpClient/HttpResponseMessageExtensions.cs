@@ -190,7 +190,14 @@ namespace TestableHttpClient
             {
                 throw new ArgumentNullException(nameof(httpResponseMessage));
             }
-            return httpResponseMessage.Content != null;
+
+            if (httpResponseMessage.Content == null)
+            {
+                return false;
+            }
+
+            var stream = httpResponseMessage.Content.ReadAsStreamAsync().Result;
+            return stream.ReadByte() != -1;
         }
 
         /// <summary>
@@ -211,12 +218,12 @@ namespace TestableHttpClient
                 throw new ArgumentNullException(nameof(pattern));
             }
 
-            if (httpResponseMessage.Content == null)
-            {
-                return false;
-            }
+            var stringContent = string.Empty;
 
-            var stringContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            if (httpResponseMessage.Content != null)
+            {
+                stringContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            }
 
             return pattern switch
             {

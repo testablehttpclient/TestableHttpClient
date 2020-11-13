@@ -32,7 +32,11 @@ namespace TestableHttpClient.NFluent.Tests
             Check.ThatCode(() => Check.That(sut).HasContentHeader("Content-Disposition", "inline"))
                 .IsAFailingCheckWithMessage(
                     "",
-                    "The checked response's content is null."
+                    "The checked response's content's headers does not contain the expected header.",
+                    "The checked response's content's headers:",
+                    "\t{} (0 item)",
+                    "The expected header:",
+                    "\t[Content-Disposition: inline]"
                 );
         }
 

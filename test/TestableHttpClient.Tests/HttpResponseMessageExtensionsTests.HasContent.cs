@@ -27,11 +27,22 @@ namespace TestableHttpClient.Tests
         }
 
         [Fact]
-        public void HasContent_NotNullContent_ReturnsTrue()
+        public void HasContent_EmptyContent_ReturnsFalse()
         {
             using var sut = new HttpResponseMessage
             {
                 Content = new StringContent("")
+            };
+
+            Assert.False(sut.HasContent());
+        }
+
+        [Fact]
+        public void HasContent_NotEmptyContent_ReturnsTrue()
+        {
+            using var sut = new HttpResponseMessage
+            {
+                Content = new StringContent("Some Content")
             };
 
             Assert.True(sut.HasContent());

@@ -29,6 +29,5 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)/.editorconfig" />
   </ItemGroup>
 </Project>

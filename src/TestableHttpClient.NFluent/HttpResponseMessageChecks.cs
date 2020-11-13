@@ -135,11 +135,9 @@ namespace TestableHttpClient.NFluent
             ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
-#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                .CheckSutAttributes(sut => sut.Content, "content")
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification: Null check is performed in FailIfNull statement
+                .CheckSutAttributes(sut => sut.Content.GetHeaders().Select(x => x.Key).ToArray(), "content's headers")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                .FailIfNull()
-                .CheckSutAttributes(sut => sut.Headers.Select(x => x.Key).ToArray(), "headers")
                 .FailWhen(sut => !sut.Contains(expectedHeader), "The {0} does not contain the expected header.")
                 .DefineExpectedResult(expectedHeader, "The expected header:", "The forbidden header:")
                 .OnNegate("The {0} should not contain the forbidden header.")
@@ -160,14 +158,21 @@ namespace TestableHttpClient.NFluent
             ExtensibilityHelper.BeginCheck(check)
                 .SetSutName("response")
                 .FailIfNull()
-#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                .CheckSutAttributes(sut => sut.Content, "content")
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Justification: Null check is performed in FailIfNull statement
+                .CheckSutAttributes(sut => sut.Content.GetHeaders().Select(x => new Header(x.Key, x.Value)), "content's headers")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                .FailIfNull()
-                .CheckSutAttributes(sut => sut.Headers.Select(x => new Header(x.Key, x.Value)), "headers")
                 .HasHeaderWithValue(expectedHeader, expectedValue);
 
             return ExtensibilityHelper.BuildCheckLink(check);
+        }
+
+        private static IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetHeaders(this HttpContent httpContent)
+        {
+            if (httpContent == null)
+            {
+                return Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>();
+            }
+            return httpContent.Headers;
         }
 
         private static void HasHeaderWithValue(this ICheckLogic<IEnumerable<Header>> checkLogic, string expectedHeader, string expectedValue)
@@ -200,12 +205,22 @@ namespace TestableHttpClient.NFluent
                 .SetSutName("response")
                 .FailIfNull()
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                .FailWhen(sut => sut.Content == null, "The {0} has no content, but content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+                .FailWhen(sut => !sut.Content.HasContent(), "The {0} has no content, but content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 .OnNegate("The {0} has content, but no content was expected.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
                 .EndCheck();
 
             return ExtensibilityHelper.BuildCheckLink(check);
+        }
+
+        private static bool HasContent(this HttpContent httpContent)
+        {
+            if (httpContent == null)
+            {
+                return false;
+            }
+            var stream = httpContent.ReadAsStreamAsync().Result;
+            return stream.ReadByte() != -1;
         }
 
         /// <summary>
@@ -230,9 +245,9 @@ namespace TestableHttpClient.NFluent
             else if (expectedContent.Contains("*"))
             {
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result, "content")
+                checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result ?? string.Empty, "content")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                .FailWhen(sut => sut == null || !StringMatcher.Matches(sut, expectedContent), "The {0} does not match the expected pattern.")
+                .FailWhen(sut => !StringMatcher.Matches(sut, expectedContent), "The {0} does not match the expected pattern.")
                 .DefineExpectedResult(expectedContent, "The expected content pattern:", "The forbidden content pattern:")
                 .OnNegate("The {0} should not match the forbidden pattern.")
                 .EndCheck();
@@ -240,9 +255,9 @@ namespace TestableHttpClient.NFluent
             else
             {
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
-                checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result, "content")
+                checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result ?? string.Empty, "content")
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                .FailWhen(sut => sut == null || !StringMatcher.Matches(sut, expectedContent), "The {0} should be the expected content.")
+                .FailWhen(sut => !StringMatcher.Matches(sut, expectedContent), "The {0} should be the expected content.")
                 .DefineExpectedResult(expectedContent, "The expected content:", "The forbidden content:")
                 .OnNegate("The {0} should not be the forbidden content.")
                 .EndCheck();
