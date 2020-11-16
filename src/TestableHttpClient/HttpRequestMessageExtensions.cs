@@ -273,5 +273,28 @@ namespace TestableHttpClient
                 _ => StringMatcher.Matches(stringContent, pattern),
             };
         }
+
+        /// <summary>
+        /// Determines whether the request uri querystring matches a string pattern. For asserting the decoded version of the querystring is used.
+        /// </summary>
+        /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct request uir querystring on.</param>
+        /// <param name="pattern">A pattern to match the request uri querystring, supports * as wildcards.</param>
+        /// <returns>true when the request uri querystring matches the pattern; otherwise, false.</returns>
+        public static bool HasQueryString(this HttpRequestMessage httpRequestMessage, string pattern)
+        {
+            if (httpRequestMessage == null)
+            {
+                throw new ArgumentNullException(nameof(httpRequestMessage));
+            }
+
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            var requestQuery = httpRequestMessage.RequestUri.GetComponents(UriComponents.Query, UriFormat.Unescaped);
+
+            return StringMatcher.Matches(requestQuery, pattern);
+        }
     }
 }

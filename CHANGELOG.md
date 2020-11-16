@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [unreleased]
+### Added
+- `WithQueryString(this IHttpRequestMessageCheck, string)` to test the querystring without url encoding.
+
 ### Changed
 - TestableHttpClient is now being tested against multiple .net versions, currently these are: .NET Core 2.1, .NET Core 3.1 and .NET 5.0.
 - `HasContent()` and `HasContent(string)` now return `false` when the actual content results in an empty string.

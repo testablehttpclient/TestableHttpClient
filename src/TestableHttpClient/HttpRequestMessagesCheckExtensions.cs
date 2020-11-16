@@ -58,6 +58,45 @@ namespace TestableHttpClient
         }
 
         /// <summary>
+        /// Asserts whether requests were made with a given querystring based on a pattern. For asserting the decoded version of the querystring is used.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="pattern">The querystring pattern that is expected.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+        public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern) => WithQueryString(check, pattern, null);
+
+        /// <summary>
+        /// Asserts whether requests were made with a given querystring based on a pattern. For asserting the decoded version of the querystring is used.
+        /// </summary>
+        /// <param name="check">The implementation that hold all the request messages.</param>
+        /// <param name="pattern">The querystring pattern that is expected.</param>
+        /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+        public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithQueryString(check, pattern, (int?)expectedNumberOfRequests);
+
+        private static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
+        {
+            if (check == null)
+            {
+                throw new ArgumentNullException(nameof(check));
+            }
+
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            var condition = pattern switch
+            {
+                "" => "no querystring",
+                "*" => "any querystring",
+                _ => $"querystring pattern '{pattern}'"
+            };
+
+            return check.WithFilter(x => x.HasQueryString(pattern), expectedNumberOfRequests, condition);
+        }
+
+        /// <summary>
         /// Asserts whether requests were made with a given HTTP Method.
         /// </summary>
         /// <param name="check">The implementation that hold all the request messages.</param>
