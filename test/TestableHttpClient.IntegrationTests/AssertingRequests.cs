@@ -95,6 +95,20 @@ namespace TestableHttpClient.IntegrationTests
         }
 
         [Fact]
+        public async Task AssertingCallWithQueryParameters()
+        {
+            var testHandler = new TestableHttpMessageHandler();
+            var client = new HttpClient(testHandler);
+
+            _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com");
+
+            testHandler.ShouldHaveMadeRequests().WithQueryString("email=admin@example.com");
+            testHandler.ShouldHaveMadeRequests().WithQueryString("email=*");
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithQueryString(""));
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithQueryString("email=admin%40example.com"));
+        }
+
+        [Fact]
         public async Task AssertingHttpMethods()
         {
             var testHandler = new TestableHttpMessageHandler();
