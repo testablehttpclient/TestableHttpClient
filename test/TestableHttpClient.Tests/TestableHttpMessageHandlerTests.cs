@@ -49,82 +49,89 @@ namespace TestableHttpClient.Tests
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+            Assert.NotNull(result.RequestMessage);
         }
 
         [Fact]
-        public async Task SendAsync_WhenRespondWithIsSet_SetRespondIsUsed()
+        public async Task SendAsync_ByDefault_ReturnsDifferentResponseForEveryRequest()
         {
             using var sut = new TestableHttpMessageHandler();
-            using var response = new HttpResponseMessage(HttpStatusCode.NotFound);
-            sut.RespondWith(response);
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com/"));
+            var result1 = await client.GetAsync(new Uri("https://example.com/"));
+            var result2 = await client.GetAsync(new Uri("https://example.com/"));
 
-            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
-            Assert.Same(response, result);
+            Assert.NotSame(result1, result2);
         }
 
         [Fact]
-        public async Task ResponseWith_EmptyResponseBuilder_SetsDefaultResponse()
+        public async Task SendAsync_ByDefault_SetsRequestMessageOnEveryResponse()
         {
             using var sut = new TestableHttpMessageHandler();
-            sut.RespondWith(_ => { });
-
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com/"));
+            var request1 = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/1"));
+            var request2 = new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/2"));
 
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
-        }
+            var response1 = await client.SendAsync(request1);
+            var response2 = await client.SendAsync(request2);
 
-        [Fact]
-        public async Task ResponseWith_UsingResponseBuilder_SetsModifiedResponse()
-        {
-            using var sut = new TestableHttpMessageHandler();
-            sut.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.BadRequest));
-
-            using var client = new HttpClient(sut);
-
-            var result = await client.GetAsync(new Uri("https://example.com/"));
-
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
-            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+            Assert.Same(request1, response1.RequestMessage);
+            Assert.Same(request2, response2.RequestMessage);
+            Assert.NotSame(response1.RequestMessage, response2.RequestMessage);
         }
 
 #nullable disable
         [Fact]
-        public void RespondWith_NullHttpResponseMessage_ThrowsArgumentNullException()
+        public async Task RespondWith_NullFactory_UsesDefaultResponseFactory()
         {
             using var sut = new TestableHttpMessageHandler();
-            HttpResponseMessage response = null;
+            Func<HttpRequestMessage, HttpResponseMessage> responseFactory = null;
+            sut.RespondWith(responseFactory);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(response));
-            Assert.Equal("httpResponseMessage", exception.ParamName);
+            using var client = new HttpClient(sut);
+            var response = await client.GetAsync("https://example.com");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync());
+            Assert.NotNull(response.RequestMessage);
         }
-
-        [Fact]
-        public void RespondsWith_NullBuilder_ThrowsArgumentNullException()
-        {
-            using var sut = new TestableHttpMessageHandler();
-            Action<HttpResponseMessageBuilder> responseBuilder = null;
-
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(responseBuilder));
-            Assert.Equal("httpResponseMessageBuilderAction", exception.ParamName);
-        }
-
 #nullable restore
 
         [Fact]
-        public async Task SimulateTimout_WhenRequestIsMade_ThrowsTaskCancelationExceptionWithOperationCanceledMessage()
+        public async Task RespondWith_CustomFactory_ReturnsCustomStatusCode()
         {
             using var sut = new TestableHttpMessageHandler();
-            sut.SimulateTimeout();
-            using var client = new HttpClient(sut);
+            static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new HttpResponseMessage(HttpStatusCode.Unauthorized);
+            sut.RespondWith(CustomResponse);
 
-            var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync(new Uri("https://example.com/")));
-            Assert.Equal(new OperationCanceledException().Message, exception.Message);
+            using var client = new HttpClient(sut);
+            var response = await client.GetAsync("https://example.com");
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            Assert.Null(response.RequestMessage);
+        }
+
+        [Fact]
+        public async Task RespondWith_CustomFactory_FactoryIsCalledEveryTimeARequestIsMade()
+        {
+            var responseFactoryCallCount = 0;
+            using var sut = new TestableHttpMessageHandler();
+            HttpResponseMessage CustomResponse(HttpRequestMessage request)
+            {
+                responseFactoryCallCount++;
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
+            }
+            sut.RespondWith(CustomResponse);
+
+            using var client = new HttpClient(sut);
+            _ = await client.GetAsync("https://example.com");
+            _ = await client.GetAsync("https://example.com");
+            _ = await client.GetAsync("https://example.com");
+            _ = await client.GetAsync("https://example.com");
+            _ = await client.GetAsync("https://example.com");
+
+            Assert.Equal(5, responseFactoryCallCount);
         }
     }
 }
