@@ -13,18 +13,6 @@ namespace TestableHttpClient
         /// <param name="check">The implementation that hold all the request messages.</param>
         /// <param name="pattern">The uri pattern that is expected.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        [Obsolete("Renamed to WithRequestUri")]
-        public static IHttpRequestMessagesCheck WithUriPattern(this IHttpRequestMessagesCheck check, string pattern)
-        {
-            return WithRequestUri(check, pattern);
-        }
-
-        /// <summary>
-        /// Asserts whether requests were made to a given URI based on a pattern.
-        /// </summary>
-        /// <param name="check">The implementation that hold all the request messages.</param>
-        /// <param name="pattern">The uri pattern that is expected.</param>
-        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
         public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, null);
 
         /// <summary>

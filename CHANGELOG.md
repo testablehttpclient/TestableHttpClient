@@ -13,6 +13,11 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `HasContent()` and `HasContent(string)` now return `false` when the actual content results in an empty string.
 - Downgraded `System.Test.Json` and `NFluent` to the lowest supported version in the library. This is done based on the guidelines of [Microsoft](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/dependencies).
 
+### Removed
+- `WithUriPattern(this IHttpRequestMessagesCheck, string)` was removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
+- `With(Func<HttpRequestMessage, bool>, string)` was removed in favour of `WithFilter(Func<HttpRequestMessage, bool>, string)`, since it conflicts with the language keyword `with`.
+- `Times(int)` was removed in favour of the `With*` methods with an `int` parameter.
+
 ## [0.5] - 2020-06-25
 ### Deprecated
 - `WithUriPattern(this IHttpRequestMessagesCheck, string)` will be removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
