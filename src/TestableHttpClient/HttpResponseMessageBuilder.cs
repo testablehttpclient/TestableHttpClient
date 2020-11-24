@@ -154,7 +154,7 @@ namespace TestableHttpClient
         /// </summary>
         /// <param name="requestMessage">The <see cref="HttpRequestMessage"/> resulting in this response.</param>
         /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
-        public HttpResponseMessageBuilder WithRequestMessage(HttpRequestMessage requestMessage)
+        public HttpResponseMessageBuilder WithRequestMessage(HttpRequestMessage? requestMessage)
         {
             httpResponseMessage.RequestMessage = requestMessage;
             return this;

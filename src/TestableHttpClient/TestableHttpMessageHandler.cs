@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
+using TestableHttpClient.Utils;
+
 namespace TestableHttpClient
 {
     /// <summary>
@@ -14,8 +16,11 @@ namespace TestableHttpClient
     public class TestableHttpMessageHandler : HttpMessageHandler
     {
         private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new ConcurrentQueue<HttpRequestMessage>();
-        private HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK)
+        private Func<HttpRequestMessage, HttpResponseMessage> responseFactory = DefaultResponseFactory;
+
+        private static HttpResponseMessage DefaultResponseFactory(HttpRequestMessage requestMessage) => new HttpResponseMessage(HttpStatusCode.OK)
         {
+            RequestMessage = requestMessage,
             Content = new StringContent(string.Empty)
         };
 
@@ -28,48 +33,27 @@ namespace TestableHttpClient
         {
             httpRequestMessages.Enqueue(request);
 
+            var response = responseFactory(request);
+
             if (response is TimeoutHttpResponseMessage)
             {
                 throw new TaskCanceledException(new OperationCanceledException().Message);
             }
+
             return Task.FromResult(response);
         }
 
         /// <summary>
-        /// Configure the <see cref="HttpResponseMessage"/> that should be returned for each request.
+        /// Configure a factory method that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
         /// </summary>
-        /// <param name="httpResponseMessage"></param>
-        public void RespondWith(HttpResponseMessage httpResponseMessage)
+        /// <param name="httpResponseMessageFactory">The factory method that should be called for every request. The request is passed as a parameter to the factory method and it is expected to return a HttpResponseMessage.</param>
+        /// <remarks>By default each request will receive a new response, however this is dependend on the implementation.</remarks>
+        /// <example>
+        /// testableHttpMessageHander.RespondWith(request => new ResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
+        /// </example>
+        public void RespondWith(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
         {
-            response = httpResponseMessage ?? throw new ArgumentNullException(nameof(httpResponseMessage));
-        }
-
-        /// <summary>
-        /// Configure the <see cref="HttpResponseMessage"/> that should be returned for each request using a <see cref="HttpResponseMessageBuilder"/>.
-        /// </summary>
-        /// <param name="httpResponseMessageBuilderAction">An action that calls methods on the <see cref="HttpResponseMessageBuilder"/>.</param>
-        public void RespondWith(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
-        {
-            if (httpResponseMessageBuilderAction == null)
-            {
-                throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
-            }
-
-            var builder = new HttpResponseMessageBuilder();
-            httpResponseMessageBuilderAction(builder);
-            response = builder.Build();
-        }
-
-        /// <summary>
-        /// Simulate a timeout on the request by throwing a TaskCanceledException when a request is received.
-        /// </summary>
-        public void SimulateTimeout()
-        {
-            response = new TimeoutHttpResponseMessage();
-        }
-
-        private class TimeoutHttpResponseMessage : HttpResponseMessage
-        {
+            responseFactory = httpResponseMessageFactory ?? DefaultResponseFactory;
         }
     }
 }

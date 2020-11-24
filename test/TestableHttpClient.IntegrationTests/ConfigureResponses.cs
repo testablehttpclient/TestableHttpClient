@@ -95,6 +95,33 @@ namespace TestableHttpClient.IntegrationTests
         }
 
         [Fact]
+        public async Task UsingTestHandlerWithCustomResponseFactory_AllowsForAdvancedUsecases()
+        {
+            using var testHandler = new TestableHttpMessageHandler();
+            HttpResponseMessage PathBasedResponse(HttpRequestMessage request)
+            {
+                var statusCode = request.RequestUri!.LocalPath switch
+                {
+                    "/status/200" => HttpStatusCode.OK,
+                    "/status/400" => HttpStatusCode.BadRequest,
+                    _ => HttpStatusCode.NotFound,
+                };
+                return new HttpResponseMessage(statusCode);
+            }
+            testHandler.RespondWith(PathBasedResponse);
+
+            var httpClient = new HttpClient(testHandler);
+            var response = await httpClient.GetAsync("http://httpbin/status/200");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            response = await httpClient.GetAsync("http://httpbin.org/status/400");
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            response = await httpClient.GetAsync("http://httpbin.org/status/500");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
         public async Task SimulateTimeout_WillThrowExceptionSimulatingTheTimeout()
         {
             using var testHandler = new TestableHttpMessageHandler();

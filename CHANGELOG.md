@@ -7,11 +7,17 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [unreleased]
 ### Added
 - `WithQueryString(this IHttpRequestMessageCheck, string)` to test the querystring without url encoding.
+- `RespondWith(Func<HttpRequestMessage, HttpResponseMessage)` to configure a factory method that is called when making a request.
 
 ### Changed
 - TestableHttpClient is now being tested against multiple .net versions, currently these are: .NET Core 2.1, .NET Core 3.1 and .NET 5.0.
 - `HasContent()` and `HasContent(string)` now return `false` when the actual content results in an empty string.
 - Downgraded `System.Test.Json` and `NFluent` to the lowest supported version in the library. This is done based on the guidelines of [Microsoft](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/dependencies).
+- Moved `RespondWith(HttpResponseMessage)` to an extension method, since it now uses `RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)`.
+- Moved `RespondWith(Action<HttpResponseMessageBuilder>)` to an extension method, since it now uses `RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)`.
+- Moved `SimulateTimeout()` to an extension method, since it now uses `RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)`.
+- The default response now sets the `HttpResponseMesage.RequestMessage`.
+- `RespondWith(Action<HttpResponseMessageBuilder>)` sets `HttpResponseMessage.RequestMessage` by default before calling the builder action.
 
 ### Removed
 - `WithUriPattern(this IHttpRequestMessagesCheck, string)` was removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
