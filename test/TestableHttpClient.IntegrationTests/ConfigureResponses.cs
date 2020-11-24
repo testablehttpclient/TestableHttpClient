@@ -100,7 +100,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             HttpResponseMessage PathBasedResponse(HttpRequestMessage request)
             {
-                var statusCode = request.RequestUri.LocalPath switch
+                var statusCode = request.RequestUri!.LocalPath switch
                 {
                     "/status/200" => HttpStatusCode.OK,
                     "/status/400" => HttpStatusCode.BadRequest,
