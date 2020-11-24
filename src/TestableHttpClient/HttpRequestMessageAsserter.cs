@@ -13,7 +13,7 @@ namespace TestableHttpClient
     internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         private readonly List<string> _expectedConditions = new List<string>();
-        private readonly bool _negate = false;
+        private readonly bool _negate;
 
         /// <summary>
         /// Construct a new HttpRequestMessageAsserter.
@@ -68,15 +68,6 @@ namespace TestableHttpClient
         /// <summary>
         /// Asserts whether requests comply with a specific filter.
         /// </summary>
-        /// <param name="predicate">The filter to filter requests with before asserting.</param>
-        /// <param name="message">The name of the conditon, used in the exception message.</param>
-        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message) => WithFilter(predicate, message);
-
-        /// <summary>
-        /// Asserts whether requests comply with a specific filter.
-        /// </summary>
         /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
         /// <param name="condition">The name of the conditon, used in the exception message.</param>
         /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
@@ -99,23 +90,6 @@ namespace TestableHttpClient
 
             Requests = Requests.Where(requestFilter);
             Assert(expectedNumberOfRequests);
-            return this;
-        }
-
-        /// <summary>
-        /// Asserts that a specific amount of requests were made.
-        /// </summary>
-        /// <param name="count">The number of requests that are expected, should be a positive value.</param>
-        /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-        [Obsolete("Times as a seperate check is no longer supported, use the WithFilter overload with expectdNumberOfRequests.", true)]
-        public IHttpRequestMessagesCheck Times(int count)
-        {
-            if (count < 0)
-            {
-                throw new ArgumentException("Count should not be less than zero", nameof(count));
-            }
-
-            Assert(count);
             return this;
         }
     }

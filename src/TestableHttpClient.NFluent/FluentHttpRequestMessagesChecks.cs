@@ -25,9 +25,6 @@ namespace TestableHttpClient.NFluent
             requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         }
 
-        [Obsolete("With is a language keyword and should be avoided, use WithFilter instead.", true)]
-        public IHttpRequestMessagesCheck With(Func<HttpRequestMessage, bool> predicate, string message) => WithFilter(predicate, message);
-
         public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
         public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
@@ -45,18 +42,6 @@ namespace TestableHttpClient.NFluent
                 .Analyze((sut, _) => requests = requests.Where(requestFilter));
 
             AnalyzeNumberOfRequests(checkLogic, expectedNumberOfRequests);
-            return this;
-        }
-
-        [Obsolete("Times as a seperate check is no longer supported, use the With overload with expectdNumberOfRequests.", true)]
-        public IHttpRequestMessagesCheck Times(int count)
-        {
-            var checkLogic = ExtensibilityHelper.BeginCheck(this)
-                .CantBeNegated(nameof(Times))
-                .SetSutName("number of requests")
-                .DefineExpectedResult(count, null, null)
-                .FailWhen(_ => count < 0, "The {1} should not be below zero.", MessageOption.NoCheckedBlock);
-            AnalyzeNumberOfRequests(checkLogic, count);
             return this;
         }
 
