@@ -13,26 +13,14 @@ namespace TestableHttpClient
     internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         private readonly List<string> _expectedConditions = new List<string>();
-        private readonly bool _negate;
 
         /// <summary>
         /// Construct a new HttpRequestMessageAsserter.
         /// </summary>
         /// <param name="httpRequestMessages">The list of requests to assert on.</param>
         public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages)
-            : this(httpRequestMessages, false)
-        {
-        }
-
-        /// <summary>
-        /// Construct a new HttpRequestMessageAsserter.
-        /// </summary>
-        /// <param name="httpRequestMessages">The list of requests to assert on.</param>
-        /// <param name="negate">Whether or not all assertions should be negated.</param>
-        public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, bool negate)
         {
             Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
-            _negate = negate;
         }
 
         /// <summary>
@@ -48,15 +36,6 @@ namespace TestableHttpClient
                 null => actualCount > 0,
                 _ => actualCount == expectedCount,
             };
-
-            if (_negate)
-            {
-                if (!expectedCount.HasValue)
-                {
-                    expectedCount = 0;
-                }
-                pass = !pass;
-            }
 
             if (!pass)
             {

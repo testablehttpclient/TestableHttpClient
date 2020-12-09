@@ -14,7 +14,7 @@ namespace TestableHttpClient.IntegrationTests
             var testHandler = new TestableHttpMessageHandler();
             var client = new HttpClient(testHandler);
 
-            testHandler.ShouldNotHaveMadeRequests();
+            testHandler.ShouldHaveMadeRequests(0);
             Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests());
         }
 
@@ -27,9 +27,8 @@ namespace TestableHttpClient.IntegrationTests
             _ = await client.GetAsync("https://httpbin.org/get");
 
             testHandler.ShouldHaveMadeRequests();
-            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldNotHaveMadeRequests());
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(0));
         }
-
 
         [Fact]
         public async Task AssertingCallsAreNotMadeToSpecificUri()
@@ -39,8 +38,8 @@ namespace TestableHttpClient.IntegrationTests
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
-            testHandler.ShouldNotHaveMadeRequestsTo("https://example.org");
-            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldNotHaveMadeRequestsTo("https://httpbin.org/get"));
+            testHandler.ShouldHaveMadeRequestsTo("https://example.org", 0);
+            Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get", 0));
         }
 
         [Fact]
