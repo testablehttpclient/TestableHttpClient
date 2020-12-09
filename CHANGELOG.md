@@ -14,6 +14,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `RespondWith(Func<HttpRequestMessage, HttpResponseMessage)` to configure a factory method that is called when making a request.
 - `ShouldHaveMadeRequests(this TestableHttpMessageHandler, int)` to test that a certain amount of requests are made.
 - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, int)` to test that a certain amount of requests are made.
+- `public static IHttpRequestMessagesCheck HasMadeRequests(this ICheck<TestableHttpMessageHandler?>, int)` to test that a certain amount of requests are made.
+- `public static IHttpRequestMessagesCheck HasMadeRequestsTo(this ICheck<TestableHttpMessageHandler?>, string, int)` to test that a certain amount of requests are made.
 
 ### Changed
 - TestableHttpClient is now being tested against multiple .net versions, currently these are: .NET Core 2.1, .NET Core 3.1 and .NET 5.0.
