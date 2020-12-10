@@ -27,6 +27,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - The default response now sets the `HttpResponseMesage.RequestMessage`.
 - `RespondWith(Action<HttpResponseMessageBuilder>)` sets `HttpResponseMessage.RequestMessage` by default before calling the builder action.
 
+- Build pipeline now uses .NET SDK by default including NETAnalyzers and C# 9
+
 ### Removed
 - `WithUriPattern(this IHttpRequestMessagesCheck, string)` was removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
 - `With(Func<HttpRequestMessage, bool>, string)` was removed in favour of `WithFilter(Func<HttpRequestMessage, bool>, string)`, since it conflicts with the language keyword `with`.
