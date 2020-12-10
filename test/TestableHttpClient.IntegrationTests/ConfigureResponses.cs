@@ -110,7 +110,7 @@ namespace TestableHttpClient.IntegrationTests
             }
             testHandler.RespondWith(PathBasedResponse);
 
-            var httpClient = new HttpClient(testHandler);
+            using var httpClient = new HttpClient(testHandler);
             var response = await httpClient.GetAsync("http://httpbin/status/200");
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 

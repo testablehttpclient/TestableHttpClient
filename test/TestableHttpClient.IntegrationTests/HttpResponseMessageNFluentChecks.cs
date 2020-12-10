@@ -15,7 +15,7 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public void ExampleOfNFluentChecksForHttpResponseMessages()
         {
-            var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+            using var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
             httpResponseMessage.Headers.Server.Add(new ProductInfoHeaderValue(new ProductHeaderValue("nginx")));
             httpResponseMessage.Content = new StringContent("{}", null, "application/json");
 

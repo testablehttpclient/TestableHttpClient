@@ -16,8 +16,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public void BasicAssertionsWhenNoCallsWereMade()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             Check.ThatCode(() => Check.That(testHandler).HasMadeRequests()).IsAFailingCheck();
         }
@@ -25,8 +25,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task WhenAssertingCallsAreNotMade_AndCallsWereMade_AssertionExceptionIsThrow()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -37,8 +37,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingCallsAreNotMadeToSpecificUri()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -48,8 +48,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingCallsAreMadeToSpecificUriPattern()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -67,8 +67,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingCallsUsingUriPattern()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -86,8 +86,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task ChainUriPatternAssertions()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -99,8 +99,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingCallsUsingQueryStringPattern()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com");
 
@@ -113,11 +113,12 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingHttpMethods()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
             _ = await client.GetAsync("https://httpbin.org/get");
-            _ = await client.PostAsync("https://httpbin.org/post", new StringContent(""));
+            using var content = new StringContent("");
+            _ = await client.PostAsync("https://httpbin.org/post", content);
 
             Check.That(testHandler).HasMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Get);
             Check.ThatCode(() => Check.That(testHandler).HasMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Post)).IsAFailingCheck();
@@ -128,8 +129,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingRequestHeaders()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
             client.DefaultRequestHeaders.Add("api-version", "1.0");
             _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -145,10 +146,11 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingContentHeaders()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
-            _ = await client.PostAsync("https://httpbin.org/post", new StringContent("", Encoding.UTF8, "application/json"));
+            using var content = new StringContent("", Encoding.UTF8, "application/json");
+            _ = await client.PostAsync("https://httpbin.org/post", content);
 
             Check.That(testHandler).HasMadeRequests().WithContentHeader("content-type");
             Check.That(testHandler).HasMadeRequests().WithContentHeader("Content-Type");
@@ -164,10 +166,11 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertingContent()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
-            _ = await client.PostAsync("https://httpbin.org/post", new StringContent("my special content"));
+            using var content = new StringContent("my special content");
+            _ = await client.PostAsync("https://httpbin.org/post", content);
 
             Check.That(testHandler).HasMadeRequests().WithContent("my special content");
             Check.That(testHandler).HasMadeRequests().WithContent("my*content");
@@ -180,10 +183,11 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task AssertJsonContent()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
-            _ = await client.PostAsync("https://httpbin.org/post", new StringContent("{}", Encoding.UTF8, "application/json"));
+            using var content = new StringContent("{}", Encoding.UTF8, "application/json");
+            _ = await client.PostAsync("https://httpbin.org/post", content);
 
             Check.That(testHandler).HasMadeRequests().WithJsonContent(new { });
         }
@@ -191,10 +195,11 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task CustomAssertions()
         {
-            var testHandler = new TestableHttpMessageHandler();
-            var client = new HttpClient(testHandler);
+            using var testHandler = new TestableHttpMessageHandler();
+            using var client = new HttpClient(testHandler);
 
-            _ = await client.PostAsync("https://httpbin.org/post", new StringContent("", Encoding.UTF8, "application/json"));
+            using var content = new StringContent("", Encoding.UTF8, "application/json");
+            _ = await client.PostAsync("https://httpbin.org/post", content);
 
             Check.That(testHandler).HasMadeRequests().WithFilter(x => x.HasContentHeader("Content-Type", "application/json") || x.HasContentHeader("Content-Type", "application/json; *"), "");
         }
