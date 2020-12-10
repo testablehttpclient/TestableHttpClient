@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TestableHttpClient.Tests.TestabeHttpMessageHandlerAssertionExtensionsTests
 {
-    [Obsolete]
+    [Obsolete("Tested method is obsolete")]
     public class ShouldNotHaveMadeRequests
     {
 #nullable disable
