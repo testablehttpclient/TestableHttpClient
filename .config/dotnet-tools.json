@@ -13,12 +13,6 @@
       "commands": [
         "dotnet-sonarscanner"
       ]
-    },
-    "gitversion.tool": {
-      "version": "5.5.0",
-      "commands": [
-        "dotnet-gitversion"
-      ]
     }
   }
 }

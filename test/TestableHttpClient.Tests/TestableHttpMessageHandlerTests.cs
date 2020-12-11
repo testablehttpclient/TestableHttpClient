@@ -70,8 +70,8 @@ namespace TestableHttpClient.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            var request1 = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/1"));
-            var request2 = new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/2"));
+            using var request1 = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/1"));
+            using var request2 = new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/2"));
 
             var response1 = await client.SendAsync(request1);
             var response2 = await client.SendAsync(request2);

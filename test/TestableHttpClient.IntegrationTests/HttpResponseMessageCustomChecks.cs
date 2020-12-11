@@ -11,7 +11,7 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public void ExampleOfCustomAssertionsWithHttpResponseMessages()
         {
-            var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+            using var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
             httpResponseMessage.Headers.Server.Add(new ProductInfoHeaderValue(product: new ProductHeaderValue("nginx")));
             httpResponseMessage.Content = new StringContent("{}", null, "application/json");
 

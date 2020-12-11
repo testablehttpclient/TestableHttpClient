@@ -4,4 +4,8 @@
     <IsPackable>false</IsPackable>
     <RunSettingsFilePath>$(MSBuildThisFileDirectory)/coverlet.runsettings</RunSettingsFilePath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)/CLSCompliant.cs" />
+  </ItemGroup>
 </Project>

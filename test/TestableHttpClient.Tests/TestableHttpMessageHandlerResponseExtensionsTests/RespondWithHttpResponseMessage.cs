@@ -13,7 +13,7 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
         public void RespondWith_NullHandler_ThrowsArgumentNullException()
         {
             TestableHttpMessageHandler sut = null;
-            var response = new HttpResponseMessage();
+            using var response = new HttpResponseMessage();
 
             var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(response));
             Assert.Equal("handler", exception.ParamName);
@@ -34,9 +34,9 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
         public async Task RespondWith_ByDefault_ReturnsSameResponseUnModified()
         {
             using var sut = new TestableHttpMessageHandler();
-            var response = new HttpResponseMessage();
+            using var response = new HttpResponseMessage();
             sut.RespondWith(response);
-            var client = new HttpClient(sut);
+            using var client = new HttpClient(sut);
 
             var result = await client.GetAsync("https://example.com");
 

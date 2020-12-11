@@ -10,8 +10,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task CreateASimpleHttpClient()
         {
-            var testableHttpMessageHandler = new TestableHttpMessageHandler();
-            var client = testableHttpMessageHandler.CreateClient();
+            using var testableHttpMessageHandler = new TestableHttpMessageHandler();
+            using var client = testableHttpMessageHandler.CreateClient();
 
             await client.GetAsync("https://httpbin.org/get");
 
@@ -25,8 +25,8 @@ namespace TestableHttpClient.IntegrationTests
         [Fact]
         public async Task CreateClientWithConfiguration()
         {
-            var testableHttpMessageHandler = new TestableHttpMessageHandler();
-            var client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
+            using var testableHttpMessageHandler = new TestableHttpMessageHandler();
+            using var client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
 
             await client.GetAsync("https://httpbin.org/get");
 
