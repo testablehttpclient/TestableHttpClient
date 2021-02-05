@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [0.6] - unreleased
 ### Deprecated
 - `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` will be removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
 - `ShouldNotHaveMadeRequestsTo(this TestableHttpMessageHandler, string)` will be removed in favour of the new `ShouldHaveMadeRequestsTo(this HttpMessageHandler, string, 0)`.
@@ -28,6 +28,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `RespondWith(Action<HttpResponseMessageBuilder>)` sets `HttpResponseMessage.RequestMessage` by default before calling the builder action.
 
 - Build pipeline now uses .NET SDK by default including NETAnalyzers and C# 9
+- Build uses NerdBank.GitVersioning instead of GitVersion, since we have to specify the version number in the CHANGELOG.md anyways.
 
 ### Removed
 - `WithUriPattern(this IHttpRequestMessagesCheck, string)` was removed in favour of `WithRequestUri(this IHttpRequestMessagesCheck, string)`
