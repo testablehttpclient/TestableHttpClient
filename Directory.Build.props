@@ -20,7 +20,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <DebugType>embedded</DebugType>
+    <DebugType>full</DebugType>
     
     <IncludeSource>true</IncludeSource>
     <RepositoryUrl>https://github.com/dnperfors/TestableHttpClient</RepositoryUrl>

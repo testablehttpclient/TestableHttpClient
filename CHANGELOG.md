@@ -4,6 +4,10 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7] - unreleased
+### Changed
+- In 0.6 the debug symbols were embedded in the dll, so the pipeline couldn't upload the symbol package. This is corrected in 0.7 where the symbol package is correct.
+
 ## [0.6] - 2021-02-24
 ### Deprecated
 - `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` will be removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
@@ -18,6 +22,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `public static IHttpRequestMessagesCheck HasMadeRequestsTo(this ICheck<TestableHttpMessageHandler?>, string, int)` to test that a certain amount of requests are made.
 
 ### Changed
+- Debug symbols are now embedded in the dll and the snupkg file is no longer uploaded seperately.
 - TestableHttpClient is now being tested against multiple .net versions, currently these are: .NET Core 2.1, .NET Core 3.1 and .NET 5.0.
 - `HasContent()` and `HasContent(string)` now return `false` when the actual content results in an empty string.
 - Downgraded `System.Test.Json` and `NFluent` to the lowest supported version in the library. This is done based on the guidelines of [Microsoft](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/dependencies).
