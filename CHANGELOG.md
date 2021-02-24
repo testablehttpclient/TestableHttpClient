@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6] - unreleased
+## [0.6] - 2021-02-24
 ### Deprecated
 - `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` will be removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
 - `ShouldNotHaveMadeRequestsTo(this TestableHttpMessageHandler, string)` will be removed in favour of the new `ShouldHaveMadeRequestsTo(this HttpMessageHandler, string, 0)`.
