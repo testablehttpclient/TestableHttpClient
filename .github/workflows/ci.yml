@@ -33,7 +33,9 @@ jobs:
     - name: Restore dotnet tools
       run: dotnet tool restore
     - name: Prepare sonarqube
-      run: dotnet sonarscanner begin -d:sonar.host.url=https://sonarcloud.io -organization:dnperfors-github -key:dnperfors_TestableHttpClient -version:`dotnet nbgv get-version --variable NuGetPackageVersion` -d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
+      env:
+        SONARCLOUD_TOKEN: ${{secrets.SONARCLOUD_TOKEN}}
+      run: dotnet sonarscanner begin -d:sonar.host.url=https://sonarcloud.io -organization:dnperfors-github -key:dnperfors_TestableHttpClient -version:`dotnet nbgv get-version --variable NuGetPackageVersion` -d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml -d:sonar.login=${{env.SONARCLOUD_TOKEN}}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
@@ -43,7 +45,8 @@ jobs:
     - name: Upload sonarqube results
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: dotnet sonarscanner end -d:sonar.login=${{secrets.SONARCLOUD_TOKEN}}
+        SONARCLOUD_TOKEN: ${{secrets.SONARCLOUD_TOKEN}}
+      run: dotnet sonarscanner end -d:sonar.login=${{env.SONARCLOUD_TOKEN}}
     - name: Check source file format
       run: dotnet format --check
     - name: Pack
@@ -99,4 +102,6 @@ jobs:
         name: artifacts
         path: ./artifacts
     - name: Publish packages
-      run: dotnet nuget push './artifacts/**/*.nupkg' --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_TOKEN}}
+      env:
+        NUGET_TOKEN: ${{secrets.NUGET_TOKEN}}
+      run: dotnet nuget push './artifacts/**/*.nupkg' --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_TOKEN}}
