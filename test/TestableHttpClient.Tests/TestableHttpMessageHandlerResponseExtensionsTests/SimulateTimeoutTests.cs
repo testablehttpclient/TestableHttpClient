@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -26,7 +26,7 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
             sut.SimulateTimeout();
             using var client = new HttpClient(sut);
 
-            var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync(new Uri("https://example.com/")));
+            var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync(new Uri("https://example.com/"))).ConfigureAwait(false);
             Assert.Equal(new OperationCanceledException().Message, exception.Message);
         }
     }

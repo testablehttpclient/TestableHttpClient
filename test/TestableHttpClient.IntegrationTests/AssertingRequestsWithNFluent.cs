@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +28,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests();
         }
@@ -40,7 +40,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequestsTo("https://httpbin.org/get");
         }
@@ -51,7 +51,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequestsTo("https://*");
             Check.That(testHandler).HasMadeRequestsTo("https://*.org/get");
@@ -70,7 +70,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithRequestUri("https://*");
             Check.That(testHandler).HasMadeRequests().WithRequestUri("https://*.org/get");
@@ -89,7 +89,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequestsTo("https://*")
                        .WithRequestUri("*://httpbin.org/*")
@@ -102,7 +102,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com");
+            _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithQueryString("email=admin@example.com");
             Check.That(testHandler).HasMadeRequests().WithQueryString("email=*");
@@ -116,9 +116,9 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
 
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
             using var content = new StringContent("");
-            _ = await client.PostAsync("https://httpbin.org/post", content);
+            _ = await client.PostAsync("https://httpbin.org/post", content).ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Get);
             Check.ThatCode(() => Check.That(testHandler).HasMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Post)).IsAFailingCheck();
@@ -132,7 +132,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
             using var client = new HttpClient(testHandler);
             client.DefaultRequestHeaders.Add("api-version", "1.0");
-            _ = await client.GetAsync("https://httpbin.org/get");
+            _ = await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithRequestHeader("api-version");
             Check.That(testHandler).HasMadeRequests().WithRequestHeader("api-version", "1.0");
@@ -150,7 +150,7 @@ namespace TestableHttpClient.IntegrationTests
             using var client = new HttpClient(testHandler);
 
             using var content = new StringContent("", Encoding.UTF8, "application/json");
-            _ = await client.PostAsync("https://httpbin.org/post", content);
+            _ = await client.PostAsync("https://httpbin.org/post", content).ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithContentHeader("content-type");
             Check.That(testHandler).HasMadeRequests().WithContentHeader("Content-Type");
@@ -170,7 +170,7 @@ namespace TestableHttpClient.IntegrationTests
             using var client = new HttpClient(testHandler);
 
             using var content = new StringContent("my special content");
-            _ = await client.PostAsync("https://httpbin.org/post", content);
+            _ = await client.PostAsync("https://httpbin.org/post", content).ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithContent("my special content");
             Check.That(testHandler).HasMadeRequests().WithContent("my*content");
@@ -187,7 +187,7 @@ namespace TestableHttpClient.IntegrationTests
             using var client = new HttpClient(testHandler);
 
             using var content = new StringContent("{}", Encoding.UTF8, "application/json");
-            _ = await client.PostAsync("https://httpbin.org/post", content);
+            _ = await client.PostAsync("https://httpbin.org/post", content).ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithJsonContent(new { });
         }
@@ -199,7 +199,7 @@ namespace TestableHttpClient.IntegrationTests
             using var client = new HttpClient(testHandler);
 
             using var content = new StringContent("", Encoding.UTF8, "application/json");
-            _ = await client.PostAsync("https://httpbin.org/post", content);
+            _ = await client.PostAsync("https://httpbin.org/post", content).ConfigureAwait(false);
 
             Check.That(testHandler).HasMadeRequests().WithFilter(x => x.HasContentHeader("Content-Type", "application/json") || x.HasContentHeader("Content-Type", "application/json; *"), "");
         }

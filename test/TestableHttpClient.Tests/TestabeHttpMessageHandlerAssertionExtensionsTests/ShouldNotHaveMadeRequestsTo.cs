@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -43,7 +43,7 @@ namespace TestableHttpClient.Tests.TestabeHttpMessageHandlerAssertionExtensionsT
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com/"));
+            _ = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequestsTo("https://example.com/"));
         }

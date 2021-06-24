@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 using NFluent;
@@ -16,7 +16,7 @@ namespace TestableHttpClient.NFluent.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = sut.CreateClient();
 
-            _ = await client.GetAsync("https://httpbin.com/get");
+            _ = await client.GetAsync("https://httpbin.com/get").ConfigureAwait(false);
 
             Check.ThatCode(() => Check.That(sut).HasMadeRequests()).Not.IsAFailingCheck();
         }
@@ -63,7 +63,7 @@ namespace TestableHttpClient.NFluent.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = sut.CreateClient();
 
-            _ = await client.GetAsync("https://httpbin.com/get");
+            _ = await client.GetAsync("https://httpbin.com/get").ConfigureAwait(false);
 
             Check.ThatCode(() => Check.That(sut).HasMadeRequestsTo("https://httpbin.com/get")).Not.IsAFailingCheck();
         }
@@ -82,7 +82,7 @@ namespace TestableHttpClient.NFluent.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = sut.CreateClient();
 
-            _ = await client.GetAsync("https://httpbin.com/get");
+            _ = await client.GetAsync("https://httpbin.com/get").ConfigureAwait(false);
             Check.ThatCode(() => Check.That(sut).HasMadeRequestsTo("https://httpbin.com/post")).IsAFailingCheck();
         }
 
@@ -107,7 +107,7 @@ namespace TestableHttpClient.NFluent.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = sut.CreateClient();
 
-            _ = await client.GetAsync("https://httpbin.com/get");
+            _ = await client.GetAsync("https://httpbin.com/get").ConfigureAwait(false);
             Check.ThatCode(() => Check.That(sut).HasMadeRequestsTo("https://httpbin.com/get", 1)).Not.IsAFailingCheck();
         }
 
@@ -117,7 +117,7 @@ namespace TestableHttpClient.NFluent.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = sut.CreateClient();
 
-            _ = await client.GetAsync("https://httpbin.com/get");
+            _ = await client.GetAsync("https://httpbin.com/get").ConfigureAwait(false);
             Check.ThatCode(() => Check.That(sut).HasMadeRequestsTo("https://httpbin.com/get", 2)).IsAFailingCheck();
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -38,7 +38,7 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
             sut.RespondWith(response);
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync("https://example.com");
+            var result = await client.GetAsync("https://example.com").ConfigureAwait(false);
 
             Assert.Same(response, result);
             Assert.Null(result.RequestMessage);

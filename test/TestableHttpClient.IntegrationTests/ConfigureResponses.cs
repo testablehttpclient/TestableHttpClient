@@ -15,10 +15,10 @@ namespace TestableHttpClient.IntegrationTests
             using var testHandler = new TestableHttpMessageHandler();
 
             using var httpClient = new HttpClient(testHandler);
-            var result = await httpClient.GetAsync("http://httpbin.org/status/200");
+            var result = await httpClient.GetAsync("http://httpbin.org/status/200").ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -32,10 +32,10 @@ namespace TestableHttpClient.IntegrationTests
             testHandler.RespondWith(response);
 
             using var httpClient = new HttpClient(testHandler);
-            var result = await httpClient.GetAsync("http://httpbin.org/status/201");
+            var result = await httpClient.GetAsync("http://httpbin.org/status/201").ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.Created, result.StatusCode);
-            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
+            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -49,10 +49,10 @@ namespace TestableHttpClient.IntegrationTests
             });
 
             using var httpClient = new HttpClient(testHandler);
-            var result = await httpClient.GetAsync("http://httpbin.org/status/201");
+            var result = await httpClient.GetAsync("http://httpbin.org/status/201").ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.Created, result.StatusCode);
-            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
+            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -63,10 +63,10 @@ namespace TestableHttpClient.IntegrationTests
             testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.NotFound).WithJsonContent("Not Found"));
 
             using var httpClient = new HttpClient(testHandler);
-            var result = await httpClient.GetAsync("http://httpbin.org/status/201");
+            var result = await httpClient.GetAsync("http://httpbin.org/status/201").ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
-            Assert.Equal("\"Not Found\"", await result.Content.ReadAsStringAsync());
+            Assert.Equal("\"Not Found\"", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -87,10 +87,10 @@ namespace TestableHttpClient.IntegrationTests
 
             foreach (var url in urls)
             {
-                var result = await httpClient.GetAsync(url);
+                var result = await httpClient.GetAsync(url).ConfigureAwait(false);
 
                 Assert.Equal(HttpStatusCode.Created, result.StatusCode);
-                Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
+                Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             }
         }
 
@@ -111,13 +111,13 @@ namespace TestableHttpClient.IntegrationTests
             testHandler.RespondWith(PathBasedResponse);
 
             using var httpClient = new HttpClient(testHandler);
-            var response = await httpClient.GetAsync("http://httpbin/status/200");
+            var response = await httpClient.GetAsync("http://httpbin/status/200").ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            response = await httpClient.GetAsync("http://httpbin.org/status/400");
+            response = await httpClient.GetAsync("http://httpbin.org/status/400").ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            response = await httpClient.GetAsync("http://httpbin.org/status/500");
+            response = await httpClient.GetAsync("http://httpbin.org/status/500").ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
@@ -128,7 +128,7 @@ namespace TestableHttpClient.IntegrationTests
             testHandler.SimulateTimeout();
 
             using var httpClient = new HttpClient(testHandler);
-            await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500"));
+            await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500")).ConfigureAwait(false);
         }
     }
 }

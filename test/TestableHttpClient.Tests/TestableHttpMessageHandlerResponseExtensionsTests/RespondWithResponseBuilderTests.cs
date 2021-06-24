@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -38,10 +38,10 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
 
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com/"));
+            var result = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -52,10 +52,10 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
 
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com/"));
+            var result = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
-            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -66,8 +66,8 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
 
             using var client = new HttpClient(sut);
 
-            var response1 = await client.GetAsync(new Uri("https://example.com/1"));
-            var response2 = await client.GetAsync(new Uri("https://example.com/2"));
+            var response1 = await client.GetAsync(new Uri("https://example.com/1")).ConfigureAwait(false);
+            var response2 = await client.GetAsync(new Uri("https://example.com/2")).ConfigureAwait(false);
 
             Assert.NotSame(response1, response2);
         }
@@ -83,8 +83,8 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
             using var request1 = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/1"));
             using var request2 = new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/2"));
 
-            var response1 = await client.SendAsync(request1);
-            var response2 = await client.SendAsync(request2);
+            var response1 = await client.SendAsync(request1).ConfigureAwait(false);
+            var response2 = await client.SendAsync(request2).ConfigureAwait(false);
 
             Assert.Same(request1, response1.RequestMessage);
             Assert.Same(request2, response2.RequestMessage);
@@ -99,7 +99,7 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
 
             using var client = new HttpClient(sut);
 
-            var response = await client.GetAsync(new Uri("https://example.com"));
+            var response = await client.GetAsync(new Uri("https://example.com")).ConfigureAwait(false);
 
             Assert.Null(response.RequestMessage);
         }

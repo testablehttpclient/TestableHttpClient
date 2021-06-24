@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Threading.Tasks;
 
 using Xunit;
@@ -13,7 +13,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testableHttpMessageHandler = new TestableHttpMessageHandler();
             using var client = testableHttpMessageHandler.CreateClient();
 
-            await client.GetAsync("https://httpbin.org/get");
+            await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
 #if NETCOREAPP2_1
             testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version20);
@@ -28,7 +28,7 @@ namespace TestableHttpClient.IntegrationTests
             using var testableHttpMessageHandler = new TestableHttpMessageHandler();
             using var client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
 
-            await client.GetAsync("https://httpbin.org/get");
+            await client.GetAsync("https://httpbin.org/get").ConfigureAwait(false);
 
             testableHttpMessageHandler.ShouldHaveMadeRequests().WithRequestHeader("test", "test");
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace TestableHttpClient.Tests
             using var client = new HttpClient(sut);
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com/");
 
-            _ = await client.SendAsync(request);
+            _ = await client.SendAsync(request).ConfigureAwait(false);
 
             Assert.Contains(request, sut.Requests);
         }
@@ -31,10 +31,10 @@ namespace TestableHttpClient.Tests
             using var request3 = new HttpRequestMessage(HttpMethod.Delete, "https://example3.com/");
             using var request4 = new HttpRequestMessage(HttpMethod.Head, "https://example4.com/");
 
-            _ = await client.SendAsync(request1);
-            _ = await client.SendAsync(request2);
-            _ = await client.SendAsync(request3);
-            _ = await client.SendAsync(request4);
+            _ = await client.SendAsync(request1).ConfigureAwait(false);
+            _ = await client.SendAsync(request2).ConfigureAwait(false);
+            _ = await client.SendAsync(request3).ConfigureAwait(false);
+            _ = await client.SendAsync(request4).ConfigureAwait(false);
 
             Assert.Equal(new[] { request1, request2, request3, request4 }, sut.Requests);
         }
@@ -45,10 +45,10 @@ namespace TestableHttpClient.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            var result = await client.GetAsync(new Uri("https://example.com/"));
+            var result = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+            Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             Assert.NotNull(result.RequestMessage);
         }
 
@@ -58,8 +58,8 @@ namespace TestableHttpClient.Tests
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            var result1 = await client.GetAsync(new Uri("https://example.com/"));
-            var result2 = await client.GetAsync(new Uri("https://example.com/"));
+            var result1 = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
+            var result2 = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             Assert.NotSame(result1, result2);
         }
@@ -73,8 +73,8 @@ namespace TestableHttpClient.Tests
             using var request1 = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/1"));
             using var request2 = new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/2"));
 
-            var response1 = await client.SendAsync(request1);
-            var response2 = await client.SendAsync(request2);
+            var response1 = await client.SendAsync(request1).ConfigureAwait(false);
+            var response2 = await client.SendAsync(request2).ConfigureAwait(false);
 
             Assert.Same(request1, response1.RequestMessage);
             Assert.Same(request2, response2.RequestMessage);
@@ -90,10 +90,10 @@ namespace TestableHttpClient.Tests
             sut.RespondWith(responseFactory);
 
             using var client = new HttpClient(sut);
-            var response = await client.GetAsync("https://example.com");
+            var response = await client.GetAsync("https://example.com").ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync());
+            Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
             Assert.NotNull(response.RequestMessage);
         }
 #nullable restore
@@ -106,7 +106,7 @@ namespace TestableHttpClient.Tests
             sut.RespondWith(CustomResponse);
 
             using var client = new HttpClient(sut);
-            var response = await client.GetAsync("https://example.com");
+            var response = await client.GetAsync("https://example.com").ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             Assert.Null(response.RequestMessage);
@@ -125,11 +125,11 @@ namespace TestableHttpClient.Tests
             sut.RespondWith(CustomResponse);
 
             using var client = new HttpClient(sut);
-            _ = await client.GetAsync("https://example.com");
-            _ = await client.GetAsync("https://example.com");
-            _ = await client.GetAsync("https://example.com");
-            _ = await client.GetAsync("https://example.com");
-            _ = await client.GetAsync("https://example.com");
+            _ = await client.GetAsync("https://example.com").ConfigureAwait(false);
+            _ = await client.GetAsync("https://example.com").ConfigureAwait(false);
+            _ = await client.GetAsync("https://example.com").ConfigureAwait(false);
+            _ = await client.GetAsync("https://example.com").ConfigureAwait(false);
+            _ = await client.GetAsync("https://example.com").ConfigureAwait(false);
 
             Assert.Equal(5, responseFactoryCallCount);
         }

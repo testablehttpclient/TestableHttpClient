@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -117,7 +117,7 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithStringContent("My content").Build();
 
-            Assert.Equal("My content", await result.Content.ReadAsStringAsync());
+            Assert.Equal("My content", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
             Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
         }
@@ -173,7 +173,7 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithJsonContent(null).Build();
 
-            Assert.Equal("null", await result.Content.ReadAsStringAsync());
+            Assert.Equal("null", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
         }
 
@@ -184,7 +184,7 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithJsonContent(Array.Empty<object>(), null).Build();
 
-            Assert.Equal("[]", await result.Content.ReadAsStringAsync());
+            Assert.Equal("[]", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
         }
 
@@ -195,7 +195,7 @@ namespace TestableHttpClient.Tests
 
             var result = sut.WithJsonContent(new { }, "text/json").Build();
 
-            Assert.Equal("{}", await result.Content.ReadAsStringAsync());
+            Assert.Equal("{}", await result.Content.ReadAsStringAsync().ConfigureAwait(false));
             Assert.Equal("text/json", result.Content.Headers.ContentType?.MediaType);
             Assert.Null(result.Content.Headers.ContentType?.CharSet);
         }

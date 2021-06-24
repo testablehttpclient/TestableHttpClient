@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -34,7 +34,7 @@ namespace TestableHttpClient.Tests.TestabeHttpMessageHandlerAssertionExtensionsT
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com/"));
+            _ = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             var result = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequests());
             Assert.Equal("Expected no requests to be made, but one request was made.", result.Message);
@@ -46,8 +46,8 @@ namespace TestableHttpClient.Tests.TestabeHttpMessageHandlerAssertionExtensionsT
             using var sut = new TestableHttpMessageHandler();
             using var client = new HttpClient(sut);
 
-            _ = await client.GetAsync(new Uri("https://example.com/"));
-            _ = await client.GetAsync(new Uri("https://example.com/"));
+            _ = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
+            _ = await client.GetAsync(new Uri("https://example.com/")).ConfigureAwait(false);
 
             var result = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldNotHaveMadeRequests());
             Assert.Equal("Expected no requests to be made, but 2 requests were made.", result.Message);
