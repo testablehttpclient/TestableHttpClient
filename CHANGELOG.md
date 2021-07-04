@@ -8,6 +8,10 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Changed
 - In 0.6 the debug symbols were embedded in the dll, so the pipeline couldn't upload the symbol package. This is corrected in 0.7 where the symbol package is correct.
 
+### Removed
+- `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` was removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
+- `ShouldNotHaveMadeRequestsTo(this TestableHttpMessageHandler, string)` was removed in favour of the new `ShouldHaveMadeRequestsTo(this HttpMessageHandler, string, 0)`.
+
 ## [0.6] - 2021-02-24
 ### Deprecated
 - `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` will be removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
