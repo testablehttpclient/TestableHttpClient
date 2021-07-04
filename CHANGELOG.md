@@ -7,6 +7,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [0.7] - unreleased
 ### Changed
 - In 0.6 the debug symbols were embedded in the dll, so the pipeline couldn't upload the symbol package. This is corrected in 0.7 where the symbol package is correct.
+- TestableHttpClient is now CLRCompliant.
 
 ### Removed
 - `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` was removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
