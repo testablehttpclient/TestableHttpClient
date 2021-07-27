@@ -26,10 +26,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1'
-    - name: Setup .NET Core 5.0
+    - name: Setup .NET 5.0
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0'
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
+        include-prerelease: true
     - name: Restore dotnet tools
       run: dotnet tool restore
     - name: Prepare sonarqube
@@ -50,7 +55,7 @@ jobs:
         SONARCLOUD_TOKEN: ${{secrets.SONARCLOUD_TOKEN}}
       run: dotnet sonarscanner end -d:sonar.login=${{env.SONARCLOUD_TOKEN}}
     - name: Check source file format
-      run: dotnet format --check
+      run: dotnet format --no-restore --verify-no-changes
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build
     - uses: actions/upload-artifact@v2
@@ -77,6 +82,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0'
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
+        include-prerelease: true
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
@@ -91,10 +101,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup .NET Core 5.0
+    - name: Setup .NET Core 6.0
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0'
+        dotnet-version: '6.0'
+        include-prerelease: true
     - uses: actions/download-artifact@v2
       with:
         name: artifacts

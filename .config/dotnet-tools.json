@@ -2,12 +2,6 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "dotnet-format": {
-      "version": "4.1.131201",
-      "commands": [
-        "dotnet-format"
-      ]
-    },
     "dotnet-sonarscanner": {
       "version": "5.0.4",
       "commands": [

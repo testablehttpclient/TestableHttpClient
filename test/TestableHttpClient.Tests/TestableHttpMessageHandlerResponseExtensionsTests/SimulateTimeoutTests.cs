@@ -27,7 +27,11 @@ namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsT
             using var client = new HttpClient(sut);
 
             var exception = await Assert.ThrowsAsync<TaskCanceledException>(() => client.GetAsync(new Uri("https://example.com/")));
+#if NET6_0_OR_GREATER
+            Assert.Equal($"The request was canceled due to the configured HttpClient.Timeout of {client.Timeout.TotalSeconds} seconds elapsing.", exception.Message);
+#else
             Assert.Equal(new OperationCanceledException().Message, exception.Message);
+#endif
         }
     }
 }
