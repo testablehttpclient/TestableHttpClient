@@ -15,11 +15,7 @@ namespace TestableHttpClient.IntegrationTests
 
             await client.GetAsync("https://httpbin.org/get");
 
-#if NETCOREAPP2_1
-            testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version20);
-#else
             testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version11);
-#endif
         }
 
         [Fact]
