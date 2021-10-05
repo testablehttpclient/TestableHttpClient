@@ -61,6 +61,7 @@ However, only the following versions are being actively tested and thus supporte
 
 - .NET Core 3.1
 - .NET 5.0
+- .NET 6.0
 
 These versions are supported as long as Microsoft supports them, we do our best to test and support newer versions as soon as possible.
 
