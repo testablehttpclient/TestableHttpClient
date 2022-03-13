@@ -1,45 +1,40 @@
-﻿using System;
-using System.Net.Http;
-using System.Reflection;
+﻿using System.Reflection;
 
-using Xunit;
+namespace TestableHttpClient.Tests;
 
-namespace TestableHttpClient.Tests
+public partial class TestableHttpMessageHandlerExtensionsTests
 {
-    public partial class TestableHttpMessageHandlerExtensionsTests
-    {
 #nullable disable
-        [Fact]
-        public void CreateClient_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
-        {
-            TestableHttpMessageHandler sut = null;
+    [Fact]
+    public void CreateClient_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
+    {
+        TestableHttpMessageHandler sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient());
-            Assert.Equal("handler", exception.ParamName);
-        }
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient());
+        Assert.Equal("handler", exception.ParamName);
+    }
 #nullable restore
 
-        [Fact]
-        public void CreateClient_CorrectTestableHttpMessageHandler_AddsHandlerToHttpClient()
+    [Fact]
+    public void CreateClient_CorrectTestableHttpMessageHandler_AddsHandlerToHttpClient()
+    {
+        using var sut = new TestableHttpMessageHandler();
+
+        using var client = sut.CreateClient();
+
+        var handler = GetPrivateHandler(client);
+
+        Assert.Same(sut, handler);
+    }
+
+    private static object? GetPrivateHandler(HttpClient client)
+    {
+        var handlerField = client.GetType().BaseType?.GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
+        if (handlerField == null)
         {
-            using var sut = new TestableHttpMessageHandler();
-
-            using var client = sut.CreateClient();
-
-            var handler = GetPrivateHandler(client);
-
-            Assert.Same(sut, handler);
+            Assert.True(false, "Can't find the private _handler field on HttpClient.");
+            return null;
         }
-
-        private static object? GetPrivateHandler(HttpClient client)
-        {
-            var handlerField = client.GetType().BaseType?.GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (handlerField == null)
-            {
-                Assert.True(false, "Can't find the private _handler field on HttpClient.");
-                return null;
-            }
-            return handlerField.GetValue(client);
-        }
+        return handlerField.GetValue(client);
     }
 }
