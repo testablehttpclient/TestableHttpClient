@@ -83,29 +83,4 @@ public static class TestableHttpMessageHandlerAssertionExtensions
 
         return new HttpRequestMessageAsserter(handler.Requests).WithRequestUri(pattern, expectedNumberOfRequests);
     }
-
-    /// <summary>
-    /// Validates that no requests have been made, throws an exception when requests were made.
-    /// </summary>
-    /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be asserted.</param>
-    /// <exception cref="ArgumentNullException">handler is `null`</exception>
-    /// <exception cref="HttpRequestMessageAssertionException">When requests are made</exception>
-    [Obsolete("This check is now replaced with `ShouldHaveMadeRequests(0)`")]
-    public static void ShouldNotHaveMadeRequests(this TestableHttpMessageHandler handler)
-    {
-        _ = handler.ShouldHaveMadeRequests(0);
-    }
-
-    /// <summary>
-    /// Validates that no requests to a specific uri have been made, throws an exception when requests were made.
-    /// </summary>
-    /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be asserted.</param>
-    /// <param name="pattern">The uri pattern to validate against, the pattern supports *.</param>
-    /// <exception cref="ArgumentNullException">handler is `null` or pattern is `null`</exception>
-    /// <exception cref="HttpRequestMessageAssertionException">When requests are made</exception>
-    [Obsolete("This check is now replaced with `ShouldHaveMadeRequestsTo(pattern, 0)`")]
-    public static void ShouldNotHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern)
-    {
-        _ = handler.ShouldHaveMadeRequestsTo(pattern, 0);
-    }
 }

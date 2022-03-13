@@ -14,6 +14,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Removed
 - Support for .NET Core 2.1 has been removed, although there were no code changes in the library, we no longer test if TestableHttpClient works with .NET Core 2.1.
+- `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler)` was removed in favour of the new `ShouldHaveMadeRequests(this HttpMessageHandler, 0)`.
+- `ShouldNotHaveMadeRequestsTo(this TestableHttpMessageHandler, string)` was removed in favour of the new `ShouldHaveMadeRequestsTo(this HttpMessageHandler, string, 0)`.
 
 ## [0.6] - 2021-02-24
 ### Deprecated
