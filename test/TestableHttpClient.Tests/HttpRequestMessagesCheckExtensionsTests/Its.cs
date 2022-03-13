@@ -1,15 +1,11 @@
-﻿using System;
-using System.Net.Http;
+﻿using Moq;
 
-using Moq;
+namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
-namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests
+public static class Its
 {
-    public static class Its
+    public static Func<HttpRequestMessage, bool> AnyPredicate()
     {
-        public static Func<HttpRequestMessage, bool> AnyPredicate()
-        {
-            return It.IsAny<Func<HttpRequestMessage, bool>>();
-        }
+        return It.IsAny<Func<HttpRequestMessage, bool>>();
     }
 }

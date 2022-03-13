@@ -1,68 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿namespace TestableHttpClient.NFluent;
 
-using NFluent;
-using NFluent.Extensibility;
-using NFluent.Kernel;
-
-using TestableHttpClient.Utils;
-
-namespace TestableHttpClient.NFluent
+/// <summary>
+/// Class that implement NFluent checks on a collection of HttpRequestMessages.
+/// </summary>
+internal class FluentHttpRequestMessagesChecks : FluentSut<IEnumerable<HttpRequestMessage>>, IHttpRequestMessagesCheck
 {
-    /// <summary>
-    /// Class that implement NFluent checks on a collection of HttpRequestMessages.
-    /// </summary>
-    internal class FluentHttpRequestMessagesChecks : FluentSut<IEnumerable<HttpRequestMessage>>, IHttpRequestMessagesCheck
+    private IEnumerable<HttpRequestMessage> requests;
+    private readonly List<string> requestConditions = new List<string>();
+
+    public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages)
+        : base(httpRequestMessages, Check.Reporter, false)
     {
-        private IEnumerable<HttpRequestMessage> requests;
-        private readonly List<string> requestConditions = new List<string>();
+        requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
+    }
 
-        public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages)
-            : base(httpRequestMessages, Check.Reporter, false)
+    public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
+
+    public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
+
+    public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
+    {
+        if (!string.IsNullOrEmpty(condition))
         {
-            requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
+            requestConditions.Add(condition);
         }
 
-        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
+        var checkLogic = ExtensibilityHelper.BeginCheck(this)
+            .CantBeNegated(nameof(WithFilter))
+            .FailWhen(_ => requestFilter == null, "The request filter should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
+            .Analyze((sut, _) => requests = requests.Where(requestFilter));
 
-        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
+        AnalyzeNumberOfRequests(checkLogic, expectedNumberOfRequests);
+        return this;
+    }
 
-        public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
+    private void AnalyzeNumberOfRequests(ICheckLogic<IEnumerable<HttpRequestMessage>> checkLogic, int? expectedCount)
+    {
+        checkLogic.Analyze((sut, check) =>
         {
-            if (!string.IsNullOrEmpty(condition))
+            var actualCount = requests.Count();
+            var pass = expectedCount switch
             {
-                requestConditions.Add(condition);
+                null => actualCount > 0,
+                _ => actualCount == expectedCount
+            };
+
+            var message = MessageBuilder.BuildMessage(expectedCount, actualCount, requestConditions);
+            if (!pass)
+            {
+                check.Fail(message, MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock);
             }
-
-            var checkLogic = ExtensibilityHelper.BeginCheck(this)
-                .CantBeNegated(nameof(WithFilter))
-                .FailWhen(_ => requestFilter == null, "The request filter should not be null.", MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock)
-                .Analyze((sut, _) => requests = requests.Where(requestFilter));
-
-            AnalyzeNumberOfRequests(checkLogic, expectedNumberOfRequests);
-            return this;
-        }
-
-        private void AnalyzeNumberOfRequests(ICheckLogic<IEnumerable<HttpRequestMessage>> checkLogic, int? expectedCount)
-        {
-            checkLogic.Analyze((sut, check) =>
-            {
-                var actualCount = requests.Count();
-                var pass = expectedCount switch
-                {
-                    null => actualCount > 0,
-                    _ => actualCount == expectedCount
-                };
-
-                var message = MessageBuilder.BuildMessage(expectedCount, actualCount, requestConditions);
-                if (!pass)
-                {
-                    check.Fail(message, MessageOption.NoCheckedBlock | MessageOption.NoExpectedBlock);
-                }
-            })
-            .EndCheck();
-        }
+        })
+        .EndCheck();
     }
 }

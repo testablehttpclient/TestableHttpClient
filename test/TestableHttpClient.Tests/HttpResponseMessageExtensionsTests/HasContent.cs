@@ -1,51 +1,45 @@
-﻿using System;
-using System.Net.Http;
+﻿namespace TestableHttpClient.Tests;
 
-using Xunit;
-
-namespace TestableHttpClient.Tests
+public partial class HttpResponseMessageExtensionsTests
 {
-    public partial class HttpResponseMessageExtensionsTests
-    {
 #nullable disable
-        [Fact]
-        public void HasContent_NullResponse_ThrowsArgumentNullException()
-        {
-            HttpResponseMessage sut = null;
+    [Fact]
+    public void HasContent_NullResponse_ThrowsArgumentNullException()
+    {
+        HttpResponseMessage sut = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContent());
-            Assert.Equal("httpResponseMessage", exception.ParamName);
-        }
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContent());
+        Assert.Equal("httpResponseMessage", exception.ParamName);
+    }
 #nullable restore
 
-        [Fact]
-        public void HasContent_NullContent_ReturnsFalse()
+    [Fact]
+    public void HasContent_NullContent_ReturnsFalse()
+    {
+        using var sut = new HttpResponseMessage();
+
+        Assert.False(sut.HasContent());
+    }
+
+    [Fact]
+    public void HasContent_EmptyContent_ReturnsFalse()
+    {
+        using var sut = new HttpResponseMessage
         {
-            using var sut = new HttpResponseMessage();
+            Content = new StringContent("")
+        };
 
-            Assert.False(sut.HasContent());
-        }
+        Assert.False(sut.HasContent());
+    }
 
-        [Fact]
-        public void HasContent_EmptyContent_ReturnsFalse()
+    [Fact]
+    public void HasContent_NotEmptyContent_ReturnsTrue()
+    {
+        using var sut = new HttpResponseMessage
         {
-            using var sut = new HttpResponseMessage
-            {
-                Content = new StringContent("")
-            };
+            Content = new StringContent("Some Content")
+        };
 
-            Assert.False(sut.HasContent());
-        }
-
-        [Fact]
-        public void HasContent_NotEmptyContent_ReturnsTrue()
-        {
-            using var sut = new HttpResponseMessage
-            {
-                Content = new StringContent("Some Content")
-            };
-
-            Assert.True(sut.HasContent());
-        }
+        Assert.True(sut.HasContent());
     }
 }

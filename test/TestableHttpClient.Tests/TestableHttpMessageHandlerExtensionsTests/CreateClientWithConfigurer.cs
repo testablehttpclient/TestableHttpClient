@@ -1,58 +1,52 @@
-﻿using System;
-using System.Net.Http;
+﻿using Moq;
 
-using Moq;
+namespace TestableHttpClient.Tests;
 
-using Xunit;
-
-namespace TestableHttpClient.Tests
+public partial class TestableHttpMessageHandlerExtensionsTests
 {
-    public partial class TestableHttpMessageHandlerExtensionsTests
-    {
 #nullable disable
-        [Fact]
-        public void CreateClientWithConfigurer_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
-        {
-            TestableHttpMessageHandler sut = null;
-            Action<HttpClient> configureClient = client => { };
+    [Fact]
+    public void CreateClientWithConfigurer_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
+    {
+        TestableHttpMessageHandler sut = null;
+        Action<HttpClient> configureClient = client => { };
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
-            Assert.Equal("handler", exception.ParamName);
-        }
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
+        Assert.Equal("handler", exception.ParamName);
+    }
 
-        [Fact]
-        public void CreateClientWithConfigurer_NullConfigureAction_ThrowsArgumentNullException()
-        {
-            using var sut = new TestableHttpMessageHandler();
-            Action<HttpClient> configureClient = null;
+    [Fact]
+    public void CreateClientWithConfigurer_NullConfigureAction_ThrowsArgumentNullException()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        Action<HttpClient> configureClient = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
-            Assert.Equal("configureClient", exception.ParamName);
-        }
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
+        Assert.Equal("configureClient", exception.ParamName);
+    }
 #nullable restore
 
-        [Fact]
-        public void CreateClientWithConfigurer_ReturnsHttpClientWithHandlerConfigured()
-        {
-            using var sut = new TestableHttpMessageHandler();
-            Action<HttpClient> configureClient = client => { };
+    [Fact]
+    public void CreateClientWithConfigurer_ReturnsHttpClientWithHandlerConfigured()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        Action<HttpClient> configureClient = client => { };
 
-            using var client = sut.CreateClient(configureClient);
+        using var client = sut.CreateClient(configureClient);
 
-            var handler = GetPrivateHandler(client);
+        var handler = GetPrivateHandler(client);
 
-            Assert.Same(sut, handler);
-        }
+        Assert.Same(sut, handler);
+    }
 
-        [Fact]
-        public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
-        {
-            using var sut = new TestableHttpMessageHandler();
-            Mock<Action<HttpClient>> configureClient = new Mock<Action<HttpClient>>();
+    [Fact]
+    public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        Mock<Action<HttpClient>> configureClient = new Mock<Action<HttpClient>>();
 
-            using var client = sut.CreateClient(configureClient.Object);
+        using var client = sut.CreateClient(configureClient.Object);
 
-            configureClient.Verify(x => x.Invoke(client), Times.Once);
-        }
+        configureClient.Verify(x => x.Invoke(client), Times.Once);
     }
 }

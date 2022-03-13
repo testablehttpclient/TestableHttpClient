@@ -1,29 +1,18 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿namespace TestableHttpClient.IntegrationTests;
 
-using NFluent;
-
-using TestableHttpClient.NFluent;
-
-using Xunit;
-
-namespace TestableHttpClient.IntegrationTests
+public class HttpResponseMessageNFluentChecks
 {
-    public class HttpResponseMessageNFluentChecks
+    [Fact]
+    public void ExampleOfNFluentChecksForHttpResponseMessages()
     {
-        [Fact]
-        public void ExampleOfNFluentChecksForHttpResponseMessages()
-        {
-            using var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
-            httpResponseMessage.Headers.Server.Add(new ProductInfoHeaderValue(new ProductHeaderValue("nginx")));
-            httpResponseMessage.Content = new StringContent("{}", null, "application/json");
+        using var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        httpResponseMessage.Headers.Server.Add(new ProductInfoHeaderValue(new ProductHeaderValue("nginx")));
+        httpResponseMessage.Content = new StringContent("{}", null, "application/json");
 
-            Check.That(httpResponseMessage).HasHttpStatusCode(HttpStatusCode.OK)
-                .And.HasResponseHeader("Server")
-                .And.HasContent()
-                .And.HasContentHeader("Content-Type", "*/json*")
-                .And.HasContent("{*}");
-        }
+        Check.That(httpResponseMessage).HasHttpStatusCode(HttpStatusCode.OK)
+            .And.HasResponseHeader("Server")
+            .And.HasContent()
+            .And.HasContentHeader("Content-Type", "*/json*")
+            .And.HasContent("{*}");
     }
 }

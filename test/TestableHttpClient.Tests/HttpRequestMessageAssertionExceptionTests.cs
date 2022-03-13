@@ -1,15 +1,12 @@
-﻿using Xunit;
+﻿namespace TestableHttpClient.Tests;
 
-namespace TestableHttpClient.Tests
+public class HttpRequestMessageAssertionExceptionTests
 {
-    public class HttpRequestMessageAssertionExceptionTests
+    [Fact]
+    public void Constructor_ByDefault_SetsMessage()
     {
-        [Fact]
-        public void Constructor_ByDefault_SetsMessage()
-        {
-            var exception = new HttpRequestMessageAssertionException("My exception");
+        var exception = new HttpRequestMessageAssertionException("My exception");
 
-            Assert.Equal("My exception", exception.Message);
-        }
+        Assert.Equal("My exception", exception.Message);
     }
 }
