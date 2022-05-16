@@ -231,7 +231,11 @@ public static class HttpResponseMessageChecks
                 .CantBeNegated($"{nameof(HasContent)} with {nameof(expectedContent)} set to null")
                 .EndCheck();
         }
+#if NETSTANDARD2_0
         else if (expectedContent.Contains("*"))
+#else
+        else if (expectedContent.Contains('*', StringComparison.InvariantCulture))
+#endif
         {
 #pragma warning disable CS8602 // Dereference of a possibly null reference. Justification = "Null reference check is performed by the FailIfNull check"
             checkLogic.CheckSutAttributes(sut => sut.Content?.ReadAsStringAsync()?.Result ?? string.Empty, "content")

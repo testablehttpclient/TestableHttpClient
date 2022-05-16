@@ -212,6 +212,11 @@ public static class HttpRequestMessageExtensions
             throw new ArgumentNullException(nameof(httpRequestMessage));
         }
 
+        if (httpRequestMessage.RequestUri == null)
+        {
+            return false;
+        }
+
         return pattern switch
         {
             null => throw new ArgumentNullException(nameof(pattern)),
@@ -285,6 +290,11 @@ public static class HttpRequestMessageExtensions
         if (pattern == null)
         {
             throw new ArgumentNullException(nameof(pattern));
+        }
+
+        if (httpRequestMessage.RequestUri == null)
+        {
+            return false;
         }
 
         var requestQuery = httpRequestMessage.RequestUri.GetComponents(UriComponents.Query, UriFormat.Unescaped);

@@ -28,6 +28,14 @@ public partial class HttpRequestMessageExtensionsTests
         Assert.False(sut.HasMatchingUri(""));
     }
 
+    [Fact]
+    public void HasMatchingUri_NullRequestUri_ReturnsFalse()
+    {
+        using var sut = new HttpRequestMessage { RequestUri = null };
+
+        Assert.False(sut.HasMatchingUri("*"));
+    }
+
     [Theory]
     [InlineData("*")]
     [InlineData("https://example.com*")]
