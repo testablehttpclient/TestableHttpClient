@@ -26,15 +26,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1'
-    - name: Setup .NET 5.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0'
     - name: Setup .NET 6.0
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0'
-        include-prerelease: true
     - name: Restore dotnet tools
       run: dotnet tool restore
     - name: Prepare sonarqube
@@ -78,15 +73,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1'
-    - name: Setup .NET Core 5.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0'
     - name: Setup .NET 6.0
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0'
-        include-prerelease: true
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
@@ -105,7 +95,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0'
-        include-prerelease: true
     - uses: actions/download-artifact@v2
       with:
         name: artifacts
