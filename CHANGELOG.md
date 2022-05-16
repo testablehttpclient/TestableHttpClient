@@ -11,6 +11,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 - Support for .NET 6.0 has been added, although there were no code changes in the labrary, we now test if TestableHttpClient works with .NET 6.0. Besides that all assemblies are compiled using the .NET 6.0 SDK.
+- The NuGet packages now support multiple target frameworks: .NET Standard 2.0, .NET Core 3.1 and .NET 6.0
 
 ### Removed
 - Support for .NET Core 2.1 has been removed, although there were no code changes in the library, we no longer test if TestableHttpClient works with .NET Core 2.1.

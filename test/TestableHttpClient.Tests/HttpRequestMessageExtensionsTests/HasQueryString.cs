@@ -29,6 +29,14 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    public void HasQueryString_NullRequestUri_ReturnsFalse()
+    {
+        using var sut = new HttpRequestMessage { RequestUri = null };
+
+        Assert.False(sut.HasQueryString("*"));
+    }
+
+    [Fact]
     public void HasQueryString_MatchingEmptyPattern_ReturnsTrue()
     {
         using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
