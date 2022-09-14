@@ -66,7 +66,7 @@ public partial class HttpRequestMessageExtensionsTests
     {
         using var sut = new HttpRequestMessage { Method = HttpMethod.Get };
 
-        Assert.False(sut.HasHttpMethod(HttpMethod.Patch));
+        Assert.False(sut.HasHttpMethod(HttpMethod.Put));
     }
 
     [Fact]

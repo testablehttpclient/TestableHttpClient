@@ -36,10 +36,11 @@ public partial class TestableHttpMessageHandlerExtensionsTests
 
     private static HttpMessageHandler? GetPrivateHandler(HttpClient client)
     {
-        var handlerField = client.GetType().BaseType?.GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
+        var privateFields = client.GetType().BaseType?.GetFields(BindingFlags.Instance | BindingFlags.NonPublic) ?? Enumerable.Empty<FieldInfo>();
+        var handlerField = privateFields.FirstOrDefault(x => x.FieldType == typeof(HttpMessageHandler));
         if (handlerField == null)
         {
-            Assert.True(false, "Can't find the private _handler field on HttpClient.");
+            Assert.True(false, $"Can't find the private HttpMessageHandler field on HttpClient.");
             return null;
         }
         return handlerField.GetValue(client) as HttpMessageHandler;

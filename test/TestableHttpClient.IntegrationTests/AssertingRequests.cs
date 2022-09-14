@@ -154,6 +154,7 @@ public class AssertingRequests
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "*=utf-16"));
     }
 
+#if !NETFRAMEWORK
     [Fact]
     public async Task AssertingContent()
     {
@@ -182,6 +183,7 @@ public class AssertingRequests
 
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
     }
+#endif
 
     [Fact]
     public async Task CustomAssertions()
