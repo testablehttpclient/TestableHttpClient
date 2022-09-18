@@ -12,7 +12,7 @@ internal static class CancellationTokenExtensions
         {
             if (cancellationSourceField is null)
             {
-                cancellationSourceField = typeof(CancellationToken).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly).Where(x => x.FieldType == typeof(CancellationTokenSource)).FirstOrDefault();
+                cancellationSourceField = typeof(CancellationToken).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly).FirstOrDefault(x => x.FieldType == typeof(CancellationTokenSource));
             }
             return cancellationSourceField;
         }
