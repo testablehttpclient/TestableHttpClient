@@ -29,7 +29,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
         if (response is TimeoutHttpResponseMessage)
         {
             var cancelationSource = cancellationToken.GetSource();
-                        
+
             if (cancelationSource is not null)
             {
                 cancelationSource.Cancel(false);
