@@ -37,16 +37,14 @@ public class HttpResponseMessageBuilderTests
         Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
     }
 
-#nullable disable
     [Fact]
     public void WithResponseHeaders_WhenPassingNull_ArgumentNullExceptionIsThrown()
     {
         var sut = new HttpResponseMessageBuilder();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithResponseHeaders(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithResponseHeaders(null!));
         Assert.Equal("responseHeaderBuilder", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void WithResponseHeaders_CreatesHttpResponseMessageWithCorrectHeaders()
@@ -90,16 +88,14 @@ public class HttpResponseMessageBuilderTests
         Assert.Same(content, result.Content);
     }
 
-#nullable disable
     [Fact]
     public void WithStringContent_NullContent_ThrowsArgumentNullException()
     {
         var sut = new HttpResponseMessageBuilder();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithStringContent(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithStringContent(null!));
         Assert.Equal("content", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public async Task WithStringContent_CreatesHttpResponseMessageWithStringContent()
@@ -140,7 +136,7 @@ public class HttpResponseMessageBuilderTests
     {
         var sut = new HttpResponseMessageBuilder();
 
-        var result = sut.WithStringContent("", null, null).Build();
+        var result = sut.WithStringContent("", null, null!).Build();
 
         Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
         Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);

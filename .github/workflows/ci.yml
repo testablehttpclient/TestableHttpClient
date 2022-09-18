@@ -22,14 +22,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '11'
-    - name: Setup .NET Core 3.1
+    - name: Setup .NET versions
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1'
-    - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0'
+        dotnet-version: |
+          3.1.x
+          6.0.x
     - name: Restore dotnet tools
       run: dotnet tool restore
     - name: Prepare sonarqube
@@ -42,7 +40,7 @@ jobs:
     - name: Build source code
       run: dotnet build --configuration Release --no-restore
     - name: Test with dotnet
-      run: dotnet test --configuration Release --no-build --collect="Code Coverage" --framework="netcoreapp3.1"
+      run: dotnet test --configuration Release --no-build --collect="Code Coverage" --framework="net6.0"
     - name: Upload sonarqube results
       if: ${{ github.actor != 'dependabot[bot]' }}
       env:
@@ -69,14 +67,12 @@ jobs:
       uses: actions/checkout@v2
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
-    - name: Setup .NET Core 3.1
+    - name: Setup .NET versions
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1'
-    - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0'
+        dotnet-version: |
+          3.1.x
+          6.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
@@ -91,7 +87,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup .NET Core 6.0
+    - name: Setup .NET 6.0
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '6.0'
