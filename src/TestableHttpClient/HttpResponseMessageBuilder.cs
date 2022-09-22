@@ -79,6 +79,7 @@ public sealed class HttpResponseMessageBuilder
         return this;
     }
 
+    private const string DefaultStringContentMediaType = "text/plain";
     /// <summary>
     /// Specifies string content for the response.
     /// </summary>
@@ -86,7 +87,7 @@ public sealed class HttpResponseMessageBuilder
     /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
     public HttpResponseMessageBuilder WithStringContent(string content)
     {
-        return WithStringContent(content, null, null);
+        return WithStringContent(content, null, DefaultStringContentMediaType);
     }
 
     /// <summary>
@@ -97,7 +98,7 @@ public sealed class HttpResponseMessageBuilder
     /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
     public HttpResponseMessageBuilder WithStringContent(string content, Encoding? encoding)
     {
-        return WithStringContent(content, encoding, null);
+        return WithStringContent(content, encoding, DefaultStringContentMediaType);
     }
 
     /// <summary>
@@ -107,14 +108,14 @@ public sealed class HttpResponseMessageBuilder
     /// <param name="encoding">The encoding for this response, defaults to utf-8 when null is passed.</param>
     /// <param name="mediaType">The mediatype for this response, defaults to text/plain when null is passed.</param>
     /// <returns>The <see cref="HttpResponseMessageBuilder"/> for further building of the response.</returns>
-    public HttpResponseMessageBuilder WithStringContent(string content, Encoding? encoding, string? mediaType)
+    public HttpResponseMessageBuilder WithStringContent(string content, Encoding? encoding, string mediaType)
     {
         if (content == null)
         {
             throw new ArgumentNullException(nameof(content));
         }
 
-        return WithContent(new StringContent(content, encoding, mediaType));
+        return WithContent(new StringContent(content, encoding, mediaType ?? DefaultStringContentMediaType));
     }
 
     /// <summary>

@@ -8,9 +8,11 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Changed
 - In 0.6 the debug symbols were embedded in the dll, so the pipeline couldn't upload the symbol package. This is corrected in 0.7 where the symbol package is correct.
 - TestableHttpClient assembly is now CLSCompliant
+- The mediaType parameter in `HttpResponseMessageBuilder.WithStringContent` is no longer nullable, like in .NET 7.0, it defaults to "text/plain" in other methods.
+- `TestableHttpMessageHanlder.SimulateTimeout` functionality now actually cancels the request, so that it also works on .NET 7.0
 
 ### Added
-- Support for .NET 6.0 has been added, although there were no code changes in the labrary, we now test if TestableHttpClient works with .NET 6.0. Besides that all assemblies are compiled using the .NET 6.0 SDK.
+- Support for .NET 6.0 has been added, although there were no code changes in the library, we now test if TestableHttpClient works with .NET 6.0. Besides that all assemblies are compiled using the .NET 6.0 SDK.
 - The NuGet packages now support multiple target frameworks: .NET Standard 2.0, .NET Core 3.1 and .NET 6.0
 
 ### Removed
