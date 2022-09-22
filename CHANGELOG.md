@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7] - unreleased
+## [0.7] - 2022-09-22
 ### Changed
 - In 0.6 the debug symbols were embedded in the dll, so the pipeline couldn't upload the symbol package. This is corrected in 0.7 where the symbol package is correct.
 - TestableHttpClient assembly is now CLSCompliant
