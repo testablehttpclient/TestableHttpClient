@@ -4,6 +4,11 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8] - Unplanned
+
+### Added
+- `CreateClient` now accepts `DelegateHandlers` in order to chain Handlers. The InnerHandler property of each handler is set automatically and the `TestableHttpMessageHandler` is automatically set as the last handler. This is showcased with Polly in the integration tests.
+
 ## [0.7] - 2022-09-22
 ### Changed
 - In 0.6 the debug symbols were embedded in the dll, so the pipeline couldn't upload the symbol package. This is corrected in 0.7 where the symbol package is correct.
@@ -207,6 +212,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.7]: https://github.com/dnperfors/TestableHttpClient/compare/v0.6...v0.7
 [0.6]: https://github.com/dnperfors/TestableHttpClient/compare/v0.5...v0.6
 [0.5]: https://github.com/dnperfors/TestableHttpClient/compare/v0.4...v0.5
 [0.4]: https://github.com/dnperfors/TestableHttpClient/compare/v0.3...v0.4

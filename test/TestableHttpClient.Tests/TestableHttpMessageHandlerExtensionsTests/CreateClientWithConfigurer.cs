@@ -4,11 +4,10 @@ namespace TestableHttpClient.Tests;
 
 public partial class TestableHttpMessageHandlerExtensionsTests
 {
-#nullable disable
     [Fact]
     public void CreateClientWithConfigurer_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
     {
-        TestableHttpMessageHandler sut = null;
+        TestableHttpMessageHandler sut = null!;
         Action<HttpClient> configureClient = client => { };
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
@@ -19,12 +18,11 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     public void CreateClientWithConfigurer_NullConfigureAction_ThrowsArgumentNullException()
     {
         using var sut = new TestableHttpMessageHandler();
-        Action<HttpClient> configureClient = null;
+        Action<HttpClient> configureClient = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
         Assert.Equal("configureClient", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void CreateClientWithConfigurer_ReturnsHttpClientWithHandlerConfigured()
