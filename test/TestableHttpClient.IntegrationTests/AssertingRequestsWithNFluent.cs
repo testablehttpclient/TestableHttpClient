@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TestableHttpClient.IntegrationTests;
+﻿namespace TestableHttpClient.IntegrationTests;
 
 public class AssertingRequestsWithNFluent
 {
@@ -164,7 +162,7 @@ public class AssertingRequestsWithNFluent
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
 #if NET48
-        Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("*")).Throws<ObjectDisposedException>();
+        Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("*")).Throws<System.ObjectDisposedException>();
 #else
         Check.That(testHandler).HasMadeRequests().WithContent("my special content");
         Check.That(testHandler).HasMadeRequests().WithContent("my*content");
@@ -185,7 +183,7 @@ public class AssertingRequestsWithNFluent
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
 #if NET48
-        Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithJsonContent(new { })).Throws<ObjectDisposedException>();
+        Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithJsonContent(new { })).Throws<System.ObjectDisposedException>();
 #else
         Check.That(testHandler).HasMadeRequests().WithJsonContent(new { });
 #endif

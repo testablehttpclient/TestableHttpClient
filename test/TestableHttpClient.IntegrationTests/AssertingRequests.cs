@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TestableHttpClient.IntegrationTests;
+﻿namespace TestableHttpClient.IntegrationTests;
 
 public class AssertingRequests
 {
@@ -167,7 +165,7 @@ public class AssertingRequests
 
 #if NET48
         // On .NET Framework the HttpClient disposes the content automatically.
-        Assert.Throws<ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithContent("*"));
+        Assert.Throws<System.ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithContent("*"));
 #else
         testHandler.ShouldHaveMadeRequests().WithContent("my special content");
         testHandler.ShouldHaveMadeRequests().WithContent("my*content");
@@ -188,7 +186,7 @@ public class AssertingRequests
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
 #if NET48
-        Assert.Throws<ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithJsonContent(new { }));
+        Assert.Throws<System.ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithJsonContent(new { }));
 #else
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
 #endif
