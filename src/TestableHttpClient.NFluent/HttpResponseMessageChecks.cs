@@ -231,7 +231,7 @@ public static class HttpResponseMessageChecks
                 .CantBeNegated($"{nameof(HasContent)} with {nameof(expectedContent)} set to null")
                 .EndCheck();
         }
-#if NETFRAMEWORK
+#if NETSTANDARD2_0
         else if (expectedContent.Contains("*"))
 #else
         else if (expectedContent.Contains('*', StringComparison.InvariantCulture))
