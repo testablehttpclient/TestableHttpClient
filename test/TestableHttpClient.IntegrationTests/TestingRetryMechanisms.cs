@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP3_1_OR_GREATER || NET6_0_OR_GREATER
+﻿#if !NETFRAMEWORK
 using Microsoft.Extensions.Http;
 
 using Polly;
