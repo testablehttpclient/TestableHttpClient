@@ -11,7 +11,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Added support for .NET Framework 4.6.2, .NET Framework 4.7 and .NET Framework 4.8 by running the tests against these versions.
 
 ### Changed
-- The NuGet packages no longer target .NET Core 3.1. It will be out of support in December, and it can still be used using the .NET Standard 2.0 variant.
+- The NuGet packages no longer target .NET Core 3.1. It will be out of support in December 2022, and it can still be used using the .NET Standard 2.0 variant.
 
 ## [0.7] - 2022-09-22
 ### Changed
