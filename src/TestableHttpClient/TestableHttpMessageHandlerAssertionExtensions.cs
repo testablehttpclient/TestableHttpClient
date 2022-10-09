@@ -9,6 +9,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     /// <returns>An <see cref="IHttpRequestMessagesCheck"/> that can be used for additional assertions.</returns>
     /// <exception cref="ArgumentNullException">handler is `null`</exception>
     /// <exception cref="HttpRequestMessageAssertionException">When no requests are made</exception>
+    [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequests(this TestableHttpMessageHandler handler)
     {
         if (handler == null)
@@ -27,6 +28,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     /// <returns>An <see cref="IHttpRequestMessagesCheck"/> that can be used for additional assertions.</returns>
     /// <exception cref="ArgumentNullException">handler is `null`</exception>
     /// <exception cref="HttpRequestMessageAssertionException">When no requests are made</exception>
+    [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequests(this TestableHttpMessageHandler handler, int expectedNumberOfRequests)
     {
         if (handler == null)
@@ -45,6 +47,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     /// <returns>An <see cref="IHttpRequestMessagesCheck"/> that can be used for additional assertions.</returns>
     /// <exception cref="ArgumentNullException">handler is `null` or pattern is `null`</exception>
     /// <exception cref="HttpRequestMessageAssertionException">When no requests are made</exception>
+    [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern)
     {
         if (handler == null)
@@ -69,6 +72,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     /// <returns>An <see cref="IHttpRequestMessagesCheck"/> that can be used for additional assertions.</returns>
     /// <exception cref="ArgumentNullException">handler is `null` or pattern is `null`</exception>
     /// <exception cref="HttpRequestMessageAssertionException">When no requests are made</exception>
+    [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern, int expectedNumberOfRequests)
     {
         if (handler == null)
