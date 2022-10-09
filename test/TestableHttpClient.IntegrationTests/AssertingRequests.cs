@@ -163,9 +163,9 @@ public class AssertingRequests
         using var content = new StringContent("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
-#if NET48
-        // On .NET Framework the HttpClient disposes the content automatically.
-        Assert.Throws<System.ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithContent("*"));
+#if NETFRAMEWORK
+        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
+        testHandler.ShouldHaveMadeRequests();
 #else
         testHandler.ShouldHaveMadeRequests().WithContent("my special content");
         testHandler.ShouldHaveMadeRequests().WithContent("my*content");
@@ -185,8 +185,9 @@ public class AssertingRequests
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
-#if NET48
-        Assert.Throws<System.ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithJsonContent(new { }));
+#if NETFRAMEWORK
+        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
+        testHandler.ShouldHaveMadeRequests();
 #else
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
 #endif
