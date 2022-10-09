@@ -10,7 +10,7 @@ public class CreatingClients
 
         await client.GetAsync("https://httpbin.org/get");
 
-        testableHttpMessageHandler.ShouldHaveMadeRequests().WithHttpVersion(HttpVersion.Version11);
+        testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get");
     }
 
     [Fact]

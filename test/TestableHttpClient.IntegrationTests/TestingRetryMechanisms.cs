@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Http;
+﻿#if NETCOREAPP || NET
+using Microsoft.Extensions.Http;
 
 using Polly;
 using Polly.Extensions.Http;
@@ -54,3 +55,4 @@ public class TestingRetryMechanisms
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get", 1);
     }
 }
+#endif

@@ -161,12 +161,17 @@ public class AssertingRequestsWithNFluent
         using var content = new StringContent("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NETFRAMEWORK
+        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
+        Check.That(testHandler).HasMadeRequests();
+#else
         Check.That(testHandler).HasMadeRequests().WithContent("my special content");
         Check.That(testHandler).HasMadeRequests().WithContent("my*content");
         Check.That(testHandler).HasMadeRequests().WithContent("*");
 
         Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("")).IsAFailingCheck();
         Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("my")).IsAFailingCheck();
+#endif
     }
 
     [Fact]
@@ -178,7 +183,12 @@ public class AssertingRequestsWithNFluent
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NETFRAMEWORK
+        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
+        Check.That(testHandler).HasMadeRequests();
+#else
         Check.That(testHandler).HasMadeRequests().WithJsonContent(new { });
+#endif
     }
 
     [Fact]

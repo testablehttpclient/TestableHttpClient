@@ -22,9 +22,9 @@ public class HttpResponseMessageBuilderTests
     {
         var sut = new HttpResponseMessageBuilder();
 
-        var result = sut.WithHttpVersion(HttpVersion.Version20).Build();
+        var result = sut.WithHttpVersion(HttpVersion.Version11).Build();
 
-        Assert.Equal(HttpVersion.Version20, result.Version);
+        Assert.Equal(HttpVersion.Version11, result.Version);
     }
 
     [Fact]

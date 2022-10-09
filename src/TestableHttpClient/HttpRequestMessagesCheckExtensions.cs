@@ -370,6 +370,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="pattern">The expected content, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern) => WithContent(check, pattern, null);
 
     /// <summary>
@@ -379,6 +380,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="pattern">The expected content, supports wildcards.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithContent(check, pattern, (int?)expectedNumberOfRequests);
 
     private static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
@@ -402,6 +404,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject) => WithJsonContent(check, jsonObject, null);
 
     /// <summary>
@@ -411,6 +414,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="jsonObject">The object representation of the expected request content.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int expectedNumberOfRequests) => WithJsonContent(check, jsonObject, (int?)expectedNumberOfRequests);
 
     private static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int? expectedNumberOfRequests)
@@ -430,6 +434,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection) => WithFormUrlEncodedContent(check, nameValueCollection, null);
 
     /// <summary>
@@ -439,6 +444,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection, int expectedNumberOfRequests) => WithFormUrlEncodedContent(check, nameValueCollection, (int?)expectedNumberOfRequests);
 
     private static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection, int? expectedNumberOfRequests)

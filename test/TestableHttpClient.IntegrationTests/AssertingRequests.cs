@@ -163,12 +163,17 @@ public class AssertingRequests
         using var content = new StringContent("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NETFRAMEWORK
+        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
+        testHandler.ShouldHaveMadeRequests();
+#else
         testHandler.ShouldHaveMadeRequests().WithContent("my special content");
         testHandler.ShouldHaveMadeRequests().WithContent("my*content");
         testHandler.ShouldHaveMadeRequests().WithContent("*");
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent(""));
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent("my"));
+#endif
     }
 
     [Fact]
@@ -180,7 +185,12 @@ public class AssertingRequests
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NETFRAMEWORK
+        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
+        testHandler.ShouldHaveMadeRequests();
+#else
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
+#endif
     }
 
     [Fact]

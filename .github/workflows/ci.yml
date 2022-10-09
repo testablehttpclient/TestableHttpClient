@@ -28,6 +28,8 @@ jobs:
         dotnet-version: |
           3.1.x
           6.0.x
+    - name: Dump .NET info
+      run: dotnet --info
     - name: Restore dotnet tools
       run: dotnet tool restore
     - name: Prepare sonarqube
@@ -60,8 +62,11 @@ jobs:
         name: coverage
         path: ./**/TestResults/**/coverage.opencover.xml
 
-  testFrameworkVersions:
-    runs-on: ubuntu-latest
+  testOnSupportedDotnetVersions:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -71,8 +76,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: |
-          3.1.x
-          6.0.x
+          3.1
+          6.0
+    - name: Dump .NET info
+      run: dotnet --info
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
@@ -87,10 +94,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup .NET 6.0
+    - name: Setup .NET versions
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0'
+        dotnet-version: |
+          6.0
     - uses: actions/download-artifact@v2
       with:
         name: artifacts
