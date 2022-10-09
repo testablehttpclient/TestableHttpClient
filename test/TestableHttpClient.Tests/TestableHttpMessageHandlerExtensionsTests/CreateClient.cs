@@ -25,6 +25,15 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         Assert.Same(sut, handler);
     }
 
+    [Fact]
+    public void CreateClient_NullDelegateHandler_ThrowsArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+        DelegatingHandler handler = null!;
+        var exception =Assert.Throws<ArgumentNullException>(() => sut.CreateClient(handler));
+        Assert.Equal("httpMessageHandlers", exception.ParamName);
+    }
+
     private static HttpMessageHandler? GetPrivateHandler(HttpClient client)
     {
         var handlerField = client.GetType().BaseType?.GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);

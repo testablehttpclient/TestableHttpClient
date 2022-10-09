@@ -43,6 +43,11 @@ public static class TestableHttpMessageHandlerExtensions
             throw new ArgumentNullException(nameof(httpMessageHandlers));
         }
 
+        if (httpMessageHandlers.Any(x => x is null))
+        {
+            throw new ArgumentNullException(nameof(httpMessageHandlers));
+        }
+
         var httpClient = new HttpClient(CreateHandlerChain(handler, httpMessageHandlers));
         configureClient(httpClient);
 
