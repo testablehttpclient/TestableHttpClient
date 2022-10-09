@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient.IntegrationTests;
+﻿using System;
+
+namespace TestableHttpClient.IntegrationTests;
 
 public class AssertingRequestsWithNFluent
 {
@@ -152,7 +154,6 @@ public class AssertingRequestsWithNFluent
         Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContentHeader("Content-Type", "*=utf-16")).IsAFailingCheck();
     }
 
-#if !NETFRAMEWORK
     [Fact]
     public async Task AssertingContent()
     {
@@ -162,12 +163,16 @@ public class AssertingRequestsWithNFluent
         using var content = new StringContent("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NET48
+        Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("*")).Throws<ObjectDisposedException>();
+#else
         Check.That(testHandler).HasMadeRequests().WithContent("my special content");
         Check.That(testHandler).HasMadeRequests().WithContent("my*content");
         Check.That(testHandler).HasMadeRequests().WithContent("*");
 
         Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("")).IsAFailingCheck();
         Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithContent("my")).IsAFailingCheck();
+#endif
     }
 
     [Fact]
@@ -179,9 +184,12 @@ public class AssertingRequestsWithNFluent
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NET48
+        Check.ThatCode(() => Check.That(testHandler).HasMadeRequests().WithJsonContent(new { })).Throws<ObjectDisposedException>();
+#else
         Check.That(testHandler).HasMadeRequests().WithJsonContent(new { });
-    }
 #endif
+    }
 
     [Fact]
     public async Task CustomAssertions()

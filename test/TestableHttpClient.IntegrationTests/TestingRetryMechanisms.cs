@@ -1,4 +1,4 @@
-﻿#if !NETFRAMEWORK
+﻿#if NETCOREAPP || NET
 using Microsoft.Extensions.Http;
 
 using Polly;

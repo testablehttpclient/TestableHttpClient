@@ -1,4 +1,4 @@
-﻿#if !NETFRAMEWORK
+﻿#if NETCOREAPP || NET
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

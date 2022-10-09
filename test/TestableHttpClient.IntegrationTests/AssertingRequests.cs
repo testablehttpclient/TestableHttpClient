@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient.IntegrationTests;
+﻿using System;
+
+namespace TestableHttpClient.IntegrationTests;
 
 public class AssertingRequests
 {
@@ -154,7 +156,6 @@ public class AssertingRequests
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "*=utf-16"));
     }
 
-#if !NETFRAMEWORK
     [Fact]
     public async Task AssertingContent()
     {
@@ -164,12 +165,17 @@ public class AssertingRequests
         using var content = new StringContent("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NET48
+        // On .NET Framework the HttpClient disposes the content automatically.
+        Assert.Throws<ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithContent("*"));
+#else
         testHandler.ShouldHaveMadeRequests().WithContent("my special content");
         testHandler.ShouldHaveMadeRequests().WithContent("my*content");
         testHandler.ShouldHaveMadeRequests().WithContent("*");
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent(""));
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent("my"));
+#endif
     }
 
     [Fact]
@@ -181,9 +187,12 @@ public class AssertingRequests
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
+#if NET48
+        Assert.Throws<ObjectDisposedException>(() => testHandler.ShouldHaveMadeRequests().WithJsonContent(new { }));
+#else
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
-    }
 #endif
+    }
 
     [Fact]
     public async Task CustomAssertions()
