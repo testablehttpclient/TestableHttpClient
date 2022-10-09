@@ -34,7 +34,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
             {
                 cancelationSource.Cancel(false);
             }
-            throw new TaskCanceledException(new OperationCanceledException().Message);
+            return Task.FromCanceled<HttpResponseMessage>(cancellationToken);
         }
 
         return Task.FromResult(response);

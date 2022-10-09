@@ -2,16 +2,14 @@
 
 public class SimulateTimeoutTests
 {
-#nullable disable
     [Fact]
     public void SimulateTimeout_WhenHandlerIsNull_ThrowsArgumentNullException()
     {
-        TestableHttpMessageHandler sut = null;
+        TestableHttpMessageHandler sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.SimulateTimeout());
         Assert.Equal("handler", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public async Task SimulateTimout_WhenRequestIsMade_ThrowsTaskCancelationExceptionWithOperationCanceledMessage()
@@ -24,7 +22,7 @@ public class SimulateTimeoutTests
 #if NET6_0_OR_GREATER
         Assert.Equal($"The request was canceled due to the configured HttpClient.Timeout of {client.Timeout.TotalSeconds} seconds elapsing.", exception.Message);
 #else
-        Assert.Equal(new OperationCanceledException().Message, exception.Message);
+        Assert.Equal(new TaskCanceledException().Message, exception.Message);
 #endif
     }
 }

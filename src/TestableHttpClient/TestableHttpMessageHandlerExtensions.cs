@@ -9,9 +9,9 @@ public static class TestableHttpMessageHandlerExtensions
     /// <returns>An HttpClient configure with the TestableHttpMessageHandler.</returns>
     /// <exception cref="ArgumentNullException">The `handler` is `null`</exception>
     /// <remarks>Using this method is equivalent to `new HttClient(handler)`.</remarks>
-    public static HttpClient CreateClient(this TestableHttpMessageHandler handler)
+    public static HttpClient CreateClient(this TestableHttpMessageHandler handler, params DelegatingHandler[] httpMessageHandlers)
     {
-        return CreateClient(handler, _ => { });
+        return CreateClient(handler, _ => { }, httpMessageHandlers);
     }
 
     /// <summary>
@@ -23,6 +23,11 @@ public static class TestableHttpMessageHandlerExtensions
     /// <exception cref="ArgumentNullException">The `handler` or `configureClient` is `null`</exception>
     public static HttpClient CreateClient(this TestableHttpMessageHandler handler, Action<HttpClient> configureClient)
     {
+        return CreateClient(handler, configureClient, Enumerable.Empty<DelegatingHandler>());
+    }
+
+    public static HttpClient CreateClient(this TestableHttpMessageHandler handler, Action<HttpClient> configureClient, IEnumerable<DelegatingHandler> httpMessageHandlers)
+    {
         if (handler is null)
         {
             throw new ArgumentNullException(nameof(handler));
@@ -33,9 +38,31 @@ public static class TestableHttpMessageHandlerExtensions
             throw new ArgumentNullException(nameof(configureClient));
         }
 
-        var httpClient = new HttpClient(handler);
+        if (httpMessageHandlers is null)
+        {
+            throw new ArgumentNullException(nameof(httpMessageHandlers));
+        }
+
+        if (httpMessageHandlers.Any(x => x is null))
+        {
+            throw new ArgumentNullException(nameof(httpMessageHandlers));
+        }
+
+        var httpClient = new HttpClient(CreateHandlerChain(handler, httpMessageHandlers));
         configureClient(httpClient);
 
         return httpClient;
+    }
+
+    private static HttpMessageHandler CreateHandlerChain(TestableHttpMessageHandler handler, IEnumerable<DelegatingHandler> additionalHandlers)
+    {
+        HttpMessageHandler next = handler;
+        var reversedHandlers = additionalHandlers.Reverse();
+        foreach (var delegatingHandler in reversedHandlers)
+        {
+            delegatingHandler.InnerHandler = next;
+            next = delegatingHandler;
+        }
+        return next;
     }
 }

@@ -4,16 +4,14 @@ namespace TestableHttpClient.Tests;
 
 public partial class TestableHttpMessageHandlerExtensionsTests
 {
-#nullable disable
     [Fact]
     public void CreateClient_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
     {
-        TestableHttpMessageHandler sut = null;
+        TestableHttpMessageHandler sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient());
         Assert.Equal("handler", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void CreateClient_CorrectTestableHttpMessageHandler_AddsHandlerToHttpClient()
@@ -27,7 +25,16 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         Assert.Same(sut, handler);
     }
 
-    private static object? GetPrivateHandler(HttpClient client)
+    [Fact]
+    public void CreateClient_NullDelegateHandler_ThrowsArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+        DelegatingHandler handler = null!;
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(handler));
+        Assert.Equal("httpMessageHandlers", exception.ParamName);
+    }
+
+    private static HttpMessageHandler? GetPrivateHandler(HttpClient client)
     {
         var handlerField = client.GetType().BaseType?.GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
         if (handlerField == null)
@@ -35,6 +42,6 @@ public partial class TestableHttpMessageHandlerExtensionsTests
             Assert.True(false, "Can't find the private _handler field on HttpClient.");
             return null;
         }
-        return handlerField.GetValue(client);
+        return handlerField.GetValue(client) as HttpMessageHandler;
     }
 }
