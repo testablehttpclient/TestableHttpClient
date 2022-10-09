@@ -30,7 +30,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         DelegatingHandler handler = null!;
-        var exception =Assert.Throws<ArgumentNullException>(() => sut.CreateClient(handler));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(handler));
         Assert.Equal("httpMessageHandlers", exception.ParamName);
     }
 
