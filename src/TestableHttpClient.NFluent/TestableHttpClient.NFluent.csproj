@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcore3.1;net6.0</TargetFrameworks>
 
     <Description>NFluent checks for checking HttpResponseMessages.</Description>
     <PackageTags>httpclient;unittesting;dotnet;nfluent</PackageTags>
