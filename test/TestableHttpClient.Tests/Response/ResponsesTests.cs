@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using System.Diagnostics;
+using System.Net.Http.Json;
 
 using TestableHttpClient.Utils;
 
@@ -51,7 +52,7 @@ public class ResponsesTests
         var stopwatch = Stopwatch.StartNew();
         var response = await sut.GetResponseAsync(requestMessage);
         stopwatch.Stop();
-        Assert.InRange(stopwatch.ElapsedMilliseconds, 450, 550);
+        Assert.True(stopwatch.ElapsedMilliseconds > 500);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -64,5 +65,34 @@ public class ResponsesTests
         var response = await sut.GetResponseAsync(requestMessage);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.Equal("Mock", response.Headers.Server.ToString());
+    }
+
+    [Fact]
+    public async Task Sequence_ReturnsDifferentRequestWithEachCall()
+    {
+        var sut = Sequenced(NoContent(), StatusCode(HttpStatusCode.OK), StatusCode(HttpStatusCode.NotFound));
+
+        using HttpRequestMessage requestMessage = new();
+        var response1 = await sut.GetResponseAsync(requestMessage);
+        var response2 = await sut.GetResponseAsync(requestMessage);
+        var response3 = await sut.GetResponseAsync(requestMessage);
+        var response4 = await sut.GetResponseAsync(requestMessage);
+
+        Assert.Equal(HttpStatusCode.NoContent, response1.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response3.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response4.StatusCode);
+    }
+
+    [Fact(Skip = "To be implemented")]
+    public async Task Json_ReturnsCorrectJsonType()
+    {
+        var sut = Json("Charlie");
+
+        using HttpRequestMessage requestMessage = new();
+        var response = await sut.GetResponseAsync(requestMessage);
+
+        Assert.Equal("application/json", response.Content?.Headers?.ContentType?.MediaType);
+        Assert.Equal("\"Charlie\"", await response.Content.ReadAsStringAsync());
     }
 }

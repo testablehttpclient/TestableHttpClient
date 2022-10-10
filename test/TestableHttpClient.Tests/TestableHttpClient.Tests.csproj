@@ -12,4 +12,8 @@
     <ProjectReference Include="..\..\src\TestableHttpClient\TestableHttpClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0'">
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>
