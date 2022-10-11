@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class JsonResponse : IResponse
+internal class JsonResponse : ResponseBase
 {
     private readonly object content;
 
@@ -9,8 +9,11 @@ internal class JsonResponse : IResponse
         this.content = content;
     }
 
-    public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage)
+    protected override HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
     {
-        throw new NotImplementedException();
+        HttpResponseMessage response = new();
+        string json = JsonSerializer.Serialize(content);
+        response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+        return response;
     }
 }

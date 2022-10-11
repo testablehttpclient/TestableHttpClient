@@ -52,7 +52,7 @@ public class ResponsesTests
         var stopwatch = Stopwatch.StartNew();
         var response = await sut.GetResponseAsync(requestMessage);
         stopwatch.Stop();
-        Assert.True(stopwatch.ElapsedMilliseconds > 500);
+        Assert.True(stopwatch.ElapsedMilliseconds >= 500);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -84,7 +84,7 @@ public class ResponsesTests
         Assert.Equal(HttpStatusCode.NotFound, response4.StatusCode);
     }
 
-    [Fact(Skip = "To be implemented")]
+    [Fact]
     public async Task Json_ReturnsCorrectJsonType()
     {
         var sut = Json("Charlie");

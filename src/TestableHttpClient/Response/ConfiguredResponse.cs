@@ -12,7 +12,7 @@ internal class ConfiguredResponse : IResponse
     }
     public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage)
     {
-        var response = await innerResponse.GetResponseAsync(requestMessage);
+        var response = await innerResponse.GetResponseAsync(requestMessage).ConfigureAwait(false);
         configureResponse(response);
         return response;
     }

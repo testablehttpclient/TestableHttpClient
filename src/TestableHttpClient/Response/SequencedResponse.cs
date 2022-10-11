@@ -17,13 +17,13 @@ internal class SequencedResponse : IResponse
 
     private IResponse GetResponse()
     {
-        if(responses.Count == 1)
+        if (responses.Count == 1)
         {
             return responses.Peek();
         }
         else
         {
             return responses.Dequeue();
-        }    
+        }
     }
 }
