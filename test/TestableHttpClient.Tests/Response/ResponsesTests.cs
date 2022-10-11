@@ -92,7 +92,7 @@ public class ResponsesTests
         using HttpRequestMessage requestMessage = new();
         var response = await sut.GetResponseAsync(requestMessage);
 
-        Assert.Equal("application/json", response.Content?.Headers?.ContentType?.MediaType);
-        Assert.Equal("\"Charlie\"", await response.Content.ReadAsStringAsync());
+        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("\"Charlie\"", await response.Content!.ReadAsStringAsync());
     }
 }
