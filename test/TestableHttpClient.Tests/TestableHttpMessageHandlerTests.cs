@@ -1,4 +1,7 @@
-﻿namespace TestableHttpClient.Tests;
+﻿using System.Collections.Concurrent;
+using System.Threading;
+
+namespace TestableHttpClient.Tests;
 
 public class TestableHttpMessageHandlerTests
 {
@@ -117,5 +120,79 @@ public class TestableHttpMessageHandlerTests
         _ = await client.GetAsync("https://example.com");
 
         Assert.Equal(5, responseFactoryCallCount);
+    }
+
+    [Fact]
+    public void GetAsync_ShouldNotHang()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        sut.RespondWith(Responses.Delayed(new CustomResponse(), 300));
+
+        bool doesNotHang = Task.Run(() =>
+        {
+            SingleThreadedSynchronizationContext.Run(() =>
+            {
+                sut.CreateClient().GetAsync("http://example.com").GetAwaiter().GetResult();
+            });
+        }).Wait(TimeSpan.FromSeconds(10));
+
+
+        Assert.True(doesNotHang);
+    }
+
+    private class CustomResponse : IResponse
+    {
+        public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+        {
+#pragma warning disable CA1849 // Call async methods when in an async method
+            Task.Delay(300, CancellationToken.None).GetAwaiter().GetResult();
+            var response = Responses.NoContent().GetResponseAsync(requestMessage, CancellationToken.None).GetAwaiter().GetResult();
+#pragma warning restore CA1849 // Call async methods when in an async method
+            return Task.FromResult(response);
+        }
+    }
+
+    private class SingleThreadedSynchronizationContext : SynchronizationContext, IDisposable
+    {
+        private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = new BlockingCollection<(SendOrPostCallback Callback, object? State)>();
+
+        private SingleThreadedSynchronizationContext() { }
+        public override void Send(SendOrPostCallback d, object? state) // Sync operations
+        {
+            throw new NotSupportedException($"{nameof(SingleThreadedSynchronizationContext)} does not support synchronous operations.");
+        }
+
+        public override void Post(SendOrPostCallback d, object? state) // Async operations
+        {
+            _queue.Add((d, state));
+        }
+
+        public static void Run(Action action)
+        {
+            var previous = Current;
+            var context = new SingleThreadedSynchronizationContext();
+            SetSynchronizationContext(context);
+            try
+            {
+                action();
+
+                while (context._queue.TryTake(out var item))
+                {
+                    item.Callback(item.State);
+                }
+            }
+            finally
+            {
+                context._queue.CompleteAdding();
+                SetSynchronizationContext(previous);
+                context.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            _queue.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

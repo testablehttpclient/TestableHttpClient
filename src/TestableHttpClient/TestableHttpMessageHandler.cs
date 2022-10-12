@@ -20,7 +20,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     {
         httpRequestMessages.Enqueue(request);
 
-        HttpResponseMessage responseMessage = await response.GetResponseAsync(request, cancellationToken);
+        HttpResponseMessage responseMessage = await response.GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
         if (responseMessage.RequestMessage is null)
         {
             responseMessage.RequestMessage = request;
@@ -38,7 +38,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
             {
                 cancelationSource.Cancel(false);
             }
-            return await Task.FromCanceled<HttpResponseMessage>(cancellationToken);
+            return await Task.FromCanceled<HttpResponseMessage>(cancellationToken).ConfigureAwait(false);
         }
 
         return responseMessage;
