@@ -11,9 +11,9 @@ internal class DelayedResponse : IResponse
         this.delayInMilliseconds = delayInMilliseconds;
     }
 
-    public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage)
+    public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
     {
-        await Task.Delay(delayInMilliseconds).ConfigureAwait(false);
-        return await delayedResponse.GetResponseAsync(requestMessage).ConfigureAwait(false);
+        await Task.Delay(delayInMilliseconds, cancellationToken);
+        return await delayedResponse.GetResponseAsync(requestMessage, cancellationToken);
     }
 }

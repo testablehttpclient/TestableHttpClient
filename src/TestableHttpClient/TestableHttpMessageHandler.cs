@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
 
+using TestableHttpClient.Response;
+
 namespace TestableHttpClient;
 /// <summary>
 /// A testable HTTP message handler that captures all requests and always returns the same response.
@@ -7,26 +9,28 @@ namespace TestableHttpClient;
 public class TestableHttpMessageHandler : HttpMessageHandler
 {
     private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new ConcurrentQueue<HttpRequestMessage>();
-    private Func<HttpRequestMessage, HttpResponseMessage> responseFactory = DefaultResponseFactory;
-
-    private static HttpResponseMessage DefaultResponseFactory(HttpRequestMessage requestMessage) => new HttpResponseMessage(HttpStatusCode.OK)
-    {
-        RequestMessage = requestMessage,
-        Content = new StringContent(string.Empty)
-    };
+    private IResponse response = new StatusCodeResponse(HttpStatusCode.OK);
 
     /// <summary>
     /// Gets the collection of captured requests made using this HttpMessageHandler.
     /// </summary>
     public IEnumerable<HttpRequestMessage> Requests => httpRequestMessages;
 
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         httpRequestMessages.Enqueue(request);
 
-        var response = responseFactory(request);
+        HttpResponseMessage responseMessage = await response.GetResponseAsync(request, cancellationToken);
+        if (responseMessage.RequestMessage is null)
+        {
+            responseMessage.RequestMessage = request;
+        }
+        if (responseMessage.Content is null)
+        {
+            responseMessage.Content = new StringContent("");
+        }
 
-        if (response is TimeoutHttpResponseMessage)
+        if (responseMessage is TimeoutHttpResponseMessage)
         {
             var cancelationSource = cancellationToken.GetSource();
 
@@ -34,10 +38,15 @@ public class TestableHttpMessageHandler : HttpMessageHandler
             {
                 cancelationSource.Cancel(false);
             }
-            return Task.FromCanceled<HttpResponseMessage>(cancellationToken);
+            return await Task.FromCanceled<HttpResponseMessage>(cancellationToken);
         }
 
-        return Task.FromResult(response);
+        return responseMessage;
+    }
+
+    public void RespondWith(IResponse response)
+    {
+        this.response = response;
     }
 
     /// <summary>
@@ -50,6 +59,11 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// </example>
     public void RespondWith(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
     {
-        responseFactory = httpResponseMessageFactory ?? DefaultResponseFactory;
+        if (httpResponseMessageFactory is null)
+        {
+            throw new ArgumentNullException(nameof(httpResponseMessageFactory));
+        }
+
+        RespondWith(new FunctionResponse(httpResponseMessageFactory));
     }
 }

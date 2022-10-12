@@ -10,9 +10,9 @@ internal class ConfiguredResponse : IResponse
         innerResponse = response;
         this.configureResponse = configureResponse;
     }
-    public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage)
+    public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
     {
-        var response = await innerResponse.GetResponseAsync(requestMessage).ConfigureAwait(false);
+        var response = await innerResponse.GetResponseAsync(requestMessage, cancellationToken);
         configureResponse(response);
         return response;
     }

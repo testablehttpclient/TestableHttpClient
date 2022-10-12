@@ -9,10 +9,10 @@ internal class SequencedResponse : IResponse
     {
         this.responses = new(responses);
     }
-    public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage)
+    public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
     {
         var response = GetResponse();
-        return response.GetResponseAsync(requestMessage);
+        return response.GetResponseAsync(requestMessage, cancellationToken);
     }
 
     private IResponse GetResponse()

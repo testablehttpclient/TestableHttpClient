@@ -1,3 +1,5 @@
+using System;
+
 namespace TestableHttpClient.IntegrationTests;
 
 public class ConfigureResponses
@@ -18,11 +20,10 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithCustomResponse_ReturnsCustomResponse()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        using var response = new HttpResponseMessage(HttpStatusCode.Created)
+        testHandler.RespondWith(_ => new HttpResponseMessage(HttpStatusCode.Created)
         {
             Content = new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain")
-        };
-        testHandler.RespondWith(response);
+        });
 
         using var httpClient = new HttpClient(testHandler);
         var result = await httpClient.GetAsync("http://httpbin.org/status/201");

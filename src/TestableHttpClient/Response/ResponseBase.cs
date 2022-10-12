@@ -7,7 +7,7 @@
             return new HttpResponseMessage();
         }
 
-        public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage)
+        public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
         {
             return Task.FromResult(GetResponse(requestMessage));
         }

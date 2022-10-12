@@ -74,22 +74,14 @@ public class TestableHttpMessageHandlerTests
         Assert.NotSame(response1.RequestMessage, response2.RequestMessage);
     }
 
-#nullable disable
     [Fact]
-    public async Task RespondWith_NullFactory_UsesDefaultResponseFactory()
+    public void RespondWith_NullFactory_ThrowArgumentNullException()
     {
         using var sut = new TestableHttpMessageHandler();
-        Func<HttpRequestMessage, HttpResponseMessage> responseFactory = null;
-        sut.RespondWith(responseFactory);
-
-        using var client = new HttpClient(sut);
-        var response = await client.GetAsync("https://example.com");
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync());
-        Assert.NotNull(response.RequestMessage);
+        Func<HttpRequestMessage, HttpResponseMessage> responseFactory = null!;
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(responseFactory));
+        Assert.Equal("httpResponseMessageFactory", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public async Task RespondWith_CustomFactory_ReturnsCustomStatusCode()
@@ -102,7 +94,7 @@ public class TestableHttpMessageHandlerTests
         var response = await client.GetAsync("https://example.com");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        Assert.Null(response.RequestMessage);
+        Assert.NotNull(response.RequestMessage);
     }
 
     [Fact]
