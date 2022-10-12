@@ -53,7 +53,7 @@ public class ResponsesTests
         var stopwatch = Stopwatch.StartNew();
         var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
         stopwatch.Stop();
-        Assert.True(stopwatch.ElapsedMilliseconds >= 500);
+        Assert.True(stopwatch.ElapsedMilliseconds >= 250);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
