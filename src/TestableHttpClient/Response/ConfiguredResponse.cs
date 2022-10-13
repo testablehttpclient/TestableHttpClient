@@ -7,8 +7,8 @@ internal class ConfiguredResponse : IResponse
 
     public ConfiguredResponse(IResponse response, Action<HttpResponseMessage> configureResponse)
     {
-        innerResponse = response;
-        this.configureResponse = configureResponse;
+        innerResponse = response ?? throw new ArgumentNullException(nameof(response));
+        this.configureResponse = configureResponse ?? throw new ArgumentNullException(nameof(configureResponse));
     }
     public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
     {

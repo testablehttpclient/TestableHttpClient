@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsTests;
 
+[Obsolete("SimulateTimeout is obsolete")]
 public class SimulateTimeoutTests
 {
     [Fact]

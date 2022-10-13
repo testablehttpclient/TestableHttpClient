@@ -2,9 +2,9 @@
 
 internal class JsonResponse : ResponseBase
 {
-    private readonly object content;
+    private readonly object? content;
 
-    public JsonResponse(object content)
+    public JsonResponse(object? content)
     {
         this.content = content;
     }

@@ -7,7 +7,7 @@ internal class DelayedResponse : IResponse
 
     public DelayedResponse(IResponse delayedResponse, int delayInMilliseconds)
     {
-        this.delayedResponse = delayedResponse;
+        this.delayedResponse = delayedResponse ?? throw new ArgumentNullException(nameof(delayedResponse));
         this.delayInMilliseconds = delayInMilliseconds;
     }
 

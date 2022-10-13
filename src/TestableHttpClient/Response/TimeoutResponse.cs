@@ -1,7 +1,17 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class TimeoutResponse : ResponseBase
+internal class TimeoutResponse : IResponse
 {
-    protected override HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
-        => new TimeoutHttpResponseMessage();
+    public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+    {
+        var cancelationSource = cancellationToken.GetSource();
+
+        if (cancelationSource is not null)
+        {
+            cancelationSource.Cancel(false);
+            return Task.FromCanceled<HttpResponseMessage>(cancellationToken);
+        }
+
+        throw new TaskCanceledException();
+    }
 }

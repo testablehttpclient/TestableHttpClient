@@ -78,6 +78,28 @@ public class TestableHttpMessageHandlerTests
     }
 
     [Fact]
+    public void RespondWith_NullResponse_ThrowArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+        IResponse response = null!;
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(response));
+        Assert.Equal("response", exception.ParamName);
+    }
+
+    [Fact]
+    public async Task RespondWith_GivenResponse_ReturnsResponse()
+    {
+        using TestableHttpMessageHandler sut = new();
+        sut.RespondWith(Responses.NoContent());
+
+        using var client = new HttpClient(sut);
+        var response = await client.GetAsync("https://example.com");
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.NotNull(response.RequestMessage);
+    }
+
+    [Fact]
     public void RespondWith_NullFactory_ThrowArgumentNullException()
     {
         using var sut = new TestableHttpMessageHandler();
@@ -87,48 +109,12 @@ public class TestableHttpMessageHandlerTests
     }
 
     [Fact]
-    public async Task RespondWith_CustomFactory_ReturnsCustomStatusCode()
-    {
-        using var sut = new TestableHttpMessageHandler();
-        static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new HttpResponseMessage(HttpStatusCode.Unauthorized);
-        sut.RespondWith(CustomResponse);
-
-        using var client = new HttpClient(sut);
-        var response = await client.GetAsync("https://example.com");
-
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        Assert.NotNull(response.RequestMessage);
-    }
-
-    [Fact]
-    public async Task RespondWith_CustomFactory_FactoryIsCalledEveryTimeARequestIsMade()
-    {
-        var responseFactoryCallCount = 0;
-        using var sut = new TestableHttpMessageHandler();
-        HttpResponseMessage CustomResponse(HttpRequestMessage request)
-        {
-            responseFactoryCallCount++;
-            return new HttpResponseMessage(HttpStatusCode.Unauthorized);
-        }
-        sut.RespondWith(CustomResponse);
-
-        using var client = new HttpClient(sut);
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-
-        Assert.Equal(5, responseFactoryCallCount);
-    }
-
-    [Fact]
     public void GetAsync_ShouldNotHang()
     {
         using var sut = new TestableHttpMessageHandler();
         sut.RespondWith(Responses.Delayed(new CustomResponse(), 300));
 
-        bool doesNotHang = Task.Run(() =>
+        var doesNotHang = Task.Run(() =>
         {
             SingleThreadedSynchronizationContext.Run(() =>
             {

@@ -9,7 +9,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         TestableHttpMessageHandler sut = null!;
         Action<HttpClient> configureClient = _ => { };
-        IEnumerable<DelegatingHandler> handlers = Enumerable.Empty<DelegatingHandler>();
+        var handlers = Enumerable.Empty<DelegatingHandler>();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, handlers));
         Assert.Equal("handler", exception.ParamName);
@@ -20,7 +20,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using var sut = new TestableHttpMessageHandler();
         Action<HttpClient> configureClient = null!;
-        IEnumerable<DelegatingHandler> handlers = Enumerable.Empty<DelegatingHandler>();
+        var handlers = Enumerable.Empty<DelegatingHandler>();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, handlers));
         Assert.Equal("configureClient", exception.ParamName);
@@ -41,8 +41,8 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     public void CreateClientWithConfigurerAndHtppMessageHandlers_CallsConfigureClientWithClientToReturn()
     {
         using var sut = new TestableHttpMessageHandler();
-        Action<HttpClient> configureClient = Mock.Of<Action<HttpClient>>();
-        IEnumerable<DelegatingHandler> handlers = Enumerable.Empty<DelegatingHandler>();
+        var configureClient = Mock.Of<Action<HttpClient>>();
+        var handlers = Enumerable.Empty<DelegatingHandler>();
 
         using var client = sut.CreateClient(configureClient, handlers);
 

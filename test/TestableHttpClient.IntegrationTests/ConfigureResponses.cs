@@ -1,4 +1,4 @@
-using System;
+using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
@@ -119,7 +119,7 @@ public class ConfigureResponses
     public async Task SimulateTimeout_WillThrowExceptionSimulatingTheTimeout()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        testHandler.SimulateTimeout();
+        testHandler.RespondWith(Timeout());
 
         using var httpClient = new HttpClient(testHandler);
         await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500"));

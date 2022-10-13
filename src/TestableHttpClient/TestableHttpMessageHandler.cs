@@ -30,40 +30,19 @@ public class TestableHttpMessageHandler : HttpMessageHandler
             responseMessage.Content = new StringContent("");
         }
 
-        if (responseMessage is TimeoutHttpResponseMessage)
-        {
-            var cancelationSource = cancellationToken.GetSource();
-
-            if (cancelationSource is not null)
-            {
-                cancelationSource.Cancel(false);
-            }
-            return await Task.FromCanceled<HttpResponseMessage>(cancellationToken).ConfigureAwait(false);
-        }
-
         return responseMessage;
     }
 
-    public void RespondWith(IResponse response)
-    {
-        this.response = response;
-    }
-
     /// <summary>
-    /// Configure a factory method that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
+    /// Configure a response that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
     /// </summary>
-    /// <param name="httpResponseMessageFactory">The factory method that should be called for every request. The request is passed as a parameter to the factory method and it is expected to return a HttpResponseMessage.</param>
+    /// <param name="response">The response that should be created.</param>
     /// <remarks>By default each request will receive a new response, however this is dependend on the implementation.</remarks>
     /// <example>
-    /// testableHttpMessageHander.RespondWith(request => new ResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
+    /// testableHttpMessageHander.RespondWith(Responses.NoContent());
     /// </example>
-    public void RespondWith(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
+    public void RespondWith(IResponse response)
     {
-        if (httpResponseMessageFactory is null)
-        {
-            throw new ArgumentNullException(nameof(httpResponseMessageFactory));
-        }
-
-        RespondWith(new FunctionResponse(httpResponseMessageFactory));
+        this.response = response ?? throw new ArgumentNullException(nameof(response));
     }
 }

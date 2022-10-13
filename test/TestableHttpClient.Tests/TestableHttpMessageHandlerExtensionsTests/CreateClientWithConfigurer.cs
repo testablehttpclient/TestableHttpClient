@@ -41,7 +41,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
     {
         using var sut = new TestableHttpMessageHandler();
-        Mock<Action<HttpClient>> configureClient = new Mock<Action<HttpClient>>();
+        var configureClient = new Mock<Action<HttpClient>>();
 
         using var client = sut.CreateClient(configureClient.Object);
 

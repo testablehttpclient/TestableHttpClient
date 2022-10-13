@@ -1,8 +1,7 @@
-﻿using System.Data.Common;
-using System.Diagnostics;
-using System.Net.Http.Json;
+﻿using System.Diagnostics;
 using System.Threading;
 
+using TestableHttpClient.Response;
 using TestableHttpClient.Utils;
 
 using static TestableHttpClient.Responses;
@@ -12,88 +11,86 @@ namespace TestableHttpClient.Tests.Response;
 public class ResponsesTests
 {
     [Fact]
-    public async Task Timeout_ReturnsTimeoutHttpResponseMessage()
+    public void Timeout_ReturnsTimeoutResponse()
     {
         var sut = Timeout();
 
-        using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
-        Assert.IsType<TimeoutHttpResponseMessage>(response);
+        Assert.IsType<TimeoutResponse>(sut);
     }
 
     [Fact]
-    public async Task StatusCode_ReturnsHttpResponseMessageWithStatusCode()
+    public void StatusCode_ReturnsStatusCodeResponse()
     {
         var sut = StatusCode(HttpStatusCode.Ambiguous);
-
-        using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
+        var response = Assert.IsType<StatusCodeResponse>(sut);
         Assert.Equal(HttpStatusCode.Ambiguous, response.StatusCode);
     }
 
     [Fact]
-    public async Task NoContent_ReturnsHttpResponseMessageWithNotContentStatusCode()
+    public void NoContent_ReturnsStatusCodeResponse()
     {
         var sut = NoContent();
-
-        using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
+        var response = Assert.IsType<StatusCodeResponse>(sut);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
     [Fact]
-    public async Task Delayed_ReturnsHttpResponseMessageWithADelay()
+    public void Delayed_WithNullResponse_ThrowsArgumentNullException()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => Delayed(null!, 500));
+        Assert.Equal("delayedResponse", exception.ParamName);
+    }
+
+    [Fact]
+    public void Delayed_ReturnsDelayedResponse()
     {
         var sut = Delayed(NoContent(), 500);
-
-        using HttpRequestMessage requestMessage = new();
-        var stopwatch = Stopwatch.StartNew();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        stopwatch.Stop();
-        Assert.True(stopwatch.ElapsedMilliseconds >= 250);
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.IsType<DelayedResponse>(sut);
     }
 
     [Fact]
-    public async Task Configured_ReturnsConfiguredHttpResponse()
+    public void Configured_NullResponse_ThrowsArgumentNullException()
     {
-        var sut = Configured(NoContent(), x => x.Headers.Add("Server", "Mock"));
-
-        using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-        Assert.Equal("Mock", response.Headers.Server.ToString());
+        Assert.Throws<ArgumentNullException>(() => Configured(null!, _ => { }));
     }
 
     [Fact]
-    public async Task Sequence_ReturnsDifferentRequestWithEachCall()
+    public void Configured_NullConfigurationAction_ThrowsArgumentNullException()
     {
-        var sut = Sequenced(NoContent(), StatusCode(HttpStatusCode.OK), StatusCode(HttpStatusCode.NotFound));
-
-        using HttpRequestMessage requestMessage = new();
-        var response1 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var response2 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var response3 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var response4 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
-        Assert.Equal(HttpStatusCode.NoContent, response1.StatusCode);
-        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
-        Assert.Equal(HttpStatusCode.NotFound, response3.StatusCode);
-        Assert.Equal(HttpStatusCode.NotFound, response4.StatusCode);
+        Assert.Throws<ArgumentNullException>(() => Configured(NoContent(), null!));
     }
 
     [Fact]
-    public async Task Json_ReturnsCorrectJsonType()
+    public void Configured_ReturnsConfiguredResponse()
+    {
+        var sut = Configured(NoContent(), x => { });
+        Assert.IsType<ConfiguredResponse>(sut);
+    }
+
+    [Fact]
+    public void Sequenced_NoContent_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => Sequenced());
+    }
+
+    [Fact]
+    public void Sequenced_NullContent_ThrowsArgumentNullException()
+    {
+        IResponse[] responses = null!;
+        Assert.Throws<ArgumentNullException>(() => Sequenced(responses));
+    }
+
+    [Fact]
+    public void Sequenced_ReturnsSequencedResponse()
+    {
+        var sut = Sequenced(NoContent());
+        Assert.IsType<SequencedResponse>(sut);
+    }
+
+    [Fact]
+    public void Json_ReturnsJsonResponse()
     {
         var sut = Json("Charlie");
-
-        using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
-        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-        Assert.Equal("\"Charlie\"", await response.Content!.ReadAsStringAsync());
+        Assert.IsType<JsonResponse>(sut);
     }
 }

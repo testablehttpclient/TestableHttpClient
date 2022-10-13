@@ -7,12 +7,12 @@ internal class FunctionResponse : ResponseBase
 
     internal FunctionResponse(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
     {
-        this.httpResponseMessageFactory = httpResponseMessageFactory;
+        this.httpResponseMessageFactory = httpResponseMessageFactory ?? throw new ArgumentNullException(nameof(httpResponseMessageFactory));
     }
 
     internal FunctionResponse(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
     {
-        this.httpResponseMessageBuilderAction = httpResponseMessageBuilderAction;
+        this.httpResponseMessageBuilderAction = httpResponseMessageBuilderAction ?? throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
     }
 
     protected override HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
