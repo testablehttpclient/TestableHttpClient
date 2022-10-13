@@ -45,7 +45,7 @@ public class SequencedResponseTests
         using HttpResponseMessage responseMessage1 = new();
         using HttpResponseMessage responseMessage2 = new();
         using HttpResponseMessage responseMessage3 = new();
-        
+
         var sut = new SequencedResponse(new[]
         {
             new FunctionResponse(_ => responseMessage1),

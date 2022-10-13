@@ -23,7 +23,8 @@ public class DelayedResponseTests
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
         long delayResponseCallTimestamp = 0;
-        FunctionResponse delayedResponse = new(_ => {
+        FunctionResponse delayedResponse = new(_ =>
+        {
             delayResponseCallTimestamp = Stopwatch.GetTimestamp();
             return responseMessage;
         });
@@ -32,7 +33,7 @@ public class DelayedResponseTests
         await sut.GetResponseAsync(requestMessage, CancellationToken.None);
 
         Assert.True(delayResponseCallTimestamp > 0, "No delay found");
-        
+
         Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds > 10);
     }
 
@@ -42,7 +43,8 @@ public class DelayedResponseTests
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
         long delayResponseCallTimestamp = 0;
-        FunctionResponse delayedResponse = new(_ => {
+        FunctionResponse delayedResponse = new(_ =>
+        {
             delayResponseCallTimestamp = Stopwatch.GetTimestamp();
             return responseMessage;
         });

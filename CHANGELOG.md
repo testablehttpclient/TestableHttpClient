@@ -18,6 +18,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `TestableHttpClient` now works with the `Responses` class, making it easier to configure responses.
 - When a HttpResponseMessage doesn't contain `Content` (mostly on .NET Framework and .NET Core 3.1), an empty `StringContent` is added.
 - The HttpRequestMessage is always added to the response.
+- Added `ConfigureAwait(false)` to all calls, since we now use async/await in the library.
 
 ## [0.7] - 2022-09-22
 ### Changed
