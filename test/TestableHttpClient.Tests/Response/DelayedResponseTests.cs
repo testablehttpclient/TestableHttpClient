@@ -34,7 +34,7 @@ public class DelayedResponseTests
 
         Assert.True(delayResponseCallTimestamp > 0, "No delay found");
 
-        Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds > 10);
+        Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds > 250);
     }
 
     [Fact]
@@ -53,6 +53,6 @@ public class DelayedResponseTests
         await sut.GetResponseAsync(requestMessage, CancellationToken.None);
 
         Assert.True(delayResponseCallTimestamp > 0, "No delay found");
-        Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds < 10);
+        Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds < 250);
     }
 }
