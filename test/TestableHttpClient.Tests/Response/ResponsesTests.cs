@@ -88,9 +88,28 @@ public class ResponsesTests
     }
 
     [Fact]
+    public void Text_ReturnsTextResponse()
+    {
+        var sut = Text("Hello world");
+        TextResponse response = Assert.IsType<TextResponse>(sut);
+        Assert.Equal("Hello world", response.Content);
+    }
+
+    [Fact]
     public void Json_ReturnsJsonResponse()
     {
         var sut = Json("Charlie");
-        Assert.IsType<JsonResponse>(sut);
+        JsonResponse response = Assert.IsType<JsonResponse>(sut);
+        Assert.Equal("Charlie", response.Content);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public void Json_WithStatusCode_ReturnsJsonResponse()
+    {
+        var sut = Json("Charlie", HttpStatusCode.NotFound);
+        JsonResponse response = Assert.IsType<JsonResponse>(sut);
+        Assert.Equal("Charlie", response.Content);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }

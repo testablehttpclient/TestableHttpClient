@@ -20,6 +20,7 @@ public class JsonResponseTests
         var json = await response.Content.ReadAsStringAsync();
 
         Assert.Equal(expectedJson, json);
+        Assert.Same(input, sut.Content);
     }
 
     [Fact]
@@ -34,6 +35,7 @@ public class JsonResponseTests
         var json = await response.Content.ReadAsStringAsync();
 
         Assert.Equal("{\"Value\":42}", json);
+        Assert.Same(input, sut.Content);
     }
 
     [Fact]
@@ -48,5 +50,6 @@ public class JsonResponseTests
         var json = await response.Content.ReadAsStringAsync();
 
         Assert.Equal("[1,2,3,4]", json);
+        Assert.Same(input, sut.Content);
     }
 }

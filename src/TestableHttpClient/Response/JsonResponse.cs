@@ -2,18 +2,16 @@
 
 internal class JsonResponse : ResponseBase
 {
-    private readonly object? content;
-
     public JsonResponse(object? content)
     {
-        this.content = content;
+        Content = content;
     }
 
-    protected override HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
+    public object? Content { get; }
+
+    protected override HttpContent? GetContent(HttpRequestMessage requestMessage)
     {
-        HttpResponseMessage response = new();
-        string json = JsonSerializer.Serialize(content);
-        response.Content = new StringContent(json, Encoding.UTF8, "application/json");
-        return response;
+        string json = JsonSerializer.Serialize(Content);
+        return new StringContent(json, Encoding.UTF8, "application/json");
     }
 }

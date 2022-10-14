@@ -1,3 +1,5 @@
+using System.Net.Http;
+
 using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
@@ -20,15 +22,12 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithCustomResponse_ReturnsCustomResponse()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        testHandler.RespondWith(_ => new HttpResponseMessage(HttpStatusCode.Created)
-        {
-            Content = new StringContent("HttpClient testing is easy", Encoding.UTF8, "text/plain")
-        });
+        testHandler.RespondWith(Text("HttpClient testing is easy"));
 
         using var httpClient = new HttpClient(testHandler);
-        var result = await httpClient.GetAsync("http://httpbin.org/status/201");
+        var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 
-        Assert.Equal(HttpStatusCode.Created, result.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
     }
 
@@ -53,8 +52,8 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithMultipleCustomRepsonse_ReturnsLastCustomResponse()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
-        testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.NotFound).WithJsonContent("Not Found"));
+        testHandler.RespondWith(Text("HttpClient testing is easy"));
+        testHandler.RespondWith(Json("Not Found", HttpStatusCode.NotFound));
 
         using var httpClient = new HttpClient(testHandler);
         var result = await httpClient.GetAsync("http://httpbin.org/status/201");
@@ -67,7 +66,7 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithCustomResponse_AlwaysReturnsSameCustomResponse()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        testHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.Created).WithStringContent("HttpClient testing is easy"));
+        testHandler.RespondWith(Text("HttpClient testing is easy"));
 
         using var httpClient = new HttpClient(testHandler);
         var urls = new[]
@@ -83,7 +82,7 @@ public class ConfigureResponses
         {
             var result = await httpClient.GetAsync(url);
 
-            Assert.Equal(HttpStatusCode.Created, result.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
         }
     }
@@ -123,5 +122,56 @@ public class ConfigureResponses
 
         using var httpClient = new HttpClient(testHandler);
         await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500"));
+    }
+
+    [Fact]
+    public async Task UsingTestHandlerWithSequencedResponses_WillReturnDifferentResponseForEveryRequest()
+    {
+        using TestableHttpMessageHandler testHandler = new();
+        testHandler.RespondWith(Sequenced(
+            StatusCode(HttpStatusCode.OK),
+            StatusCode(HttpStatusCode.Unauthorized),
+            NoContent(),
+            StatusCode(HttpStatusCode.NotFound)
+            ));
+
+        using HttpClient httpClient = new(testHandler);
+        var response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        // Last configured response is returned when all other responses are used.
+        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UsingTestHandlerWithDelayedResponses_WillDelayTheResponse()
+    {
+        using TestableHttpMessageHandler testHandler = new();
+        testHandler.RespondWith(Delayed(StatusCode(HttpStatusCode.OK), 500));
+
+        using HttpClient httpClient = new(testHandler);
+        var response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task YsingTestHandlerWithConfiguredResponses_WillConfigureTHeResponse()
+    {
+        using TestableHttpMessageHandler testHandler = new();
+        testHandler.RespondWith(Configured(NoContent(), x => x.Headers.Add("server", "test")));
+
+        using HttpClient httpClient = new(testHandler);
+        var response = await httpClient.GetAsync("http://httpbin.org/anything");
+        Assert.Equal("test", response.Headers.Server.ToString());
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
@@ -15,7 +16,7 @@ public class UsingIHttpClientFactory
     {
         // Create TestableHttpMessageHandler as usual.
         using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        testableHttpMessageHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.OK));
+        testableHttpMessageHandler.RespondWith(NoContent());
 
         var services = new ServiceCollection();
         // Register an HttpClient and configure the TestableHttpMessageHandler as the PrimaryHttpMessageHandler
@@ -39,10 +40,10 @@ public class UsingIHttpClientFactory
     {
         // Create multiple TestableHttpMessageHandlers as usual, if the response is not important, a single TestableHttpMessageHandler can be used.
         using var testableGithubHandler = new TestableHttpMessageHandler();
-        testableGithubHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.OK).WithResponseHeader("Server", "github"));
+        testableGithubHandler.RespondWith(Configured(Text(string.Empty), x => x.Headers.Add("Server", "github")));
 
         using var testableHttpBinHandler = new TestableHttpMessageHandler();
-        testableHttpBinHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.NotFound).WithResponseHeader("Server", "httpbin"));
+        testableHttpBinHandler.RespondWith(Configured(StatusCode(HttpStatusCode.NotFound), x => x.Headers.Add("Server", "httpbin")));
 
         var services = new ServiceCollection();
         // Register named HttpClients and configure the correct TestableHttpMessageHandler as the PrimaryHttpMessageHandler
@@ -75,7 +76,7 @@ public class UsingIHttpClientFactory
     {
         // Create TestableHttpMessageHandler as usual.
         using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        testableHttpMessageHandler.RespondWith(response => response.WithHttpStatusCode(HttpStatusCode.OK));
+        testableHttpMessageHandler.RespondWith(Responses.NoContent());
 
         // Setup a TestServer
         using var host = await new HostBuilder()

@@ -100,15 +100,6 @@ public class TestableHttpMessageHandlerTests
     }
 
     [Fact]
-    public void RespondWith_NullFactory_ThrowArgumentNullException()
-    {
-        using var sut = new TestableHttpMessageHandler();
-        Func<HttpRequestMessage, HttpResponseMessage> responseFactory = null!;
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(responseFactory));
-        Assert.Equal("httpResponseMessageFactory", exception.ParamName);
-    }
-
-    [Fact]
     public void GetAsync_ShouldNotHang()
     {
         using var sut = new TestableHttpMessageHandler();

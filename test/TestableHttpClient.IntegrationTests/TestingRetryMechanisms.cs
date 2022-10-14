@@ -15,7 +15,12 @@ public class TestingRetryMechanisms
     {
         // Create TestableHttpMessageHandler as usual.
         using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        testableHttpMessageHandler.RespondWith(StatusCode(HttpStatusCode.ServiceUnavailable));
+        testableHttpMessageHandler.RespondWith(
+            Sequenced(
+                StatusCode(HttpStatusCode.ServiceUnavailable),
+                StatusCode(HttpStatusCode.ServiceUnavailable),
+                StatusCode(HttpStatusCode.OK)
+                ));
 
         // Configure the retry policy
         var policy = HttpPolicyExtensions.HandleTransientHttpError().RetryAsync(2);
@@ -23,11 +28,14 @@ public class TestingRetryMechanisms
 
         using var client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
 
-        // Make a request, which should fail
-        _ = await client.GetAsync("https://httpbin.com/get");
+        // Make a request, which should pass
+        var response = await client.GetAsync("https://httpbin.com/get");
 
         // Now use the assertions to make sure the request was actually made multiple times.
         _ = testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get", 3);
+
+        // Make sure the response is correct
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
