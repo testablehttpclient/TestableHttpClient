@@ -25,7 +25,7 @@ public class SequencedResponseTests
     public async Task GetReponseAsync_WithSingleResponse_ReturnsSameResponseEveryCall()
     {
         using HttpRequestMessage requestMessage = new();
-        StatusCodeResponse innerResponse = new(HttpStatusCode.Created);
+        HttpResponse innerResponse = new(HttpStatusCode.Created);
         var sut = new SequencedResponse(new[] { innerResponse });
 
         using HttpResponseMessage responseMessage1 = new();
@@ -48,9 +48,9 @@ public class SequencedResponseTests
 
         var sut = new SequencedResponse(new[]
         {
-            new StatusCodeResponse(HttpStatusCode.Created),
-            new StatusCodeResponse(HttpStatusCode.Accepted),
-            new StatusCodeResponse(HttpStatusCode.NoContent),
+            new HttpResponse(HttpStatusCode.Created),
+            new HttpResponse(HttpStatusCode.Accepted),
+            new HttpResponse(HttpStatusCode.NoContent),
         });
 
         using HttpResponseMessage responseMessage1 = new();

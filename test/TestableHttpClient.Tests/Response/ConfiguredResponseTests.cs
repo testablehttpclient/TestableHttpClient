@@ -18,7 +18,7 @@ public class ConfiguredResponseTests
     [Fact]
     public void Constructor_NullConfigureResponse_ThrowsArgumentNullException()
     {
-        IResponse response = new StatusCodeResponse(HttpStatusCode.OK);
+        HttpResponse response = new(HttpStatusCode.OK);
         Action<HttpResponseMessage> configureResponse = null!;
         var exception = Assert.Throws<ArgumentNullException>(() => new ConfiguredResponse(response, configureResponse));
         Assert.Equal("configureResponse", exception.ParamName);
@@ -28,7 +28,7 @@ public class ConfiguredResponseTests
     public async Task ExecuteAsync_ByDefault_CallsConfigureResponse()
     {
         bool wasCalled = false;
-        StatusCodeResponse response = new(HttpStatusCode.OK);
+        HttpResponse response = new(HttpStatusCode.OK);
         Action<HttpResponseMessage> configureResponse = _ => wasCalled = true;
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();

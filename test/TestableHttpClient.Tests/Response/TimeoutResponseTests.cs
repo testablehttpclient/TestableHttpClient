@@ -7,7 +7,7 @@ namespace TestableHttpClient.Tests.Response;
 public class TimeoutResponseTests
 {
     [Fact]
-    public void GetResponseAsync_ByDefault_CancelsTheTaskAndToken()
+    public void ExecuteAsync_ByDefault_CancelsTheTaskAndToken()
     {
         TimeoutResponse sut = new();
 
@@ -22,7 +22,7 @@ public class TimeoutResponseTests
     }
 
     [Fact]
-    public async Task GetResponseAsync_WithCancelllationTokenWithoutSource_CancelsTheTaskAsync()
+    public async Task ExecuteAsync_WithCancelllationTokenWithoutSource_CancelsTheTaskAsync()
     {
         TimeoutResponse sut = new();
         using HttpRequestMessage requestMessage = new();

@@ -1,7 +1,13 @@
 ﻿namespace TestableHttpClient.Response
 {
-    public abstract class ResponseBase : IResponse
+    public class HttpResponse : IResponse
     {
+        public HttpResponse() { }
+        public HttpResponse(HttpStatusCode statusCode)
+        {
+            StatusCode = statusCode;
+        }
+
         public HttpStatusCode StatusCode { get; init; } = HttpStatusCode.OK;
 
         protected virtual HttpContent? GetContent(HttpResponseContext context)

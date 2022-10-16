@@ -24,7 +24,7 @@ public class DelayedResponseTests
     {
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        StatusCodeResponse delayedResponse = new(HttpStatusCode.Created);
+        HttpResponse delayedResponse = new(HttpStatusCode.Created);
         DelayedResponse sut = new(delayedResponse, 500);
 
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);

@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class TextResponse : ResponseBase
+internal class TextResponse : HttpResponse
 {
     public TextResponse(string content)
     {

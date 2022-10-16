@@ -9,7 +9,7 @@ namespace TestableHttpClient;
 public class TestableHttpMessageHandler : HttpMessageHandler
 {
     private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new ConcurrentQueue<HttpRequestMessage>();
-    private IResponse response = new StatusCodeResponse(HttpStatusCode.OK);
+    private IResponse response = new HttpResponse(HttpStatusCode.OK);
     private Func<HttpRequestMessage, HttpResponseMessage>? responseFactory;
 
     /// <summary>
@@ -38,10 +38,12 @@ public class TestableHttpMessageHandler : HttpMessageHandler
             responseMessage.RequestMessage = request;
         }
 
+#if !NET6_0_OR_GREATER
         if (responseMessage.Content is null)
         {
             responseMessage.Content = new StringContent("");
         }
+#endif
 
         return responseMessage;
     }

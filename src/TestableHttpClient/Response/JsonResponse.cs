@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class JsonResponse : ResponseBase
+internal class JsonResponse : HttpResponse
 {
     public JsonResponse(object? content)
     {

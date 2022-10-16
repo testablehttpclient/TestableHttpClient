@@ -7,7 +7,7 @@ public static class Responses
     public static IResponse Delayed(IResponse delayedResponse, int delayInMilliseconds) => new DelayedResponse(delayedResponse, delayInMilliseconds);
     public static IResponse Configured(IResponse response, Action<HttpResponseMessage> configureResponse) => new ConfiguredResponse(response, configureResponse);
     public static IResponse Sequenced(params IResponse[] responses) => new SequencedResponse(responses);
-    public static IResponse StatusCode(HttpStatusCode statusCode) => new StatusCodeResponse(statusCode);
+    public static IResponse StatusCode(HttpStatusCode statusCode) => new HttpResponse { StatusCode = statusCode };
     public static IResponse NoContent() => StatusCode(HttpStatusCode.NoContent);
     public static IResponse Text(string content) => new TextResponse(content);
     public static IResponse Json(object? content) => new JsonResponse(content);

@@ -22,7 +22,7 @@ public class ResponsesTests
     public void StatusCode_ReturnsStatusCodeResponse()
     {
         var sut = StatusCode(HttpStatusCode.Ambiguous);
-        var response = Assert.IsType<StatusCodeResponse>(sut);
+        var response = Assert.IsType<HttpResponse>(sut);
         Assert.Equal(HttpStatusCode.Ambiguous, response.StatusCode);
     }
 
@@ -30,7 +30,7 @@ public class ResponsesTests
     public void NoContent_ReturnsStatusCodeResponse()
     {
         var sut = NoContent();
-        var response = Assert.IsType<StatusCodeResponse>(sut);
+        var response = Assert.IsType<HttpResponse>(sut);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -117,12 +117,12 @@ public class ResponsesTests
     public void Extensions_WithCustomExtension_ReturnsCorrectResponse()
     {
         var sut = Extensions.ServiceUnavailable();
-        StatusCodeResponse response = Assert.IsType<StatusCodeResponse>(sut);
+        HttpResponse response = Assert.IsType<HttpResponse>(sut);
         Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
     }
 }
 
 internal static class TestResponseExtensions
 {
-    public static IResponse ServiceUnavailable(this IResponsesExtensions _) => new StatusCodeResponse(HttpStatusCode.ServiceUnavailable);
+    public static IResponse ServiceUnavailable(this IResponsesExtensions _) => new HttpResponse { StatusCode = HttpStatusCode.ServiceUnavailable };
 }
