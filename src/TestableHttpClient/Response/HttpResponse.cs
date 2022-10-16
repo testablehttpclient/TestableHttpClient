@@ -15,13 +15,17 @@
             return Task.FromResult<HttpContent?>(null);
         }
 
-        public async Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
+        public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
             if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
+            return ExecuteAsyncImpl(context, cancellationToken);
+        }
 
+        private async Task ExecuteAsyncImpl(HttpResponseContext context, CancellationToken cancellationToken)
+        {
             context.HttpResponseMessage.StatusCode = StatusCode;
             var content = await GetContentAsync(context, cancellationToken).ConfigureAwait(false);
             if (content is not null)
