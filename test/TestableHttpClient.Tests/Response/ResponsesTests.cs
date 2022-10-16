@@ -93,6 +93,18 @@ public class ResponsesTests
         var sut = Text("Hello world");
         TextResponse response = Assert.IsType<TextResponse>(sut);
         Assert.Equal("Hello world", response.Content);
+        Assert.Equal(Encoding.UTF8, response.Encoding);
+        Assert.Equal("text/plain", response.MediaType);
+    }
+
+    [Fact]
+    public void Text_WithCustomMediaType_ReturnsTextResponse()
+    {
+        var sut = Text("Hello world", mediaType: "text/xml");
+        TextResponse response = Assert.IsType<TextResponse>(sut);
+        Assert.Equal("Hello world", response.Content);
+        Assert.Equal(Encoding.UTF8, response.Encoding);
+        Assert.Equal("text/xml", response.MediaType);
     }
 
     [Fact]
@@ -102,6 +114,19 @@ public class ResponsesTests
         JsonResponse response = Assert.IsType<JsonResponse>(sut);
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(Encoding.UTF8, response.Encoding);
+        Assert.Equal("application/json", response.MediaType);
+    }
+
+    [Fact]
+    public void Json_WithCustomMediaType_ReturnsJsonResponse()
+    {
+        var sut = Json("Charlie", mediaType: "application/problem+json");
+        JsonResponse response = Assert.IsType<JsonResponse>(sut);
+        Assert.Equal("Charlie", response.Content);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(Encoding.UTF8, response.Encoding);
+        Assert.Equal("application/problem+json", response.MediaType);
     }
 
     [Fact]
@@ -111,6 +136,19 @@ public class ResponsesTests
         JsonResponse response = Assert.IsType<JsonResponse>(sut);
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(Encoding.UTF8, response.Encoding);
+        Assert.Equal("application/json", response.MediaType);
+    }
+
+    [Fact]
+    public void Json_WithStatusCodeAndMediaType_ReturnsJsonResponse()
+    {
+        var sut = Json("Charlie", HttpStatusCode.NotFound, mediaType: "application/problem+json");
+        JsonResponse response = Assert.IsType<JsonResponse>(sut);
+        Assert.Equal("Charlie", response.Content);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(Encoding.UTF8, response.Encoding);
+        Assert.Equal("application/problem+json", response.MediaType);
     }
 
     [Fact]

@@ -9,9 +9,9 @@ public static class Responses
     public static IResponse Sequenced(params IResponse[] responses) => new SequencedResponse(responses);
     public static IResponse StatusCode(HttpStatusCode statusCode) => new HttpResponse { StatusCode = statusCode };
     public static IResponse NoContent() => StatusCode(HttpStatusCode.NoContent);
-    public static IResponse Text(string content) => new TextResponse(content);
-    public static IResponse Json(object? content) => new JsonResponse(content);
-    public static IResponse Json(object? content, HttpStatusCode statusCode) => new JsonResponse(content) { StatusCode = statusCode };
+    public static IResponse Text(string content, Encoding? encoding = null, string? mediaType = null) => new TextResponse(content, encoding, mediaType);
+    public static IResponse Json(object? content, Encoding? encoding = null, string? mediaType = null) => new JsonResponse(content, encoding, mediaType);
+    public static IResponse Json(object? content, HttpStatusCode statusCode, Encoding? encoding = null, string? mediaType = null) => new JsonResponse(content, encoding, mediaType) { StatusCode = statusCode };
     public static IResponsesExtensions Extensions { get; } = new ResponseExtensions();
     private sealed class ResponseExtensions : IResponsesExtensions { }
 }
