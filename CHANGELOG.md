@@ -6,20 +6,20 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [0.8] - Unplanned
 ### Deprecated
-- `TestableHttpMessageHandler.SimulateTimeout` is deprecated, and can be replaced with `RespondWith(Responses.Timeout())`
-- `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` had been deprecated, it's functionality is replaced by IResponse
-- `RespondWith(this TestableHttpMessageHandler, HttpResponseMessage)` has been deprecated, the response is modified with every call, so it doesn't work reliably. If this is still needed, the `RespondWith(this TestableHttpMessageHandler, Func<HttpRequestMessage, HttpResponseMessage>)` can be used instead.
-- `HttpResponseMessageBuilder` has been deprecated, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
+- `TestableHttpMessageHandler.SimulateTimeout` is deprecated, and can be replaced with `RespondWith(Responses.Timeout())`.
+- `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` had been deprecated, it's functionality is replaced by IResponse.
+- `RespondWith(this TestableHttpMessageHandler, HttpResponseMessage)` has been deprecated, the response is modified with every call, so it doesn't work reliably and is different from how HttpClientHandler works, which creates a HttpResponseMessage for every request.
+- `HttpResponseMessageBuilder` and `RespondWith(this TestableHttpMessageHandler, HttpResponseMessageBuilder)` has been deprecated, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
 
 ### Added
 - `CreateClient` now accepts `DelegateHandlers` in order to chain Handlers. The InnerHandler property of each handler is set automatically and the `TestableHttpMessageHandler` is automatically set as the last handler. This is showcased with Polly in the integration tests.
 - Added support for .NET Framework 4.6.2, .NET Framework 4.7 and .NET Framework 4.8 by running the tests against these versions.
-- Added several `Responses`, including `Delayed`, `Timeout`, `Configured`, `Sequenced`, `StatusCode` and `Json`. These responses can now be used inside the `RespondWith`
+- Added several `Responses`, including `Delayed`, `Timeout`, `Configured`, `Sequenced`, `StatusCode` and `Json`. These responses can now be used inside the `RespondWith`.
 
 ### Changed
 - `TestableHttpClient` now works with the `Responses` class, making it easier to configure responses.
-- When a HttpResponseMessage doesn't contain `Content` (mostly on .NET Framework and .NET Core 3.1), an empty `StringContent` is added.
-- The HttpRequestMessage is always added to the response.
+- When `HttpResponseMessage.Content` is null after `IResponse.ExecuteAsync` was called, an empty `StringContent` is added (Up until .NET 6.0, since Content is always filled there).
+- The `HttpRequestMessage` is always added to the response, which is now possible, since we no longer allow reusing responses.
 - Added `ConfigureAwait(false)` to all calls, since we now use async/await in the library.
 
 ## [0.7] - 2022-09-22
