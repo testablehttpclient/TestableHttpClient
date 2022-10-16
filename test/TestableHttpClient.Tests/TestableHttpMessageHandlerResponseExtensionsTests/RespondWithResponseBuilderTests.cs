@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsTests;
 
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
 public class RespondWithResponseBuilderTests
 {
 #nullable disable

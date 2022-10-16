@@ -6,11 +6,11 @@ namespace TestableHttpClient;
 /// This class helps creating an <see cref="HttpResponseMessage"/> using a fluent interface.
 /// </summary>
 [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The HttpResponseMessage is only created and passed to the consumer.")]
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
 public sealed class HttpResponseMessageBuilder
 {
     private readonly HttpResponseMessage httpResponseMessage;
 
-    [Obsolete("Creating responseMessageBuilder should be done by passing a HttpResponseMessage")]
     public HttpResponseMessageBuilder()
     {
         httpResponseMessage = new HttpResponseMessage
@@ -170,7 +170,6 @@ public sealed class HttpResponseMessageBuilder
     /// Builds and returns the HttpResponseMessage.
     /// </summary>
     /// <returns>The <see cref="HttpResponseMessage"/></returns>
-    [Obsolete("Build is no longer necessary, because the httpResponseMessage is already passed to the constructor.")]
     public HttpResponseMessage Build()
     {
         return httpResponseMessage;

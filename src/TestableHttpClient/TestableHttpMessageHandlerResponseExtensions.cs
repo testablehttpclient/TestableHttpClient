@@ -31,6 +31,7 @@ public static class TestableHttpMessageHandlerResponseExtensions
     /// </summary>
     /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
     /// <param name="httpResponseMessageBuilderAction">An action that calls methods on the <see cref="HttpResponseMessageBuilder"/>.</param>
+    [Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
     public static void RespondWith(this TestableHttpMessageHandler handler, Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
     {
         if (handler is null)
@@ -43,7 +44,7 @@ public static class TestableHttpMessageHandlerResponseExtensions
             throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
         }
 
-        handler.RespondWith(new FunctionResponse(httpResponseMessageBuilderAction));
+        handler.RespondWith(new BuilderResponse(httpResponseMessageBuilderAction));
     }
 
     /// <summary>

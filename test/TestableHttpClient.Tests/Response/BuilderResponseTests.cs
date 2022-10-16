@@ -4,14 +4,15 @@ using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class FunctionResponseTests
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
+public class BuilderResponseTests
 {
     [Fact]
     public void Constructor_WithNullHttpResponseMessageBuilder_ThrowsArgumentNullException()
     {
         Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => new FunctionResponse(httpResponseMessageBuilderAction));
+        var exception = Assert.Throws<ArgumentNullException>(() => new BuilderResponse(httpResponseMessageBuilderAction));
         Assert.Equal("httpResponseMessageBuilderAction", exception.ParamName);
     }
 
@@ -29,7 +30,7 @@ public class FunctionResponseTests
             builder.WithHttpStatusCode(HttpStatusCode.Ambiguous);
         };
 
-        FunctionResponse response = new(httpResponseMessageBuilderAction);
+        BuilderResponse response = new(httpResponseMessageBuilderAction);
 
         await response.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 

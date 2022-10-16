@@ -112,4 +112,17 @@ public class ResponsesTests
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
+
+    [Fact]
+    public void Extensions_WithCustomExtension_ReturnsCorrectResponse()
+    {
+        var sut = Extensions.ServiceUnavailable();
+        StatusCodeResponse response = Assert.IsType<StatusCodeResponse>(sut);
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+    }
+}
+
+internal static class TestResponseExtensions
+{
+    public static IResponse ServiceUnavailable(this IResponsesExtensions _) => new StatusCodeResponse(HttpStatusCode.ServiceUnavailable);
 }

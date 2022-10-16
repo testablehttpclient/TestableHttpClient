@@ -1,10 +1,26 @@
 ﻿namespace TestableHttpClient.Tests;
 
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
 public class HttpResponseMessageBuilderTests
 {
     [Fact]
-    [Obsolete("Build is deprecated")]
     public void Build_ReturnsEmptyHttpResponseMessage()
+    {
+        HttpResponseMessageBuilder sut = new();
+
+        var result = sut.Build();
+
+        Assert.NotNull(result);
+        Assert.Equal(HttpVersion.Version11, result.Version);
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        Assert.Empty(result.Headers);
+        Assert.NotNull(result.Content);
+        Assert.Null(result.RequestMessage);
+    }
+
+    [Fact]
+    [Obsolete("Build is deprecated")]
+    public void Build_ReturnsSameResponseMessage()
     {
         using HttpResponseMessage responseMessage = new();
         HttpResponseMessageBuilder sut = new(responseMessage);

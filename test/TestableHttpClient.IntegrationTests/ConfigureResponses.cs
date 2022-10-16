@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 
 using static TestableHttpClient.Responses;
@@ -32,6 +33,7 @@ public class ConfigureResponses
     }
 
     [Fact]
+    [Obsolete("Use ConfiguredResponse or a custom response instead.")]
     public async Task UsingTestHandlerWithCustomResponseUsingBuilder_ReturnsCustomResponse()
     {
         using var testHandler = new TestableHttpMessageHandler();

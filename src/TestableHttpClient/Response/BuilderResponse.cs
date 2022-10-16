@@ -1,10 +1,11 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class FunctionResponse : IResponse
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
+internal class BuilderResponse : IResponse
 {
     private readonly Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction;
 
-    internal FunctionResponse(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
+    internal BuilderResponse(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
     {
         this.httpResponseMessageBuilderAction = httpResponseMessageBuilderAction ?? throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
     }

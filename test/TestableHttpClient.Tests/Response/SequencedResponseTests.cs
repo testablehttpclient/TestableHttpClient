@@ -45,7 +45,7 @@ public class SequencedResponseTests
     public async Task GetReponseAsync_WithMultpleResponses_ReturnsDifferentResponseForEachRequest()
     {
         using HttpRequestMessage requestMessage = new();
-        
+
         var sut = new SequencedResponse(new[]
         {
             new StatusCodeResponse(HttpStatusCode.Created),
