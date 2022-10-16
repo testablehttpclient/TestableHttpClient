@@ -2,16 +2,8 @@
 {
     public abstract class ResponseBase : IResponse
     {
-        public HttpStatusCode StatusCode
-        {
-            get;
-#if NET6_0_OR_GREATER
-            init;
-#else
-            set;
-#endif
-        } = HttpStatusCode.OK;
-        
+        public HttpStatusCode StatusCode { get; init; } = HttpStatusCode.OK;
+
         protected virtual HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
         {
             HttpResponseMessage response = new();
