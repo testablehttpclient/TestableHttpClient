@@ -10,7 +10,7 @@
 
         public HttpStatusCode StatusCode { get; init; } = HttpStatusCode.OK;
 
-        protected virtual Task<HttpContent?> GetContentAsync(HttpResponseContext context)
+        protected virtual Task<HttpContent?> GetContentAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
             return Task.FromResult<HttpContent?>(null);
         }
@@ -23,7 +23,7 @@
             }
 
             context.HttpResponseMessage.StatusCode = StatusCode;
-            var content = await GetContentAsync(context).ConfigureAwait(false);
+            var content = await GetContentAsync(context, cancellationToken).ConfigureAwait(false);
             if (content is not null)
             {
                 context.HttpResponseMessage.Content = content;

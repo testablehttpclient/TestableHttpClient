@@ -13,7 +13,7 @@ internal class TextResponse : HttpResponse
     public Encoding Encoding { get; }
     public string MediaType { get; }
 
-    protected override Task<HttpContent?> GetContentAsync(HttpResponseContext context)
+    protected override Task<HttpContent?> GetContentAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
         return Task.FromResult<HttpContent?>(new StringContent(Content, Encoding, MediaType));
     }

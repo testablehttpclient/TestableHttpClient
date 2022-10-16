@@ -3,6 +3,7 @@
 namespace TestableHttpClient;
 public static class Responses
 {
+    public static IResponse SelectResponse(Func<HttpResponseContext, IResponse> selector) => new SelectableResponse(selector);
     public static IResponse Timeout() => new TimeoutResponse();
     public static IResponse Delayed(IResponse delayedResponse, int delayInMilliseconds) => new DelayedResponse(delayedResponse, delayInMilliseconds);
     public static IResponse Configured(IResponse response, Action<HttpResponseMessage> configureResponse) => new ConfiguredResponse(response, configureResponse);

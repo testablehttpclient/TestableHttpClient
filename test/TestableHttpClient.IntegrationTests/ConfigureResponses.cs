@@ -93,17 +93,13 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithCustomResponseFactory_AllowsForAdvancedUsecases()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        HttpResponseMessage PathBasedResponse(HttpRequestMessage request)
+        IResponse PathBasedResponse(HttpResponseContext context) => context.HttpRequestMessage switch
         {
-            var statusCode = request.RequestUri!.LocalPath switch
-            {
-                "/status/200" => HttpStatusCode.OK,
-                "/status/400" => HttpStatusCode.BadRequest,
-                _ => HttpStatusCode.NotFound,
-            };
-            return new HttpResponseMessage(statusCode);
-        }
-        testHandler.RespondWith(PathBasedResponse);
+            _ when context.HttpRequestMessage.HasMatchingUri("*/status/200") => StatusCode(HttpStatusCode.OK),
+            _ when context.HttpRequestMessage.HasMatchingUri("*/status/400") => StatusCode(HttpStatusCode.BadRequest),
+            _ => StatusCode(HttpStatusCode.NotFound)
+        };
+        testHandler.RespondWith(SelectResponse(PathBasedResponse));
 
         using var httpClient = new HttpClient(testHandler);
         var response = await httpClient.GetAsync("http://httpbin/status/200");
