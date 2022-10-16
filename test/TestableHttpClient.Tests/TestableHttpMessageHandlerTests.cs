@@ -1,4 +1,7 @@
-﻿namespace TestableHttpClient.Tests;
+﻿using System.Collections.Concurrent;
+using System.Threading;
+
+namespace TestableHttpClient.Tests;
 
 public class TestableHttpMessageHandlerTests
 {
@@ -74,56 +77,99 @@ public class TestableHttpMessageHandlerTests
         Assert.NotSame(response1.RequestMessage, response2.RequestMessage);
     }
 
-#nullable disable
     [Fact]
-    public async Task RespondWith_NullFactory_UsesDefaultResponseFactory()
+    public void RespondWith_NullResponse_ThrowArgumentNullException()
     {
-        using var sut = new TestableHttpMessageHandler();
-        Func<HttpRequestMessage, HttpResponseMessage> responseFactory = null;
-        sut.RespondWith(responseFactory);
+        using TestableHttpMessageHandler sut = new();
+        IResponse response = null!;
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(response));
+        Assert.Equal("response", exception.ParamName);
+    }
+
+    [Fact]
+    public async Task RespondWith_GivenResponse_ReturnsResponse()
+    {
+        using TestableHttpMessageHandler sut = new();
+        sut.RespondWith(Responses.NoContent());
 
         using var client = new HttpClient(sut);
         var response = await client.GetAsync("https://example.com");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync());
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.NotNull(response.RequestMessage);
     }
-#nullable restore
 
     [Fact]
-    public async Task RespondWith_CustomFactory_ReturnsCustomStatusCode()
+    public void GetAsync_ShouldNotHang()
     {
         using var sut = new TestableHttpMessageHandler();
-        static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new HttpResponseMessage(HttpStatusCode.Unauthorized);
-        sut.RespondWith(CustomResponse);
+        sut.RespondWith(Responses.Delayed(new CustomResponse(), TimeSpan.FromSeconds(1)));
 
-        using var client = new HttpClient(sut);
-        var response = await client.GetAsync("https://example.com");
+        var doesNotHang = Task.Run(() =>
+        {
+            SingleThreadedSynchronizationContext.Run(() =>
+            {
+                sut.CreateClient().GetAsync("http://example.com").GetAwaiter().GetResult();
+            });
+        }).Wait(TimeSpan.FromSeconds(10));
 
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        Assert.Null(response.RequestMessage);
+
+        Assert.True(doesNotHang);
     }
 
-    [Fact]
-    public async Task RespondWith_CustomFactory_FactoryIsCalledEveryTimeARequestIsMade()
+    private class CustomResponse : IResponse
     {
-        var responseFactoryCallCount = 0;
-        using var sut = new TestableHttpMessageHandler();
-        HttpResponseMessage CustomResponse(HttpRequestMessage request)
+        public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
-            responseFactoryCallCount++;
-            return new HttpResponseMessage(HttpStatusCode.Unauthorized);
+#pragma warning disable CA1849 // Call async methods when in an async method
+            Task.Delay(300, CancellationToken.None).GetAwaiter().GetResult();
+            Responses.NoContent().ExecuteAsync(context, CancellationToken.None).GetAwaiter().GetResult();
+#pragma warning restore CA1849 // Call async methods when in an async method
+            return Task.CompletedTask;
         }
-        sut.RespondWith(CustomResponse);
+    }
 
-        using var client = new HttpClient(sut);
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
-        _ = await client.GetAsync("https://example.com");
+    private class SingleThreadedSynchronizationContext : SynchronizationContext, IDisposable
+    {
+        private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = new BlockingCollection<(SendOrPostCallback Callback, object? State)>();
 
-        Assert.Equal(5, responseFactoryCallCount);
+        private SingleThreadedSynchronizationContext() { }
+        public override void Send(SendOrPostCallback d, object? state) // Sync operations
+        {
+            throw new NotSupportedException($"{nameof(SingleThreadedSynchronizationContext)} does not support synchronous operations.");
+        }
+
+        public override void Post(SendOrPostCallback d, object? state) // Async operations
+        {
+            _queue.Add((d, state));
+        }
+
+        public static void Run(Action action)
+        {
+            var previous = Current;
+            var context = new SingleThreadedSynchronizationContext();
+            SetSynchronizationContext(context);
+            try
+            {
+                action();
+
+                while (context._queue.TryTake(out var item))
+                {
+                    item.Callback(item.State);
+                }
+            }
+            finally
+            {
+                context._queue.CompleteAdding();
+                SetSynchronizationContext(previous);
+                context.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            _queue.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

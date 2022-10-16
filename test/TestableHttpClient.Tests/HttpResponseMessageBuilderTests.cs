@@ -1,11 +1,12 @@
 ﻿namespace TestableHttpClient.Tests;
 
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
 public class HttpResponseMessageBuilderTests
 {
     [Fact]
     public void Build_ReturnsEmptyHttpResponseMessage()
     {
-        var sut = new HttpResponseMessageBuilder();
+        HttpResponseMessageBuilder sut = new();
 
         var result = sut.Build();
 
@@ -18,29 +19,52 @@ public class HttpResponseMessageBuilderTests
     }
 
     [Fact]
+    [Obsolete("Build is deprecated")]
+    public void Build_ReturnsSameResponseMessage()
+    {
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
+
+        var result = sut.Build();
+
+        Assert.Same(responseMessage, result);
+    }
+
+    [Fact]
+    public void Constructor_NullResponseMessage_ThrowsArgumentNullException()
+    {
+        HttpResponseMessage responseMessage = null!;
+        var exception = Assert.Throws<ArgumentNullException>(() => new HttpResponseMessageBuilder(responseMessage));
+        Assert.Equal("httpResponseMessage", exception.ParamName);
+    }
+
+    [Fact]
     public void WithHttpVersion_CreatesHttpResponseMessageWithCorrectVersion()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithHttpVersion(HttpVersion.Version11).Build();
+        sut.WithHttpVersion(HttpVersion.Version11);
 
-        Assert.Equal(HttpVersion.Version11, result.Version);
+        Assert.Equal(HttpVersion.Version11, responseMessage.Version);
     }
 
     [Fact]
     public void WithHttpStatusCode_CreatesHttpResponseMessageWithCorrectStatusCode()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithHttpStatusCode(HttpStatusCode.BadRequest).Build();
+        sut.WithHttpStatusCode(HttpStatusCode.BadRequest);
 
-        Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, responseMessage.StatusCode);
     }
 
     [Fact]
     public void WithResponseHeaders_WhenPassingNull_ArgumentNullExceptionIsThrown()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithResponseHeaders(null!));
         Assert.Equal("responseHeaderBuilder", exception.ParamName);
@@ -49,11 +73,12 @@ public class HttpResponseMessageBuilderTests
     [Fact]
     public void WithResponseHeaders_CreatesHttpResponseMessageWithCorrectHeaders()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithResponseHeaders(x => x.Location = new Uri("https://example.com/")).Build();
+        sut.WithResponseHeaders(x => x.Location = new Uri("https://example.com/"));
 
-        Assert.Equal("https://example.com/", result.Headers.Location?.AbsoluteUri);
+        Assert.Equal("https://example.com/", responseMessage.Headers.Location?.AbsoluteUri);
     }
 
     [Theory]
@@ -61,7 +86,8 @@ public class HttpResponseMessageBuilderTests
     [InlineData("")]
     public void WithResponseHeader_NullOrEmptyName_ThrowsArgumentException(string headerName)
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithResponseHeader(headerName, "value"));
         Assert.Equal("header", exception.ParamName);
@@ -70,28 +96,31 @@ public class HttpResponseMessageBuilderTests
     [Fact]
     public void WithResponseHeader_CreatesHttpResponseMessageWithHeaderAddedToTheList()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithResponseHeader("Location", "https://example.com/").Build();
+        sut.WithResponseHeader("Location", "https://example.com/");
 
-        Assert.Equal("https://example.com/", result.Headers.GetValues("Location").Single());
+        Assert.Equal("https://example.com/", responseMessage.Headers.GetValues("Location").Single());
     }
 
     [Fact]
     public void WithContent_CreatesHttpResponseMessageWithContent()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
         using var content = new StringContent(string.Empty);
 
-        var result = sut.WithContent(content).Build();
+        sut.WithContent(content);
 
-        Assert.Same(content, result.Content);
+        Assert.Same(content, responseMessage.Content);
     }
 
     [Fact]
     public void WithStringContent_NullContent_ThrowsArgumentNullException()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithStringContent(null!));
         Assert.Equal("content", exception.ParamName);
@@ -100,101 +129,110 @@ public class HttpResponseMessageBuilderTests
     [Fact]
     public async Task WithStringContent_CreatesHttpResponseMessageWithStringContent()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithStringContent("My content").Build();
+        sut.WithStringContent("My content");
 
-        Assert.Equal("My content", await result.Content.ReadAsStringAsync());
-        Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("My content", await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("text/plain", responseMessage.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("utf-8", responseMessage.Content.Headers.ContentType?.CharSet);
     }
 
     [Fact]
     public void WithStringContent_WithNullEncoding_CreateHttpResponseMessageWithDefaultEncoding()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithStringContent("", null).Build();
+        sut.WithStringContent("", null);
 
-        Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("text/plain", responseMessage.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("utf-8", responseMessage.Content.Headers.ContentType?.CharSet);
     }
 
     [Fact]
     public void WithStringContent_WithEncoding_CreatesHttpResponseMessageWithContentTypeHeader()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithStringContent("", Encoding.ASCII).Build();
+        sut.WithStringContent("", Encoding.ASCII);
 
-        Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
-        Assert.Equal("us-ascii", result.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("text/plain", responseMessage.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("us-ascii", responseMessage.Content.Headers.ContentType?.CharSet);
     }
 
     [Fact]
     public void WithStringContent_WithNullMediaType_CreateHttpResponseMessageWithDefaultMediaType()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithStringContent("", null, null!).Build();
+        sut.WithStringContent("", null, null!);
 
-        Assert.Equal("text/plain", result.Content.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("text/plain", responseMessage.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("utf-8", responseMessage.Content.Headers.ContentType?.CharSet);
     }
 
     [Fact]
     public void WithStringContent_WithMediaType_CreatesHttpResponseMessageWithContentTypeHeader()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithStringContent("", null, "application/json").Build();
+        sut.WithStringContent("", null, "application/json");
 
-        Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
-        Assert.Equal("utf-8", result.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("utf-8", responseMessage.Content.Headers.ContentType?.CharSet);
     }
 
     [Fact]
     public async Task WithJsonContent_Null_CreatesHttpResponseMessageWithNullJsonAndDefaultContentType()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithJsonContent(null).Build();
+        sut.WithJsonContent(null);
 
-        Assert.Equal("null", await result.Content.ReadAsStringAsync());
-        Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("null", await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
     }
 
     [Fact]
     public async Task WithJsonContent_ObjectAndNullMediaType_CreatesHttpResponseMessageWithJsonAndDefaultContentType()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithJsonContent(Array.Empty<object>(), null).Build();
+        sut.WithJsonContent(Array.Empty<object>(), null);
 
-        Assert.Equal("[]", await result.Content.ReadAsStringAsync());
-        Assert.Equal("application/json", result.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("[]", await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
     }
 
     [Fact]
     public async Task WithJsonContent_ObjectAnCustomMediaType_CreatesHttpResponseMessageWithJsonAndContentType()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
 
-        var result = sut.WithJsonContent(new { }, "text/json").Build();
+        sut.WithJsonContent(new { }, "text/json");
 
-        Assert.Equal("{}", await result.Content.ReadAsStringAsync());
-        Assert.Equal("text/json", result.Content.Headers.ContentType?.MediaType);
-        Assert.Null(result.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("{}", await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("text/json", responseMessage.Content.Headers.ContentType?.MediaType);
+        Assert.Null(responseMessage.Content.Headers.ContentType?.CharSet);
     }
 
     [Fact]
     public void WithRequestMessage_CreatesHttpResponseMessagaeWithRequestMessage()
     {
-        var sut = new HttpResponseMessageBuilder();
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseMessageBuilder sut = new(responseMessage);
         using var requestMessage = new HttpRequestMessage();
 
-        var result = sut.WithRequestMessage(requestMessage).Build();
+        sut.WithRequestMessage(requestMessage);
 
-        Assert.Same(requestMessage, result.RequestMessage);
+        Assert.Same(requestMessage, responseMessage.RequestMessage);
     }
 }

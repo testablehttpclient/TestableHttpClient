@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsTests;
 
+[Obsolete("RespondWith with an instance of HttpResponseMessage is deprecated")]
 public class RespondWithHttpResponseMessage
 {
 #nullable disable
@@ -35,6 +36,6 @@ public class RespondWithHttpResponseMessage
         var result = await client.GetAsync("https://example.com");
 
         Assert.Same(response, result);
-        Assert.Null(result.RequestMessage);
+        Assert.NotNull(result.RequestMessage);
     }
 }

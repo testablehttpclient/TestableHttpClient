@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient;
+﻿using TestableHttpClient.Response;
+
+namespace TestableHttpClient;
 
 public static class TestableHttpMessageHandlerResponseExtensions
 {
@@ -8,6 +10,7 @@ public static class TestableHttpMessageHandlerResponseExtensions
     /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
     /// <param name="httpResponseMessage">The response message to return.</param>
     /// <remarks>The response is actually the exact same response for every single request and will not be modified by TestableHttpMessageHandler.</remarks>
+    [Obsolete("Returning an instance is deprecated. It is adviced to create a new instance for each request.")]
     public static void RespondWith(this TestableHttpMessageHandler handler, HttpResponseMessage httpResponseMessage)
     {
         if (handler is null)
@@ -28,6 +31,7 @@ public static class TestableHttpMessageHandlerResponseExtensions
     /// </summary>
     /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
     /// <param name="httpResponseMessageBuilderAction">An action that calls methods on the <see cref="HttpResponseMessageBuilder"/>.</param>
+    [Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
     public static void RespondWith(this TestableHttpMessageHandler handler, Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
     {
         if (handler is null)
@@ -40,18 +44,14 @@ public static class TestableHttpMessageHandlerResponseExtensions
             throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
         }
 
-        handler.RespondWith(request =>
-        {
-            var builder = new HttpResponseMessageBuilder().WithRequestMessage(request);
-            httpResponseMessageBuilderAction(builder);
-            return builder.Build();
-        });
+        handler.RespondWith(new BuilderResponse(httpResponseMessageBuilderAction));
     }
 
     /// <summary>
     /// Simulate a timeout on the request by throwing a TaskCanceledException when a request is received.
     /// </summary>
     /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
+    [Obsolete("SimulateTimeout can now be replaced with RespondWith(Response.Timeout()).")]
     public static void SimulateTimeout(this TestableHttpMessageHandler handler)
     {
         if (handler is null)
@@ -59,6 +59,6 @@ public static class TestableHttpMessageHandlerResponseExtensions
             throw new ArgumentNullException(nameof(handler));
         }
 
-        handler.RespondWith(_ => new TimeoutHttpResponseMessage());
+        handler.RespondWith(Responses.Timeout());
     }
 }

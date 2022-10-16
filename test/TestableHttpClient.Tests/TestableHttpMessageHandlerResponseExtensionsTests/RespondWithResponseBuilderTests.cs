@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsTests;
 
+[Obsolete("Use ConfiguredResponse or a custom IResponse instead.")]
 public class RespondWithResponseBuilderTests
 {
 #nullable disable
@@ -85,15 +86,16 @@ public class RespondWithResponseBuilderTests
     }
 
     [Fact]
-    public async Task RespondWith_UsingResponseBuilde_SetRequestMessageIsNotOverwritten()
+    public async Task RespondWith_UsingResponseBuilder_SetRequestMessageIsNotOverwritten()
     {
+        using HttpRequestMessage requestMessage = new();
         using var sut = new TestableHttpMessageHandler();
-        sut.RespondWith(builder => builder.WithRequestMessage(null));
+        sut.RespondWith(builder => builder.WithRequestMessage(requestMessage));
 
         using var client = new HttpClient(sut);
 
         var response = await client.GetAsync(new Uri("https://example.com"));
 
-        Assert.Null(response.RequestMessage);
+        Assert.Same(requestMessage, response.RequestMessage);
     }
 }
