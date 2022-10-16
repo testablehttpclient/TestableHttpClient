@@ -9,7 +9,7 @@ internal class TextResponse : ResponseBase
 
     public string Content { get; }
 
-    protected override HttpContent? GetContent(HttpRequestMessage requestMessage)
+    protected override HttpContent? GetContent(HttpResponseContext context)
     {
         return new StringContent(Content, Encoding.UTF8, "text/plain");
     }

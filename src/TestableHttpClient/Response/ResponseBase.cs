@@ -4,22 +4,21 @@
     {
         public HttpStatusCode StatusCode { get; init; } = HttpStatusCode.OK;
 
-        protected virtual HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
-        {
-            HttpResponseMessage response = new();
-            response.StatusCode = StatusCode;
-            response.Content = GetContent(requestMessage);
-            return response;
-        }
-
-        protected virtual HttpContent? GetContent(HttpRequestMessage requestMessage)
+        protected virtual HttpContent? GetContent(HttpResponseContext context)
         {
             return null;
         }
 
-        public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+        public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
-            return Task.FromResult(GetResponse(requestMessage));
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.HttpResponseMessage.StatusCode = StatusCode;
+            context.HttpResponseMessage.Content = GetContent(context);
+            return Task.CompletedTask;
         }
     }
 }

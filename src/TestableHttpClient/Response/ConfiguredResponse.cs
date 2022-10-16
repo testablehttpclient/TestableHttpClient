@@ -10,10 +10,10 @@ internal class ConfiguredResponse : IResponse
         innerResponse = response ?? throw new ArgumentNullException(nameof(response));
         this.configureResponse = configureResponse ?? throw new ArgumentNullException(nameof(configureResponse));
     }
-    public async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+
+    public async Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
-        var response = await innerResponse.GetResponseAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-        configureResponse(response);
-        return response;
+        await innerResponse.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
+        configureResponse(context.HttpResponseMessage);
     }
 }

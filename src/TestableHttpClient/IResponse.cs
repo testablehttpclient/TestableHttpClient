@@ -2,5 +2,5 @@
 
 public interface IResponse
 {
-    Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken);
+    Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken);
 }

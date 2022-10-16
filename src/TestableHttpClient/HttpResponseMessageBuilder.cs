@@ -8,10 +8,21 @@ namespace TestableHttpClient;
 [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "The HttpResponseMessage is only created and passed to the consumer.")]
 public sealed class HttpResponseMessageBuilder
 {
-    private readonly HttpResponseMessage httpResponseMessage = new HttpResponseMessage
+    private readonly HttpResponseMessage httpResponseMessage;
+
+    [Obsolete("Creating responseMessageBuilder should be done by passing a HttpResponseMessage")]
+    public HttpResponseMessageBuilder()
     {
-        Content = new StringContent("")
-    };
+        httpResponseMessage = new HttpResponseMessage
+        {
+            Content = new StringContent("")
+        };
+    }
+
+    internal HttpResponseMessageBuilder(HttpResponseMessage httpResponseMessage)
+    {
+        this.httpResponseMessage = httpResponseMessage ?? throw new ArgumentNullException(nameof(httpResponseMessage));
+    }
 
     /// <summary>
     /// Specifies the version of the response.
@@ -159,6 +170,7 @@ public sealed class HttpResponseMessageBuilder
     /// Builds and returns the HttpResponseMessage.
     /// </summary>
     /// <returns>The <see cref="HttpResponseMessage"/></returns>
+    [Obsolete("Build is no longer necessary, because the httpResponseMessage is already passed to the constructor.")]
     public HttpResponseMessage Build()
     {
         return httpResponseMessage;

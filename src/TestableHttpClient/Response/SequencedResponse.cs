@@ -14,17 +14,17 @@ internal class SequencedResponse : IResponse
         _lastResponse = this.responses.Last();
     }
 
-    public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+    public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
         var response = GetResponse();
-        return response.GetResponseAsync(requestMessage, cancellationToken);
+        return response.ExecuteAsync(context, cancellationToken);
     }
 
     private IResponse GetResponse()
     {
-        if (responses.TryDequeue(out var response))
+        if (responses.Any())
         {
-            return response;
+            return responses.Dequeue();
         }
         else
         {

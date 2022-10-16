@@ -18,11 +18,13 @@ public class TextResponseTests
     {
         TextResponse sut = new(string.Empty);
         using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseContext context = new(requestMessage, responseMessage);
+        await sut.ExecuteAsync(context, CancellationToken.None);
 
         Assert.Equal(string.Empty, sut.Content);
-        Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync());
-        Assert.Equal("text/plain", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal(string.Empty, await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("text/plain", responseMessage.Content.Headers.ContentType?.MediaType);
     }
 
     [Fact]
@@ -30,10 +32,12 @@ public class TextResponseTests
     {
         TextResponse sut = new("Hello World");
         using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        using HttpResponseMessage responseMessage = new();
+        HttpResponseContext context = new(requestMessage, responseMessage);
+        await sut.ExecuteAsync(context, CancellationToken.None);
 
         Assert.Equal("Hello World", sut.Content);
-        Assert.Equal("Hello World", await response.Content.ReadAsStringAsync());
-        Assert.Equal("text/plain", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("Hello World", await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("text/plain", responseMessage.Content.Headers.ContentType?.MediaType);
     }
 }

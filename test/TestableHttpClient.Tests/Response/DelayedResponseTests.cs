@@ -24,11 +24,11 @@ public class DelayedResponseTests
     {
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        FunctionResponse delayedResponse = new(_ => responseMessage);
+        StatusCodeResponse delayedResponse = new(HttpStatusCode.Created);
         DelayedResponse sut = new(delayedResponse, 500);
 
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
-        Assert.Same(responseMessage, response);
+        Assert.Equal(HttpStatusCode.Created, responseMessage.StatusCode);
     }
 }

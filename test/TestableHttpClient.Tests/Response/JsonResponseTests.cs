@@ -14,10 +14,11 @@ public class JsonResponseTests
     {
         JsonResponse sut = new(input);
         using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        using HttpResponseMessage responseMessage = new();
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
-        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-        var json = await response.Content.ReadAsStringAsync();
+        Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
+        var json = await responseMessage.Content.ReadAsStringAsync();
 
         Assert.Equal(expectedJson, json);
         Assert.Same(input, sut.Content);
@@ -29,10 +30,11 @@ public class JsonResponseTests
         var input = new { Value = 42 };
         JsonResponse sut = new(input);
         using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        using HttpResponseMessage responseMessage = new();
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
-        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-        var json = await response.Content.ReadAsStringAsync();
+        Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
+        var json = await responseMessage.Content.ReadAsStringAsync();
 
         Assert.Equal("{\"Value\":42}", json);
         Assert.Same(input, sut.Content);
@@ -44,10 +46,11 @@ public class JsonResponseTests
         var input = new[] { 1, 2, 3, 4 };
         JsonResponse sut = new(input);
         using HttpRequestMessage requestMessage = new();
-        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        using HttpResponseMessage responseMessage = new();
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
-        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-        var json = await response.Content.ReadAsStringAsync();
+        Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
+        var json = await responseMessage.Content.ReadAsStringAsync();
 
         Assert.Equal("[1,2,3,4]", json);
         Assert.Same(input, sut.Content);

@@ -1,17 +1,8 @@
 ﻿namespace TestableHttpClient.Tests.TestableHttpMessageHandlerResponseExtensionsTests;
 
+[Obsolete("The response message factory is deprecated.")]
 public class RespondWithResponseFactoryTests
 {
-    [Fact]
-    public void RespondWith_NullHandler_ThrowsArgumentNullException()
-    {
-        TestableHttpMessageHandler sut = null!;
-        static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new HttpResponseMessage(HttpStatusCode.Unauthorized);
-
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(CustomResponse));
-        Assert.Equal("handler", exception.ParamName);
-    }
-
     [Fact]
     public void RespondWith_NullFactory_ThrowsArgumentNullException()
     {

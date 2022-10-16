@@ -119,13 +119,13 @@ public class TestableHttpMessageHandlerTests
 
     private class CustomResponse : IResponse
     {
-        public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+        public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
 #pragma warning disable CA1849 // Call async methods when in an async method
             Task.Delay(300, CancellationToken.None).GetAwaiter().GetResult();
-            var response = Responses.NoContent().GetResponseAsync(requestMessage, CancellationToken.None).GetAwaiter().GetResult();
+            Responses.NoContent().ExecuteAsync(context, CancellationToken.None).GetAwaiter().GetResult();
 #pragma warning restore CA1849 // Call async methods when in an async method
-            return Task.FromResult(response);
+            return Task.CompletedTask;
         }
     }
 

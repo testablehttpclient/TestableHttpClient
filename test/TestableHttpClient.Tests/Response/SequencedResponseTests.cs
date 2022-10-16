@@ -25,42 +25,47 @@ public class SequencedResponseTests
     public async Task GetReponseAsync_WithSingleResponse_ReturnsSameResponseEveryCall()
     {
         using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        FunctionResponse innerResponse = new(_ => responseMessage);
+        StatusCodeResponse innerResponse = new(HttpStatusCode.Created);
         var sut = new SequencedResponse(new[] { innerResponse });
 
-        var result1 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var result2 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var result3 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
+        using HttpResponseMessage responseMessage1 = new();
+        using HttpResponseMessage responseMessage2 = new();
+        using HttpResponseMessage responseMessage3 = new();
 
-        Assert.Same(responseMessage, result1);
-        Assert.Same(responseMessage, result2);
-        Assert.Same(responseMessage, result3);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage1), CancellationToken.None);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage2), CancellationToken.None);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage3), CancellationToken.None);
+
+        Assert.Equal(HttpStatusCode.Created, responseMessage1.StatusCode);
+        Assert.Equal(HttpStatusCode.Created, responseMessage2.StatusCode);
+        Assert.Equal(HttpStatusCode.Created, responseMessage3.StatusCode);
     }
 
     [Fact]
     public async Task GetReponseAsync_WithMultpleResponses_ReturnsDifferentResponseForEachRequest()
     {
         using HttpRequestMessage requestMessage = new();
+        
+        var sut = new SequencedResponse(new[]
+        {
+            new StatusCodeResponse(HttpStatusCode.Created),
+            new StatusCodeResponse(HttpStatusCode.Accepted),
+            new StatusCodeResponse(HttpStatusCode.NoContent),
+        });
+
         using HttpResponseMessage responseMessage1 = new();
         using HttpResponseMessage responseMessage2 = new();
         using HttpResponseMessage responseMessage3 = new();
+        using HttpResponseMessage responseMessage4 = new();
 
-        var sut = new SequencedResponse(new[]
-        {
-            new FunctionResponse(_ => responseMessage1),
-            new FunctionResponse(_ => responseMessage2),
-            new FunctionResponse(_ => responseMessage3),
-        });
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage1), CancellationToken.None);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage2), CancellationToken.None);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage3), CancellationToken.None);
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage4), CancellationToken.None);
 
-        var result1 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var result2 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var result3 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-        var result4 = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
-        Assert.Same(responseMessage1, result1);
-        Assert.Same(responseMessage2, result2);
-        Assert.Same(responseMessage3, result3);
-        Assert.Same(responseMessage3, result4);
+        Assert.Equal(HttpStatusCode.Created, responseMessage1.StatusCode);
+        Assert.Equal(HttpStatusCode.Accepted, responseMessage2.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, responseMessage3.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, responseMessage4.StatusCode);
     }
 }

@@ -1,29 +1,19 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class FunctionResponse : ResponseBase
+internal class FunctionResponse : IResponse
 {
-    private readonly Func<HttpRequestMessage, HttpResponseMessage>? httpResponseMessageFactory;
-    private readonly Action<HttpResponseMessageBuilder>? httpResponseMessageBuilderAction;
-
-    internal FunctionResponse(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
-    {
-        this.httpResponseMessageFactory = httpResponseMessageFactory ?? throw new ArgumentNullException(nameof(httpResponseMessageFactory));
-    }
+    private readonly Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction;
 
     internal FunctionResponse(Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction)
     {
         this.httpResponseMessageBuilderAction = httpResponseMessageBuilderAction ?? throw new ArgumentNullException(nameof(httpResponseMessageBuilderAction));
     }
 
-    protected override HttpResponseMessage GetResponse(HttpRequestMessage requestMessage)
+    public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
-        if (httpResponseMessageBuilderAction is not null)
-        {
-            var builder = new HttpResponseMessageBuilder();
-            httpResponseMessageBuilderAction(builder);
-            return builder.Build();
-        }
+        HttpResponseMessageBuilder builder = new(context.HttpResponseMessage);
+        httpResponseMessageBuilderAction(builder);
 
-        return httpResponseMessageFactory!(requestMessage);
+        return Task.CompletedTask;
     }
 }

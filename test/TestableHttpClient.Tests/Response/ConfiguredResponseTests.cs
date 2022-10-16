@@ -1,4 +1,6 @@
-﻿using TestableHttpClient.Response;
+﻿using System.Threading;
+
+using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
@@ -20,5 +22,20 @@ public class ConfiguredResponseTests
         Action<HttpResponseMessage> configureResponse = null!;
         var exception = Assert.Throws<ArgumentNullException>(() => new ConfiguredResponse(response, configureResponse));
         Assert.Equal("configureResponse", exception.ParamName);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ByDefault_CallsConfigureResponse()
+    {
+        bool wasCalled = false;
+        StatusCodeResponse response = new(HttpStatusCode.OK);
+        Action<HttpResponseMessage> configureResponse = _ => wasCalled = true;
+        using HttpRequestMessage requestMessage = new();
+        using HttpResponseMessage responseMessage = new();
+        ConfiguredResponse sut = new(response, configureResponse);
+
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        Assert.True(wasCalled, "configureResponse action was not called.");
     }
 }

@@ -7,7 +7,10 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [0.8] - Unplanned
 ### Deprecated
 - `TestableHttpMessageHandler.SimulateTimeout` is deprecated, and can be replaced with `RespondWith(Responses.Timeout())`
+- `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` had been deprecated, it's functionality is replaced by IResponse
 - `RespondWith(this TestableHttpMessageHandler, HttpResponseMessage)` has been deprecated, the response is modified with every call, so it doesn't work reliably. If this is still needed, the `RespondWith(this TestableHttpMessageHandler, Func<HttpRequestMessage, HttpResponseMessage>)` can be used instead.
+- `HttpResponseMessageBuilder()` has been deprecated, the builder is only instantiated internally and the HttpResponseMessage is passed.
+- `HttpResponseMessageBuilder.Build()` has been deprecated, the HttpResponseMessage is passed into the constructor (internally) and isn't replaced.
 
 ### Added
 - `CreateClient` now accepts `DelegateHandlers` in order to chain Handlers. The InnerHandler property of each handler is set automatically and the `TestableHttpMessageHandler` is automatically set as the last handler. This is showcased with Polly in the integration tests.

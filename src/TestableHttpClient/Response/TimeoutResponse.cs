@@ -2,7 +2,7 @@
 
 internal class TimeoutResponse : IResponse
 {
-    public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+    public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
         var cancelationSource = cancellationToken.GetSource();
 

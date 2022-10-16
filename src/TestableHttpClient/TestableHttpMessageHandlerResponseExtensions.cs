@@ -5,30 +5,6 @@ namespace TestableHttpClient;
 public static class TestableHttpMessageHandlerResponseExtensions
 {
     /// <summary>
-    /// Configure a factory method that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
-    /// </summary>
-    /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
-    /// <param name="httpResponseMessageFactory">The factory method that should be called for every request. The request is passed as a parameter to the factory method and it is expected to return a HttpResponseMessage.</param>
-    /// <remarks>By default each request will receive a new response, however this is dependend on the implementation.</remarks>
-    /// <example>
-    /// testableHttpMessageHander.RespondWith(request => new ResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
-    /// </example>
-    public static void RespondWith(this TestableHttpMessageHandler handler, Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
-    {
-        if (handler is null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
-
-        if (httpResponseMessageFactory is null)
-        {
-            throw new ArgumentNullException(nameof(httpResponseMessageFactory));
-        }
-
-        handler.RespondWith(new FunctionResponse(httpResponseMessageFactory));
-    }
-
-    /// <summary>
     /// Configure the <see cref="HttpResponseMessage"/> that should be returned for each request.
     /// </summary>
     /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
