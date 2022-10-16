@@ -2,20 +2,18 @@
 
 internal class JsonResponse : HttpResponse
 {
-    public JsonResponse(object? content, Encoding? encoding = null, string? mediaType = null)
+    public JsonResponse(object? content, string? contentType = null)
     {
         Content = content;
-        Encoding = encoding ?? Encoding.UTF8;
-        MediaType = mediaType ?? "application/json";
+        ContentType = contentType ?? "application/json";
     }
 
     public object? Content { get; }
-    public Encoding Encoding { get; }
-    public string MediaType { get; }
+    public string ContentType { get; }
 
     protected override Task<HttpContent?> GetContentAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
         string json = JsonSerializer.Serialize(Content);
-        return Task.FromResult<HttpContent?>(new StringContent(json, Encoding, MediaType));
+        return Task.FromResult<HttpContent?>(new StringContent(json, Encoding.UTF8, ContentType));
     }
 }

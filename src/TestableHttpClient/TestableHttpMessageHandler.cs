@@ -73,11 +73,6 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     [Obsolete("Use a custom IResponse instead.")]
     public void RespondWith(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
     {
-        if (httpResponseMessageFactory is null)
-        {
-            throw new ArgumentNullException(nameof(httpResponseMessageFactory));
-        }
-
-        responseFactory = httpResponseMessageFactory;
+        responseFactory = httpResponseMessageFactory ?? throw new ArgumentNullException(nameof(httpResponseMessageFactory));
     }
 }

@@ -103,7 +103,7 @@ public class TestableHttpMessageHandlerTests
     public void GetAsync_ShouldNotHang()
     {
         using var sut = new TestableHttpMessageHandler();
-        sut.RespondWith(Responses.Delayed(new CustomResponse(), 300));
+        sut.RespondWith(Responses.Delayed(new CustomResponse(), TimeSpan.FromSeconds(1)));
 
         var doesNotHang = Task.Run(() =>
         {

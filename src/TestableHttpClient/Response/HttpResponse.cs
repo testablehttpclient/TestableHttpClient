@@ -1,8 +1,8 @@
 ﻿namespace TestableHttpClient.Response
 {
-    public class HttpResponse : IResponse
+    internal class HttpResponse : IResponse
     {
-        public HttpResponse() { }
+        protected HttpResponse() { }
         public HttpResponse(HttpStatusCode statusCode)
         {
             StatusCode = statusCode;

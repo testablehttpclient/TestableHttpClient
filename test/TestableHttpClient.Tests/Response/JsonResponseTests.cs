@@ -54,30 +54,26 @@ public class JsonResponseTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_WithCustomEncoding_SetsEncoding()
+    public async Task ExecuteAsync_WithOutCustomContentType_SetsMediaType()
     {
-        JsonResponse sut = new(null, Encoding.ASCII, null);
+        JsonResponse sut = new(null, null);
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
-        Assert.Equal(Encoding.ASCII, sut.Encoding);
-        Assert.Equal("application/json", sut.MediaType);
-        Assert.Equal("us-ascii", responseMessage.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("application/json", sut.ContentType);
         Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
     }
 
     [Fact]
-    public async Task ExecuteAsync_WithCustomMediaType_SetsMediaType()
+    public async Task ExecuteAsync_WithCustomContentType_SetsMediaType()
     {
-        JsonResponse sut = new(null, null, "application/problem+json");
+        JsonResponse sut = new(null, "application/problem+json");
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
-        Assert.Equal(Encoding.UTF8, sut.Encoding);
-        Assert.Equal("application/problem+json", sut.MediaType);
-        Assert.Equal("utf-8", responseMessage.Content.Headers.ContentType?.CharSet);
+        Assert.Equal("application/problem+json", sut.ContentType);
         Assert.Equal("application/problem+json", responseMessage.Content.Headers.ContentType?.MediaType);
     }
 }

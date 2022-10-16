@@ -35,6 +35,20 @@ public class ResponsesTests
     }
 
     [Fact]
+    public void Delayed_WithTimeSpan_WithNullResponse_ThrowsArgumentNullException()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => Delayed(null!, TimeSpan.FromSeconds(1)));
+        Assert.Equal("delayedResponse", exception.ParamName);
+    }
+
+    [Fact]
+    public void Delayed_WithTimeSpan_ReturnsDelayedResponse()
+    {
+        var sut = Delayed(NoContent(), TimeSpan.FromSeconds(1));
+        Assert.IsType<DelayedResponse>(sut);
+    }
+
+    [Fact]
     public void Delayed_WithNullResponse_ThrowsArgumentNullException()
     {
         var exception = Assert.Throws<ArgumentNullException>(() => Delayed(null!, 500));
@@ -114,19 +128,17 @@ public class ResponsesTests
         JsonResponse response = Assert.IsType<JsonResponse>(sut);
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(Encoding.UTF8, response.Encoding);
-        Assert.Equal("application/json", response.MediaType);
+        Assert.Equal("application/json", response.ContentType);
     }
 
     [Fact]
-    public void Json_WithCustomMediaType_ReturnsJsonResponse()
+    public void Json_WithCustomContentType_ReturnsJsonResponse()
     {
-        var sut = Json("Charlie", mediaType: "application/problem+json");
+        var sut = Json("Charlie", "application/problem+json");
         JsonResponse response = Assert.IsType<JsonResponse>(sut);
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(Encoding.UTF8, response.Encoding);
-        Assert.Equal("application/problem+json", response.MediaType);
+        Assert.Equal("application/problem+json", response.ContentType);
     }
 
     [Fact]
@@ -136,19 +148,17 @@ public class ResponsesTests
         JsonResponse response = Assert.IsType<JsonResponse>(sut);
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal(Encoding.UTF8, response.Encoding);
-        Assert.Equal("application/json", response.MediaType);
+        Assert.Equal("application/json", response.ContentType);
     }
 
     [Fact]
-    public void Json_WithStatusCodeAndMediaType_ReturnsJsonResponse()
+    public void Json_WithStatusCodeAndContentType_ReturnsJsonResponse()
     {
-        var sut = Json("Charlie", HttpStatusCode.NotFound, mediaType: "application/problem+json");
+        var sut = Json("Charlie", HttpStatusCode.NotFound, "application/problem+json");
         JsonResponse response = Assert.IsType<JsonResponse>(sut);
         Assert.Equal("Charlie", response.Content);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal(Encoding.UTF8, response.Encoding);
-        Assert.Equal("application/problem+json", response.MediaType);
+        Assert.Equal("application/problem+json", response.ContentType);
     }
 
     [Fact]
@@ -162,5 +172,5 @@ public class ResponsesTests
 
 internal static class TestResponseExtensions
 {
-    public static IResponse ServiceUnavailable(this IResponsesExtensions _) => new HttpResponse { StatusCode = HttpStatusCode.ServiceUnavailable };
+    public static IResponse ServiceUnavailable(this IResponsesExtensions _) => new HttpResponse(HttpStatusCode.ServiceUnavailable);
 }

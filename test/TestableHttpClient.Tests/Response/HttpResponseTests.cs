@@ -9,7 +9,7 @@ public class HttpResponseTests
     [Fact]
     public async Task ExecuteAsync_WithNullContext_ThrowsArgumentNullException()
     {
-        HttpResponse sut = new() { StatusCode = HttpStatusCode.Continue };
+        HttpResponse sut = new(HttpStatusCode.Continue);
 
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => sut.ExecuteAsync(null!, CancellationToken.None));
 
@@ -21,7 +21,7 @@ public class HttpResponseTests
     {
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        HttpResponse sut = new() { StatusCode = HttpStatusCode.Continue };
+        HttpResponse sut = new(HttpStatusCode.Continue);
 
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 

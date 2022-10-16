@@ -1,5 +1,8 @@
 ﻿namespace TestableHttpClient;
 
+/// <summary>
+/// This class contains contextual information for generating responses.
+/// </summary>
 public class HttpResponseContext
 {
     public HttpResponseContext(HttpRequestMessage httpRequestMessage, HttpResponseMessage httpResponseMessage)
@@ -8,7 +11,12 @@ public class HttpResponseContext
         HttpResponseMessage = httpResponseMessage;
     }
 
+    /// <summary>
+    /// The request message that is send by the HttpClient.
+    /// </summary>
     public HttpRequestMessage HttpRequestMessage { get; }
-    // The internal set is specifically for backwards compatibiltity of the HttpRepsonseMessage factory functionality.
-    public HttpResponseMessage HttpResponseMessage { get; internal set; }
+    /// <summary>
+    /// The response message that will be send back to the HttpClient.
+    /// </summary>
+    public HttpResponseMessage HttpResponseMessage { get; }
 }

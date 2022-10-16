@@ -155,7 +155,7 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithDelayedResponses_WillDelayTheResponse()
     {
         using TestableHttpMessageHandler testHandler = new();
-        testHandler.RespondWith(Delayed(StatusCode(HttpStatusCode.OK), 500));
+        testHandler.RespondWith(Delayed(StatusCode(HttpStatusCode.OK), TimeSpan.FromSeconds(1)));
 
         using HttpClient httpClient = new(testHandler);
         var response = await httpClient.GetAsync("http://httpbin.org/anything");

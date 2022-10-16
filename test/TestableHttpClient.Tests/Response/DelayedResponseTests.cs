@@ -12,12 +12,12 @@ public class DelayedResponseTests
     {
         IResponse response = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => new DelayedResponse(response, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => new DelayedResponse(response, TimeSpan.Zero));
 
         Assert.Equal("delayedResponse", exception.ParamName);
     }
 
-    // Note: The delay itself can't be tested reliably.
+    // Note: The delay itself can't be tested reliably, so use a 0 delay.
 
     [Fact]
     public async Task GetResponseAsync_ByDefault_ReturnsInnerResponse()
@@ -25,7 +25,7 @@ public class DelayedResponseTests
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
         HttpResponse delayedResponse = new(HttpStatusCode.Created);
-        DelayedResponse sut = new(delayedResponse, 500);
+        DelayedResponse sut = new(delayedResponse, TimeSpan.Zero);
 
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
 
