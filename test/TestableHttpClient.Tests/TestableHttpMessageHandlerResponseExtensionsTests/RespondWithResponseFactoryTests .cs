@@ -6,8 +6,9 @@ public class RespondWithResponseFactoryTests
     public void RespondWith_NullHandler_ThrowsArgumentNullException()
     {
         TestableHttpMessageHandler sut = null!;
+        static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(builder => builder.WithHttpStatusCode(HttpStatusCode.BadRequest)));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.RespondWith(CustomResponse));
         Assert.Equal("handler", exception.ParamName);
     }
 

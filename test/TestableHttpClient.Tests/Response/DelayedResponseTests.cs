@@ -17,42 +17,18 @@ public class DelayedResponseTests
         Assert.Equal("delayedResponse", exception.ParamName);
     }
 
+    // Note: The delay itself can't be tested reliably.
+
     [Fact]
-    public async Task GetResponseAsync_LargerDelay_ReturnsResponseWithDelay()
+    public async Task GetResponseAsync_ByDefault_ReturnsInnerResponse()
     {
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        long delayResponseCallTimestamp = 0;
-        FunctionResponse delayedResponse = new(_ =>
-        {
-            delayResponseCallTimestamp = Stopwatch.GetTimestamp();
-            return responseMessage;
-        });
+        FunctionResponse delayedResponse = new(_ => responseMessage);
         DelayedResponse sut = new(delayedResponse, 500);
-        var startTimeStamp = Stopwatch.GetTimestamp();
-        await sut.GetResponseAsync(requestMessage, CancellationToken.None);
 
-        Assert.True(delayResponseCallTimestamp > 0, "No delay found");
+        var response = await sut.GetResponseAsync(requestMessage, CancellationToken.None);
 
-        Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds > 250);
-    }
-
-    [Fact]
-    public async Task GetResponseAsync_0Delay_ReturnsResponseWithoutDelay()
-    {
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        long delayResponseCallTimestamp = 0;
-        FunctionResponse delayedResponse = new(_ =>
-        {
-            delayResponseCallTimestamp = Stopwatch.GetTimestamp();
-            return responseMessage;
-        });
-        DelayedResponse sut = new(delayedResponse, 0);
-        var startTimeStamp = Stopwatch.GetTimestamp();
-        await sut.GetResponseAsync(requestMessage, CancellationToken.None);
-
-        Assert.True(delayResponseCallTimestamp > 0, "No delay found");
-        Assert.True(TimeSpan.FromTicks(delayResponseCallTimestamp - startTimeStamp).TotalMilliseconds < 250);
+        Assert.Same(responseMessage, response);
     }
 }

@@ -3,6 +3,7 @@
 internal class SequencedResponse : IResponse
 {
     private readonly Queue<IResponse> responses;
+    private readonly IResponse _lastResponse;
     public SequencedResponse(IEnumerable<IResponse> responses)
     {
         this.responses = new(responses ?? throw new ArgumentNullException(nameof(responses)));
@@ -10,6 +11,7 @@ internal class SequencedResponse : IResponse
         {
             throw new ArgumentException("Responses can't be empty.", nameof(responses));
         }
+        _lastResponse = this.responses.Last();
     }
 
     public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
@@ -20,13 +22,13 @@ internal class SequencedResponse : IResponse
 
     private IResponse GetResponse()
     {
-        if (responses.Count == 1)
+        if (responses.TryDequeue(out var response))
         {
-            return responses.Peek();
+            return response;
         }
         else
         {
-            return responses.Dequeue();
+            return _lastResponse;
         }
     }
 }
