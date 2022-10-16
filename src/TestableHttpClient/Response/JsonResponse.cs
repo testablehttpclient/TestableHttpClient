@@ -13,9 +13,9 @@ internal class JsonResponse : HttpResponse
     public Encoding Encoding { get; }
     public string MediaType { get; }
 
-    protected override HttpContent? GetContent(HttpResponseContext context)
+    protected override Task<HttpContent?> GetContentAsync(HttpResponseContext context)
     {
         string json = JsonSerializer.Serialize(Content);
-        return new StringContent(json, Encoding, MediaType);
+        return Task.FromResult<HttpContent?>(new StringContent(json, Encoding, MediaType));
     }
 }

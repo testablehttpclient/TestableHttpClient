@@ -10,12 +10,12 @@
 
         public HttpStatusCode StatusCode { get; init; } = HttpStatusCode.OK;
 
-        protected virtual HttpContent? GetContent(HttpResponseContext context)
+        protected virtual Task<HttpContent?> GetContentAsync(HttpResponseContext context)
         {
-            return null;
+            return Task.FromResult<HttpContent?>(null);
         }
 
-        public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
             if (context is null)
             {
@@ -23,8 +23,11 @@
             }
 
             context.HttpResponseMessage.StatusCode = StatusCode;
-            context.HttpResponseMessage.Content = GetContent(context);
-            return Task.CompletedTask;
+            var content = await GetContentAsync(context).ConfigureAwait(false);
+            if (content is not null)
+            {
+                context.HttpResponseMessage.Content = content;
+            }
         }
     }
 }
