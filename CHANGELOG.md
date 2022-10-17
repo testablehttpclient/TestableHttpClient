@@ -15,6 +15,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `CreateClient` now accepts `DelegateHandlers` in order to chain Handlers. The InnerHandler property of each handler is set automatically and the `TestableHttpMessageHandler` is automatically set as the last handler. This is showcased with Polly in the integration tests.
 - Added support for .NET Framework 4.6.2, .NET Framework 4.7 and .NET Framework 4.8 by running the tests against these versions.
 - Added several `Responses`, including `Delayed`, `Timeout`, `Configured`, `Sequenced`, `StatusCode` and `Json`. These responses can now be used inside the `RespondWith`.
+- Added the possibility to set and override the JsonSerializerOptions.
 
 ### Changed
 - `TestableHttpClient` now works with the `Responses` class, making it easier to configure responses.

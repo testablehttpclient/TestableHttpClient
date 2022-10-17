@@ -5,10 +5,11 @@
 /// </summary>
 public class HttpResponseContext
 {
-    public HttpResponseContext(HttpRequestMessage httpRequestMessage, HttpResponseMessage httpResponseMessage)
+    public HttpResponseContext(HttpRequestMessage httpRequestMessage, HttpResponseMessage httpResponseMessage, TestableHttpMessageHandlerOptions? options = null)
     {
         HttpRequestMessage = httpRequestMessage;
         HttpResponseMessage = httpResponseMessage;
+        Options = options ?? new TestableHttpMessageHandlerOptions();
     }
 
     /// <summary>
@@ -19,4 +20,5 @@ public class HttpResponseContext
     /// The response message that will be send back to the HttpClient.
     /// </summary>
     public HttpResponseMessage HttpResponseMessage { get; }
+    public TestableHttpMessageHandlerOptions Options { get; }
 }

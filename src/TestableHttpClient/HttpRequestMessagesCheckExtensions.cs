@@ -405,7 +405,16 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="jsonObject">The object representation of the expected request content.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
-    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject) => WithJsonContent(check, jsonObject, null);
+    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject) => WithJsonContent(check, jsonObject, null, null);
+
+    /// <summary>
+    /// Asserts wheter requests are made with specific json content.
+    /// </summary>
+    /// <param name="check">The implementation that hold all the request messages.</param>
+    /// <param name="jsonObject">The object representation of the expected request content.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
+    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, JsonSerializerOptions jsonSerializerOptions) => WithJsonContent(check, jsonObject, jsonSerializerOptions, null);
 
     /// <summary>
     /// Asserts wheter requests are made with specific json content.
@@ -415,16 +424,26 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
-    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int expectedNumberOfRequests) => WithJsonContent(check, jsonObject, (int?)expectedNumberOfRequests);
+    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int expectedNumberOfRequests) => WithJsonContent(check, jsonObject, null, (int?)expectedNumberOfRequests);
 
-    private static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int? expectedNumberOfRequests)
+    /// <summary>
+    /// Asserts wheter requests are made with specific json content.
+    /// </summary>
+    /// <param name="check">The implementation that hold all the request messages.</param>
+    /// <param name="jsonObject">The object representation of the expected request content.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
+    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, JsonSerializerOptions jsonSerializerOptions, int expectedNumberOfRequests) => WithJsonContent(check, jsonObject, jsonSerializerOptions, (int?)expectedNumberOfRequests);
+
+    private static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, JsonSerializerOptions? jsonSerializerOptions, int? expectedNumberOfRequests)
     {
         if (check == null)
         {
             throw new ArgumentNullException(nameof(check));
         }
 
-        var jsonString = JsonSerializer.Serialize(jsonObject);
+        var jsonString = JsonSerializer.Serialize(jsonObject, jsonSerializerOptions ?? check.Options.JsonSerializerOptions);
         return check.WithFilter(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), expectedNumberOfRequests, $"json content '{jsonString}'");
     }
 

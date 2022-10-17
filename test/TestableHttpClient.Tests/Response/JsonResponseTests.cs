@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text.Json;
+using System.Threading;
 
 using TestableHttpClient.Response;
 
@@ -24,13 +25,49 @@ public class JsonResponseTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_WithObjectContent_SetsJsonStringToContent()
+    public async Task ExecuteAsync_WithObjectContentAndCustomSettingsFromContext_SetsJsonStringToContent()
     {
         var input = new { Value = 42 };
         JsonResponse sut = new(input);
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+        TestableHttpMessageHandlerOptions options = new TestableHttpMessageHandlerOptions();
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, options), CancellationToken.None);
+
+        var json = await responseMessage.Content.ReadAsStringAsync();
+
+        Assert.Equal("{\"Value\":42}", json);
+        Assert.Same(input, sut.Content);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WithObjectContentAndDefaultSettingsViaContext_SetsJsonStringToContent()
+    {
+        var input = new { Value = 42 };
+        JsonResponse sut = new(input);
+        using HttpRequestMessage requestMessage = new();
+        using HttpResponseMessage responseMessage = new();
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, new TestableHttpMessageHandlerOptions()), CancellationToken.None);
+
+        var json = await responseMessage.Content.ReadAsStringAsync();
+
+        Assert.Equal("{\"value\":42}", json);
+        Assert.Same(input, sut.Content);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WithObjectContentAndCustomSettingsDirectly_SetsJsonStringToContent()
+    {
+        var input = new { Value = 42 };
+        JsonResponse sut = new(input)
+        {
+            JsonSerializerOptions = new JsonSerializerOptions()
+        };
+        using HttpRequestMessage requestMessage = new();
+        using HttpResponseMessage responseMessage = new();
+        TestableHttpMessageHandlerOptions options = new TestableHttpMessageHandlerOptions();
+        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, options), CancellationToken.None);
 
         var json = await responseMessage.Content.ReadAsStringAsync();
 

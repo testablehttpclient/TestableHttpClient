@@ -2,21 +2,34 @@
 
 public class HttpRequestMessageAsserterTests
 {
-#nullable disable
     [Fact]
     public void Constructor_NullRequestList_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new HttpRequestMessageAsserter(null));
+        Assert.Throws<ArgumentNullException>(() => new HttpRequestMessageAsserter(null!));
+    }
+
+    [Fact]
+    public void Constructor_NullOptions_SetsDefault()
+    {
+        HttpRequestMessageAsserter sut = new(Array.Empty<HttpRequestMessage>(), null);
+        Assert.NotNull(sut.Options);
+    }
+
+    [Fact]
+    public void Constructor_NotNullOptions_SetsOptions()
+    {
+        TestableHttpMessageHandlerOptions options = new();
+        HttpRequestMessageAsserter sut = new(Array.Empty<HttpRequestMessage>(), options);
+        Assert.Same(options, sut.Options);
     }
 
     [Fact]
     public void WithFilter_NullPredicate_ThrowsArgumentNullException()
     {
         var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFilter(null, "check"));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFilter(null!, "check"));
         Assert.Equal("predicate", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void WithFilter_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()

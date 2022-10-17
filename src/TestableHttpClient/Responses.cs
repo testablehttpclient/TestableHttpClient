@@ -70,7 +70,7 @@ public static class Responses
     /// <param name="content">The content to serialize.</param>
     /// <param name="contentType">The content type of the response, defaults to 'application/json'.</param>
     /// <returns>A response with specific content.</returns>
-    public static IResponse Json(object? content, string? contentType = null) => new JsonResponse(content, contentType);
+    public static IResponse Json(object? content, string? contentType = null, JsonSerializerOptions? jsonSerializerOptions = null) => new JsonResponse(content, contentType) { JsonSerializerOptions = jsonSerializerOptions };
     /// <summary>
     /// Create a response with json content and a specific status code.
     /// </summary>
@@ -78,7 +78,7 @@ public static class Responses
     /// <param name="statusCode">The status code for the response.</param>
     /// <param name="contentType">The content type of the response, defaults to 'application/json'.</param>
     /// <returns>A response with specific content.</returns>
-    public static IResponse Json(object? content, HttpStatusCode statusCode, string? contentType = null) => new JsonResponse(content, contentType) { StatusCode = statusCode };
+    public static IResponse Json(object? content, HttpStatusCode statusCode, string? contentType = null, JsonSerializerOptions? jsonSerializerOptions = null) => new JsonResponse(content, contentType) { StatusCode = statusCode, JsonSerializerOptions = jsonSerializerOptions };
     /// <summary>
     /// Entrypoint for extensions.
     /// </summary>

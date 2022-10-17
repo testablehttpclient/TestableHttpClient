@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
+using Moq;
+
 namespace TestableHttpClient.Tests;
 
 public class TestableHttpMessageHandlerTests
@@ -33,6 +35,28 @@ public class TestableHttpMessageHandlerTests
         _ = await client.SendAsync(request4);
 
         Assert.Equal(new[] { request1, request2, request3, request4 }, sut.Requests);
+    }
+
+    [Fact]
+    public async Task SendAsync_ByDefault_CallsExecutAsyncOnIResponse()
+    {
+        IResponse mockedResponse = Mock.Of<IResponse>();
+        HttpResponseContext? context = null;
+        Mock.Get(mockedResponse)
+            .Setup(x => x.ExecuteAsync(It.IsAny<HttpResponseContext>(), It.IsAny<CancellationToken>()))
+            .Callback((HttpResponseContext c, CancellationToken _) => context = c)
+            .Returns(Task.CompletedTask);
+
+        using TestableHttpMessageHandler sut = new();
+        sut.RespondWith(mockedResponse);
+        using var client = new HttpClient(sut);
+        using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/"));
+        var response = await client.SendAsync(request);
+
+        Assert.NotNull(context);
+        Assert.Same(request, context.HttpRequestMessage);
+        Assert.Same(response, context.HttpResponseMessage);
+        Assert.Same(sut.Options, context.Options);
     }
 
     [Fact]
