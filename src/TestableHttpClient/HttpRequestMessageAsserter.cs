@@ -11,15 +11,21 @@ internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// Construct a new HttpRequestMessageAsserter.
     /// </summary>
     /// <param name="httpRequestMessages">The list of requests to assert on.</param>
-    public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages)
+    /// <param name="options">Options that could be used by several assertions.</param>
+    public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, TestableHttpMessageHandlerOptions? options = null)
     {
         Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
+        Options = options ?? new TestableHttpMessageHandlerOptions();
     }
 
     /// <summary>
     /// The list of requests received from <seealso cref="TestableHttpMessageHandler"/>.
     /// </summary>
     public IEnumerable<HttpRequestMessage> Requests { get; private set; }
+    /// <summary>
+    /// Options that could be used by several assertions.
+    /// </summary>
+    public TestableHttpMessageHandlerOptions Options { get; }
 
     private void Assert(int? expectedCount = null)
     {

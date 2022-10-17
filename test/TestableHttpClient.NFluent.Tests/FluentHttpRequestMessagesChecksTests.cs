@@ -2,26 +2,37 @@
 
 public class FluentHttpRequestMessagesChecksTests
 {
-#nullable disable
     [Fact]
     public void Constructor_NullHttpRequestMessages_ThrowsArgumentNullException()
     {
-        Check.ThatCode(() => new FluentHttpRequestMessagesChecks(null))
+        Check.ThatCode(() => new FluentHttpRequestMessagesChecks(null!))
             .Throws<ArgumentNullException>()
             .WithProperty(x => x.ParamName, "httpRequestMessages");
     }
-#nullable restore
 
-#nullable disable
+    [Fact]
+    public void Constructor_NullOptions_SetsDefaultOptions()
+    {
+        FluentHttpRequestMessagesChecks sut = new(Array.Empty<HttpRequestMessage>(), null);
+        Check.That(sut.Options).Not.IsNull();
+    }
+
+    [Fact]
+    public void Constructor_NotNullOptions_SetsOptions()
+    {
+        TestableHttpMessageHandlerOptions options = new();
+        FluentHttpRequestMessagesChecks sut = new(Array.Empty<HttpRequestMessage>(), options);
+        Check.That(sut.Options).IsSameReferenceAs(options);
+    }
+
     [Fact]
     public void WithFilter_NullPredicate_Fails()
     {
         var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
-        Check.ThatCode(() => sut.WithFilter(null, "check"))
+        Check.ThatCode(() => sut.WithFilter(null!, "check"))
             .IsAFailingCheckWithMessage("",
             "The request filter should not be null.");
     }
-#nullable restore
 
     [Fact]
     public void WithFilter_PredicateThatDoesNotMatchAnyRequests_Fails()
@@ -51,16 +62,14 @@ public class FluentHttpRequestMessagesChecksTests
         Check.ThatCode(() => sut.WithFilter(x => x != null, string.Empty)).Not.IsAFailingCheck();
     }
 
-#nullable disable
     [Fact]
     public void WithFilter_WithRequestExpectations_NullPredicate_Fails()
     {
         var sut = new FluentHttpRequestMessagesChecks(Enumerable.Empty<HttpRequestMessage>());
-        Check.ThatCode(() => sut.WithFilter(null, 1, "check"))
+        Check.ThatCode(() => sut.WithFilter(null!, 1, "check"))
             .IsAFailingCheckWithMessage("",
             "The request filter should not be null.");
     }
-#nullable restore
 
     [Fact]
     public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_Fails()

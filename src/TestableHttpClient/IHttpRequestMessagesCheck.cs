@@ -6,6 +6,11 @@
 public interface IHttpRequestMessagesCheck
 {
     /// <summary>
+    /// Options that could be used by several asserters.
+    /// </summary>
+    TestableHttpMessageHandlerOptions Options { get; }
+
+    /// <summary>
     /// Asserts whether requests comply with a specific filter.
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>

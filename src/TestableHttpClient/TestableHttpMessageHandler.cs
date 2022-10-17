@@ -12,6 +12,8 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     private IResponse response = new HttpResponse(HttpStatusCode.OK);
     private Func<HttpRequestMessage, HttpResponseMessage>? responseFactory;
 
+    public TestableHttpMessageHandlerOptions Options { get; } = new TestableHttpMessageHandlerOptions();
+
     /// <summary>
     /// Gets the collection of captured requests made using this HttpMessageHandler.
     /// </summary>
@@ -29,7 +31,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
         else
         {
             responseMessage = new();
-            HttpResponseContext context = new(request, responseMessage);
+            HttpResponseContext context = new(request, responseMessage, Options);
             await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
         }
 

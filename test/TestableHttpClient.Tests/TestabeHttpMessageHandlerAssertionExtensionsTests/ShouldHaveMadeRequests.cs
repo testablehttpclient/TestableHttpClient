@@ -2,11 +2,10 @@
 
 public class ShouldHaveMadeRequests
 {
-#nullable disable
     [Fact]
     public void ShouldHaveMadeRequests_NullHandler_ThrowsArgumentNullException()
     {
-        TestableHttpMessageHandler sut = null;
+        TestableHttpMessageHandler sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequests());
         Assert.Equal("handler", exception.ParamName);
@@ -15,12 +14,11 @@ public class ShouldHaveMadeRequests
     [Fact]
     public void ShouldHaveMadeRequestWithNumberOfRequests_NullHandler_ThrowsArgumentNullException()
     {
-        TestableHttpMessageHandler sut = null;
+        TestableHttpMessageHandler sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequests(1));
         Assert.Equal("handler", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void ShouldHaveMadeRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
@@ -50,6 +48,7 @@ public class ShouldHaveMadeRequests
 
         Assert.NotNull(result);
         Assert.IsType<HttpRequestMessageAsserter>(result);
+        Assert.Same(sut.Options, result.Options);
     }
 
     [Fact]
@@ -64,5 +63,6 @@ public class ShouldHaveMadeRequests
 
         Assert.NotNull(result);
         Assert.IsType<HttpRequestMessageAsserter>(result);
+        Assert.Same(sut.Options, result.Options);
     }
 }

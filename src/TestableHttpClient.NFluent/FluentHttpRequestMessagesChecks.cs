@@ -8,11 +8,14 @@ internal class FluentHttpRequestMessagesChecks : FluentSut<IEnumerable<HttpReque
     private IEnumerable<HttpRequestMessage> requests;
     private readonly List<string> requestConditions = new List<string>();
 
-    public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages)
+    public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages, TestableHttpMessageHandlerOptions? options = null)
         : base(httpRequestMessages, Check.Reporter, false)
     {
         requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
+        Options = options ?? new TestableHttpMessageHandlerOptions();
     }
+
+    public TestableHttpMessageHandlerOptions Options { get; }
 
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 

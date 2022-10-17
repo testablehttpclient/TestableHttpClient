@@ -10,10 +10,11 @@ internal class JsonResponse : HttpResponse
 
     public object? Content { get; }
     public string ContentType { get; }
+    public JsonSerializerOptions? JsonSerializerOptions { get; set; }
 
     protected override Task<HttpContent?> GetContentAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
-        string json = JsonSerializer.Serialize(Content);
+        string json = JsonSerializer.Serialize(Content, JsonSerializerOptions ?? context.Options.JsonSerializerOptions);
         return Task.FromResult<HttpContent?>(new StringContent(json, Encoding.UTF8, ContentType));
     }
 }

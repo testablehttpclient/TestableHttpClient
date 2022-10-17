@@ -17,7 +17,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
             throw new ArgumentNullException(nameof(handler));
         }
 
-        return new HttpRequestMessageAsserter(handler.Requests).WithRequestUri("*");
+        return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri("*");
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
             throw new ArgumentNullException(nameof(handler));
         }
 
-        return new HttpRequestMessageAsserter(handler.Requests).WithRequestUri("*", expectedNumberOfRequests);
+        return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri("*", expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
             throw new ArgumentNullException(nameof(pattern));
         }
 
-        return new HttpRequestMessageAsserter(handler.Requests).WithRequestUri(pattern);
+        return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri(pattern);
     }
 
     /// <summary>
@@ -85,6 +85,6 @@ public static class TestableHttpMessageHandlerAssertionExtensions
             throw new ArgumentNullException(nameof(pattern));
         }
 
-        return new HttpRequestMessageAsserter(handler.Requests).WithRequestUri(pattern, expectedNumberOfRequests);
+        return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri(pattern, expectedNumberOfRequests);
     }
 }
