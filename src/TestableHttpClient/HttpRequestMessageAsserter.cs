@@ -69,8 +69,15 @@ internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
             _expectedConditions.Add(condition);
         }
 
-        Requests = Requests.Where(requestFilter);
-        Assert(expectedNumberOfRequests);
+        try
+        {
+            Requests = Requests.Where(requestFilter);
+            Assert(expectedNumberOfRequests);
+        }
+        catch (ObjectDisposedException)
+        {
+            throw new HttpRequestMessageAssertionException("Can't validate requests, because one or more requests have content that is already disposed.");
+        }
         return this;
     }
 }
