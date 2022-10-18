@@ -46,7 +46,6 @@ public class ShouldHaveMadeRequestsTo
         Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/"));
     }
 
-
     [Fact]
     public void ShouldHaveMadeRequestsToWithNumberOfRequests_WhenNoRequestsWereMadeAndOneIsExpected_ThrowsHttpRequestMessageAssertionException()
     {
@@ -68,7 +67,7 @@ public class ShouldHaveMadeRequestsTo
     }
 
     [Fact]
-    public async Task ShouldHaveMadeRequestsTo_WhenMatchinRequestsWereMade_ReturnsHttpRequestMessageAsserter()
+    public async Task ShouldHaveMadeRequestsTo_WhenMatchingRequestsWithSameCaseWereMade_ReturnsHttpRequestMessageAsserter()
     {
         using var sut = new TestableHttpMessageHandler();
         using var client = new HttpClient(sut);
@@ -83,7 +82,7 @@ public class ShouldHaveMadeRequestsTo
     }
 
     [Fact]
-    public async Task ShouldHaveMadeRequestsToWithNumberOfRequests_WhenMatchinRequestsWereMade_ReturnsHttpRequestMessageAsserter()
+    public async Task ShouldHaveMadeRequestsToWithNumberOfRequests_WhenMatchingRequestsWithSameCaseWereMade_ReturnsHttpRequestMessageAsserter()
     {
         using var sut = new TestableHttpMessageHandler();
         using var client = new HttpClient(sut);
@@ -95,5 +94,57 @@ public class ShouldHaveMadeRequestsTo
         Assert.NotNull(result);
         Assert.IsType<HttpRequestMessageAsserter>(result);
         Assert.Same(sut.Options, result.Options);
+    }
+
+    [Fact]
+    public async Task ShouldHaveMadeRequestsTo_WhenMatchingRequestsWithDifferentCaseWereMade_ReturnsHttpRequestMessageAsserter()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        using var client = new HttpClient(sut);
+
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+
+        var result = sut.ShouldHaveMadeRequestsTo("https://example.com/test");
+
+        Assert.NotNull(result);
+        Assert.IsType<HttpRequestMessageAsserter>(result);
+        Assert.Same(sut.Options, result.Options);
+    }
+
+    [Fact]
+    public async Task ShouldHaveMadeRequestsTo_WhenMatchingRequestsWithDifferentCaseWereMadeAndNotIgnoringCase_ThrowsException()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        using var client = new HttpClient(sut);
+
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test", ignoreCase: false));
+    }
+
+    [Fact]
+    public async Task ShouldHaveMadeRequestsToWithNumberOfRequests_WhenMatchingRequestsWithDifferentCaseWereMade_ReturnsHttpRequestMessageAsserter()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        using var client = new HttpClient(sut);
+
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+
+        var result = sut.ShouldHaveMadeRequestsTo("https://example.com/test", 1);
+
+        Assert.NotNull(result);
+        Assert.IsType<HttpRequestMessageAsserter>(result);
+        Assert.Same(sut.Options, result.Options);
+    }
+
+    [Fact]
+    public async Task ShouldHaveMadeRequestsToWithNumberOfRequests_WhenMatchingRequestsWithDifferentCaseWereMadeAndNotIgnoringCase_ShouldThrowException()
+    {
+        using var sut = new TestableHttpMessageHandler();
+        using var client = new HttpClient(sut);
+
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test", ignoreCase: false, 1));
     }
 }

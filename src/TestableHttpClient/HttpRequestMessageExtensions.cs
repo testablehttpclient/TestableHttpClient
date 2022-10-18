@@ -205,7 +205,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct uri on.</param>
     /// <param name="pattern">A pattern to match with the request uri, supports * as wildcards.</param>
     /// <returns>true when the request uri matches the pattern; otherwise, false.</returns>
-    public static bool HasMatchingUri(this HttpRequestMessage httpRequestMessage, string pattern)
+    public static bool HasMatchingUri(this HttpRequestMessage httpRequestMessage, string pattern, bool ignoreCase = true)
     {
         if (httpRequestMessage == null)
         {
@@ -222,7 +222,7 @@ public static class HttpRequestMessageExtensions
             null => throw new ArgumentNullException(nameof(pattern)),
             "" => false,
             "*" => true,
-            _ => StringMatcher.Matches(httpRequestMessage.RequestUri.AbsoluteUri, pattern),
+            _ => StringMatcher.Matches(httpRequestMessage.RequestUri.AbsoluteUri, pattern, ignoreCase),
         };
     }
 
