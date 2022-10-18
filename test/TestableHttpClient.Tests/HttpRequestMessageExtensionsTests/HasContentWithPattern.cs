@@ -2,11 +2,10 @@
 
 public partial class HttpRequestMessageExtensionsTests
 {
-#nullable disable
     [Fact]
     public void HasContentWithPattern_NullRequest_ThrowsArgumentNullException()
     {
-        HttpRequestMessage sut = null;
+        HttpRequestMessage sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContent(""));
         Assert.Equal("httpRequestMessage", exception.ParamName);
@@ -15,17 +14,16 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasContentWithPattern_NullExpectedContent_ThrowsArgumentNullException()
     {
-        using var sut = new HttpRequestMessage();
+        using HttpRequestMessage sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContent(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContent(null!));
         Assert.Equal("pattern", exception.ParamName);
     }
-#nullable enable
 
     [Fact]
     public void HasContentWithPattern_NoContent_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage();
+        using HttpRequestMessage sut = new();
 
         Assert.False(sut.HasContent(""));
     }
@@ -36,7 +34,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("{\"key\":\"value\"}")]
     public void HasContentWithPattern_ExactlyMatchingStringContent_ReturnsTrue(string content)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent(content)
         };
@@ -50,7 +48,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("{\"key\":\"value\"}")]
     public void HasContentWithPattern_NotMatchingStringContent_ReturnsFalse(string content)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("Example content")
         };
@@ -64,7 +62,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("*admin*")]
     public void HasContentWithPattern_MatchingPattern_ReturnsTrue(string pattern)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("username=admin&password=admin")
         };
@@ -77,11 +75,25 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("*test*")]
     public void HasContentWithPattern_NotMatchingPattern_ReturnsFalse(string pattern)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("username=admin&password=admin")
         };
 
         Assert.False(sut.HasContent(pattern));
+    }
+
+    [Fact]
+    public void HasContentWithPattern_DisposedContent_ThrowsObjectDisposedException()
+    {
+        StringContent content = new("");
+        content.Dispose();
+
+        using HttpRequestMessage sut = new()
+        {
+            Content = content
+        };
+
+        Assert.Throws<ObjectDisposedException>(() => sut.HasContent("*"));
     }
 }
