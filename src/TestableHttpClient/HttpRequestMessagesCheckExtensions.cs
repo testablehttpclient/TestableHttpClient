@@ -8,7 +8,9 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="pattern">The uri pattern that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, null);
+    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, true, null);
+
+    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase) => WithRequestUri(check, pattern, ignoreCase, null);
 
     /// <summary>
     /// Asserts whether requests were made to a given URI based on a pattern.
@@ -17,9 +19,10 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="pattern">The uri pattern that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithRequestUri(check, pattern, (int?)expectedNumberOfRequests);
+    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithRequestUri(check, pattern, true, (int?)expectedNumberOfRequests);
+    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase, int expectedNumberOfRequests) => WithRequestUri(check, pattern, ignoreCase, (int?)expectedNumberOfRequests);
 
-    private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
+    private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase, int? expectedNumberOfRequests)
     {
         if (check == null)
         {
@@ -37,7 +40,7 @@ public static class HttpRequestMessagesCheckExtensions
             condition = $"uri pattern '{pattern}'";
         }
 
-        return check.WithFilter(x => x.HasMatchingUri(pattern), expectedNumberOfRequests, condition);
+        return check.WithFilter(x => x.HasMatchingUri(pattern, ignoreCase), expectedNumberOfRequests, condition);
     }
 
     /// <summary>

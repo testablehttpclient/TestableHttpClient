@@ -2,11 +2,10 @@
 
 public partial class HttpRequestMessageExtensionsTests
 {
-#nullable disable
     [Fact]
     public void HasMatchingUri_NullHttpRequestMessage_ThrowsArgumentNullException()
     {
-        HttpRequestMessage sut = null;
+        HttpRequestMessage sut = null!;
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasMatchingUri("*"));
         Assert.Equal("httpRequestMessage", exception.ParamName);
     }
@@ -15,10 +14,9 @@ public partial class HttpRequestMessageExtensionsTests
     public void HasMatchingUri_NullPattern_ThrowsArgumentNullException()
     {
         using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasMatchingUri(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasMatchingUri(null!));
         Assert.Equal("pattern", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void HasMatchingUri_EmptyPattern_ReturnsFalse()
@@ -43,11 +41,29 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("https://example.com/*")]
     [InlineData("https://*/")]
     [InlineData("https://*/*")]
+    [InlineData("HTTPS://Example.com/")]
+    [InlineData("*://Example.com/")]
     public void HasMatchingUri_WithPatternFor_ReturnsTrue(string pattern)
     {
         using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
 
         Assert.True(sut.HasMatchingUri(pattern));
+    }
+
+    [Theory]
+    [InlineData("*", true)]
+    [InlineData("https://example.com*", true)]
+    [InlineData("https://example.com/", true)]
+    [InlineData("https://example.com/*", true)]
+    [InlineData("https://*/", true)]
+    [InlineData("https://*/*", true)]
+    [InlineData("HTTPS://Example.com/", false)]
+    [InlineData("*://Example.com/", false)]
+    public void HasMatchingUri_WithPatternForAndNotIgnoringCase_ReturnsFalse(string pattern, bool expectedResult)
+    {
+        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
+
+        Assert.Equal(expectedResult, sut.HasMatchingUri(pattern, ignoreCase: false));
     }
 
     [Fact]
