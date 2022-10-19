@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.IntegrationTests;
 
+[Obsolete("Testing deprecated warnings")]
 public class AssertingRequestsWithNFluent
 {
     [Fact]

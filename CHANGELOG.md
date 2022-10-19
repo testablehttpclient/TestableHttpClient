@@ -10,6 +10,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` had been deprecated, it's functionality is replaced by IResponse.
 - `RespondWith(this TestableHttpMessageHandler, HttpResponseMessage)` has been deprecated, the response is modified with every call, so it doesn't work reliably and is different from how HttpClientHandler works, which creates a HttpResponseMessage for every request.
 - `HttpResponseMessageBuilder` and `RespondWith(this TestableHttpMessageHandler, HttpResponseMessageBuilder)` has been deprecated, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
+- `HttpRequestMessageExtensions` and `HttpResponseMessageExtensions` were introduced as extensions for easier assertion. However, these types are intended for internal use and will be made internal next release.
+- TestableHttpClient.NFluent is deprecated and will be removed in the next version.
 
 ### Added
 - `CreateClient` now accepts `DelegateHandlers` in order to chain Handlers. The InnerHandler property of each handler is set automatically and the `TestableHttpMessageHandler` is automatically set as the last handler. This is showcased with Polly in the integration tests.

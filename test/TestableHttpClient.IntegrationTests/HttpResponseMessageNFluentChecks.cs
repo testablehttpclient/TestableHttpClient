@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.IntegrationTests;
 
+[Obsolete("Testing deptrecated functionality")]
 public class HttpResponseMessageNFluentChecks
 {
     [Fact]

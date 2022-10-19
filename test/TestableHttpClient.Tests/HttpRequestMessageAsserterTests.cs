@@ -93,6 +93,7 @@ public class HttpRequestMessageAsserterTests
     }
 
     [Fact]
+    [Obsolete("Testing obsolete code")]
     public void WithFilter_WithDisposedRequestContent_DoesThrowSensibleException()
     {
         StringContent content = new("");

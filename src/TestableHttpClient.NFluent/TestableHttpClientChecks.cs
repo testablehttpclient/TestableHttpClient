@@ -3,6 +3,7 @@
 /// <summary>
 /// A set of NFluent checks to check <see cref="TestableHttpMessageHandler"/>.
 /// </summary>
+[Obsolete("These NFluent extensions are no longer supported and will be removed.")]
 public static class TestableHttpClientChecks
 {
     /// <summary>

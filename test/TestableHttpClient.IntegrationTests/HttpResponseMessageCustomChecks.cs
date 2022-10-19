@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.IntegrationTests;
 
+[Obsolete("Showcasing deprecated functionality")]
 public class HttpResponseMessageCustomChecks
 {
     [Fact]
