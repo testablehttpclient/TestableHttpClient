@@ -3,6 +3,7 @@
 /// <summary>
 /// A set of static methods for checking values on a <see cref="HttpResponseMessage"/>.
 /// </summary>
+[Obsolete("This class is not intended for public use and will be marked internal in the next release.")]
 public static class HttpResponseMessageExtensions
 {
     /// <summary>
@@ -11,6 +12,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct version on.</param>
     /// <param name="httpVersion">The expected version.</param>
     /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasHttpVersion(this HttpResponseMessage httpResponseMessage, Version httpVersion)
     {
         if (httpResponseMessage == null)
@@ -32,6 +34,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct version on.</param>
     /// <param name="httpStatusCode">The expected status code.</param>
     /// <returns>true when the status code matches; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasHttpStatusCode(this HttpResponseMessage httpResponseMessage, HttpStatusCode httpStatusCode)
     {
         if (httpResponseMessage == null)
@@ -48,6 +51,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct version on.</param>
     /// <param name="reasonPhrase">The expected reason phrase.</param>
     /// <returns>true when the reason phrase matches; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasReasonPhrase(this HttpResponseMessage httpResponseMessage, string reasonPhrase)
     {
         if (httpResponseMessage == null)
@@ -70,6 +74,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the response header on.</param>
     /// <param name="headerName">The name of the header to locate on the response.</param>
     /// <returns>true when the response contains a header with the specified name; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasResponseHeader(this HttpResponseMessage httpResponseMessage, string headerName)
     {
         if (httpResponseMessage == null)
@@ -93,6 +98,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="headerName">The name of the header to locate on the response.</param>
     /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
     /// <returns>true when the response contains a header with the specified name and value; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasResponseHeader(this HttpResponseMessage httpResponseMessage, string headerName, string headerValue)
     {
         if (httpResponseMessage == null)
@@ -120,6 +126,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the content header on.</param>
     /// <param name="headerName">The name of the header to locate on the response content.</param>
     /// <returns>true when the response contains a header with the specified name; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasContentHeader(this HttpResponseMessage httpResponseMessage, string headerName)
     {
         if (httpResponseMessage == null)
@@ -148,6 +155,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="headerName">The name of the header to locate on the response content.</param>
     /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
     /// <returns>true when the response contains a header with the specified name and value; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasContentHeader(this HttpResponseMessage httpResponseMessage, string headerName, string headerValue)
     {
         if (httpResponseMessage == null)
@@ -178,6 +186,7 @@ public static class HttpResponseMessageExtensions
     /// </summary>
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check for content.</param>
     /// <returns>true when the response has content; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasContent(this HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null)
@@ -200,6 +209,7 @@ public static class HttpResponseMessageExtensions
     /// <param name="httpResponseMessage">A <see cref="HttpResponseMessage"/> to check the correct content on.</param>
     /// <param name="pattern">A pattern to match the response content, supports * as wildcards.</param>
     /// <returns>true when the response content matches the pattern; otherwise, false.</returns>
+    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
     public static bool HasContent(this HttpResponseMessage httpResponseMessage, string pattern)
     {
         if (httpResponseMessage == null)

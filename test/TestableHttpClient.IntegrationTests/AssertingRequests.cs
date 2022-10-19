@@ -202,6 +202,6 @@ public class AssertingRequests
         using var content = new StringContent("", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
-        testHandler.ShouldHaveMadeRequests().WithFilter(x => x.HasContentHeader("Content-Type", "application/json") || x.HasContentHeader("Content-Type", "application/json; *"), "");
+        testHandler.ShouldHaveMadeRequests().WithFilter(x => x.Content is not null && x.Content.Headers.ContentType?.MediaType == "application/json", "");
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests;
 
+[Obsolete("Testing obsolete methods")]
 public partial class HttpResponseMessageExtensionsTests
 {
 #nullable disable

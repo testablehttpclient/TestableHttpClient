@@ -95,8 +95,8 @@ public class ConfigureResponses
         using var testHandler = new TestableHttpMessageHandler();
         IResponse PathBasedResponse(HttpResponseContext context) => context.HttpRequestMessage switch
         {
-            _ when context.HttpRequestMessage.HasMatchingUri("*/status/200") => StatusCode(HttpStatusCode.OK),
-            _ when context.HttpRequestMessage.HasMatchingUri("*/status/400") => StatusCode(HttpStatusCode.BadRequest),
+            _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/200" => StatusCode(HttpStatusCode.OK),
+            _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/400" => StatusCode(HttpStatusCode.BadRequest),
             _ => StatusCode(HttpStatusCode.NotFound)
         };
         testHandler.RespondWith(SelectResponse(PathBasedResponse));

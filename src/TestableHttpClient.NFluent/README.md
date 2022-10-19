@@ -1,5 +1,10 @@
 # TestableHttpClient.NFluent
 
+## Status
+The NFluent extensions for TestableHttpClient are being deprecated and will no longer ship with the next version of the library.
+
+---
+
 In integration tests, asserting HttpResponseMessages can be a real challenge, especially since error messages are sometimes not very clear. NFluent is known for giving clear error messages.
 `TestableHttpClient.NFluent` is designed to make it easier to check `HttpResponseMessage`s and `TestableHttpClient`s and give clear error messages.
 

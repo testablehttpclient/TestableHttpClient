@@ -3,6 +3,7 @@
 /// <summary>
 /// A set of NFluent checks to validate <see cref="HttpResponseMessage"/>s.
 /// </summary>
+[Obsolete("These NFluent extensions are no longer supported and will be removed.")]
 public static class HttpResponseMessageChecks
 {
     /// <summary>
