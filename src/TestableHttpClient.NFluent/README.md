@@ -55,8 +55,8 @@ Check.That(handler).HasMadeRequestsTo("https://httpbin.org*").WithHttpMethod(Htt
 
 * **David Perfors** - [dnperfors](https://github.com/dnperfors)
 
-See also the list of [contributors](https://github.com/dnperfors/TestableHttpClient/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/testablehttpclient/TestableHttpClient/contributors) who participated in this project.
 
 ## License
 
-This project is released under the MIT license, see [LICENSE.md](https://github.com/dnperfors/TestableHttpClient/blob/master/LICENSE.md) for more information.
+This project is released under the MIT license, see [LICENSE.md](https://github.com/testablehttpclient/TestableHttpClient/blob/master/LICENSE.md) for more information.

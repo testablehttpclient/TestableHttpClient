@@ -83,7 +83,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `Times(int)` will be removed in favour of the `With*` methods with an `int` parameter.
 
 ### Added
-- It is now possible to use NFluent to check `TestableHttpMessageHandler` by using `Check.That(handler).HasMadeRequests()` and `Check.That(handler).HasMadeRequestsTo("https://github.com/dnperfors/testablehttpclient")`. All existing `With` checks are supported.
+- It is now possible to use NFluent to check `TestableHttpMessageHandler` by using `Check.That(handler).HasMadeRequests()` and `Check.That(handler).HasMadeRequestsTo("https://github.com/testablehttpclient/testablehttpclient")`. All existing `With` checks are supported.
 - All `With*` methods got an extra overload to specify the exact number of expected requests. This is instead of the `Times` method.
 
 ### Changed
@@ -230,10 +230,10 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
-[0.7]: https://github.com/dnperfors/TestableHttpClient/compare/v0.6...v0.7
-[0.6]: https://github.com/dnperfors/TestableHttpClient/compare/v0.5...v0.6
-[0.5]: https://github.com/dnperfors/TestableHttpClient/compare/v0.4...v0.5
-[0.4]: https://github.com/dnperfors/TestableHttpClient/compare/v0.3...v0.4
-[0.3]: https://github.com/dnperfors/TestableHttpClient/compare/v0.2...v0.3
-[0.2]: https://github.com/dnperfors/TestableHttpClient/compare/v0.1...v0.2
-[0.1]: https://github.com/dnperfors/TestableHttpClient/releases/tag/v0.1
+[0.7]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.6...v0.7
+[0.6]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.5...v0.6
+[0.5]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.4...v0.5
+[0.4]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.3...v0.4
+[0.3]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.2...v0.3
+[0.2]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.1...v0.2
+[0.1]: https://github.com/testablehttpclient/TestableHttpClient/releases/tag/v0.1

@@ -22,17 +22,17 @@ var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 ```
 
-More examples can be found in the [IntegrationTests project](https://github.com/dnperfors/TestableHttpClient/tree/master/test/TestableHttpClient.IntegrationTests)
+More examples can be found in the [IntegrationTests project](https://github.com/testablehttpclient/TestableHttpClient/tree/master/test/TestableHttpClient.IntegrationTests)
 
 ## Authors
 
 * **David Perfors** - [dnperfors](https://github.com/dnperfors)
 
-See also the list of [contributors](https://github.com/dnperfors/TestableHttpClient/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/testablehttpclient/TestableHttpClient/contributors) who participated in this project.
 
 ## License
 
-This project is released under the MIT license, see [LICENSE.md](https://github.com/dnperfors/TestableHttpClient/blob/master/LICENSE.md) for more information.
+This project is released under the MIT license, see [LICENSE.md](https://github.com/testablehttpclient/TestableHttpClient/blob/master/LICENSE.md) for more information.
 
 ## Acknowledgments
 

@@ -1,6 +1,6 @@
 # TestableHttpClient
 
-![GitHub](https://img.shields.io/github/license/dnperfors/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dnperfors/TestableHttpClient/.NET%20Core)
+![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/ci)
 
 Using HttpClient in code that is unit tested is seen as rather difficult, these libraries aims to make it easier to assert the calls that are made via an HttpClient and to make assertions on the HttpResponseMessages.
 
@@ -70,7 +70,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can help u
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [releases on this repository](https://github.com/dnperfors/TestableHttpClient/releases).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [releases on this repository](https://github.com/testablehttpclient/TestableHttpClient/releases).
 
 Note that currently every library will always be released when a new tag is created, even though it might not have any changes.
 
@@ -78,7 +78,7 @@ Note that currently every library will always be released when a new tag is crea
 
 * **David Perfors** - [dnperfors](https://github.com/dnperfors)
 
-See also the list of [contributors](https://github.com/dnperfors/TestableHttpClient/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/testablehttpclient/TestableHttpClient/contributors) who participated in this project.
 
 ## License
 

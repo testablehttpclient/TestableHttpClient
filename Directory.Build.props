@@ -14,8 +14,9 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <DevelopmentDependency>false</DevelopmentDependency>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/dnperfors/TestableHttpClient</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/testablehttpclient/TestableHttpClient</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -24,11 +25,12 @@
     <DebugType>full</DebugType>
     
     <IncludeSource>true</IncludeSource>
-    <RepositoryUrl>https://github.com/dnperfors/TestableHttpClient</RepositoryUrl>
+    <RepositoryUrl>https://github.com/testablehttpclient/TestableHttpClient</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)/images/icon.png" Pack="true" PackagePath="" />
     <None Include="$(MSBuildThisFileDirectory)/LICENSE.md" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)/README.md" Pack="true" PackagePath="" />
   </ItemGroup>
