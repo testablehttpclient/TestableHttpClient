@@ -35,8 +35,8 @@ jobs:
     - name: Prepare sonarqube
       if: ${{ github.actor != 'dependabot[bot]' }}
       env:
-        SONARCLOUD_TOKEN: ${{secrets.SONARCLOUD_TOKEN}}
-      run: dotnet sonarscanner begin -d:sonar.host.url=https://sonarcloud.io -organization:testablehttpclient -key:testable_TestableHttpClient -version:`dotnet nbgv get-version --variable NuGetPackageVersion` -d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml -d:sonar.login=${{env.SONARCLOUD_TOKEN}}
+        SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+      run: dotnet sonarscanner begin -d:sonar.host.url=https://sonarcloud.io -organization:testablehttpclient -key:testablehttpclient_TestableHttpClient -version:`dotnet nbgv get-version --variable NuGetPackageVersion` -d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml -d:sonar.login=${{env.SONAR_TOKEN}}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build source code
@@ -47,8 +47,8 @@ jobs:
       if: ${{ github.actor != 'dependabot[bot]' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONARCLOUD_TOKEN: ${{secrets.SONARCLOUD_TOKEN}}
-      run: dotnet sonarscanner end -d:sonar.login=${{env.SONARCLOUD_TOKEN}}
+        SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+      run: dotnet sonarscanner end -d:sonar.login=${{env.SONAR_TOKEN}}
     - name: Check source file format
       run: dotnet format --no-restore --verify-no-changes
     - name: Pack
