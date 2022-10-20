@@ -1,6 +1,6 @@
 # TestableHttpClient
 
-![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/ci)
+![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/CI)
 
 Using HttpClient in code that is unit tested is seen as rather difficult, these libraries aims to make it easier to assert the calls that are made via an HttpClient and to make assertions on the HttpResponseMessages.
 

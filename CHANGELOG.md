@@ -26,6 +26,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - The `HttpRequestMessage` is always added to the response, which is now possible, since we no longer allow reusing responses.
 - Added `ConfigureAwait(false)` to all calls, since we now use async/await in the library.
 - The check on request uri is now case insensitive by default, when test url's that are case sensitive set the `ignoreCase` parameter to false.
+- The project has been moved to an organisation, so all the url's have been changed and an icon is added to the NuGet package.
 
 ## [0.7] - 2022-09-22
 ### Changed
