@@ -17,7 +17,7 @@ public class RespondWithResponseFactoryTests
     public async Task RespondWith_CustomFactory_ReturnsCustomStatusCode()
     {
         using var sut = new TestableHttpMessageHandler();
-        static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new HttpResponseMessage(HttpStatusCode.Unauthorized);
+        static HttpResponseMessage CustomResponse(HttpRequestMessage request) => new(HttpStatusCode.Unauthorized);
         sut.RespondWith(CustomResponse);
 
         using var client = new HttpClient(sut);

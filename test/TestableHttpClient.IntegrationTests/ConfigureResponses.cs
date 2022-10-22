@@ -93,7 +93,8 @@ public class ConfigureResponses
     public async Task UsingTestHandlerWithCustomResponseFactory_AllowsForAdvancedUsecases()
     {
         using var testHandler = new TestableHttpMessageHandler();
-        IResponse PathBasedResponse(HttpResponseContext context) => context.HttpRequestMessage switch
+
+        static IResponse PathBasedResponse(HttpResponseContext context) => context.HttpRequestMessage switch
         {
             _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/200" => StatusCode(HttpStatusCode.OK),
             _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/400" => StatusCode(HttpStatusCode.BadRequest),

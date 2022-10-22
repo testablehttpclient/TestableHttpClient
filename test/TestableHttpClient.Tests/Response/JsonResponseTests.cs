@@ -31,7 +31,7 @@ public class JsonResponseTests
         JsonResponse sut = new(input);
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        TestableHttpMessageHandlerOptions options = new TestableHttpMessageHandlerOptions();
+        TestableHttpMessageHandlerOptions options = new();
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, options), CancellationToken.None);
 
@@ -66,7 +66,7 @@ public class JsonResponseTests
         };
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        TestableHttpMessageHandlerOptions options = new TestableHttpMessageHandlerOptions();
+        TestableHttpMessageHandlerOptions options = new();
         await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, options), CancellationToken.None);
 
         var json = await responseMessage.Content.ReadAsStringAsync();
