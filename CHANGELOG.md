@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8] - Unplanned
+## [0.8] - 2022-11-08
 ### Deprecated
 - `TestableHttpMessageHandler.SimulateTimeout` is deprecated, and can be replaced with `RespondWith(Responses.Timeout())`.
 - `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` had been deprecated, it's functionality is replaced by IResponse.
@@ -16,6 +16,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - `CreateClient` now accepts `DelegateHandlers` in order to chain Handlers. The InnerHandler property of each handler is set automatically and the `TestableHttpMessageHandler` is automatically set as the last handler. This is showcased with Polly in the integration tests.
 - Added support for .NET Framework 4.6.2, .NET Framework 4.7 and .NET Framework 4.8 by running the tests against these versions.
+- Added support for .NET 7
 - When validating requests, an `HttpRequestMessageAssertionException` will be thrown when the content of a request is disposed. This typically happens on .NET Framework when the runtime decides to use the older version of System.Net.Http.
 - Added several `Responses`, including `Delayed`, `Timeout`, `Configured`, `Sequenced`, `StatusCode` and `Json`. These responses can now be used inside the `RespondWith`.
 - Added the possibility to set and override the JsonSerializerOptions.
@@ -26,6 +27,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - The `HttpRequestMessage` is always added to the response, which is now possible, since we no longer allow reusing responses.
 - Added `ConfigureAwait(false)` to all calls, since we now use async/await in the library.
 - The check on request uri is now case insensitive by default, when test url's that are case sensitive set the `ignoreCase` parameter to false.
+- The project has been moved to an organisation, so all the url's have been changed and an icon is added to the NuGet package.
 
 ## [0.7] - 2022-09-22
 ### Changed
@@ -230,6 +232,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.8]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.7...v0.8
 [0.7]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.6...v0.7
 [0.6]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.5...v0.6
 [0.5]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.4...v0.5

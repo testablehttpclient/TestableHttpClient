@@ -50,7 +50,7 @@ public class TestableHttpMessageHandlerTests
         using TestableHttpMessageHandler sut = new();
         sut.RespondWith(mockedResponse);
         using var client = new HttpClient(sut);
-        using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/"));
+        using HttpRequestMessage request = new(HttpMethod.Get, new Uri("https://example.com/"));
         var response = await client.SendAsync(request);
 
         Assert.NotNull(context);
@@ -155,7 +155,7 @@ public class TestableHttpMessageHandlerTests
 
     private class SingleThreadedSynchronizationContext : SynchronizationContext, IDisposable
     {
-        private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = new BlockingCollection<(SendOrPostCallback Callback, object? State)>();
+        private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = new();
 
         private SingleThreadedSynchronizationContext() { }
         public override void Send(SendOrPostCallback d, object? state) // Sync operations

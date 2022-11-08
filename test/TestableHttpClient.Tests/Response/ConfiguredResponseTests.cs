@@ -10,7 +10,7 @@ public class ConfiguredResponseTests
     public void Constructor_NullResponse_ThrowsArgumentNullException()
     {
         IResponse response = null!;
-        Action<HttpResponseMessage> configureResponse = _ => { };
+        static void configureResponse(HttpResponseMessage _) { }
         var exception = Assert.Throws<ArgumentNullException>(() => new ConfiguredResponse(response, configureResponse));
         Assert.Equal("response", exception.ParamName);
     }
@@ -29,7 +29,8 @@ public class ConfiguredResponseTests
     {
         bool wasCalled = false;
         HttpResponse response = new(HttpStatusCode.OK);
-        Action<HttpResponseMessage> configureResponse = _ => wasCalled = true;
+
+        void configureResponse(HttpResponseMessage _) => wasCalled = true;
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
         ConfiguredResponse sut = new(response, configureResponse);

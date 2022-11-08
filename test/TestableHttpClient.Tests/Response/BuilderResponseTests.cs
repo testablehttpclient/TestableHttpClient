@@ -24,11 +24,11 @@ public class BuilderResponseTests
 
         var builderWasCalled = false;
 
-        Action<HttpResponseMessageBuilder> httpResponseMessageBuilderAction = builder =>
+        void httpResponseMessageBuilderAction(HttpResponseMessageBuilder builder)
         {
             builderWasCalled = true;
             builder.WithHttpStatusCode(HttpStatusCode.Ambiguous);
-        };
+        }
 
         BuilderResponse response = new(httpResponseMessageBuilderAction);
 

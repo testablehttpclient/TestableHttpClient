@@ -6,7 +6,7 @@
 internal class FluentHttpRequestMessagesChecks : FluentSut<IEnumerable<HttpRequestMessage>>, IHttpRequestMessagesCheck
 {
     private IEnumerable<HttpRequestMessage> requests;
-    private readonly List<string> requestConditions = new List<string>();
+    private readonly List<string> requestConditions = new();
 
     public FluentHttpRequestMessagesChecks(IEnumerable<HttpRequestMessage> httpRequestMessages, TestableHttpMessageHandlerOptions? options = null)
         : base(httpRequestMessages, Check.Reporter, false)

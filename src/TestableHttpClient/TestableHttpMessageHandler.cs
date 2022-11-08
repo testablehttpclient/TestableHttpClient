@@ -8,7 +8,7 @@ namespace TestableHttpClient;
 /// </summary>
 public class TestableHttpMessageHandler : HttpMessageHandler
 {
-    private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new ConcurrentQueue<HttpRequestMessage>();
+    private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new();
     private IResponse response = new HttpResponse(HttpStatusCode.OK);
     private Func<HttpRequestMessage, HttpResponseMessage>? responseFactory;
 

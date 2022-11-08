@@ -1,0 +1,133 @@
+﻿#nullable enable
+TestableHttpClient.TestableHttpMessageHandler
+TestableHttpClient.TestableHttpMessageHandler.Options.get -> TestableHttpClient.TestableHttpMessageHandlerOptions!
+TestableHttpClient.TestableHttpMessageHandler.Requests.get -> System.Collections.Generic.IEnumerable<System.Net.Http.HttpRequestMessage!>!
+TestableHttpClient.TestableHttpMessageHandler.RespondWith(System.Func<System.Net.Http.HttpRequestMessage!, System.Net.Http.HttpResponseMessage!>! httpResponseMessageFactory) -> void
+TestableHttpClient.TestableHttpMessageHandler.RespondWith(TestableHttpClient.IResponse! response) -> void
+TestableHttpClient.TestableHttpMessageHandler.TestableHttpMessageHandler() -> void
+override TestableHttpClient.TestableHttpMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage! request, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage!>!
+
+TestableHttpClient.TestableHttpMessageHandlerOptions
+TestableHttpClient.TestableHttpMessageHandlerOptions.JsonSerializerOptions.get -> System.Text.Json.JsonSerializerOptions!
+TestableHttpClient.TestableHttpMessageHandlerOptions.TestableHttpMessageHandlerOptions() -> void
+
+TestableHttpClient.IResponse
+TestableHttpClient.IResponse.ExecuteAsync(TestableHttpClient.HttpResponseContext! context, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+TestableHttpClient.IResponsesExtensions
+TestableHttpClient.Responses
+static TestableHttpClient.Responses.Configured(TestableHttpClient.IResponse! response, System.Action<System.Net.Http.HttpResponseMessage!>! configureResponse) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Delayed(TestableHttpClient.IResponse! delayedResponse, int delayInMilliseconds) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Delayed(TestableHttpClient.IResponse! delayedResponse, System.TimeSpan delay) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Extensions.get -> TestableHttpClient.IResponsesExtensions!
+static TestableHttpClient.Responses.Json(object? content, string? contentType = null, System.Text.Json.JsonSerializerOptions? jsonSerializerOptions = null) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Json(object? content, System.Net.HttpStatusCode statusCode, string? contentType = null, System.Text.Json.JsonSerializerOptions? jsonSerializerOptions = null) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.NoContent() -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.SelectResponse(System.Func<TestableHttpClient.HttpResponseContext!, TestableHttpClient.IResponse!>! selector) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Sequenced(params TestableHttpClient.IResponse![]! responses) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.StatusCode(System.Net.HttpStatusCode statusCode) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Text(string! content, System.Text.Encoding? encoding = null, string? mediaType = null) -> TestableHttpClient.IResponse!
+static TestableHttpClient.Responses.Timeout() -> TestableHttpClient.IResponse!
+
+TestableHttpClient.HttpResponseContext
+TestableHttpClient.HttpResponseContext.HttpRequestMessage.get -> System.Net.Http.HttpRequestMessage!
+TestableHttpClient.HttpResponseContext.HttpResponseContext(System.Net.Http.HttpRequestMessage! httpRequestMessage, System.Net.Http.HttpResponseMessage! httpResponseMessage, TestableHttpClient.TestableHttpMessageHandlerOptions? options = null) -> void
+TestableHttpClient.HttpResponseContext.HttpResponseMessage.get -> System.Net.Http.HttpResponseMessage!
+TestableHttpClient.HttpResponseContext.Options.get -> TestableHttpClient.TestableHttpMessageHandlerOptions!
+
+TestableHttpClient.TestableHttpMessageHandlerExtensions
+static TestableHttpClient.TestableHttpMessageHandlerExtensions.CreateClient(this TestableHttpClient.TestableHttpMessageHandler! handler, params System.Net.Http.DelegatingHandler![]! httpMessageHandlers) -> System.Net.Http.HttpClient!
+static TestableHttpClient.TestableHttpMessageHandlerExtensions.CreateClient(this TestableHttpClient.TestableHttpMessageHandler! handler, System.Action<System.Net.Http.HttpClient!>! configureClient) -> System.Net.Http.HttpClient!
+static TestableHttpClient.TestableHttpMessageHandlerExtensions.CreateClient(this TestableHttpClient.TestableHttpMessageHandler! handler, System.Action<System.Net.Http.HttpClient!>! configureClient, System.Collections.Generic.IEnumerable<System.Net.Http.DelegatingHandler!>! httpMessageHandlers) -> System.Net.Http.HttpClient!
+
+TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions
+static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequests(this TestableHttpClient.TestableHttpMessageHandler! handler) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequests(this TestableHttpClient.TestableHttpMessageHandler! handler, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern, bool ignoreCase) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern, bool ignoreCase, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+
+TestableHttpClient.TestableHttpMessageHandlerResponseExtensions
+static TestableHttpClient.TestableHttpMessageHandlerResponseExtensions.RespondWith(this TestableHttpClient.TestableHttpMessageHandler! handler, System.Action<TestableHttpClient.HttpResponseMessageBuilder!>! httpResponseMessageBuilderAction) -> void
+static TestableHttpClient.TestableHttpMessageHandlerResponseExtensions.RespondWith(this TestableHttpClient.TestableHttpMessageHandler! handler, System.Net.Http.HttpResponseMessage! httpResponseMessage) -> void
+static TestableHttpClient.TestableHttpMessageHandlerResponseExtensions.SimulateTimeout(this TestableHttpClient.TestableHttpMessageHandler! handler) -> void
+
+TestableHttpClient.IHttpRequestMessagesCheck
+TestableHttpClient.IHttpRequestMessagesCheck.Options.get -> TestableHttpClient.TestableHttpMessageHandlerOptions!
+TestableHttpClient.IHttpRequestMessagesCheck.WithFilter(System.Func<System.Net.Http.HttpRequestMessage!, bool>! requestFilter, int expectedNumberOfRequests, string! condition) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithFilter(System.Func<System.Net.Http.HttpRequestMessage!, bool>! requestFilter, int? expectedNumberOfRequests, string! condition) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithFilter(System.Func<System.Net.Http.HttpRequestMessage!, bool>! requestFilter, string! condition) -> TestableHttpClient.IHttpRequestMessagesCheck!
+
+TestableHttpClient.HttpRequestMessageAssertionException
+
+TestableHttpClient.HttpRequestMessagesCheckExtensions
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithFormUrlEncodedContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string?, string?>>! nameValueCollection) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithFormUrlEncodedContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string?, string?>>! nameValueCollection, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpMethod(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpMethod(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Net.Http.HttpMethod! httpMethod, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpVersion(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Version! httpVersion) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpVersion(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Version! httpVersion, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, System.Text.Json.JsonSerializerOptions! jsonSerializerOptions) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, System.Text.Json.JsonSerializerOptions! jsonSerializerOptions, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithQueryString(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithQueryString(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, bool ignoreCase) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, bool ignoreCase, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+
+TestableHttpClient.HttpRequestMessageExtensions
+static TestableHttpClient.HttpRequestMessageExtensions.HasContent(this System.Net.Http.HttpRequestMessage! httpRequestMessage) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasContent(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! pattern) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasContentHeader(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! headerName) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasContentHeader(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! headerName, string! headerValue) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasHttpMethod(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! httpMethod) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasHttpMethod(this System.Net.Http.HttpRequestMessage! httpRequestMessage, System.Net.Http.HttpMethod! httpMethod) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasHttpVersion(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! httpVersion) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasHttpVersion(this System.Net.Http.HttpRequestMessage! httpRequestMessage, System.Version! httpVersion) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasMatchingUri(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! pattern, bool ignoreCase = true) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasQueryString(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! pattern) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasRequestHeader(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! headerName) -> bool
+static TestableHttpClient.HttpRequestMessageExtensions.HasRequestHeader(this System.Net.Http.HttpRequestMessage! httpRequestMessage, string! headerName, string! headerValue) -> bool
+
+TestableHttpClient.HttpResponseMessageExtensions
+static TestableHttpClient.HttpResponseMessageExtensions.HasContent(this System.Net.Http.HttpResponseMessage! httpResponseMessage) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasContent(this System.Net.Http.HttpResponseMessage! httpResponseMessage, string! pattern) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasContentHeader(this System.Net.Http.HttpResponseMessage! httpResponseMessage, string! headerName) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasContentHeader(this System.Net.Http.HttpResponseMessage! httpResponseMessage, string! headerName, string! headerValue) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasHttpStatusCode(this System.Net.Http.HttpResponseMessage! httpResponseMessage, System.Net.HttpStatusCode httpStatusCode) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasHttpVersion(this System.Net.Http.HttpResponseMessage! httpResponseMessage, System.Version! httpVersion) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasReasonPhrase(this System.Net.Http.HttpResponseMessage! httpResponseMessage, string! reasonPhrase) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasResponseHeader(this System.Net.Http.HttpResponseMessage! httpResponseMessage, string! headerName) -> bool
+static TestableHttpClient.HttpResponseMessageExtensions.HasResponseHeader(this System.Net.Http.HttpResponseMessage! httpResponseMessage, string! headerName, string! headerValue) -> bool
+
+TestableHttpClient.HttpResponseMessageBuilder
+TestableHttpClient.HttpResponseMessageBuilder.Build() -> System.Net.Http.HttpResponseMessage!
+TestableHttpClient.HttpResponseMessageBuilder.HttpResponseMessageBuilder() -> void
+TestableHttpClient.HttpResponseMessageBuilder.WithContent(System.Net.Http.HttpContent! content) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithHttpStatusCode(System.Net.HttpStatusCode statusCode) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithHttpVersion(System.Version! httpVersion) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithJsonContent(object? jsonObject) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithJsonContent(object? jsonObject, string? mediaType) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithRequestMessage(System.Net.Http.HttpRequestMessage? requestMessage) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithResponseHeader(string! header, string! value) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithResponseHeaders(System.Action<System.Net.Http.Headers.HttpResponseHeaders!>! responseHeaderBuilder) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithStringContent(string! content) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithStringContent(string! content, System.Text.Encoding? encoding) -> TestableHttpClient.HttpResponseMessageBuilder!
+TestableHttpClient.HttpResponseMessageBuilder.WithStringContent(string! content, System.Text.Encoding? encoding, string! mediaType) -> TestableHttpClient.HttpResponseMessageBuilder!

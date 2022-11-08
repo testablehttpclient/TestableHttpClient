@@ -5,7 +5,7 @@
 /// </summary>
 internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 {
-    private readonly List<string> _expectedConditions = new List<string>();
+    private readonly List<string> _expectedConditions = new();
 
     /// <summary>
     /// Construct a new HttpRequestMessageAsserter.
