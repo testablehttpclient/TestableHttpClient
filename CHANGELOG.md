@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8] - Unplanned
+## [0.8] - 2022-11-08
 ### Deprecated
 - `TestableHttpMessageHandler.SimulateTimeout` is deprecated, and can be replaced with `RespondWith(Responses.Timeout())`.
 - `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` had been deprecated, it's functionality is replaced by IResponse.
@@ -232,6 +232,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.8]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.7...v0.8
 [0.7]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.6...v0.7
 [0.6]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.5...v0.6
 [0.5]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.4...v0.5

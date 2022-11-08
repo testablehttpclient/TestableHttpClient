@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -12,7 +12,7 @@
   <PropertyGroup Condition="'$(IsTestProject)' == 'false'">
     <Version>0.0.1</Version>
     <Authors>David Perfors</Authors>
-    <Copyright>Copyright (c) 2020 David Perfors</Copyright>
+    <Copyright>Copyright (c) 2022 David Perfors</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <DevelopmentDependency>false</DevelopmentDependency>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
