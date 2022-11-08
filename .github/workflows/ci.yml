@@ -28,6 +28,7 @@ jobs:
         dotnet-version: |
           3.1.x
           6.0.x
+          7.0.x
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dotnet tools
@@ -78,6 +79,7 @@ jobs:
         dotnet-version: |
           3.1
           6.0
+          7.0
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dependencies
@@ -98,7 +100,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: |
-          6.0
+          7.0
     - uses: actions/download-artifact@v2
       with:
         name: artifacts

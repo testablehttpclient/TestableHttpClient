@@ -62,7 +62,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
             Mock.Of<DelegatingHandler>()
         };
 
-        using var client = sut.CreateClient(_ => { }, handlers);
+        using var client = sut.CreateClient(configureClient, handlers);
 
         var handler = GetPrivateHandler(client);
         var delegatingHandler1 = Assert.IsAssignableFrom<DelegatingHandler>(handler);
