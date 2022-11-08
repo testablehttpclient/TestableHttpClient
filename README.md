@@ -57,10 +57,12 @@ Check.That(testHandler).HasMadeRequestsTo("https://httpbin.org/*");
 ## Supported .NET versions
 
 TestableHttpClient is build as a netstandard2.0 library, so theoretically it can work on every .NET version that support netstandard2.0.
-However, only the following versions are being actively tested and thus supported:
+The following versions are being actively tested and thus supported:
 
+- .NET Framework 4.6 and up
 - .NET Core 3.1
 - .NET 6.0
+- .NET 7.0
 
 These versions are supported as long as Microsoft supports them, we do our best to test and support newer versions as soon as possible.
 
