@@ -34,6 +34,6 @@ jobs:
         queries: security-and-quality
         languages: csharp
     - name: Build source code
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --framework net6.0
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
