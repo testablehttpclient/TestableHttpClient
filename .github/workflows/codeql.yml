@@ -26,15 +26,14 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: |
-          3.1
-          6.0
-          7.0
+          6.0.x
+          7.0.x
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         queries: security-and-quality
         languages: csharp
     - name: Build source code
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --framework net6.0
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
