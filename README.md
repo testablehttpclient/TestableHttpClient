@@ -60,7 +60,6 @@ TestableHttpClient is build as a netstandard2.0 library, so theoretically it can
 The following versions are being actively tested and thus supported:
 
 - .NET Framework 4.6 and up
-- .NET Core 3.1
 - .NET 6.0
 - .NET 7.0
 
