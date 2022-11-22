@@ -74,7 +74,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [new RouteDefinition { Path = Value.Exact("/get") }] = StatusCode(HttpStatusCode.OK)
+                [RouteParser.Parse("/get")] = StatusCode(HttpStatusCode.OK)
             }
         };
 
@@ -96,7 +96,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [new RouteDefinition { Path = Value.Exact("/get") }] = StatusCode(HttpStatusCode.OK)
+                [RouteParser.Parse("/get")] = StatusCode(HttpStatusCode.OK)
             }
         };
 
@@ -116,7 +116,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [new RouteDefinition { Path = Value.Pattern("/delay/*") }] = StatusCode(HttpStatusCode.OK)
+                [RouteParser.Parse("/delay/*")] = StatusCode(HttpStatusCode.OK)
             }
         };
 

@@ -1,1 +1,9 @@
-﻿
+﻿static TestableHttpClient.Responses.Route(System.Action<TestableHttpClient.IRoutingResponseBuilder!>! builder) -> TestableHttpClient.IResponse!
+TestableHttpClient.IRoutingResponseBuilder
+TestableHttpClient.IRoutingResponseBuilder.Map(string! route, TestableHttpClient.IResponse! response) -> void
+TestableHttpClient.IRoutingResponseBuilder.MapFallBackResponse(TestableHttpClient.IResponse! fallBackResponse) -> void
+TestableHttpClient.Utils.RouteParserException
+TestableHttpClient.Utils.RouteParserException.RouteParserException() -> void
+TestableHttpClient.Utils.RouteParserException.RouteParserException(string? message) -> void
+TestableHttpClient.Utils.RouteParserException.RouteParserException(string? message, System.Exception? innerException) -> void
+TestableHttpClient.Utils.RouteParserException.RouteParserException(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void

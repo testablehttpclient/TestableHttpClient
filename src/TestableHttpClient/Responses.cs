@@ -79,6 +79,17 @@ public static class Responses
     /// <param name="contentType">The content type of the response, defaults to 'application/json'.</param>
     /// <returns>A response with specific content.</returns>
     public static IResponse Json(object? content, HttpStatusCode statusCode, string? contentType = null, JsonSerializerOptions? jsonSerializerOptions = null) => new JsonResponse(content, contentType) { StatusCode = statusCode, JsonSerializerOptions = jsonSerializerOptions };
+    public static IResponse Route(Action<IRoutingResponseBuilder> builder)
+    {
+        if (builder is null)
+        {
+            throw new ArgumentNullException(nameof(builder));
+        }
+
+        RoutingResponseBuilder routingResponseBuilder = new();
+        builder(routingResponseBuilder);
+        return routingResponseBuilder.RoutingResponse;
+    }
     /// <summary>
     /// Entrypoint for extensions.
     /// </summary>

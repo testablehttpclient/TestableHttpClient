@@ -17,7 +17,7 @@ internal class RoutingResponse : IResponse
     }
 
     public Dictionary<RouteDefinition, IResponse> ResponseMap { get; init; } = new();
-    public IResponse FallBackResponse { get; init; } = StatusCode(NotFound);
+    public IResponse FallBackResponse { get; internal set; } = StatusCode(NotFound);
 
     private IResponse GetResponseForRequest(Uri requestUri)
     {

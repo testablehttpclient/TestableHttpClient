@@ -168,6 +168,23 @@ public class ResponsesTests
         HttpResponse response = Assert.IsType<HttpResponse>(sut);
         Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
     }
+
+    [Fact]
+    public void Route_WithNullBuilder_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => Route(null!));
+    }
+
+    [Fact]
+    public void Route_WithNonNullBuilder_CallsBuilderAndReturnsRoutingResponse()
+    {
+        bool builderWasCalled = false;
+        void builder(IRoutingResponseBuilder _) => builderWasCalled = true;
+        IResponse result = Route(builder);
+
+        Assert.True(builderWasCalled);
+        Assert.IsType<RoutingResponse>(result);
+    }
 }
 
 internal static class TestResponseExtensions
