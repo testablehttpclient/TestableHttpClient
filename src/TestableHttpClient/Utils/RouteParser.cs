@@ -6,6 +6,11 @@ internal static class RouteParser
 {
     public static RouteDefinition Parse(string pattern)
     {
+        if (string.IsNullOrEmpty(pattern))
+        {
+            throw new RouteParserException();
+        }
+
         ReadOnlySpan<char> patternSpan = pattern.AsSpan();
         RouteDefinition routeDefinition = RouteDefinition.Any;
         int length = patternSpan.Length;
@@ -33,14 +38,19 @@ internal static class RouteParser
 
     private static Value ParseScheme(ReadOnlySpan<char> patternSpan, ref int currentPosition, int length)
     {
-        var separator = "://".AsSpan();
+        ReadOnlySpan<char> separator = "://".AsSpan();
         int beginPosition = currentPosition;
         char currentChar = patternSpan[currentPosition];
         char nextChar = patternSpan[currentPosition + 1];
 
+        if (!patternSpan.Contains(separator, StringComparison.Ordinal))
+        {
+            return Value.Any();
+        }
+
         if (currentChar == '*' && (nextChar == ':' || nextChar == '/'))
         {
-            if (nextChar == ':' && patternSpan[(currentPosition + 1)..(currentPosition + 4)].SequenceEqual(separator))
+            if (patternSpan[(currentPosition + 1)..(currentPosition + 4)].SequenceEqual(separator))
             {
                 currentPosition += 4;
             }
@@ -49,7 +59,7 @@ internal static class RouteParser
 
         bool hasWildCard = false;
 
-        while (currentChar != ':' && currentPosition != length)
+        while (currentChar != ':' && currentPosition < length)
         {
             hasWildCard = hasWildCard || currentChar == '*';
             currentChar = patternSpan[++currentPosition];
@@ -57,7 +67,7 @@ internal static class RouteParser
 
         string value = patternSpan[beginPosition..currentPosition].ToString();
 
-        if (currentChar == ':' && patternSpan[currentPosition..(currentPosition + 3)].SequenceEqual(separator))
+        if (patternSpan[currentPosition..(currentPosition + 3)].StartsWith(separator, StringComparison.Ordinal))
         {
             currentPosition += 3;
         }
@@ -73,6 +83,11 @@ internal static class RouteParser
     {
         char currentChar = patternSpan[currentPosition];
 
+        if (currentChar == '/')
+        {
+            return Value.Any();
+        }
+
         if (currentChar == '*' && (currentPosition + 1 == length || patternSpan[currentPosition + 1] == '/'))
         {
             if (currentPosition + 1 != length)
@@ -84,10 +99,14 @@ internal static class RouteParser
         int beginPosition = currentPosition;
         bool hasWildCard = false;
 
-        while (currentChar != '/' && currentPosition != length)
+        while (currentChar != '/' && currentPosition < length)
         {
             hasWildCard = hasWildCard || currentChar == '*';
-            currentChar = patternSpan[++currentPosition];
+            currentPosition++;
+            if (currentPosition < length)
+            {
+                currentChar = patternSpan[currentPosition];
+            }
         }
 
         string value = patternSpan[beginPosition..currentPosition].ToString();
@@ -100,6 +119,11 @@ internal static class RouteParser
     }
     private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition, int length)
     {
+        if (currentPosition == length)
+        {
+            return Value.Any();
+        }
+
         var pathSpan = patternSpan[currentPosition..length];
 
         return (pathSpan[0] == '/', pathSpan.IndexOf('*')) switch

@@ -7,6 +7,7 @@ public class RouteParserTests
     [InlineData("*")]
     [InlineData("*://*")]
     [InlineData("*/*")]
+    [InlineData("*://*/*")]
     public void Parse_WildCardPattern_ReturnsAnyRouteDefinition(string input)
     {
         RouteDefinition result = RouteParser.Parse(input);
@@ -36,10 +37,12 @@ public class RouteParserTests
         Assert.Equal(Value.Any(), result.Path);
     }
 
-    [Fact]
-    public void Parse_ExactHost_ReturnsRouteDefintionWithExactHost()
+    [Theory]
+    [InlineData("*://httpbin.org/*")]
+    [InlineData("*://httpbin.org")]
+    [InlineData("httpbin.org")]
+    public void Parse_ExactHost_ReturnsRouteDefintionWithExactHost(string input)
     {
-        string input = "*://httpbin.org/*";
         RouteDefinition result = RouteParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Exact("httpbin.org"), result.Host);
@@ -49,6 +52,8 @@ public class RouteParserTests
     [Theory]
     [InlineData("*://*.org/*", "*.org")]
     [InlineData("*://httpbin.*/*", "httpbin.*")]
+    [InlineData("*://*.com", "*.com")]
+    [InlineData("*.com", "*.com")]
     public void Parse_PatternHost_ReturnsRouteDefintionWithPatternHost(string input, string expectedPattern)
     {
         RouteDefinition result = RouteParser.Parse(input);
@@ -57,24 +62,34 @@ public class RouteParserTests
         Assert.Equal(Value.Any(), result.Path);
     }
 
-    [Fact]
-    public void Parse_WildCardWithCompletePath_ReturnsRouteDefintionWithExactPath()
+    [Theory]
+    [InlineData("*/", "/")]
+    [InlineData("*/get", "/get")]
+    [InlineData("/get", "/get")]
+    public void Parse_WildCardWithCompletePath_ReturnsRouteDefintionWithExactPath(string input, string expectedValue)
     {
-        string input = "*/get";
         RouteDefinition result = RouteParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
-        Assert.Equal(Value.Exact("/get"), result.Path);
+        Assert.Equal(Value.Exact(expectedValue), result.Path);
     }
 
-    [Fact]
-    public void Parse_WildCardWithPatternPath_ReturnsRouteDefintionWithPatternPath()
+    [Theory]
+    [InlineData("*/get/*", "/get/*")]
+    [InlineData("/post/*", "/post/*")]
+    public void Parse_WildCardWithPatternPath_ReturnsRouteDefintionWithPatternPath(string input, string expectedPattern)
     {
-        string input = "*/get/*";
         RouteDefinition result = RouteParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
-        Assert.Equal(Value.Pattern("/get/*"), result.Path);
+        Assert.Equal(Value.Pattern(expectedPattern), result.Path);
+    }
+
+    [Theory]
+    [InlineData("")]
+    public void Parse_InvalidInput_ThrowsRouteParserException(string input)
+    {
+        Assert.Throws<RouteParserException>(() => RouteParser.Parse(input));
     }
 }
 
