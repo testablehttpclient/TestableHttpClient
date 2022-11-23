@@ -87,6 +87,7 @@ public class RouteParserTests
 
     [Theory]
     [InlineData("")]
+    [InlineData("://")]
     public void Parse_InvalidInput_ThrowsRouteParserException(string input)
     {
         Assert.Throws<RouteParserException>(() => RouteParser.Parse(input));

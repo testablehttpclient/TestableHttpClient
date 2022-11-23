@@ -38,41 +38,37 @@ internal static class RouteParser
     private static Value ParseScheme(ReadOnlySpan<char> patternSpan, ref int currentPosition, int length)
     {
         ReadOnlySpan<char> separator = "://".AsSpan();
+        var separatorIndex = patternSpan.IndexOf(separator, StringComparison.Ordinal);
+
+        if (separatorIndex == -1)
+        {
+            return Value.Any();
+        }
+
+        if (separatorIndex == 0)
+        {
+            throw new RouteParserException("No scheme specified, this is not a valid url.");
+        }
+
         int beginPosition = currentPosition;
-        char currentChar = patternSpan[currentPosition];
-        char nextChar = patternSpan[currentPosition + 1];
-
-        if (!patternSpan.Contains(separator, StringComparison.Ordinal))
-        {
-            return Value.Any();
-        }
-
-        if (currentChar == '*' && (nextChar == ':' || nextChar == '/'))
-        {
-            if (patternSpan[(currentPosition + 1)..(currentPosition + 4)].SequenceEqual(separator))
-            {
-                currentPosition += 4;
-            }
-            return Value.Any();
-        }
 
         bool hasWildCard = false;
 
-        while (currentChar != ':' && currentPosition < length)
+        while (currentPosition != separatorIndex)
         {
+            char currentChar = patternSpan[currentPosition];
             hasWildCard = hasWildCard || currentChar == '*';
-            currentChar = patternSpan[++currentPosition];
+            currentPosition++;
         }
 
         string value = patternSpan[beginPosition..currentPosition].ToString();
 
-        if (patternSpan[currentPosition..(currentPosition + 3)].StartsWith(separator, StringComparison.Ordinal))
-        {
-            currentPosition += 3;
-        }
+        // We have reached the separator (://) so let's skip it.
+        currentPosition += 3;
 
         return hasWildCard switch
         {
+            true when separatorIndex == 1 => Value.Any(),
             true => Value.Pattern(value),
             false => Value.Exact(value)
         };
@@ -123,7 +119,7 @@ internal static class RouteParser
             return Value.Any();
         }
 
-        var pathSpan = patternSpan[currentPosition..length];
+        ReadOnlySpan<char> pathSpan = patternSpan[currentPosition..length];
 
         return (pathSpan[0] == '/', pathSpan.IndexOf('*')) switch
         {
