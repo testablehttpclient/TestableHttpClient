@@ -23,7 +23,6 @@ internal static class RouteParser
         }
         else
         {
-            System.Diagnostics.Debugger.Break();
             Value scheme = ParseScheme(patternSpan, ref currentPosition, length);
             Value host = ParseHost(patternSpan, ref currentPosition, length);
             Value path = ParsePath(patternSpan, ref currentPosition, length);

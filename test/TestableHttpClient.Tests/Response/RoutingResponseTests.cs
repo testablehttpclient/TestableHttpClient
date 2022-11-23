@@ -85,7 +85,7 @@ public class RoutingResponseTests
 
     [Theory]
     [InlineData("https://httpbin.org/post")]
-    [InlineData("https://httpbin.org/Get")]
+    [InlineData("https://httpbin.org/getsomething")]
     public async Task ExecuteAsync_ConfiguredExactPathMatch_ReturnsFallBackResponseForNoMatch(string requestUri)
     {
         using HttpRequestMessage requestMessage = new(HttpMethod.Get, requestUri);

@@ -2,6 +2,15 @@
 TestableHttpClient.IRoutingResponseBuilder
 TestableHttpClient.IRoutingResponseBuilder.Map(string! route, TestableHttpClient.IResponse! response) -> void
 TestableHttpClient.IRoutingResponseBuilder.MapFallBackResponse(TestableHttpClient.IResponse! fallBackResponse) -> void
+TestableHttpClient.RoutingOptions
+TestableHttpClient.RoutingOptions.HostCaseInsensitive.get -> bool
+TestableHttpClient.RoutingOptions.HostCaseInsensitive.set -> void
+TestableHttpClient.RoutingOptions.PathCaseInsensitive.get -> bool
+TestableHttpClient.RoutingOptions.PathCaseInsensitive.set -> void
+TestableHttpClient.RoutingOptions.RoutingOptions() -> void
+TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.get -> bool
+TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.set -> void
+TestableHttpClient.TestableHttpMessageHandlerOptions.RoutingOptions.get -> TestableHttpClient.RoutingOptions!
 TestableHttpClient.Utils.RouteParserException
 TestableHttpClient.Utils.RouteParserException.RouteParserException() -> void
 TestableHttpClient.Utils.RouteParserException.RouteParserException(string? message) -> void

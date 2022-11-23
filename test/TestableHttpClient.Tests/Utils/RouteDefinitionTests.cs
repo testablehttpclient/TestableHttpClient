@@ -4,12 +4,14 @@ namespace TestableHttpClient.Tests.Utils;
 
 public class RouteDefinitionTests
 {
+    private readonly RoutingOptions defaultRoutingOptions = new();
+
     [Theory]
     [InlineData("https://httpbin.com/get")]
     [InlineData("http://httpbin.com/post")]
     public void Matches_AnyRouteDefinition_MatchesAllUrls(string uriString)
     {
-        bool result = RouteDefinition.Any.Matches(new Uri(uriString));
+        bool result = RouteDefinition.Any.Matches(new Uri(uriString), defaultRoutingOptions);
         Assert.True(result);
     }
 
@@ -20,8 +22,8 @@ public class RouteDefinitionTests
     {
         RouteDefinition route = new() { Scheme = Value.Exact(expectedScheme) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get")));
-        Assert.False(route.Matches(new Uri("http://httpbin.com/get")));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("http://httpbin.com/get"), defaultRoutingOptions));
     }
 
     [Theory]
@@ -31,9 +33,9 @@ public class RouteDefinitionTests
     {
         RouteDefinition route = new() { Scheme = Value.Pattern(expectedSchemePattern) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get")));
-        Assert.True(route.Matches(new Uri("http://httpbin.com/get")));
-        Assert.False(route.Matches(new Uri("ftp://httpbin.com/get")));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("http://httpbin.com/get"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("ftp://httpbin.com/get"), defaultRoutingOptions));
     }
 
     [Theory]
@@ -43,8 +45,8 @@ public class RouteDefinitionTests
     {
         RouteDefinition route = new() { Host = Value.Exact(expectedHost) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get")));
-        Assert.False(route.Matches(new Uri("https://httpbin.org/get")));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("https://httpbin.org/get"), defaultRoutingOptions));
     }
 
     [Theory]
@@ -54,9 +56,9 @@ public class RouteDefinitionTests
     {
         RouteDefinition route = new() { Host = Value.Pattern(expectedHostPattern) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get")));
-        Assert.True(route.Matches(new Uri("https://httpbin.org/get")));
-        Assert.False(route.Matches(new Uri("https://httpbin/get")));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("https://httpbin.org/get"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("https://httpbin/get"), defaultRoutingOptions));
     }
 
     [Fact]
@@ -64,11 +66,12 @@ public class RouteDefinitionTests
     {
         RouteDefinition route = new() { Path = Value.Exact("/get") };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get")));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get?query=test")));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/get/status")));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/GET")));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/post")));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get?query=test"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("https://httpbin.com/get/status"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/GET"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("https://httpbin.com/GET"), new() { PathCaseInsensitive = false }));
+        Assert.False(route.Matches(new Uri("https://httpbin.com/post"), defaultRoutingOptions));
     }
 
     [Fact]
@@ -76,10 +79,11 @@ public class RouteDefinitionTests
     {
         RouteDefinition route = new() { Path = Value.Pattern("/get*") };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get")));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get?query=test")));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get/status")));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/GET")));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/post")));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get?query=test"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/get/status"), defaultRoutingOptions));
+        Assert.True(route.Matches(new Uri("https://httpbin.com/GET"), defaultRoutingOptions));
+        Assert.False(route.Matches(new Uri("https://httpbin.com/GET"), new() { PathCaseInsensitive = false }));
+        Assert.False(route.Matches(new Uri("https://httpbin.com/post"), defaultRoutingOptions));
     }
 }
