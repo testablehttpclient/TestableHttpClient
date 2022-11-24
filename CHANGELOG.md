@@ -8,6 +8,9 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Removed
 - Official support for .NET Core 3.1 has been removed. This means we no longer provide a specific version for .NET Core 3.0 and we no longer test this version explicitly. Since we support .NET Standard 2.0, the library could still be used.
 
+### Added
+- Added `Responses.Route` that allows changing the response based on the url. The url supports patterns.
+
 ## [0.8] - 2022-11-08
 ### Deprecated
 - `TestableHttpMessageHandler.SimulateTimeout` is deprecated, and can be replaced with `RespondWith(Responses.Timeout())`.

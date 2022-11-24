@@ -66,35 +66,37 @@ internal static class RouteParser
 
     private static Value ParseHost(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
-        char currentChar = patternSpan[currentPosition];
+        var remainingSpan = patternSpan[currentPosition..];
+        int indexOfWildCard = remainingSpan.IndexOf('*');
+        if (indexOfWildCard > -1)
+        {
+            indexOfWildCard += currentPosition;
+        }
 
-        if (currentChar == '/')
+        int indexOfPathSeparator = remainingSpan.IndexOf('/');
+        if (indexOfPathSeparator > -1)
+        {
+            indexOfPathSeparator += currentPosition;
+        }
+        else
+        {
+            indexOfPathSeparator = patternSpan.Length;
+        }
+
+        if (indexOfPathSeparator == currentPosition)
         {
             return Value.Any();
         }
 
-        if (currentChar == '*' && (currentPosition + 1 == patternSpan.Length || patternSpan[currentPosition + 1] == '/'))
+        if (indexOfWildCard == currentPosition && indexOfPathSeparator == currentPosition + 1)
         {
-            if (currentPosition + 1 != patternSpan.Length)
-            {
-                currentPosition++;
-            }
-            return Value.Any();
-        }
-        int beginPosition = currentPosition;
-        bool hasWildCard = false;
-
-        while (currentChar != '/' && currentPosition < patternSpan.Length)
-        {
-            hasWildCard = hasWildCard || currentChar == '*';
             currentPosition++;
-            if (currentPosition < patternSpan.Length)
-            {
-                currentChar = patternSpan[currentPosition];
-            }
+            return Value.Any();
         }
 
-        string value = patternSpan[beginPosition..currentPosition].ToString();
+        bool hasWildCard = -1 < indexOfWildCard && indexOfWildCard < indexOfPathSeparator;
+        string value = patternSpan[currentPosition..indexOfPathSeparator].ToString();
+        currentPosition = indexOfPathSeparator;
 
         return hasWildCard switch
         {
