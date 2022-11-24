@@ -13,19 +13,18 @@ internal static class RouteParser
 
         ReadOnlySpan<char> patternSpan = pattern.AsSpan();
         RouteDefinition routeDefinition = RouteDefinition.Any;
-        int length = patternSpan.Length;
         int currentPosition = 0;
         char currentChar = patternSpan[currentPosition];
 
-        if (currentChar == '*' && length == 1)
+        if (currentChar == '*' && patternSpan.Length == 1)
         {
             return routeDefinition;
         }
         else
         {
-            Value scheme = ParseScheme(patternSpan, ref currentPosition, length);
-            Value host = ParseHost(patternSpan, ref currentPosition, length);
-            Value path = ParsePath(patternSpan, ref currentPosition, length);
+            Value scheme = ParseScheme(patternSpan, ref currentPosition);
+            Value host = ParseHost(patternSpan, ref currentPosition);
+            Value path = ParsePath(patternSpan, ref currentPosition);
             return new RouteDefinition
             {
                 Scheme = scheme,
@@ -35,7 +34,7 @@ internal static class RouteParser
         }
     }
 
-    private static Value ParseScheme(ReadOnlySpan<char> patternSpan, ref int currentPosition, int length)
+    private static Value ParseScheme(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
         ReadOnlySpan<char> separator = "://".AsSpan();
         var separatorIndex = patternSpan.IndexOf(separator, StringComparison.Ordinal);
@@ -74,7 +73,7 @@ internal static class RouteParser
         };
     }
 
-    private static Value ParseHost(ReadOnlySpan<char> patternSpan, ref int currentPosition, int length)
+    private static Value ParseHost(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
         char currentChar = patternSpan[currentPosition];
 
@@ -83,9 +82,9 @@ internal static class RouteParser
             return Value.Any();
         }
 
-        if (currentChar == '*' && (currentPosition + 1 == length || patternSpan[currentPosition + 1] == '/'))
+        if (currentChar == '*' && (currentPosition + 1 == patternSpan.Length || patternSpan[currentPosition + 1] == '/'))
         {
-            if (currentPosition + 1 != length)
+            if (currentPosition + 1 != patternSpan.Length)
             {
                 currentPosition++;
             }
@@ -94,11 +93,11 @@ internal static class RouteParser
         int beginPosition = currentPosition;
         bool hasWildCard = false;
 
-        while (currentChar != '/' && currentPosition < length)
+        while (currentChar != '/' && currentPosition < patternSpan.Length)
         {
             hasWildCard = hasWildCard || currentChar == '*';
             currentPosition++;
-            if (currentPosition < length)
+            if (currentPosition < patternSpan.Length)
             {
                 currentChar = patternSpan[currentPosition];
             }
@@ -112,21 +111,24 @@ internal static class RouteParser
             false => Value.Exact(value)
         };
     }
-    private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition, int length)
+
+    private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
-        if (currentPosition == length)
-        {
-            return Value.Any();
-        }
+        ReadOnlySpan<char> pathSpan = currentPosition == patternSpan.Length ? ReadOnlySpan<char>.Empty : patternSpan[currentPosition..];
 
-        ReadOnlySpan<char> pathSpan = patternSpan[currentPosition..length];
-
-        return (pathSpan[0] == '/', pathSpan.IndexOf('*')) switch
+        return pathSpan switch
         {
-            (true, -1) => Value.Exact(pathSpan.ToString()),
-            (true, 1) => Value.Any(),
-            (true, _) => Value.Pattern(pathSpan.ToString()),
-            (false, _) => Value.Any()
+            [] => Value.Any(),
+            ['*'] => Value.Any(),
+            ['/'] => Value.Exact(pathSpan.ToString()),
+            ['/', '*'] => Value.Any(),
+            ['/', ..] when pathSpan.IndexOf('*') > 0 => Value.Pattern(pathSpan.ToString()),
+            ['/', ..] => Value.Exact(pathSpan.ToString()),
+#if NET7_0_OR_GREATER
+            _ => throw new System.Diagnostics.UnreachableException()
+#else
+            _ => throw new InvalidOperationException()
+#endif
         };
     }
 }
