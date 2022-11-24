@@ -37,7 +37,7 @@ internal static class RouteParser
     private static Value ParseScheme(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
         ReadOnlySpan<char> separator = "://".AsSpan();
-        var separatorIndex = patternSpan.IndexOf(separator, StringComparison.Ordinal);
+        int separatorIndex = patternSpan.IndexOf(separator, StringComparison.Ordinal);
 
         if (separatorIndex == -1)
         {
@@ -49,21 +49,12 @@ internal static class RouteParser
             throw new RouteParserException("No scheme specified, this is not a valid url.");
         }
 
+        int indexOfWildcard = patternSpan.IndexOf('*');
+        bool hasWildCard = -1 < indexOfWildcard && indexOfWildcard < separatorIndex;
+
         int beginPosition = currentPosition;
-
-        bool hasWildCard = false;
-
-        while (currentPosition != separatorIndex)
-        {
-            char currentChar = patternSpan[currentPosition];
-            hasWildCard = hasWildCard || currentChar == '*';
-            currentPosition++;
-        }
-
-        string value = patternSpan[beginPosition..currentPosition].ToString();
-
-        // We have reached the separator (://) so let's skip it.
-        currentPosition += 3;
+        currentPosition = separatorIndex + 3;
+        string value = patternSpan[beginPosition..separatorIndex].ToString();
 
         return hasWildCard switch
         {

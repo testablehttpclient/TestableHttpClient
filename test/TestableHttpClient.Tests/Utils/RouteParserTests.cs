@@ -26,6 +26,16 @@ public class RouteParserTests
         Assert.Equal(Value.Any(), result.Path);
     }
 
+    [Fact]
+    public void Parse_ExactSchemeWithExactHost_ReturnsRouteDefinitionWithExactSchemeAndHost()
+    {
+        string input = "https://httpbin.org";
+        RouteDefinition result = RouteParser.Parse(input);
+        Assert.Equal(Value.Exact("https"), result.Scheme);
+        Assert.Equal(Value.Exact("httpbin.org"), result.Host);
+        Assert.Equal(Value.Any(), result.Path);
+    }
+
     [Theory]
     [InlineData("http*://*", "http*")]
     [InlineData("*s://*", "*s")]
