@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TestableHttpClient.NFluent\TestableHttpClient.NFluent.csproj" />
     <ProjectReference Include="..\..\src\TestableHttpClient\TestableHttpClient.csproj" />
   </ItemGroup>
 

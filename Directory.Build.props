@@ -34,6 +34,6 @@
   <ItemGroup Condition="'$(IsTestProject)' == 'false'">
     <None Include="$(MSBuildThisFileDirectory)/images/icon.png" Pack="true" PackagePath="" />
     <None Include="$(MSBuildThisFileDirectory)/LICENSE.md" Pack="true" PackagePath="" />
-    <None Include="$(MSBuildProjectDirectory)/README.md" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildThisFileDirectory)/README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
