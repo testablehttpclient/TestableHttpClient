@@ -16,7 +16,7 @@ public class UsingIHttpClientFactory
     {
         // Create TestableHttpMessageHandler as usual.
         using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        testableHttpMessageHandler.RespondWith(NoContent());
+        testableHttpMessageHandler.RespondWith(StatusCode(HttpStatusCode.NoContent));
 
         var services = new ServiceCollection();
         // Register an HttpClient and configure the TestableHttpMessageHandler as the PrimaryHttpMessageHandler
@@ -76,7 +76,7 @@ public class UsingIHttpClientFactory
     {
         // Create TestableHttpMessageHandler as usual.
         using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        testableHttpMessageHandler.RespondWith(Responses.NoContent());
+        testableHttpMessageHandler.RespondWith(StatusCode(HttpStatusCode.NoContent));
 
         // Setup a TestServer
         using var host = await new HostBuilder()

@@ -27,14 +27,6 @@ public class ResponsesTests
     }
 
     [Fact]
-    public void NoContent_ReturnsStatusCodeResponse()
-    {
-        var sut = NoContent();
-        var response = Assert.IsType<HttpResponse>(sut);
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-    }
-
-    [Fact]
     public void Delayed_WithTimeSpan_WithNullResponse_ThrowsArgumentNullException()
     {
         var exception = Assert.Throws<ArgumentNullException>(() => Delayed(null!, TimeSpan.FromSeconds(1)));
@@ -44,7 +36,7 @@ public class ResponsesTests
     [Fact]
     public void Delayed_WithTimeSpan_ReturnsDelayedResponse()
     {
-        var sut = Delayed(NoContent(), TimeSpan.FromSeconds(1));
+        var sut = Delayed(StatusCode(HttpStatusCode.NoContent), TimeSpan.FromSeconds(1));
         Assert.IsType<DelayedResponse>(sut);
     }
 
@@ -58,7 +50,7 @@ public class ResponsesTests
     [Fact]
     public void Delayed_ReturnsDelayedResponse()
     {
-        var sut = Delayed(NoContent(), 500);
+        var sut = Delayed(StatusCode(HttpStatusCode.NoContent), 500);
         Assert.IsType<DelayedResponse>(sut);
     }
 
@@ -71,13 +63,13 @@ public class ResponsesTests
     [Fact]
     public void Configured_NullConfigurationAction_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => Configured(NoContent(), null!));
+        Assert.Throws<ArgumentNullException>(() => Configured(StatusCode(HttpStatusCode.NoContent), null!));
     }
 
     [Fact]
     public void Configured_ReturnsConfiguredResponse()
     {
-        var sut = Configured(NoContent(), x => { });
+        var sut = Configured(StatusCode(HttpStatusCode.NoContent), x => { });
         Assert.IsType<ConfiguredResponse>(sut);
     }
 
@@ -97,7 +89,7 @@ public class ResponsesTests
     [Fact]
     public void Sequenced_ReturnsSequencedResponse()
     {
-        var sut = Sequenced(NoContent());
+        var sut = Sequenced(StatusCode(HttpStatusCode.NoContent));
         Assert.IsType<SequencedResponse>(sut);
     }
 
@@ -167,6 +159,23 @@ public class ResponsesTests
         var sut = Extensions.ServiceUnavailable();
         HttpResponse response = Assert.IsType<HttpResponse>(sut);
         Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+    }
+
+    [Fact]
+    public void Route_WithNullBuilder_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => Route(null!));
+    }
+
+    [Fact]
+    public void Route_WithNonNullBuilder_CallsBuilderAndReturnsRoutingResponse()
+    {
+        bool builderWasCalled = false;
+        void builder(IRoutingResponseBuilder _) => builderWasCalled = true;
+        IResponse result = Route(builder);
+
+        Assert.True(builderWasCalled);
+        Assert.IsType<RoutingResponse>(result);
     }
 }
 

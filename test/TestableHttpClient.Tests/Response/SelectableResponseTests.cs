@@ -25,7 +25,7 @@ public class SelectableResponseTests
         IResponse SelectResponse(HttpResponseContext _)
         {
             wasCalled = true;
-            return NoContent();
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         SelectableResponse sut = new(SelectResponse);

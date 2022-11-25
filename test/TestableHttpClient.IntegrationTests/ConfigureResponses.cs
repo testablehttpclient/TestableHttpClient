@@ -73,12 +73,12 @@ public class ConfigureResponses
         using var httpClient = new HttpClient(testHandler);
         var urls = new[]
         {
-                "http://httpbin.org/status/200",
-                "http://httpbin.org/status/201",
-                "http://httpbin.org/status/400",
-                "http://httpbin.org/status/401",
-                "http://httpbin.org/status/503",
-            };
+            "http://httpbin.org/status/200",
+            "http://httpbin.org/status/201",
+            "http://httpbin.org/status/400",
+            "http://httpbin.org/status/401",
+            "http://httpbin.org/status/503",
+        };
 
         foreach (var url in urls)
         {
@@ -114,6 +114,32 @@ public class ConfigureResponses
     }
 
     [Fact]
+    public async Task UsingTestHandlerWithRoute_AllowsForRoutingUsecases()
+    {
+        using var testHandler = new TestableHttpMessageHandler();
+
+        testHandler.RespondWith(Route(builder =>
+        {
+            builder.Map("http://*", StatusCode(HttpStatusCode.Redirect));
+            builder.Map("/status/200", StatusCode(HttpStatusCode.OK));
+            builder.Map("/status/400", StatusCode(HttpStatusCode.BadRequest));
+        }));
+
+        using var httpClient = new HttpClient(testHandler);
+        var response = await httpClient.GetAsync("http://httpbin/status/200");
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+
+        response = await httpClient.GetAsync("https://httpbin/status/200");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        response = await httpClient.GetAsync("https://httpbin.org/status/400");
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        response = await httpClient.GetAsync("https://httpbin.org/status/500");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task SimulateTimeout_WillThrowExceptionSimulatingTheTimeout()
     {
         using var testHandler = new TestableHttpMessageHandler();
@@ -130,7 +156,7 @@ public class ConfigureResponses
         testHandler.RespondWith(Sequenced(
             StatusCode(HttpStatusCode.OK),
             StatusCode(HttpStatusCode.Unauthorized),
-            NoContent(),
+            StatusCode(HttpStatusCode.NoContent),
             StatusCode(HttpStatusCode.NotFound)
             ));
 
@@ -167,7 +193,7 @@ public class ConfigureResponses
     public async Task YsingTestHandlerWithConfiguredResponses_WillConfigureTHeResponse()
     {
         using TestableHttpMessageHandler testHandler = new();
-        testHandler.RespondWith(Configured(NoContent(), x => x.Headers.Add("server", "test")));
+        testHandler.RespondWith(Configured(StatusCode(HttpStatusCode.NoContent), x => x.Headers.Add("server", "test")));
 
         using HttpClient httpClient = new(testHandler);
         var response = await httpClient.GetAsync("http://httpbin.org/anything");
