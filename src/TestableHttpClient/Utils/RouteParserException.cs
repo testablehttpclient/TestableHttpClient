@@ -1,8 +1,11 @@
-﻿namespace TestableHttpClient.Utils;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TestableHttpClient.Utils;
 
 /// <summary>
 /// Exception thrown when the route string can not be parsed correctly.
 /// </summary>
+[SuppressMessage("SonarSource", "S3925", Justification = "These exceptions don't need to be serialized.")]
 public sealed class RouteParserException : Exception
 {
     /// <summary>

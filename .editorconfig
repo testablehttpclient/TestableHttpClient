@@ -94,6 +94,3 @@ dotnet_style_namespace_match_folder = true
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = silent
-
-# S3925: Update this implementation of 'ISerializable' to conform to the recommended serialization pattern.
-dotnet_diagnostic.S3925.severity = silent

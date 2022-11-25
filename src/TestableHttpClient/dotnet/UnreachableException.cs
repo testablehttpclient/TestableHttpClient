@@ -5,6 +5,7 @@ namespace System.Diagnostics;
 /// Exception thrown when the program executes an instruction that was thought to be unreachable.
 /// </summary>
 [CodeAnalysis.SuppressMessage("ApiDesign", "RS0016:Add public types and members to the declared API", Justification = "Not our API.")]
+[CodeAnalysis.SuppressMessage("SonarSource", "S3925", Justification = "These exceptions don't need to be serialized.")]
 public sealed class UnreachableException : Exception
 {
     /// <summary>

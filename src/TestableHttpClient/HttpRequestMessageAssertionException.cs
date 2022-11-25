@@ -1,8 +1,11 @@
-﻿namespace TestableHttpClient;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TestableHttpClient;
 
 /// <summary>
 /// Exception thrown when the request assertion failed.
 /// </summary>
+[SuppressMessage("SonarSource", "S3925", Justification = "These exceptions don't need to be serialized.")]
 public sealed class HttpRequestMessageAssertionException : Exception
 {
     /// <summary>
