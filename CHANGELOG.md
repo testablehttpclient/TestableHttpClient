@@ -4,13 +4,15 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.9] - unplanned
+## [0.9] - 2022-11-25
 ### Deprecated
 - `Responses.NoContent()` has been deprecated, since it doesn't fit well with the rest of the API. Please use `Responses.StatusCode(HttpStatusCode.NoContent)` instead.
 
 ### Removed
 - Official support for .NET Core 3.1 has been removed. This means we no longer provide a specific version for .NET Core 3.0 and we no longer test this version explicitly. Since we support .NET Standard 2.0, the library could still be used.
 - TestableHttpClient.NFluent has been moved to it's own repository.
+- `HttpRequestMessageExtensions` have been made internal.
+- `HttpResponseMessageExtensions` have been removed, since it not needed for making HttpClients testable.
 
 ### Added
 - Added `Responses.Route` that allows changing the response based on the url. The url supports patterns.
@@ -243,6 +245,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.9]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.8...v0.9
 [0.8]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.7...v0.8
 [0.7]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.6...v0.7
 [0.6]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.5...v0.6

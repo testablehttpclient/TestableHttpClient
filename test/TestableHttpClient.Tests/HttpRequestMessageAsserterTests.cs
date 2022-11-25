@@ -93,7 +93,6 @@ public class HttpRequestMessageAsserterTests
     }
 
     [Fact]
-    [Obsolete("Testing obsolete code")]
     public void WithFilter_WithDisposedRequestContent_DoesThrowSensibleException()
     {
         StringContent content = new("");
@@ -101,7 +100,7 @@ public class HttpRequestMessageAsserterTests
         HttpRequestMessage request = new() { Content = content };
         HttpRequestMessageAsserter sut = new(new[] { request });
 
-        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x.HasContent("test"), 1, "disposed check"));
+        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContent("test", 1));
         Assert.Equal("Can't validate requests, because one or more requests have content that is already disposed.", exception.Message);
     }
 }

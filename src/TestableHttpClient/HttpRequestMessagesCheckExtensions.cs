@@ -42,9 +42,7 @@ public static class HttpRequestMessagesCheckExtensions
             condition = $"uri pattern '{pattern}'";
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasMatchingUri(pattern, ignoreCase), expectedNumberOfRequests, condition);
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -83,9 +81,7 @@ public static class HttpRequestMessagesCheckExtensions
             _ => $"querystring pattern '{pattern}'"
         };
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasQueryString(pattern), expectedNumberOfRequests, condition);
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -117,9 +113,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(httpMethod));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasHttpMethod(httpMethod), expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -151,9 +145,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(httpVersion));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasHttpVersion(httpVersion), expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -187,9 +179,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(headerName));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasRequestHeader(headerName), expectedNumberOfRequests, $"request header '{headerName}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -230,9 +220,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(headerValue));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue), expectedNumberOfRequests, $"request header '{headerName}' and value '{headerValue}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -266,9 +254,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(headerName));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasContentHeader(headerName), expectedNumberOfRequests, $"content header '{headerName}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -309,9 +295,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(headerValue));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasContentHeader(headerName, headerValue), expectedNumberOfRequests, $"content header '{headerName}' and value '{headerValue}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -343,9 +327,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(headerName));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasRequestHeader(headerName) || x.HasContentHeader(headerName), expectedNumberOfRequests, $"header '{headerName}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -384,9 +366,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(headerValue));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue) || x.HasContentHeader(headerName, headerValue), expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -420,9 +400,7 @@ public static class HttpRequestMessagesCheckExtensions
             throw new ArgumentNullException(nameof(pattern));
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasContent(pattern), expectedNumberOfRequests, $"content '{pattern}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -472,9 +450,7 @@ public static class HttpRequestMessagesCheckExtensions
 
         var jsonString = JsonSerializer.Serialize(jsonObject, jsonSerializerOptions ?? check.Options.JsonSerializerOptions);
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), expectedNumberOfRequests, $"json content '{jsonString}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     /// <summary>
@@ -511,8 +487,6 @@ public static class HttpRequestMessagesCheckExtensions
         using var content = new FormUrlEncodedContent(nameValueCollection);
         var contentString = content.ReadAsStringAsync().Result;
 
-#pragma warning disable CS0618 // Type or member is obsolete
         return check.WithFilter(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), expectedNumberOfRequests, $"form url encoded content '{contentString}'");
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 }
