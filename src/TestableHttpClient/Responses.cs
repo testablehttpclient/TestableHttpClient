@@ -79,6 +79,12 @@ public static class Responses
     /// <param name="contentType">The content type of the response, defaults to 'application/json'.</param>
     /// <returns>A response with specific content.</returns>
     public static IResponse Json(object? content, HttpStatusCode statusCode, string? contentType = null, JsonSerializerOptions? jsonSerializerOptions = null) => new JsonResponse(content, contentType) { StatusCode = statusCode, JsonSerializerOptions = jsonSerializerOptions };
+    /// <summary>
+    /// Create a response for several routes.
+    /// </summary>
+    /// <param name="builder">The route builder that can be used to configure multiple routes.</param>
+    /// <returns>A response with routing capabilities.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the builder paramater is null.</exception>
     public static IResponse Route(Action<IRoutingResponseBuilder> builder)
     {
         if (builder is null)

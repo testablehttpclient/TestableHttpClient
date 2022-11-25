@@ -8,23 +8,26 @@ internal static class RouteParser
     {
         if (string.IsNullOrEmpty(pattern))
         {
-            throw new RouteParserException();
+            throw new RouteParserException("An empty route isn't valid.");
         }
 
         ReadOnlySpan<char> patternSpan = pattern.AsSpan();
-        RouteDefinition routeDefinition = RouteDefinition.Any;
-        int currentPosition = 0;
-        char currentChar = patternSpan[currentPosition];
 
-        if (currentChar == '*' && patternSpan.Length == 1)
+        if (patternSpan is ['*'])
         {
-            return routeDefinition;
+            return RouteDefinition.Any;
         }
         else
         {
+            int currentPosition = 0;
             Value scheme = ParseScheme(patternSpan, ref currentPosition);
+            patternSpan = patternSpan[currentPosition..];
+            currentPosition = 0;
             Value host = ParseHost(patternSpan, ref currentPosition);
-            Value path = ParsePath(patternSpan, ref currentPosition);
+            patternSpan = patternSpan[currentPosition..];
+
+            Value path = ParsePath(patternSpan);
+
             return new RouteDefinition
             {
                 Scheme = scheme,
@@ -68,17 +71,9 @@ internal static class RouteParser
     {
         var remainingSpan = patternSpan[currentPosition..];
         int indexOfWildCard = remainingSpan.IndexOf('*');
-        if (indexOfWildCard > -1)
-        {
-            indexOfWildCard += currentPosition;
-        }
 
         int indexOfPathSeparator = remainingSpan.IndexOf('/');
-        if (indexOfPathSeparator > -1)
-        {
-            indexOfPathSeparator += currentPosition;
-        }
-        else
+        if (indexOfPathSeparator <= -1)
         {
             indexOfPathSeparator = patternSpan.Length;
         }
@@ -105,23 +100,16 @@ internal static class RouteParser
         };
     }
 
-    private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition)
+    private static Value ParsePath(ReadOnlySpan<char> patternSpan)
     {
-        ReadOnlySpan<char> pathSpan = currentPosition == patternSpan.Length ? ReadOnlySpan<char>.Empty : patternSpan[currentPosition..];
-
-        return pathSpan switch
+        return patternSpan switch
         {
             [] => Value.Any(),
-            ['*'] => Value.Any(),
-            ['/'] => Value.Exact(pathSpan.ToString()),
+            ['/'] => Value.Exact(patternSpan.ToString()),
             ['/', '*'] => Value.Any(),
-            ['/', ..] when pathSpan.IndexOf('*') > 0 => Value.Pattern(pathSpan.ToString()),
-            ['/', ..] => Value.Exact(pathSpan.ToString()),
-#if NET7_0_OR_GREATER
+            ['/', ..] when patternSpan.IndexOf('*') > 0 => Value.Pattern(patternSpan.ToString()),
+            ['/', ..] => Value.Exact(patternSpan.ToString()),
             _ => throw new System.Diagnostics.UnreachableException()
-#else
-            _ => throw new InvalidOperationException()
-#endif
         };
     }
 }

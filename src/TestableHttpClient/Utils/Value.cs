@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient.Utils;
+﻿using System.Diagnostics;
+
+namespace TestableHttpClient.Utils;
 
 internal abstract record Value
 {
@@ -9,11 +11,13 @@ internal abstract record Value
     internal abstract bool Matches(string value, bool ignoreCase);
 }
 
+[DebuggerDisplay("Any value")]
 file record AnyValue : Value
 {
     internal override bool Matches(string value, bool ignoreCase) => true;
 }
 
+[DebuggerDisplay("Exact value: {expectedValue}")]
 file record ExactValue : Value
 {
     private readonly string expectedValue;
@@ -21,6 +25,7 @@ file record ExactValue : Value
     internal override bool Matches(string value, bool ignoreCase) => expectedValue.Equals(value, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 }
 
+[DebuggerDisplay("Pattern value: {pattern}")]
 file record PatternValue : Value
 {
     private readonly string pattern;

@@ -1,4 +1,5 @@
 ﻿static TestableHttpClient.Responses.Route(System.Action<TestableHttpClient.IRoutingResponseBuilder!>! builder) -> TestableHttpClient.IResponse!
+TestableHttpClient.HttpRequestMessageAssertionException.HttpRequestMessageAssertionException(string! message) -> void
 TestableHttpClient.IRoutingResponseBuilder
 TestableHttpClient.IRoutingResponseBuilder.Map(string! route, TestableHttpClient.IResponse! response) -> void
 TestableHttpClient.IRoutingResponseBuilder.MapFallBackResponse(TestableHttpClient.IResponse! fallBackResponse) -> void

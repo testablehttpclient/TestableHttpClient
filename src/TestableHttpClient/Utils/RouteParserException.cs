@@ -1,22 +1,15 @@
-﻿using System.Runtime.Serialization;
+﻿namespace TestableHttpClient.Utils;
 
-namespace TestableHttpClient.Utils;
-
-public class RouteParserException : Exception
+/// <summary>
+/// Exception thrown when the route string can not be parsed correctly.
+/// </summary>
+public sealed class RouteParserException : Exception
 {
-    public RouteParserException()
-    {
-    }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RouteParserException"/> class with a specified error message.
+    /// </summary>
+    /// <param name="message">The error message that explains the reason for the exception.</param>
     public RouteParserException(string? message) : base(message)
-    {
-    }
-
-    public RouteParserException(string? message, Exception? innerException) : base(message, innerException)
-    {
-    }
-
-    protected RouteParserException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
 }

@@ -1,18 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Serialization;
+﻿namespace TestableHttpClient;
 
-namespace TestableHttpClient;
-
-[Serializable]
-[SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Not intended for public usage, but could be used for catching.")]
+/// <summary>
+/// Exception thrown when the request assertion failed.
+/// </summary>
 public sealed class HttpRequestMessageAssertionException : Exception
 {
-    internal HttpRequestMessageAssertionException(string message) : base(message)
-    {
-    }
-
-    [ExcludeFromCodeCoverage]
-    private HttpRequestMessageAssertionException(SerializationInfo info, StreamingContext context) : base(info, context)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HttpRequestMessageAssertionException"/> class with a specified error message.
+    /// </summary>
+    /// <param name="message">The error message that explains the reason for the exception.</param>
+    public HttpRequestMessageAssertionException(string message) : base(message)
     {
     }
 }
