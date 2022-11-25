@@ -3,8 +3,7 @@
 /// <summary>
 /// A set of static methods for checking values on a <see cref="HttpRequestMessage"/>.
 /// </summary>
-[Obsolete("This class is not intended for public use and will be marked internal in the next release.")]
-public static class HttpRequestMessageExtensions
+internal static class HttpRequestMessageExtensions
 {
     /// <summary>
     /// Determines whether a specific HttpVersion is set on a request.
@@ -12,8 +11,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct version on.</param>
     /// <param name="httpVersion">The expected version.</param>
     /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, Version httpVersion)
+    internal static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, Version httpVersion)
     {
         if (httpRequestMessage == null)
         {
@@ -34,8 +32,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct version on.</param>
     /// <param name="httpVersion">The expected version.</param>
     /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, string httpVersion)
+    internal static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, string httpVersion)
     {
         if (httpRequestMessage == null)
         {
@@ -56,8 +53,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
     /// <param name="httpMethod">The expected method.</param>
     /// <returns>true when the HttpMethod matches; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, HttpMethod httpMethod)
+    internal static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, HttpMethod httpMethod)
     {
         if (httpRequestMessage == null)
         {
@@ -78,8 +74,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
     /// <param name="httpMethod">The expected method.</param>
     /// <returns>true when the HttpMethod matches; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, string httpMethod)
+    internal static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, string httpMethod)
     {
         if (httpRequestMessage == null)
         {
@@ -101,8 +96,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the request header on.</param>
     /// <param name="headerName">The name of the header to locate on the request.</param>
     /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName)
+    internal static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName)
     {
         if (httpRequestMessage == null)
         {
@@ -125,8 +119,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="headerName">The name of the header to locate on the request.</param>
     /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
     /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
+    internal static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
     {
         if (httpRequestMessage == null)
         {
@@ -153,8 +146,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the content header on.</param>
     /// <param name="headerName">The name of the header to locate on the request content.</param>
     /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName)
+    internal static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName)
     {
         if (httpRequestMessage == null)
         {
@@ -182,8 +174,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="headerName">The name of the header to locate on the request content.</param>
     /// <param name="headerValue">The value the header should have. Wildcard is supported.</param>
     /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
+    internal static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
     {
         if (httpRequestMessage == null)
         {
@@ -214,8 +205,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct uri on.</param>
     /// <param name="pattern">A pattern to match with the request uri, supports * as wildcards.</param>
     /// <returns>true when the request uri matches the pattern; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasMatchingUri(this HttpRequestMessage httpRequestMessage, string pattern, bool ignoreCase = true)
+    internal static bool HasMatchingUri(this HttpRequestMessage httpRequestMessage, string pattern, bool ignoreCase = true)
     {
         if (httpRequestMessage == null)
         {
@@ -241,8 +231,7 @@ public static class HttpRequestMessageExtensions
     /// </summary>
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check for content.</param>
     /// <returns>true when the request has content; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasContent(this HttpRequestMessage httpRequestMessage)
+    internal static bool HasContent(this HttpRequestMessage httpRequestMessage)
     {
         if (httpRequestMessage == null)
         {
@@ -258,8 +247,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct content on.</param>
     /// <param name="pattern">A pattern to match the request content, supports * as wildcards.</param>
     /// <returns>true when the request content matches the pattern; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasContent(this HttpRequestMessage httpRequestMessage, string pattern)
+    internal static bool HasContent(this HttpRequestMessage httpRequestMessage, string pattern)
     {
         if (httpRequestMessage == null)
         {
@@ -292,8 +280,7 @@ public static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct request uir querystring on.</param>
     /// <param name="pattern">A pattern to match the request uri querystring, supports * as wildcards.</param>
     /// <returns>true when the request uri querystring matches the pattern; otherwise, false.</returns>
-    [Obsolete("This method is not intended for public use and will be marked internal in the next release.")]
-    public static bool HasQueryString(this HttpRequestMessage httpRequestMessage, string pattern)
+    internal static bool HasQueryString(this HttpRequestMessage httpRequestMessage, string pattern)
     {
         if (httpRequestMessage == null)
         {

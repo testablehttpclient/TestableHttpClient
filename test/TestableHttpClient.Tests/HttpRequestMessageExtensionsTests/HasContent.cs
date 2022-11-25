@@ -1,6 +1,5 @@
 ﻿namespace TestableHttpClient.Tests;
 
-[Obsolete("Testing obsolete methods")]
 public partial class HttpRequestMessageExtensionsTests
 {
     [Fact]
