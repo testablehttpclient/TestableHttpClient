@@ -156,7 +156,7 @@ public class ConfigureResponses
         testHandler.RespondWith(Sequenced(
             StatusCode(HttpStatusCode.OK),
             StatusCode(HttpStatusCode.Unauthorized),
-            NoContent(),
+            StatusCode(HttpStatusCode.NoContent),
             StatusCode(HttpStatusCode.NotFound)
             ));
 
@@ -193,7 +193,7 @@ public class ConfigureResponses
     public async Task YsingTestHandlerWithConfiguredResponses_WillConfigureTHeResponse()
     {
         using TestableHttpMessageHandler testHandler = new();
-        testHandler.RespondWith(Configured(NoContent(), x => x.Headers.Add("server", "test")));
+        testHandler.RespondWith(Configured(StatusCode(HttpStatusCode.NoContent), x => x.Headers.Add("server", "test")));
 
         using HttpClient httpClient = new(testHandler);
         var response = await httpClient.GetAsync("http://httpbin.org/anything");

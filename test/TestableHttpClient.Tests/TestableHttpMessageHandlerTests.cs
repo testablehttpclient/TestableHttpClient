@@ -114,7 +114,7 @@ public class TestableHttpMessageHandlerTests
     public async Task RespondWith_GivenResponse_ReturnsResponse()
     {
         using TestableHttpMessageHandler sut = new();
-        sut.RespondWith(Responses.NoContent());
+        sut.RespondWith(Responses.StatusCode(HttpStatusCode.NoContent));
 
         using var client = new HttpClient(sut);
         var response = await client.GetAsync("https://example.com");
@@ -147,7 +147,7 @@ public class TestableHttpMessageHandlerTests
         {
 #pragma warning disable CA1849 // Call async methods when in an async method
             Task.Delay(300, CancellationToken.None).GetAwaiter().GetResult();
-            Responses.NoContent().ExecuteAsync(context, CancellationToken.None).GetAwaiter().GetResult();
+            Responses.StatusCode(HttpStatusCode.NoContent).ExecuteAsync(context, CancellationToken.None).GetAwaiter().GetResult();
 #pragma warning restore CA1849 // Call async methods when in an async method
             return Task.CompletedTask;
         }

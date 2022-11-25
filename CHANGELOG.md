@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.9] - unplanned
+### Deprecated
+- `Responses.NoContent()` has been deprecated, since it doesn't fit well with the rest of the API. Please use `Responses.StatusCode(HttpStatusCode.NoContent)` instead.
+
 ### Removed
 - Official support for .NET Core 3.1 has been removed. This means we no longer provide a specific version for .NET Core 3.0 and we no longer test this version explicitly. Since we support .NET Standard 2.0, the library could still be used.
 

@@ -55,6 +55,7 @@ public static class Responses
     /// Create a response with the NoContent status code.
     /// </summary>
     /// <returns>An HttpResponse with the configured StatusCode.</returns>
+    [Obsolete("Please use StatusCode(HttpStatusCode.NoContent) instead.")]
     public static IResponse NoContent() => StatusCode(HttpStatusCode.NoContent);
     /// <summary>
     /// Create a response with some text content.

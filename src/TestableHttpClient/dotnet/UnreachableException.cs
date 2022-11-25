@@ -4,7 +4,8 @@ namespace System.Diagnostics;
 /// <summary>
 /// Exception thrown when the program executes an instruction that was thought to be unreachable.
 /// </summary>
-internal sealed class UnreachableException : Exception
+[CodeAnalysis.SuppressMessage("ApiDesign", "RS0016:Add public types and members to the declared API", Justification = "Not our API.")]
+public sealed class UnreachableException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="System.Diagnostics.UnreachableException"/> class with the default error message.
