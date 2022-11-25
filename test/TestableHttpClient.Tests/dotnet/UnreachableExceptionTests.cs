@@ -1,11 +1,13 @@
-﻿namespace TestableHttpClient.Tests;
+﻿using System.Diagnostics;
 
-public class RouteParserExceptionTests
+namespace TestableHttpClient.Tests.dotnet;
+
+public class UnreachableExceptionTests
 {
     [Fact]
     public void DefaultConstructor_SetsDefaultMessage()
     {
-        HttpRequestMessageAssertionException exception = new();
+        UnreachableException exception = new();
 
         Assert.NotEmpty(exception.Message);
     }
@@ -14,7 +16,7 @@ public class RouteParserExceptionTests
     public void Constructor_WithMessage_SetsMessage()
     {
         string message = "My exception";
-        HttpRequestMessageAssertionException exception = new(message);
+        UnreachableException exception = new(message);
 
         Assert.Equal(message, exception.Message);
     }
@@ -24,7 +26,7 @@ public class RouteParserExceptionTests
     {
         string message = "My exception";
         NotSupportedException innerException = new();
-        HttpRequestMessageAssertionException exception = new(message, innerException);
+        UnreachableException exception = new(message, innerException);
 
         Assert.Equal(message, exception.Message);
         Assert.Same(innerException, exception.InnerException);
