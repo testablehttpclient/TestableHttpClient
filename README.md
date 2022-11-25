@@ -2,22 +2,13 @@
 
 ![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/CI)
 
-Using HttpClient in code that is unit tested is seen as rather difficult, these libraries aims to make it easier to assert the calls that are made via an HttpClient and to make assertions on the HttpResponseMessages.
-
-This repository contains multiple related libraries. The separation is mainly made in order to separate dependencies and not to force a specific library to the user.
-
-|Libary|Description|Main dependency|Nuget|
-|------|-----------|---------------|-----|
-|TestableHttpClient|Basic library for mocking HttpMessageHandler and to make manual assertions on HttpResponseMessage.|None|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient)|
-|TestableHttpClient.NFluent|Library containing [NFluent](https://github.com/tpierrain/NFluent) checks for HttpResponseMessage and TestableHttpMessageHandler.|NFluent|![Nuget](https://img.shields.io/nuget/v/TestableHttpClient.NFluent)|
+Creating unittest for code that uses `HttpClient` can be difficult to test. It requires a custom HttpMessageHandler or a mocked version. TestableHttpClient provides a testable version of HttpMessageHandler and several helper functions to configure the `TestableHttpHandler` and several ways to assert which requests were made.
 
 ## How to install
 
-The libraries are released as a NuGet packages and can be installed via the NuGet manager in Visual Studio or by running one of the following commands:
-
+TestableHttpClient is released as a NuGet packages and can be installed via the NuGet manager in VisualStudio or by running the following command on the command line:
 ```
 dotnet add package TestableHttpClient
-dotnet add package TestableHttpClient.NFluent
 ```
 
 ## How to use TestableHttpClient
@@ -32,27 +23,6 @@ testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 ```
 
 More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
-
-## How to use TestableHttpClient.NFluent to test responses
-
-```csharp
-var client = new HttpClient();
-
-var result = await httpClient.GetAsync("https://httpbin.org/status/200");
-
-Check.That(result).HasStatusCode(HttpStatusCode.OK).And.HasContentHeader("Content-Type", "*/json*");
-```
-
-## How to use TestableHttpClient.NFluent to which requests are made
-
-```csharp
-var testHandler = new TestableHttpMessageHandler();
-var httpClient = new HttpClient(testHandler); // or testHandler.CreateClient();
-
-var result = await httpClient.GetAsync("http://httpbin.org/status/200");
-
-Check.That(testHandler).HasMadeRequestsTo("https://httpbin.org/*");
-```
 
 ## Supported .NET versions
 

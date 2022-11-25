@@ -58,13 +58,15 @@ public class UsingIHttpClientFactory
         using var githubClient = httpClientFactory.CreateClient("github");
         // And use it.
         var result = await githubClient.GetAsync("https://github.com/api/users");
-        Check.That(result).HasResponseHeader("Server", "github").And.HasHttpStatusCode(HttpStatusCode.OK);
+        Assert.Equal("github", result.Headers.Server.ToString());
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
         // Create another named HttpClient
         using var httpbinClient = httpClientFactory.CreateClient("httpbin");
         // And use it...
         result = await httpbinClient.GetAsync("https://httpbin.com/get");
-        Check.That(result).HasResponseHeader("Server", "httpbin").And.HasHttpStatusCode(HttpStatusCode.NotFound);
+        Assert.Equal("httpbin", result.Headers.Server.ToString());
+        Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
 
         // Now assert every TestableHttpMessageHandlers to make sure we made the requests.
         testableGithubHandler.ShouldHaveMadeRequestsTo("https://github.com/*");
