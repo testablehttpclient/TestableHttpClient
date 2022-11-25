@@ -56,7 +56,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// <param name="response">The response that should be created.</param>
     /// <remarks>By default each request will receive a new response, however this is dependend on the implementation.</remarks>
     /// <example>
-    /// testableHttpMessageHander.RespondWith(Responses.NoContent());
+    /// testableHttpMessageHander.RespondWith(Responses.StatusCode(HttpStatusCode.OK));
     /// </example>
     public void RespondWith(IResponse response)
     {
