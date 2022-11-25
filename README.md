@@ -1,6 +1,6 @@
 # TestableHttpClient
 
-![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/CI)
+![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/CI) ![Nuget](https://img.shields.io/nuget/v/TestableHttpClient)
 
 Creating unittest for code that uses `HttpClient` can be difficult to test. It requires a custom HttpMessageHandler or a mocked version. TestableHttpClient provides a testable version of HttpMessageHandler and several helper functions to configure the `TestableHttpHandler` and several ways to assert which requests were made.
 
@@ -13,9 +13,21 @@ dotnet add package TestableHttpClient
 
 ## How to use TestableHttpClient
 
+The following code block shows the basic use case for asserting that certain requests are made:
 ```csharp
-var testHandler = new TestableHttpMessageHandler();
-var httpClient = new HttpClient(testHandler); // or testHandler.CreateClient();
+TestableHttpMessageHandler testHandler = new();
+HttpClient httpClient = new(testHandler); // or testHandler.CreateClient();
+
+var result = await httpClient.GetAsync("http://httpbin.org/status/200");
+
+testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
+```
+
+The default response is an empty response message with a 200 OK StatusCode, in order to return real content the response need to be configured:
+```csharp
+TestableHttpMessageHandler testHandler = new();
+testHandler.RespondWith(Responses.Json(new { Hello: "World" }));
+HttpClient httpClient = new(testHandler); // or testHandler.CreateClient();
 
 var result = await httpClient.GetAsync("http://httpbin.org/status/200");
 
@@ -29,7 +41,7 @@ More examples can be found in the [IntegrationTests project](test/TestableHttpCl
 TestableHttpClient is build as a netstandard2.0 library, so theoretically it can work on every .NET version that support netstandard2.0.
 The following versions are being actively tested and thus supported:
 
-- .NET Framework 4.6 and up
+- .NET Framework 4.6, 4.7 and 4.8
 - .NET 6.0
 - .NET 7.0
 
