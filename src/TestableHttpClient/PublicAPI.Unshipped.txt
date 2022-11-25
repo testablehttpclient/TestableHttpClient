@@ -16,5 +16,5 @@ TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.set -> void
 TestableHttpClient.TestableHttpMessageHandlerOptions.RoutingOptions.get -> TestableHttpClient.RoutingOptions!
 TestableHttpClient.Utils.RouteParserException
 TestableHttpClient.Utils.RouteParserException.RouteParserException() -> void
+TestableHttpClient.Utils.RouteParserException.RouteParserException(string! message) -> void
 TestableHttpClient.Utils.RouteParserException.RouteParserException(string! message, System.Exception! innerException) -> void
-TestableHttpClient.Utils.RouteParserException.RouteParserException(string? message) -> void
