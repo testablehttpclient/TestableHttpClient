@@ -33,24 +33,6 @@ public class ConfigureResponses
     }
 
     [Fact]
-    [Obsolete("Use ConfiguredResponse or a custom response instead.")]
-    public async Task UsingTestHandlerWithCustomResponseUsingBuilder_ReturnsCustomResponse()
-    {
-        using var testHandler = new TestableHttpMessageHandler();
-        testHandler.RespondWith(response =>
-        {
-            response.WithHttpStatusCode(HttpStatusCode.Created)
-                    .WithStringContent("HttpClient testing is easy");
-        });
-
-        using var httpClient = new HttpClient(testHandler);
-        var result = await httpClient.GetAsync("http://httpbin.org/status/201");
-
-        Assert.Equal(HttpStatusCode.Created, result.StatusCode);
-        Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
-    }
-
-    [Fact]
     public async Task UsingTestHandlerWithMultipleCustomRepsonse_ReturnsLastCustomResponse()
     {
         using var testHandler = new TestableHttpMessageHandler();
