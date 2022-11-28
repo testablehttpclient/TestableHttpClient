@@ -23,14 +23,20 @@ internal static class UriPatternParser
             currentPosition = 0;
             Value host = ParseHost(patternSpan, ref currentPosition);
             patternSpan = patternSpan[currentPosition..];
+            currentPosition = 0;
 
-            Value path = ParsePath(patternSpan);
+            Value path = ParsePath(patternSpan, ref currentPosition);
+            patternSpan = patternSpan[currentPosition..];
+            currentPosition = 0;
+
+            Value query = ParseQuery(patternSpan);
 
             return new UriPattern
             {
                 Scheme = scheme,
                 Host = host,
-                Path = path
+                Path = path,
+                Query = query,
             };
         }
     }
@@ -67,10 +73,16 @@ internal static class UriPatternParser
 
     private static Value ParseHost(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
-        var remainingSpan = patternSpan[currentPosition..];
-        int indexOfWildCard = remainingSpan.IndexOf('*');
+        int indexOfWildCard = patternSpan.IndexOf('*');
 
-        int indexOfPathSeparator = remainingSpan.IndexOf('/');
+        int indexOfPathSeparator = patternSpan.IndexOf('/');
+        int indexOfQuerySeparator = patternSpan.IndexOf('?');
+
+        if(indexOfQuerySeparator > -1 && (indexOfPathSeparator == -1 || indexOfQuerySeparator < indexOfPathSeparator))
+        {
+            throw new UriPatternParserException("invalid queryParameter.");
+        }
+
         if (indexOfPathSeparator <= -1)
         {
             indexOfPathSeparator = patternSpan.Length;
@@ -98,15 +110,39 @@ internal static class UriPatternParser
         };
     }
 
-    private static Value ParsePath(ReadOnlySpan<char> patternSpan)
+    private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition)
+    {
+        int indexOfQuestionMark = patternSpan.IndexOf('?');
+        if (indexOfQuestionMark == 0)
+        {
+            throw new UriPatternParserException("Unexpected begin of query pattern.");
+        }
+        if (indexOfQuestionMark == -1)
+        {
+            indexOfQuestionMark = patternSpan.Length;
+        }
+        currentPosition = indexOfQuestionMark;
+        var pathSpan = patternSpan[..indexOfQuestionMark];
+        return pathSpan switch
+        {
+            [] => Value.Any(),
+            ['/'] => Value.Exact(pathSpan.ToString()),
+            ['/', '*'] => Value.Any(),
+            ['/', ..] when pathSpan.IndexOf('*') > 0 => Value.Pattern(pathSpan.ToString()),
+            ['/', ..] => Value.Exact(pathSpan.ToString()),
+            _ => throw new System.Diagnostics.UnreachableException()
+        };
+    }
+
+    private static Value ParseQuery(ReadOnlySpan<char> patternSpan)
     {
         return patternSpan switch
         {
             [] => Value.Any(),
-            ['/'] => Value.Exact(patternSpan.ToString()),
-            ['/', '*'] => Value.Any(),
-            ['/', ..] when patternSpan.IndexOf('*') > 0 => Value.Pattern(patternSpan.ToString()),
-            ['/', ..] => Value.Exact(patternSpan.ToString()),
+            ['?'] => throw new UriPatternParserException("There are no query parameters."),
+            ['?', '*'] => Value.Any(),
+            ['?', ..] when patternSpan.IndexOf('*') > 0 => Value.Pattern(patternSpan.ToString()),
+            ['?', ..] => Value.Exact(patternSpan.ToString()),
             _ => throw new System.Diagnostics.UnreachableException()
         };
     }

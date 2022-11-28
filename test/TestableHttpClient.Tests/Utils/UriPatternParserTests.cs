@@ -8,12 +8,14 @@ public class UriPatternParserTests
     [InlineData("*://*")]
     [InlineData("*/*")]
     [InlineData("*://*/*")]
+    [InlineData("*://*/*?*")]
     public void Parse_WildCardPattern_ReturnsAnyUriPattern(string input)
     {
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
         Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Fact]
@@ -24,6 +26,7 @@ public class UriPatternParserTests
         Assert.Equal(Value.Exact("https"), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
         Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Fact]
@@ -34,6 +37,7 @@ public class UriPatternParserTests
         Assert.Equal(Value.Exact("https"), result.Scheme);
         Assert.Equal(Value.Exact("httpbin.org"), result.Host);
         Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Theory]
@@ -45,9 +49,11 @@ public class UriPatternParserTests
         Assert.Equal(Value.Pattern(expectedPattern), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
         Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Theory]
+    [InlineData("*://httpbin.org/*?*")]
     [InlineData("*://httpbin.org/*")]
     [InlineData("*://httpbin.org")]
     [InlineData("httpbin.org")]
@@ -57,6 +63,7 @@ public class UriPatternParserTests
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Exact("httpbin.org"), result.Host);
         Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Theory]
@@ -70,18 +77,21 @@ public class UriPatternParserTests
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Pattern(expectedPattern), result.Host);
         Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Theory]
     [InlineData("*/", "/")]
     [InlineData("*/get", "/get")]
     [InlineData("/get", "/get")]
+    [InlineData("/get?*", "/get")]
     public void Parse_WildCardWithCompletePath_ReturnsUriPatternWithExactPath(string input, string expectedValue)
     {
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
         Assert.Equal(Value.Exact(expectedValue), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
     }
 
     [Theory]
@@ -93,11 +103,38 @@ public class UriPatternParserTests
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
         Assert.Equal(Value.Pattern(expectedPattern), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
+    }
+
+    [Theory]
+    [InlineData("/*?query=true", "?query=true")]
+    public void Parse_ExactQuery_ReturnsUriPatternWithExactQuery(string input, string expectedValue)
+    {
+        UriPattern result = UriPatternParser.Parse(input);
+        Assert.Equal(Value.Any(), result.Scheme);
+        Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Exact(expectedValue), result.Query);
+    }
+
+    [Theory]
+    [InlineData("/*?query=*", "?query=*")]
+    [InlineData("/*?*=true", "?*=true")]
+    public void Parse_PatternQuery_ReturnsUriPatternWithPatternQuery(string input, string expectedPattern)
+    {
+        UriPattern result = UriPatternParser.Parse(input);
+        Assert.Equal(Value.Any(), result.Scheme);
+        Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Pattern(expectedPattern), result.Query);
     }
 
     [Theory]
     [InlineData("")]
     [InlineData("://")]
+    [InlineData("/?")]
+    [InlineData("?")]
+    [InlineData("httpbin.com?query=*")]
     public void Parse_InvalidInput_ThrowsUriPatternParserException(string input)
     {
         Assert.Throws<UriPatternParserException>(() => UriPatternParser.Parse(input));

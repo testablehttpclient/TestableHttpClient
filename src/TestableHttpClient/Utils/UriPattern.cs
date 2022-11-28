@@ -7,10 +7,12 @@ internal class UriPattern
     public Value Scheme { get; init; } = Value.Any();
     public Value Host { get; init; } = Value.Any();
     public Value Path { get; init; } = Value.Any();
+    public Value Query { get; init; } = Value.Any();
 
     public bool Matches(Uri requestUri, RoutingOptions routingOptions) =>
         Scheme.Matches(requestUri.Scheme, routingOptions.SchemeCaseInsensitive) &&
         Host.Matches(requestUri.Host, routingOptions.HostCaseInsensitive) &&
-        Path.Matches(requestUri.AbsolutePath, routingOptions.PathCaseInsensitive);
+        Path.Matches(requestUri.AbsolutePath, routingOptions.PathCaseInsensitive) &&
+        Query.Matches(requestUri.Query, true);
 }
 

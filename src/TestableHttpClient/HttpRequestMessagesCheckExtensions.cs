@@ -40,7 +40,15 @@ public static class HttpRequestMessagesCheckExtensions
             condition = $"uri pattern '{pattern}'";
         }
 
-        return check.WithFilter(x => x.HasMatchingUri(pattern, ignoreCase), expectedNumberOfRequests, condition);
+        UriPattern uriPattern = UriPatternParser.Parse(pattern);
+        var options = new RoutingOptions
+        {
+            HostCaseInsensitive = ignoreCase,
+            PathCaseInsensitive = ignoreCase,
+            SchemeCaseInsensitive = ignoreCase
+        };
+
+        return check.WithFilter(x => x.RequestUri is not null && uriPattern.Matches(x.RequestUri, options), expectedNumberOfRequests, condition);
     }
 
     /// <summary>
