@@ -103,7 +103,7 @@ static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, bool ignoreCase, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 
-TestableHttpClient.Utils.RouteParserException
-TestableHttpClient.Utils.RouteParserException.RouteParserException() -> void
-TestableHttpClient.Utils.RouteParserException.RouteParserException(string! message) -> void
-TestableHttpClient.Utils.RouteParserException.RouteParserException(string! message, System.Exception! innerException) -> void
+TestableHttpClient.Utils.UriPatternParserException
+TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException() -> void
+TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException(string! message) -> void
+TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException(string! message, System.Exception! innerException) -> void

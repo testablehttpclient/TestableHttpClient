@@ -16,7 +16,7 @@ internal class RoutingResponse : IResponse
         return response.ExecuteAsync(context, cancellationToken);
     }
 
-    public Dictionary<RouteDefinition, IResponse> ResponseMap { get; init; } = new();
+    public Dictionary<UriPattern, IResponse> ResponseMap { get; init; } = new();
     public IResponse FallBackResponse { get; internal set; } = StatusCode(NotFound);
 
     private IResponse GetResponseForRequest(Uri requestUri, RoutingOptions routingOptions)

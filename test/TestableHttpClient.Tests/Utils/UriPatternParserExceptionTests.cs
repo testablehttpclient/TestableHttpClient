@@ -2,12 +2,12 @@
 
 namespace TestableHttpClient.Tests.Utils;
 
-public class RouteParserExceptionTests
+public class UriPatternParserExceptionTests
 {
     [Fact]
     public void DefaultConstructor_SetsDefaultMessage()
     {
-        RouteParserException exception = new();
+        UriPatternParserException exception = new();
 
         Assert.NotEmpty(exception.Message);
     }
@@ -16,7 +16,7 @@ public class RouteParserExceptionTests
     public void Constructor_WithMessage_SetsMessage()
     {
         string message = "My exception";
-        RouteParserException exception = new(message);
+        UriPatternParserException exception = new(message);
 
         Assert.Equal(message, exception.Message);
     }
@@ -26,7 +26,7 @@ public class RouteParserExceptionTests
     {
         string message = "My exception";
         NotSupportedException innerException = new();
-        RouteParserException exception = new(message, innerException);
+        UriPatternParserException exception = new(message, innerException);
 
         Assert.Equal(message, exception.Message);
         Assert.Same(innerException, exception.InnerException);

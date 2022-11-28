@@ -54,7 +54,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [RouteDefinition.Any] = StatusCode(HttpStatusCode.OK)
+                [UriPattern.Any] = StatusCode(HttpStatusCode.OK)
             }
         };
 
@@ -74,7 +74,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [RouteParser.Parse("/get")] = StatusCode(HttpStatusCode.OK)
+                [UriPatternParser.Parse("/get")] = StatusCode(HttpStatusCode.OK)
             }
         };
 
@@ -96,7 +96,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [RouteParser.Parse("/get")] = StatusCode(HttpStatusCode.OK)
+                [UriPatternParser.Parse("/get")] = StatusCode(HttpStatusCode.OK)
             }
         };
 
@@ -116,7 +116,7 @@ public class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [RouteParser.Parse("/delay/*")] = StatusCode(HttpStatusCode.OK)
+                [UriPatternParser.Parse("/delay/*")] = StatusCode(HttpStatusCode.OK)
             }
         };
 

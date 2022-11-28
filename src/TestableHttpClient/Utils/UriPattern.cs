@@ -1,8 +1,8 @@
 ﻿namespace TestableHttpClient.Utils;
 
-internal class RouteDefinition
+internal class UriPattern
 {
-    public static RouteDefinition Any { get; } = new RouteDefinition();
+    public static UriPattern Any { get; } = new UriPattern();
 
     public Value Scheme { get; init; } = Value.Any();
     public Value Host { get; init; } = Value.Any();
@@ -13,3 +13,4 @@ internal class RouteDefinition
         Host.Matches(requestUri.Host, routingOptions.HostCaseInsensitive) &&
         Path.Matches(requestUri.AbsolutePath, routingOptions.PathCaseInsensitive);
 }
+

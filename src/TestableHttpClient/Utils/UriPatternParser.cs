@@ -1,19 +1,19 @@
 ﻿namespace TestableHttpClient.Utils;
 
-internal static class RouteParser
+internal static class UriPatternParser
 {
-    public static RouteDefinition Parse(string pattern)
+    public static UriPattern Parse(string pattern)
     {
         if (string.IsNullOrEmpty(pattern))
         {
-            throw new RouteParserException("An empty route isn't valid.");
+            throw new UriPatternParserException("An empty route isn't valid.");
         }
 
         ReadOnlySpan<char> patternSpan = pattern.AsSpan();
 
         if (patternSpan is ['*'])
         {
-            return RouteDefinition.Any;
+            return UriPattern.Any;
         }
         else
         {
@@ -26,7 +26,7 @@ internal static class RouteParser
 
             Value path = ParsePath(patternSpan);
 
-            return new RouteDefinition
+            return new UriPattern
             {
                 Scheme = scheme,
                 Host = host,
@@ -47,7 +47,7 @@ internal static class RouteParser
 
         if (separatorIndex == 0)
         {
-            throw new RouteParserException("No scheme specified, this is not a valid url.");
+            throw new UriPatternParserException("No scheme specified, this is not a valid url.");
         }
 
         int indexOfWildcard = patternSpan.IndexOf('*');
