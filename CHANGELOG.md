@@ -4,6 +4,13 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10] - unplanned
+### Removed
+- `TestableHttpMessageHandler.SimulateTimeout` has been removed, and can be replaced with `RespondWith(Responses.Timeout())`.
+- `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` has been removed, it's functionality is replaced by IResponse.
+- `RespondWith(this TestableHttpMessageHandler, HttpResponseMessage)` has been removed, the response is modified with every call, so it doesn't work reliably and is different from how HttpClientHandler works, which creates a HttpResponseMessage for every request.
+- `HttpResponseMessageBuilder` and `RespondWith(this TestableHttpMessageHandler, HttpResponseMessageBuilder)` has been removed, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
+
 ## [0.9] - 2022-11-25
 ### Deprecated
 - `Responses.NoContent()` has been deprecated, since it doesn't fit well with the rest of the API. Please use `Responses.StatusCode(HttpStatusCode.NoContent)` instead.

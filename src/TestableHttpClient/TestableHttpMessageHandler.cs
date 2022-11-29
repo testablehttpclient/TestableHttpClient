@@ -10,7 +10,6 @@ public class TestableHttpMessageHandler : HttpMessageHandler
 {
     private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new();
     private IResponse response = new HttpResponse(HttpStatusCode.OK);
-    private Func<HttpRequestMessage, HttpResponseMessage>? responseFactory;
 
     public TestableHttpMessageHandlerOptions Options { get; } = new TestableHttpMessageHandlerOptions();
 
@@ -24,16 +23,9 @@ public class TestableHttpMessageHandler : HttpMessageHandler
         httpRequestMessages.Enqueue(request);
 
         HttpResponseMessage responseMessage;
-        if (responseFactory is not null)
-        {
-            responseMessage = responseFactory(request);
-        }
-        else
-        {
-            responseMessage = new();
-            HttpResponseContext context = new(request, responseMessage, Options);
-            await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
-        }
+        responseMessage = new();
+        HttpResponseContext context = new(request, responseMessage, Options);
+        await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
 
         if (responseMessage.RequestMessage is null)
         {
@@ -61,20 +53,5 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     public void RespondWith(IResponse response)
     {
         this.response = response ?? throw new ArgumentNullException(nameof(response));
-    }
-
-    /// <summary>
-    /// Configure a factory method that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
-    /// </summary>
-    /// <param name="handler">The <see cref="TestableHttpMessageHandler"/> that should be configured.</param>
-    /// <param name="httpResponseMessageFactory">The factory method that should be called for every request. The request is passed as a parameter to the factory method and it is expected to return a HttpResponseMessage.</param>
-    /// <remarks>By default each request will receive a new response, however this is dependend on the implementation.</remarks>
-    /// <example>
-    /// testableHttpMessageHander.RespondWith(request => new ResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
-    /// </example>
-    [Obsolete("Use a custom IResponse instead.")]
-    public void RespondWith(Func<HttpRequestMessage, HttpResponseMessage> httpResponseMessageFactory)
-    {
-        responseFactory = httpResponseMessageFactory ?? throw new ArgumentNullException(nameof(httpResponseMessageFactory));
     }
 }

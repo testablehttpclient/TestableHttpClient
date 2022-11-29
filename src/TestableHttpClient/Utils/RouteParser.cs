@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace TestableHttpClient.Utils;
+﻿namespace TestableHttpClient.Utils;
 
 internal static class RouteParser
 {
