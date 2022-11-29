@@ -1,8 +1,10 @@
-﻿namespace TestableHttpClient.Response;
+﻿using System.Collections.Concurrent;
+
+namespace TestableHttpClient.Response;
 
 internal class SequencedResponse : IResponse
 {
-    private readonly Queue<IResponse> responses;
+    private readonly ConcurrentQueue<IResponse> responses;
     private readonly IResponse _lastResponse;
     public SequencedResponse(IEnumerable<IResponse> responses)
     {
@@ -22,13 +24,6 @@ internal class SequencedResponse : IResponse
 
     private IResponse GetResponse()
     {
-        if (responses.Any())
-        {
-            return responses.Dequeue();
-        }
-        else
-        {
-            return _lastResponse;
-        }
+        return responses.TryDequeue(out var response) ? response : _lastResponse;
     }
 }
