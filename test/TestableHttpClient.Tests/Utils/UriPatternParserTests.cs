@@ -107,7 +107,7 @@ public class UriPatternParserTests
     }
 
     [Theory]
-    [InlineData("/*?query=true", "?query=true")]
+    [InlineData("/*?query=true", "query=true")]
     public void Parse_ExactQuery_ReturnsUriPatternWithExactQuery(string input, string expectedValue)
     {
         UriPattern result = UriPatternParser.Parse(input);
@@ -118,8 +118,8 @@ public class UriPatternParserTests
     }
 
     [Theory]
-    [InlineData("/*?query=*", "?query=*")]
-    [InlineData("/*?*=true", "?*=true")]
+    [InlineData("/*?query=*", "query=*")]
+    [InlineData("/*?*=true", "*=true")]
     public void Parse_PatternQuery_ReturnsUriPatternWithPatternQuery(string input, string expectedPattern)
     {
         UriPattern result = UriPatternParser.Parse(input);

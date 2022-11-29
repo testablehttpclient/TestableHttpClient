@@ -13,6 +13,6 @@ internal class UriPattern
         Scheme.Matches(requestUri.Scheme, options.SchemeCaseInsensitive) &&
         Host.Matches(requestUri.Host, options.HostCaseInsensitive) &&
         Path.Matches(requestUri.AbsolutePath, options.PathCaseInsensitive) &&
-        Query.Matches(requestUri.Query, options.QueryCaseInsensitive);
+        Query.Matches(requestUri.GetComponents(UriComponents.Query, options.DefaultQueryFormat), options.QueryCaseInsensitive);
 }
 

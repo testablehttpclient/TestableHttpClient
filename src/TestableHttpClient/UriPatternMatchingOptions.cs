@@ -25,4 +25,8 @@ public class UriPatternMatchingOptions : RoutingOptions
     /// Indicates whether or not the query parameters of an URI should be treated as case insensitive. Default: true
     /// </summary>
     public bool QueryCaseInsensitive { get; set; } = true;
+    /// <summary>
+    /// The default format that should be used for getting the query string from an URI. Default: Unescaped.
+    /// </summary>
+    public UriFormat DefaultQueryFormat { get; set; } = UriFormat.Unescaped;
 }

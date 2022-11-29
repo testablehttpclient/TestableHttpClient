@@ -200,33 +200,6 @@ internal static class HttpRequestMessageExtensions
     }
 
     /// <summary>
-    /// Determines whether the request uri matches a pattern.
-    /// </summary>
-    /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct uri on.</param>
-    /// <param name="pattern">A pattern to match with the request uri, supports * as wildcards.</param>
-    /// <returns>true when the request uri matches the pattern; otherwise, false.</returns>
-    internal static bool HasMatchingUri(this HttpRequestMessage httpRequestMessage, string pattern, bool ignoreCase = true)
-    {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (httpRequestMessage.RequestUri == null)
-        {
-            return false;
-        }
-
-        return pattern switch
-        {
-            null => throw new ArgumentNullException(nameof(pattern)),
-            "" => false,
-            "*" => true,
-            _ => StringMatcher.Matches(httpRequestMessage.RequestUri.AbsoluteUri, pattern, ignoreCase),
-        };
-    }
-
-    /// <summary>
     /// Determines whether the request has content.
     /// </summary>
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check for content.</param>
@@ -280,6 +253,7 @@ internal static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct request uir querystring on.</param>
     /// <param name="pattern">A pattern to match the request uri querystring, supports * as wildcards.</param>
     /// <returns>true when the request uri querystring matches the pattern; otherwise, false.</returns>
+    [Obsolete]
     internal static bool HasQueryString(this HttpRequestMessage httpRequestMessage, string pattern)
     {
         if (httpRequestMessage == null)

@@ -6,8 +6,9 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [0.10] - unplanned
 ### Deprecated
-- `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler, string, bool)` and `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
 - `WithRequestUri(this IHttpRequestMessagesCheck, string, bool)` and `WithRequestUri(this IHttpRequestMessagesCheck, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `WithQueryString` has been deprecated, since `ShouldHaveMadeRequestTo` and `WithRequestUri` now properly support querystrings.
 
 ### Removed
 - `TestableHttpMessageHandler.SimulateTimeout` has been removed, and can be replaced with `RespondWith(Responses.Timeout())`.
@@ -16,7 +17,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `HttpResponseMessageBuilder` and `RespondWith(this TestableHttpMessageHandler, HttpResponseMessageBuilder)` has been removed, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
 
 ### Added
-- Uri patterns now support query parameters.
+- Uri patterns now support query parameters and by default will use the unescaped values, note that the order is still important.
 
 ### Changed
 - Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.

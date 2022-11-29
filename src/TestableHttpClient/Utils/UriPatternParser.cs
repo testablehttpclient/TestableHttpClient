@@ -141,8 +141,8 @@ internal static class UriPatternParser
             [] => Value.Any(),
             ['?'] => throw new UriPatternParserException("There are no query parameters."),
             ['?', '*'] => Value.Any(),
-            ['?', ..] when patternSpan.IndexOf('*') > 0 => Value.Pattern(patternSpan.ToString()),
-            ['?', ..] => Value.Exact(patternSpan.ToString()),
+            ['?', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
+            ['?', .. var rest] => Value.Exact(rest.ToString()),
             _ => throw new System.Diagnostics.UnreachableException()
         };
     }

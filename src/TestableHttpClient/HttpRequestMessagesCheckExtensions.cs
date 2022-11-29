@@ -85,6 +85,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="pattern">The querystring pattern that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
     public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern) => WithQueryString(check, pattern, null);
 
     /// <summary>
@@ -94,6 +95,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="pattern">The querystring pattern that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
     public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithQueryString(check, pattern, (int?)expectedNumberOfRequests);
 
     private static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)

@@ -91,7 +91,7 @@ public class UriPatternTests
     [Fact]
     public void Matches_ExactQuery_MatchesAnyUrlWithThatExactQuery()
     {
-        UriPattern pattern = new() { Query = Value.Exact("?key=value") };
+        UriPattern pattern = new() { Query = Value.Exact("key=value") };
 
         Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?key=value"), defaultOptions));
         Assert.False(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
@@ -100,11 +100,22 @@ public class UriPatternTests
     [Fact]
     public void Matches_PatternQuery_MatchesAnyUrlWithMatchinQuery()
     {
-        UriPattern pattern = new() { Query = Value.Pattern("?*=value") };
+        UriPattern pattern = new() { Query = Value.Pattern("*=value") };
         Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?key=value"), defaultOptions));
         Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?key=test&query=value"), defaultOptions));
         Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?KEY=test&QUERY=value"), defaultOptions));
         Assert.False(pattern.Matches(new Uri("https://httpbin.com/get?key=query"), defaultOptions));
         Assert.False(pattern.Matches(new Uri("https://httpbin.com/get?key=test&query=VALUE"), new() { QueryCaseInsensitive = false }));
+    }
+
+    [Fact]
+    public void Matches_ExactQueryWithSpecialCharacters_MatchesAccordingToUriFormat()
+    {
+        UriPattern pattern = new() { Query = Value.Exact("email=test@example.com") };
+
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?email=test@example.com"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?email=test%40example.com"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?email=test@example.com"), new() { DefaultQueryFormat = UriFormat.UriEscaped }));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.com/get?email=test%40example.com"), new() { DefaultQueryFormat = UriFormat.UriEscaped }));
     }
 }
