@@ -36,6 +36,28 @@ testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 
 More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
 
+## Uri Patterns
+
+TestableHttpClient supports Uri patterns in several places, mainly in:
+- Response routing, where an Uri pattern is used for matching the request uri to a response
+- Assertions, where requests can be asserted against an uri pattern.
+
+The uri pattern follows a couple of rules:
+- The scheme of an uri is optional, but when given it should end with `://`. When not given `*://` is assumed.
+- credentials in the pattern (`username:password@`) is not supported, but also not explicitly removed. It will probably seen as part of the host name.
+- The host is optional when the scheme is not present.
+- The path is optional, but should start with a `/`. When `/` is given, it can be followed by a `*` to match it with any path.
+- Query parameters are optional, when given it should start with a `?`.
+
+Some examples:
+
+Uri pattern | Matches
+------------|--------
+*|Matches any URL
+\*://\*/\*?\* | Matches any URL
+/get | Matches any URL that uses the path `/get`
+http*://* | Matches any url that uses the scheme `http` or `https` (or any other scheme that starts with `http`)
+
 ## Supported .NET versions
 
 TestableHttpClient is build as a netstandard2.0 library, so theoretically it can work on every .NET version that support netstandard2.0.

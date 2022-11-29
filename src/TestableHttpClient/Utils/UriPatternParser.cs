@@ -78,7 +78,7 @@ internal static class UriPatternParser
         int indexOfPathSeparator = patternSpan.IndexOf('/');
         int indexOfQuerySeparator = patternSpan.IndexOf('?');
 
-        if(indexOfQuerySeparator > -1 && (indexOfPathSeparator == -1 || indexOfQuerySeparator < indexOfPathSeparator))
+        if (indexOfQuerySeparator > -1 && (indexOfPathSeparator == -1 || indexOfQuerySeparator < indexOfPathSeparator))
         {
             throw new UriPatternParserException("invalid queryParameter.");
         }
