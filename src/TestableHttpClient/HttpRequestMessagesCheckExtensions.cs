@@ -8,8 +8,9 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="pattern">The uri pattern that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, true, null);
+    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, null);
 
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase) => WithRequestUri(check, pattern, ignoreCase, null);
 
     /// <summary>
@@ -19,9 +20,35 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="pattern">The uri pattern that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithRequestUri(check, pattern, true, (int?)expectedNumberOfRequests);
+    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithRequestUri(check, pattern, (int?)expectedNumberOfRequests);
+
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase, int expectedNumberOfRequests) => WithRequestUri(check, pattern, ignoreCase, (int?)expectedNumberOfRequests);
 
+    private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
+    {
+        if (check == null)
+        {
+            throw new ArgumentNullException(nameof(check));
+        }
+
+        if (string.IsNullOrEmpty(pattern))
+        {
+            throw new ArgumentNullException(nameof(pattern));
+        }
+
+        var condition = string.Empty;
+        if (pattern != "*")
+        {
+            condition = $"uri pattern '{pattern}'";
+        }
+
+        UriPattern uriPattern = UriPatternParser.Parse(pattern);
+
+        return check.WithFilter(x => x.RequestUri is not null && uriPattern.Matches(x.RequestUri, check.Options.UriPatternMatchingOptions), expectedNumberOfRequests, condition);
+    }
+
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase, int? expectedNumberOfRequests)
     {
         if (check == null)

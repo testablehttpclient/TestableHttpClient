@@ -115,11 +115,12 @@ public class ShouldHaveMadeRequestsTo
     public async Task ShouldHaveMadeRequestsTo_WhenMatchingRequestsWithDifferentCaseWereMadeAndNotIgnoringCase_ThrowsException()
     {
         using var sut = new TestableHttpMessageHandler();
+        sut.Options.UriPatternMatchingOptions.PathCaseInsensitive = false;
         using var client = new HttpClient(sut);
 
         _ = await client.GetAsync(new Uri("https://Example.com/Test"));
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test", ignoreCase: false));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test"));
     }
 
     [Fact]
@@ -141,10 +142,11 @@ public class ShouldHaveMadeRequestsTo
     public async Task ShouldHaveMadeRequestsToWithNumberOfRequests_WhenMatchingRequestsWithDifferentCaseWereMadeAndNotIgnoringCase_ShouldThrowException()
     {
         using var sut = new TestableHttpMessageHandler();
+        sut.Options.UriPatternMatchingOptions.PathCaseInsensitive = false;
         using var client = new HttpClient(sut);
 
         _ = await client.GetAsync(new Uri("https://Example.com/Test"));
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test", ignoreCase: false, 1));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test", 1));
     }
 }

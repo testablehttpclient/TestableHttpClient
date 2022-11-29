@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.10] - unplanned
+### Deprecated
+- `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler, string, bool)` and `ShouldNotHaveMadeRequests(this TestableHttpMessageHandler, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `WithRequestUri(this IHttpRequestMessagesCheck, string, bool)` and `WithRequestUri(this IHttpRequestMessagesCheck, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+
 ### Removed
 - `TestableHttpMessageHandler.SimulateTimeout` has been removed, and can be replaced with `RespondWith(Responses.Timeout())`.
 - `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` has been removed, it's functionality is replaced by IResponse.
