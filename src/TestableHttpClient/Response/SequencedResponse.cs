@@ -9,7 +9,7 @@ internal class SequencedResponse : IResponse
     public SequencedResponse(IEnumerable<IResponse> responses)
     {
         this.responses = new(responses ?? throw new ArgumentNullException(nameof(responses)));
-        if (this.responses.Count == 0)
+        if (this.responses.IsEmpty)
         {
             throw new ArgumentException("Responses can't be empty.", nameof(responses));
         }

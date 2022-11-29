@@ -41,11 +41,12 @@ public static class HttpRequestMessagesCheckExtensions
         }
 
         UriPattern uriPattern = UriPatternParser.Parse(pattern);
-        var options = new RoutingOptions
+        var options = new UriPatternMatchingOptions
         {
             HostCaseInsensitive = ignoreCase,
             PathCaseInsensitive = ignoreCase,
-            SchemeCaseInsensitive = ignoreCase
+            SchemeCaseInsensitive = ignoreCase,
+            QueryCaseInsensitive = ignoreCase
         };
 
         return check.WithFilter(x => x.RequestUri is not null && uriPattern.Matches(x.RequestUri, options), expectedNumberOfRequests, condition);

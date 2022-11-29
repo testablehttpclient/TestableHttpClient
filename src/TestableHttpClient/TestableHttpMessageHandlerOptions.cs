@@ -8,5 +8,7 @@ public sealed class TestableHttpMessageHandlerOptions
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public RoutingOptions RoutingOptions { get; } = new RoutingOptions();
+    [Obsolete("Renamed to UriPatternMatchingOptions")]
+    public RoutingOptions RoutingOptions => UriPatternMatchingOptions;
+    public UriPatternMatchingOptions UriPatternMatchingOptions { get; } = new UriPatternMatchingOptions();
 }

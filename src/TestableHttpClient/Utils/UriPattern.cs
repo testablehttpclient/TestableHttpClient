@@ -9,10 +9,10 @@ internal class UriPattern
     public Value Path { get; init; } = Value.Any();
     public Value Query { get; init; } = Value.Any();
 
-    public bool Matches(Uri requestUri, RoutingOptions routingOptions) =>
-        Scheme.Matches(requestUri.Scheme, routingOptions.SchemeCaseInsensitive) &&
-        Host.Matches(requestUri.Host, routingOptions.HostCaseInsensitive) &&
-        Path.Matches(requestUri.AbsolutePath, routingOptions.PathCaseInsensitive) &&
-        Query.Matches(requestUri.Query, true);
+    public bool Matches(Uri requestUri, UriPatternMatchingOptions options) =>
+        Scheme.Matches(requestUri.Scheme, options.SchemeCaseInsensitive) &&
+        Host.Matches(requestUri.Host, options.HostCaseInsensitive) &&
+        Path.Matches(requestUri.AbsolutePath, options.PathCaseInsensitive) &&
+        Query.Matches(requestUri.Query, options.QueryCaseInsensitive);
 }
 

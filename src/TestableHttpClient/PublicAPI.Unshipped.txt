@@ -1,1 +1,5 @@
-﻿
+﻿TestableHttpClient.TestableHttpMessageHandlerOptions.UriPatternMatchingOptions.get -> TestableHttpClient.UriPatternMatchingOptions!
+TestableHttpClient.UriPatternMatchingOptions
+TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.get -> bool
+TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.set -> void
+TestableHttpClient.UriPatternMatchingOptions.UriPatternMatchingOptions() -> void
