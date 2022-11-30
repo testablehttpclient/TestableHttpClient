@@ -98,6 +98,7 @@ public static class HttpRequestMessagesCheckExtensions
     [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
     public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithQueryString(check, pattern, (int?)expectedNumberOfRequests);
 
+    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
     private static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
     {
         if (check == null)

@@ -253,7 +253,7 @@ internal static class HttpRequestMessageExtensions
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct request uir querystring on.</param>
     /// <param name="pattern">A pattern to match the request uri querystring, supports * as wildcards.</param>
     /// <returns>true when the request uri querystring matches the pattern; otherwise, false.</returns>
-    [Obsolete]
+    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
     internal static bool HasQueryString(this HttpRequestMessage httpRequestMessage, string pattern)
     {
         if (httpRequestMessage == null)
