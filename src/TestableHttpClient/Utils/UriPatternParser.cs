@@ -112,7 +112,7 @@ internal static class UriPatternParser
     private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
         int indexOfQuestionMark = patternSpan.IndexOf('?');
-        
+
         if (indexOfQuestionMark == -1)
         {
             indexOfQuestionMark = patternSpan.Length;
