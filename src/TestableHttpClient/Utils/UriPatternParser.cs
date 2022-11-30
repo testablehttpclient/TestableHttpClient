@@ -113,10 +113,7 @@ internal static class UriPatternParser
     private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition)
     {
         int indexOfQuestionMark = patternSpan.IndexOf('?');
-        if (indexOfQuestionMark == 0)
-        {
-            throw new UriPatternParserException("Unexpected begin of query pattern.");
-        }
+        
         if (indexOfQuestionMark == -1)
         {
             indexOfQuestionMark = patternSpan.Length;
