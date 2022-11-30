@@ -27,7 +27,6 @@ internal static class UriPatternParser
 
             Value path = ParsePath(patternSpan, ref currentPosition);
             patternSpan = patternSpan[currentPosition..];
-            currentPosition = 0;
 
             Value query = ParseQuery(patternSpan);
 
