@@ -9,6 +9,8 @@ public class UriPatternParserTests
     [InlineData("*/*")]
     [InlineData("*://*/*")]
     [InlineData("*://*/*?*")]
+    [InlineData("://")]
+    [InlineData("?")]
     public void Parse_WildCardPattern_ReturnsAnyUriPattern(string input)
     {
         UriPattern result = UriPatternParser.Parse(input);
@@ -56,6 +58,8 @@ public class UriPatternParserTests
     [InlineData("*://httpbin.org/*?*")]
     [InlineData("*://httpbin.org/*")]
     [InlineData("*://httpbin.org")]
+    [InlineData("//httpbin.org")]
+    [InlineData("//user:pass@httpbin.org")]
     [InlineData("httpbin.org")]
     public void Parse_ExactHost_ReturnsUriPatternWithExactHost(string input)
     {
@@ -68,6 +72,8 @@ public class UriPatternParserTests
 
     [Theory]
     [InlineData("*://*.org/*", "*.org")]
+    [InlineData("//httpbin.*/*", "httpbin.*")]
+    [InlineData("//user:pass@httpbin.*/*", "httpbin.*")]
     [InlineData("*://httpbin.*/*", "httpbin.*")]
     [InlineData("*://*.com", "*.com")]
     [InlineData("*.com", "*.com")]
@@ -81,6 +87,7 @@ public class UriPatternParserTests
     }
 
     [Theory]
+    [InlineData("/?", "/")]
     [InlineData("*/", "/")]
     [InlineData("*/get", "/get")]
     [InlineData("/get", "/get")]
@@ -131,13 +138,19 @@ public class UriPatternParserTests
 
     [Theory]
     [InlineData("")]
-    [InlineData("://")]
-    [InlineData("/?")]
-    [InlineData("?")]
-    [InlineData("httpbin.com?query=*")]
     public void Parse_InvalidInput_ThrowsUriPatternParserException(string input)
     {
         Assert.Throws<UriPatternParserException>(() => UriPatternParser.Parse(input));
+    }
+
+    [Theory]
+    [InlineData("httpbin.com/?query=*", "http://httpbin.com/?query=test", "http://httpbin.com/test?query=test")]
+    [InlineData("httpbin.com?query=*", "http://httpbin.com?query=test", "http://httpbin.com?test=query")]
+    public void RoundTripTests(string pattern, string matchingUri, string notMatchinUri)
+    {
+        UriPattern uriPattern = UriPatternParser.Parse(pattern);
+        Assert.True(uriPattern.Matches(new Uri(matchingUri), new()));
+        Assert.False(uriPattern.Matches(new Uri(notMatchinUri), new()));
     }
 }
 

@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient.Utils;
+﻿using System.Diagnostics;
+
+namespace TestableHttpClient.Utils;
 
 internal static class UriPatternParser
 {
@@ -9,137 +11,139 @@ internal static class UriPatternParser
             throw new UriPatternParserException("An empty route isn't valid.");
         }
 
-        ReadOnlySpan<char> patternSpan = pattern.AsSpan();
-
-        if (patternSpan is ['*'])
-        {
-            return UriPattern.Any;
-        }
-        else
-        {
-            int currentPosition = 0;
-            Value scheme = ParseScheme(patternSpan, ref currentPosition);
-            patternSpan = patternSpan[currentPosition..];
-            currentPosition = 0;
-            Value host = ParseHost(patternSpan, ref currentPosition);
-            patternSpan = patternSpan[currentPosition..];
-            currentPosition = 0;
-
-            Value path = ParsePath(patternSpan, ref currentPosition);
-            patternSpan = patternSpan[currentPosition..];
-
-            Value query = ParseQuery(patternSpan);
-
-            return new UriPattern
-            {
-                Scheme = scheme,
-                Host = host,
-                Path = path,
-                Query = query,
-            };
-        }
+        return ParsePattern(pattern.AsSpan());
     }
 
-    private static Value ParseScheme(ReadOnlySpan<char> patternSpan, ref int currentPosition)
+    private static UriPattern ParsePattern(ReadOnlySpan<char> patternSpan)
     {
-        ReadOnlySpan<char> separator = "://".AsSpan();
-        int separatorIndex = patternSpan.IndexOf(separator, StringComparison.Ordinal);
-
-        if (separatorIndex == -1)
+        int indexOfSchemeSeperator = Math.Max(0, patternSpan.IndexOf("://".AsSpan(), StringComparison.Ordinal));
+        ReadOnlySpan<char> schemePattern = patternSpan[0..indexOfSchemeSeperator];
+        patternSpan = patternSpan[indexOfSchemeSeperator..];
+        int indexOfFragmentSeperator = patternSpan.LastIndexOf('#');
+        if (indexOfFragmentSeperator == -1)
         {
-            return Value.Any();
+            indexOfFragmentSeperator = patternSpan.Length;
         }
 
-        if (separatorIndex == 0)
+        _ = patternSpan[indexOfFragmentSeperator..];
+        patternSpan = patternSpan[..indexOfFragmentSeperator];
+        int indexOfQuerySeperator = patternSpan.LastIndexOf('?');
+        if (indexOfQuerySeperator == -1)
         {
-            throw new UriPatternParserException("No scheme specified, this is not a valid url.");
+            indexOfQuerySeperator = patternSpan.Length;
         }
 
-        int indexOfWildcard = patternSpan.IndexOf('*');
-        bool hasWildCard = -1 < indexOfWildcard && indexOfWildcard < separatorIndex;
+        ReadOnlySpan<char> queryPattern = patternSpan[indexOfQuerySeperator..];
 
-        int beginPosition = currentPosition;
-        currentPosition = separatorIndex + 3;
-        string value = patternSpan[beginPosition..separatorIndex].ToString();
+/* Unmerged change from project 'TestableHttpClient(net6.0)'
+Added:
+        patternSpan = patternSpan[..indexOfQuerySeperator];
 
-        return hasWildCard switch
+        if (patternSpan is ['/', '/', ..])
         {
-            true when separatorIndex == 1 => Value.Any(),
-            true => Value.Pattern(value),
-            false => Value.Exact(value)
+            patternSpan = patternSpan[2..];
+        }
+
+        if (patternSpan is [':', '/', '/', ..])
+        {
+            patternSpan = patternSpan[3..];
+        }
+
+        int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
+        int indexOfPathSeperator = patternSpan.IndexOf('/');
+        if (indexOfPathSeperator == -1)
+        {
+            indexOfPathSeperator = patternSpan.Length;
+        }
+
+        ReadOnlySpan<char> hostPattern = patternSpan[(indexOfUserInfoSeperator + 1)..indexOfPathSeperator];
+        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
+*/
+
+/* Unmerged change from project 'TestableHttpClient(net7.0)'
+Added:
+        patternSpan = patternSpan[..indexOfQuerySeperator];
+
+        if (patternSpan is ['/', '/', ..])
+        {
+            patternSpan = patternSpan[2..];
+        }
+
+        if (patternSpan is [':', '/', '/', ..])
+        {
+            patternSpan = patternSpan[3..];
+        }
+
+        int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
+        int indexOfPathSeperator = patternSpan.IndexOf('/');
+        if (indexOfPathSeperator == -1)
+        {
+            indexOfPathSeperator = patternSpan.Length;
+        }
+
+        ReadOnlySpan<char> hostPattern = patternSpan[(indexOfUserInfoSeperator + 1)..indexOfPathSeperator];
+        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
+*/
+        patternSpan = patternSpan[..indexOfQuerySeperator];
+
+        if (patternSpan is ['/', '/', ..])
+        {
+            patternSpan = patternSpan[2..];
+        }
+
+        if (patternSpan is [':', '/', '/', ..])
+        {
+            patternSpan = patternSpan[3..];
+        }
+
+        int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
+        int indexOfPathSeperator = patternSpan.IndexOf('/');
+        if (indexOfPathSeperator == -1)
+        {
+            indexOfPathSeperator = patternSpan.Length;
+        }
+
+        ReadOnlySpan<char> hostPattern = patternSpan[(indexOfUserInfoSeperator + 1)..indexOfPathSeperator];
+        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
+
+        return new()
+        {
+            Scheme = ParseScheme(schemePattern),
+            Host = ParseHost(hostPattern),
+            Path = ParsePath(pathPattern),
+            Query = ParseQuery(queryPattern)
         };
-    }
 
-    private static Value ParseHost(ReadOnlySpan<char> patternSpan, ref int currentPosition)
-    {
-        int indexOfWildCard = patternSpan.IndexOf('*');
-
-        int indexOfPathSeparator = patternSpan.IndexOf('/');
-        int indexOfQuerySeparator = patternSpan.IndexOf('?');
-
-        if (indexOfQuerySeparator > -1 && (indexOfPathSeparator == -1 || indexOfQuerySeparator < indexOfPathSeparator))
-        {
-            throw new UriPatternParserException("invalid queryParameter.");
-        }
-
-        if (indexOfPathSeparator <= -1)
-        {
-            indexOfPathSeparator = patternSpan.Length;
-        }
-
-        if (indexOfPathSeparator == currentPosition)
-        {
-            return Value.Any();
-        }
-
-        if (indexOfWildCard == currentPosition && indexOfPathSeparator == currentPosition + 1)
-        {
-            currentPosition++;
-            return Value.Any();
-        }
-
-        bool hasWildCard = -1 < indexOfWildCard && indexOfWildCard < indexOfPathSeparator;
-        string value = patternSpan[currentPosition..indexOfPathSeparator].ToString();
-        currentPosition = indexOfPathSeparator;
-
-        return hasWildCard switch
-        {
-            true => Value.Pattern(value),
-            false => Value.Exact(value)
-        };
-    }
-
-    private static Value ParsePath(ReadOnlySpan<char> patternSpan, ref int currentPosition)
-    {
-        int indexOfQuestionMark = patternSpan.IndexOf('?');
-
-        if (indexOfQuestionMark == -1)
-        {
-            indexOfQuestionMark = patternSpan.Length;
-        }
-        currentPosition = indexOfQuestionMark;
-        var pathSpan = patternSpan[..indexOfQuestionMark];
-        return pathSpan switch
+        static Value ParseScheme(ReadOnlySpan<char> scheme) => scheme switch
         {
             [] => Value.Any(),
-            ['/'] => Value.Exact(pathSpan.ToString()),
+            ['*'] => Value.Any(),
+            _ when scheme.IndexOf('*') != -1 => Value.Pattern(scheme.ToString()),
+            _ => Value.Exact(scheme.ToString())
+        };
+        static Value ParseHost(ReadOnlySpan<char> host) => host switch
+        {
+            [] => Value.Any(),
+            ['*'] => Value.Any(),
+            _ when host.IndexOf('*') != -1 => Value.Pattern(host.ToString()),
+            _ => Value.Exact(host.ToString())
+        };
+        static Value ParsePath(ReadOnlySpan<char> path) => path switch
+        {
+            [] => Value.Any(),
             ['/', '*'] => Value.Any(),
-            ['/', ..] when pathSpan.IndexOf('*') > 0 => Value.Pattern(pathSpan.ToString()),
-            ['/', ..] => Value.Exact(pathSpan.ToString()),
-            _ => throw new System.Diagnostics.UnreachableException()
+            ['/', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(path.ToString()),
+            ['/', ..] => Value.Exact(path.ToString()),
+            _ => throw new UnreachableException()
         };
-    }
-
-    private static Value ParseQuery(ReadOnlySpan<char> patternSpan)
-    {
-        return patternSpan switch
+        static Value ParseQuery(ReadOnlySpan<char> query) => query switch
         {
             [] => Value.Any(),
-            ['?'] => throw new UriPatternParserException("There are no query parameters."),
+            ['?'] => Value.Any(),
             ['?', '*'] => Value.Any(),
             ['?', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
             ['?', .. var rest] => Value.Exact(rest.ToString()),
-            _ => throw new System.Diagnostics.UnreachableException()
+            _ => throw new UnreachableException()
         };
     }
 }

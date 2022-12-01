@@ -44,10 +44,11 @@ TestableHttpClient supports Uri patterns in several places, mainly in:
 
 The uri pattern follows a couple of rules:
 - The scheme of an uri is optional, but when given it should end with `://`. When not given `*://` is assumed.
-- credentials in the pattern (`username:password@`) is not supported, but also not explicitly removed. It will probably seen as part of the host name.
-- The host is optional when the scheme is not present.
+- credentials in the pattern (`username:password@`) are ignored.
+- The host is optional.
 - The path is optional, but should start with a `/`. When `/` is given, it can be followed by a `*` to match it with any path.
 - Query parameters are optional, when given it should start with a `?`.
+- Fragments are ignored, but should start with a `#`.
 
 Some examples:
 
