@@ -31,13 +31,10 @@ internal static class MessageBuilder
             _ => $"{actualCount} requests were made"
         };
 
-        if (pass)
+        return pass switch
         {
-            return $"Expected {expectedMessage} to be made{expectedConditions}, and {actualMessage}.";
-        }
-        else
-        {
-            return $"Expected {expectedMessage} to be made{expectedConditions}, but {actualMessage}.";
-        }
+            true => $"Expected {expectedMessage} to be made{expectedConditions}, and {actualMessage}.",
+            false => $"Expected {expectedMessage} to be made{expectedConditions}, but {actualMessage}."
+        };
     }
 }

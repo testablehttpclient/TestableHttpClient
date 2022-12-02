@@ -2,6 +2,7 @@
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
+[Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
 public class WithQueryString
 {
 #nullable disable

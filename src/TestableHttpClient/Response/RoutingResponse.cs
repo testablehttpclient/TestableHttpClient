@@ -10,18 +10,18 @@ internal class RoutingResponse : IResponse
 
         if (context.HttpRequestMessage.RequestUri is not null)
         {
-            response = GetResponseForRequest(context.HttpRequestMessage.RequestUri, context.Options.RoutingOptions);
+            response = GetResponseForRequest(context.HttpRequestMessage.RequestUri, context.Options.UriPatternMatchingOptions);
         }
 
         return response.ExecuteAsync(context, cancellationToken);
     }
 
-    public Dictionary<RouteDefinition, IResponse> ResponseMap { get; init; } = new();
+    public Dictionary<UriPattern, IResponse> ResponseMap { get; init; } = new();
     public IResponse FallBackResponse { get; internal set; } = StatusCode(NotFound);
 
-    private IResponse GetResponseForRequest(Uri requestUri, RoutingOptions routingOptions)
+    private IResponse GetResponseForRequest(Uri requestUri, UriPatternMatchingOptions uriPatternOptions)
     {
-        var matchingResponse = ResponseMap.FirstOrDefault(x => x.Key.Matches(requestUri, routingOptions));
+        var matchingResponse = ResponseMap.FirstOrDefault(x => x.Key.Matches(requestUri, uriPatternOptions));
 
         return matchingResponse.Value switch
         {

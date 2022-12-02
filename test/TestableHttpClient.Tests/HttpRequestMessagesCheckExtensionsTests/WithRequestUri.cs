@@ -48,6 +48,7 @@ public class WithRequestUri
     }
 
     [Fact]
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public void WithRequestUri_WithoutNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
         var sut = new Mock<IHttpRequestMessagesCheck>();
@@ -58,6 +59,7 @@ public class WithRequestUri
     }
 
     [Fact]
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public void WithRequestUri_WithNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
         var sut = new Mock<IHttpRequestMessagesCheck>();

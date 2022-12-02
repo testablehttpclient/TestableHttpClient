@@ -36,6 +36,46 @@ testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/*");
 
 More examples can be found in the [IntegrationTests project](test/TestableHttpClient.IntegrationTests)
 
+## URI Patterns
+
+TestableHttpClient supports URI patterns in several places, mainly in:
+- Response routing, where an URI pattern is used for matching the request URI to a response
+- Assertions, where requests can be asserted against an URI pattern.
+
+URI patterns are based on URI's as specified in [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986), but allow the wildcard character `*` to specify optional parts of an URI.
+
+An URI contains several components:
+- The scheme of an URI is optional, but when given it should end with `://`. When not given `*://` is assumed.
+- User Information (`username:password@`) is ignored and is not checked at all.
+- The host is optional and when not given `*` is assumed. Both IP addresses and registered names are supported.
+- The port is optional, but when ':' is provided after host, it should have a value.
+- The path is optional, but should start with a `/`. When `/` is given, it can be followed by a `*` to match it with any path.
+- Query parameters are optional, when given it should start with a `?`.
+- Fragments are ignored, but should start with a `#`.
+
+URI patterns differ from URI's in the following ways:
+- Any character is allowed, for example: `myhost:myport` is a valid URI pattern, but not a valid URI. (and this will never match).
+- No encoding is performed, and patterns are matched against the unescaped values of an URI.
+- Patterns are not normalized, so a path pattern `/test/../example` will not work.
+
+Some examples:
+
+Uri pattern | Matches
+------------|--------
+*|Matches any URL
+\*://\*/\*?\* | Matches any URL
+/get | Matches any URL that uses the path `/get`
+http*://* | Matches any URL that uses the scheme `http` or `https` (or any other scheme that starts with `http`)
+localhost:5000 | Matches any URL that uses localhost for the host and port 5000, no matter what scheme or path is used.
+
+## Controlling the behaviour of pattern matching
+
+TestableHttpClient has several options available that let you control different parts of the library. These options can be found on
+the `TestableHttpMessageHandler.Options` and are passed to the `HttpRepsonseContext` and the `IHttpRequestMessagesCheck`.
+The options include:
+- `JsonSerializerOptions` for controlling the serialization of json content
+- `UriPatternMatchingOptions` for controlling how the URI pattern matching works.
+
 ## Supported .NET versions
 
 TestableHttpClient is build as a netstandard2.0 library, so theoretically it can work on every .NET version that support netstandard2.0.

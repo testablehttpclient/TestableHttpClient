@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests;
 
+[Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
 public partial class HttpRequestMessageExtensionsTests
 {
 #nullable disable

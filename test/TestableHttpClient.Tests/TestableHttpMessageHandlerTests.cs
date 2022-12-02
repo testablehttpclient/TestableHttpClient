@@ -171,7 +171,7 @@ public class TestableHttpMessageHandlerTests
         public static void Run(Action action)
         {
             var previous = Current;
-            var context = new SingleThreadedSynchronizationContext();
+            using var context = new SingleThreadedSynchronizationContext();
             SetSynchronizationContext(context);
             try
             {
@@ -186,7 +186,6 @@ public class TestableHttpMessageHandlerTests
             {
                 context._queue.CompleteAdding();
                 SetSynchronizationContext(previous);
-                context.Dispose();
             }
         }
 

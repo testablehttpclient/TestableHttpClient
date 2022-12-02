@@ -1,13 +1,15 @@
-﻿namespace TestableHttpClient.Response;
+﻿using System.Collections.Concurrent;
+
+namespace TestableHttpClient.Response;
 
 internal class SequencedResponse : IResponse
 {
-    private readonly Queue<IResponse> responses;
+    private readonly ConcurrentQueue<IResponse> responses;
     private readonly IResponse _lastResponse;
     public SequencedResponse(IEnumerable<IResponse> responses)
     {
         this.responses = new(responses ?? throw new ArgumentNullException(nameof(responses)));
-        if (this.responses.Count == 0)
+        if (this.responses.IsEmpty)
         {
             throw new ArgumentException("Responses can't be empty.", nameof(responses));
         }
@@ -22,13 +24,6 @@ internal class SequencedResponse : IResponse
 
     private IResponse GetResponse()
     {
-        if (responses.Any())
-        {
-            return responses.Dequeue();
-        }
-        else
-        {
-            return _lastResponse;
-        }
+        return responses.TryDequeue(out var response) ? response : _lastResponse;
     }
 }
