@@ -47,19 +47,28 @@ internal static class UriPatternParser
         }
 
         int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
+        patternSpan = patternSpan[(indexOfUserInfoSeperator + 1)..];
+
         int indexOfPathSeperator = patternSpan.IndexOf('/');
+        int indexOfPortSeperator = patternSpan.IndexOf(':');
         if (indexOfPathSeperator == -1)
         {
             indexOfPathSeperator = patternSpan.Length;
         }
+        if(indexOfPortSeperator == -1)
+        {
+            indexOfPortSeperator = indexOfPathSeperator;
+        }
 
-        ReadOnlySpan<char> hostPattern = patternSpan[(indexOfUserInfoSeperator + 1)..indexOfPathSeperator];
+        ReadOnlySpan<char> hostPattern = patternSpan[..indexOfPortSeperator];
+        ReadOnlySpan<char> portPattern = patternSpan[indexOfPortSeperator..indexOfPathSeperator];
         ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
 
         return new()
         {
             Scheme = ParseScheme(schemePattern),
             Host = ParseHost(hostPattern),
+            Port = ParsePort(portPattern),
             Path = ParsePath(pathPattern),
             Query = ParseQuery(queryPattern)
         };
@@ -71,6 +80,7 @@ internal static class UriPatternParser
             _ when scheme.IndexOf('*') != -1 => Value.Pattern(scheme.ToString()),
             _ => Value.Exact(scheme.ToString())
         };
+
         static Value ParseHost(ReadOnlySpan<char> host) => host switch
         {
             [] => Value.Any(),
@@ -78,6 +88,17 @@ internal static class UriPatternParser
             _ when host.IndexOf('*') != -1 => Value.Pattern(host.ToString()),
             _ => Value.Exact(host.ToString())
         };
+
+        static Value ParsePort(ReadOnlySpan<char> port) => port switch
+        {
+            [] => Value.Any(),
+            [':'] => throw new UriPatternParserException("Invalid port"),
+            [':', '*'] => Value.Any(),
+            [':', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
+            [':', .. var rest] => Value.Exact(rest.ToString()),
+            _ => throw new UnreachableException()
+        };
+
         static Value ParsePath(ReadOnlySpan<char> path) => path switch
         {
             [] => Value.Any(),
@@ -86,6 +107,7 @@ internal static class UriPatternParser
             ['/', ..] => Value.Exact(path.ToString()),
             _ => throw new UnreachableException()
         };
+
         static Value ParseQuery(ReadOnlySpan<char> query) => query switch
         {
             [] => Value.Any(),

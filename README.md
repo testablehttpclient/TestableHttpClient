@@ -46,6 +46,7 @@ The uri pattern follows a couple of rules:
 - The scheme of an uri is optional, but when given it should end with `://`. When not given `*://` is assumed.
 - credentials in the pattern (`username:password@`) are ignored.
 - The host is optional.
+- The port is optional, but when ':' is provided after host, it should have a value.
 - The path is optional, but should start with a `/`. When `/` is given, it can be followed by a `*` to match it with any path.
 - Query parameters are optional, when given it should start with a `?`.
 - Fragments are ignored, but should start with a `#`.
@@ -57,7 +58,8 @@ Uri pattern | Matches
 *|Matches any URL
 \*://\*/\*?\* | Matches any URL
 /get | Matches any URL that uses the path `/get`
-http*://* | Matches any url that uses the scheme `http` or `https` (or any other scheme that starts with `http`)
+http*://* | Matches any URL that uses the scheme `http` or `https` (or any other scheme that starts with `http`)
+localhost:5000 | Matches any URL made to localhost:5000, no matter what scheme or path is used.
 
 ## Supported .NET versions
 

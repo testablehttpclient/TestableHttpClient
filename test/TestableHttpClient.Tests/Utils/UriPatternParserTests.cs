@@ -6,6 +6,7 @@ public class UriPatternParserTests
     [Theory]
     [InlineData("*")]
     [InlineData("*://*")]
+    [InlineData("*://*:*")]
     [InlineData("*/*")]
     [InlineData("*://*/*")]
     [InlineData("*://*/*?*")]
@@ -16,6 +17,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -27,6 +29,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Exact("https"), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -38,6 +41,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Exact("https"), result.Scheme);
         Assert.Equal(Value.Exact("httpbin.org"), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -50,6 +54,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Pattern(expectedPattern), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -66,6 +71,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Exact("httpbin.org"), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -82,6 +88,39 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Pattern(expectedPattern), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
+        Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
+    }
+
+    [Theory]
+    [InlineData("*://*:8443/*?*")]
+    [InlineData("*://*:8443/*")]
+    [InlineData("*://*:8443")]
+    [InlineData("//*:8443")]
+    [InlineData("*:8443")]
+    public void Parse_ExactPort_ReturnsUriPatternWithExactHost(string input)
+    {
+        UriPattern result = UriPatternParser.Parse(input);
+        Assert.Equal(Value.Any(), result.Scheme);
+        Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Exact("8443"), result.Port);
+        Assert.Equal(Value.Any(), result.Path);
+        Assert.Equal(Value.Any(), result.Query);
+    }
+
+    [Theory]
+    [InlineData("*://*:8*/*?*")]
+    [InlineData("*://*:8*/*")]
+    [InlineData("*://*:8*")]
+    [InlineData("//*:8*")]
+    [InlineData("*:8*")]
+    public void Parse_PatternPort_ReturnsUriPatternWithPatternHost(string input)
+    {
+        UriPattern result = UriPatternParser.Parse(input);
+        Assert.Equal(Value.Any(), result.Scheme);
+        Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Pattern("8*"), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -97,6 +136,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Exact(expectedValue), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -109,6 +149,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Pattern(expectedPattern), result.Path);
         Assert.Equal(Value.Any(), result.Query);
     }
@@ -120,6 +161,7 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Exact(expectedValue), result.Query);
     }
@@ -132,20 +174,23 @@ public class UriPatternParserTests
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
         Assert.Equal(Value.Any(), result.Host);
+        Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Pattern(expectedPattern), result.Query);
     }
 
     [Theory]
     [InlineData("")]
+    [InlineData("*:")]
     public void Parse_InvalidInput_ThrowsUriPatternParserException(string input)
     {
         Assert.Throws<UriPatternParserException>(() => UriPatternParser.Parse(input));
     }
 
     [Theory]
-    [InlineData("httpbin.com/?query=*", "http://httpbin.com/?query=test", "http://httpbin.com/test?query=test")]
+    [InlineData("httpbin.com/?query=*", "http://httpbin.com:8080/?query=test", "http://httpbin.com/test?query=test")]
     [InlineData("httpbin.com?query=*", "http://httpbin.com?query=test", "http://httpbin.com?test=query")]
+    [InlineData("https://httpbin.com:8443", "https://httpbin.com:8443/", "https://httpbin.com/")]
     public void RoundTripTests(string pattern, string matchingUri, string notMatchinUri)
     {
         UriPattern uriPattern = UriPatternParser.Parse(pattern);

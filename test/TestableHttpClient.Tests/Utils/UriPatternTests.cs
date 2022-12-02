@@ -10,6 +10,7 @@ public class UriPatternTests
     [InlineData("https://httpbin.com/get")]
     [InlineData("http://httpbin.com/post")]
     [InlineData("https://httpbin.com/get?test=test")]
+    [InlineData("https://httpbin.com:5000/get?test=test")]
     public void Matches_AnyUriPattern_MatchesAllUrls(string uriString)
     {
         bool result = UriPattern.Any.Matches(new Uri(uriString), defaultOptions);
@@ -60,6 +61,27 @@ public class UriPatternTests
         Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
         Assert.True(route.Matches(new Uri("https://httpbin.org/get"), defaultOptions));
         Assert.False(route.Matches(new Uri("https://httpbin/get"), defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_ExactPort_MatchesAnyUrlWithThatPort()
+    {
+        UriPattern uriPattern = new() { Port = Value.Exact("80") };
+
+        Assert.True(uriPattern.Matches(new Uri("http://httpbin.com"), defaultOptions));
+        Assert.True(uriPattern.Matches(new Uri("http://httpbin.com:80"), defaultOptions));
+        Assert.False(uriPattern.Matches(new Uri("http://httpbin.com:5000"), defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_PatternPort_MatchesAnyUrlWithThatPort()
+    {
+        UriPattern uriPattern = new() { Port = Value.Pattern("8*") };
+
+        Assert.True(uriPattern.Matches(new Uri("http://httpbin.com"), defaultOptions));
+        Assert.True(uriPattern.Matches(new Uri("http://httpbin.com:80"), defaultOptions));
+        Assert.True(uriPattern.Matches(new Uri("http://httpbin.com:8443"), defaultOptions));
+        Assert.False(uriPattern.Matches(new Uri("http://httpbin.com:5000"), defaultOptions));
     }
 
     [Fact]
