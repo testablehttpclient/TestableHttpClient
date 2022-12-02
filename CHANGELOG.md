@@ -19,6 +19,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - URI patterns now support query parameters and by default will use the unescaped values, note that the order is still important.
 - URI pattern parsing is extended to be able to parse most URI's.
+- `TestableHttpMessageHandler.ClearRequests` was added for situations where it is not possible to create and use a new instance.
 
 ### Changed
 - Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.
