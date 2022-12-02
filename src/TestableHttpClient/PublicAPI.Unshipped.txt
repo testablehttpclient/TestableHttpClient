@@ -1,4 +1,5 @@
-﻿TestableHttpClient.TestableHttpMessageHandlerOptions.UriPatternMatchingOptions.get -> TestableHttpClient.UriPatternMatchingOptions!
+﻿TestableHttpClient.TestableHttpMessageHandler.ClearRequests() -> void
+TestableHttpClient.TestableHttpMessageHandlerOptions.UriPatternMatchingOptions.get -> TestableHttpClient.UriPatternMatchingOptions!
 TestableHttpClient.UriPatternMatchingOptions
 TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.get -> System.UriFormat
 TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.set -> void

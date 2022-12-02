@@ -8,7 +8,12 @@ namespace TestableHttpClient;
 /// </summary>
 public class TestableHttpMessageHandler : HttpMessageHandler
 {
-    private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new();
+    private
+#if !NETSTANDARD
+    readonly
+#endif
+    ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new();
+
     private IResponse response = new HttpResponse(HttpStatusCode.OK);
 
     public TestableHttpMessageHandlerOptions Options { get; } = new TestableHttpMessageHandlerOptions();
@@ -53,5 +58,20 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     public void RespondWith(IResponse response)
     {
         this.response = response ?? throw new ArgumentNullException(nameof(response));
+    }
+
+    /// <summary>
+    /// Clear the registration of requests that were made with this handler.
+    /// </summary>
+    /// Sometimes the TestableHttpMessageHandler can't be replaced with a new instance, but it can be cleared.
+    /// The configuration is not cleared and will be kept the same.
+    /// <remarks>The configuration it self (Options and the configure IResponse) will not be cleared or reset.</remarks>
+    public void ClearRequests()
+    {
+#if NETSTANDARD
+        httpRequestMessages = new();
+#else
+        httpRequestMessages.Clear();
+#endif
     }
 }

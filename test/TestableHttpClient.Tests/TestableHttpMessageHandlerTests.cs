@@ -10,9 +10,9 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_WhenRequestsAreMade_LogsRequests()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
-        using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com/");
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com/");
 
         _ = await client.SendAsync(request);
 
@@ -22,12 +22,12 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_WhenMultipleRequestsAreMade_AllRequestsAreLogged()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
-        using var request1 = new HttpRequestMessage(HttpMethod.Get, "https://example1.com/");
-        using var request2 = new HttpRequestMessage(HttpMethod.Post, "https://example2.com/");
-        using var request3 = new HttpRequestMessage(HttpMethod.Delete, "https://example3.com/");
-        using var request4 = new HttpRequestMessage(HttpMethod.Head, "https://example4.com/");
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
+        using HttpRequestMessage request1 = new(HttpMethod.Get, "https://example1.com/");
+        using HttpRequestMessage request2 = new(HttpMethod.Post, "https://example2.com/");
+        using HttpRequestMessage request3 = new(HttpMethod.Delete, "https://example3.com/");
+        using HttpRequestMessage request4 = new(HttpMethod.Head, "https://example4.com/");
 
         _ = await client.SendAsync(request1);
         _ = await client.SendAsync(request2);
@@ -49,9 +49,9 @@ public class TestableHttpMessageHandlerTests
 
         using TestableHttpMessageHandler sut = new();
         sut.RespondWith(mockedResponse);
-        using var client = new HttpClient(sut);
+        using HttpClient client = new(sut);
         using HttpRequestMessage request = new(HttpMethod.Get, new Uri("https://example.com/"));
-        var response = await client.SendAsync(request);
+        using HttpResponseMessage response = await client.SendAsync(request);
 
         Assert.NotNull(context);
         Assert.Same(request, context.HttpRequestMessage);
@@ -62,10 +62,10 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_ByDefault_ReturnsHttpStatusCodeOK()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
 
-        var result = await client.GetAsync(new Uri("https://example.com/"));
+        using HttpResponseMessage result = await client.GetAsync(new Uri("https://example.com/"));
 
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
@@ -75,11 +75,11 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_ByDefault_ReturnsDifferentResponseForEveryRequest()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
 
-        var result1 = await client.GetAsync(new Uri("https://example.com/"));
-        var result2 = await client.GetAsync(new Uri("https://example.com/"));
+        using HttpResponseMessage result1 = await client.GetAsync(new Uri("https://example.com/"));
+        using HttpResponseMessage result2 = await client.GetAsync(new Uri("https://example.com/"));
 
         Assert.NotSame(result1, result2);
     }
@@ -87,14 +87,14 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_ByDefault_SetsRequestMessageOnEveryResponse()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
 
-        using var request1 = new HttpRequestMessage(HttpMethod.Get, new Uri("https://example.com/1"));
-        using var request2 = new HttpRequestMessage(HttpMethod.Post, new Uri("https://example.com/2"));
+        using HttpRequestMessage request1 = new(HttpMethod.Get, new Uri("https://example.com/1"));
+        using HttpRequestMessage request2 = new(HttpMethod.Post, new Uri("https://example.com/2"));
 
-        var response1 = await client.SendAsync(request1);
-        var response2 = await client.SendAsync(request2);
+        using HttpResponseMessage response1 = await client.SendAsync(request1);
+        using HttpResponseMessage response2 = await client.SendAsync(request2);
 
         Assert.Same(request1, response1.RequestMessage);
         Assert.Same(request2, response2.RequestMessage);
@@ -116,20 +116,34 @@ public class TestableHttpMessageHandlerTests
         using TestableHttpMessageHandler sut = new();
         sut.RespondWith(Responses.StatusCode(HttpStatusCode.NoContent));
 
-        using var client = new HttpClient(sut);
-        var response = await client.GetAsync("https://example.com");
+        using HttpClient client = new(sut);
+        using HttpResponseMessage response = await client.GetAsync("https://example.com");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.NotNull(response.RequestMessage);
     }
 
     [Fact]
+    public async Task ClearRequests_ByDefault_ShouldClearRequests()
+    {
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
+        _ = await client.GetAsync("https://example.com");
+
+        Assert.NotEmpty(sut.Requests);
+
+        sut.ClearRequests();
+
+        Assert.Empty(sut.Requests);
+    }
+
+    [Fact]
     public void GetAsync_ShouldNotHang()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
         sut.RespondWith(Responses.Delayed(new CustomResponse(), TimeSpan.FromSeconds(1)));
 
-        var doesNotHang = Task.Run(() =>
+        bool doesNotHang = Task.Run(() =>
         {
             SingleThreadedSynchronizationContext.Run(() =>
             {
@@ -170,7 +184,7 @@ public class TestableHttpMessageHandlerTests
 
         public static void Run(Action action)
         {
-            var previous = Current;
+            SynchronizationContext? previous = Current;
             using var context = new SingleThreadedSynchronizationContext();
             SetSynchronizationContext(context);
             try

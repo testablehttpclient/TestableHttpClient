@@ -15,10 +15,10 @@ public class UsingIHttpClientFactory
     public async Task ConfigureIHttpClientFactoryToUseTestableHttpClient()
     {
         // Create TestableHttpMessageHandler as usual.
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
         testableHttpMessageHandler.RespondWith(StatusCode(HttpStatusCode.NoContent));
 
-        var services = new ServiceCollection();
+        ServiceCollection services = new();
         // Register an HttpClient and configure the TestableHttpMessageHandler as the PrimaryHttpMessageHandler
         services.AddHttpClient(string.Empty).ConfigurePrimaryHttpMessageHandler(() => testableHttpMessageHandler);
 
@@ -27,12 +27,18 @@ public class UsingIHttpClientFactory
         // Request the IHttpClientFactory
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
         // Create the HttpClient
-        using var client = httpClientFactory.CreateClient();
+        using HttpClient client = httpClientFactory.CreateClient();
         // And use it...
         _ = await client.GetAsync("https://httpbin.com/get");
 
         // Now use the assertions to make sure the request was actually made.
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get");
+
+        // Since we already have created the serviceProvider, we can't (easily) replace the TestableHttpMessageHandler.
+        // So in case you need to start fresh, i.e. when the serviceProvider is part of shared context, you can clear it.
+        testableHttpMessageHandler.ClearRequests();
+
+        testableHttpMessageHandler.ShouldHaveMadeRequests(0);
     }
 
     [Fact]
