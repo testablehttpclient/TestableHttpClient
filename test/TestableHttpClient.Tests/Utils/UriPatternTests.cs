@@ -22,10 +22,10 @@ public class UriPatternTests
     [InlineData("HTTPS")]
     public void Matches_SpecificScheme_MatchesAnyUrlWithThatProtocol(string expectedScheme)
     {
-        UriPattern route = new() { Scheme = Value.Exact(expectedScheme) };
+        UriPattern pattern = new() { Scheme = Value.Exact(expectedScheme) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
-        Assert.False(route.Matches(new Uri("http://httpbin.com/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("http://httpbin.com/get"), defaultOptions));
     }
 
     [Theory]
@@ -33,11 +33,11 @@ public class UriPatternTests
     [InlineData("HTTP*")]
     public void Matches_PatternScheme_Matches_AnyUrlMatchingTheSchemePattern(string expectedSchemePattern)
     {
-        UriPattern route = new() { Scheme = Value.Pattern(expectedSchemePattern) };
+        UriPattern pattern = new() { Scheme = Value.Pattern(expectedSchemePattern) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
-        Assert.True(route.Matches(new Uri("http://httpbin.com/get"), defaultOptions));
-        Assert.False(route.Matches(new Uri("ftp://httpbin.com/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("http://httpbin.com/get"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("ftp://httpbin.com/get"), defaultOptions));
     }
 
     [Theory]
@@ -45,10 +45,10 @@ public class UriPatternTests
     [InlineData("HTTPBIN.COM")]
     public void Matches_SpecificHost_MatchesAnyUrlWithThatHost(string expectedHost)
     {
-        UriPattern route = new() { Host = Value.Exact(expectedHost) };
+        UriPattern pattern = new() { Host = Value.Exact(expectedHost) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
-        Assert.False(route.Matches(new Uri("https://httpbin.org/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.org/get"), defaultOptions));
     }
 
     [Theory]
@@ -56,11 +56,11 @@ public class UriPatternTests
     [InlineData("HTTPBIN.*")]
     public void Matches_PatternHost_MatchesAnyUrlWithThatHost(string expectedHostPattern)
     {
-        UriPattern route = new() { Host = Value.Pattern(expectedHostPattern) };
+        UriPattern pattern = new() { Host = Value.Pattern(expectedHostPattern) };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
-        Assert.True(route.Matches(new Uri("https://httpbin.org/get"), defaultOptions));
-        Assert.False(route.Matches(new Uri("https://httpbin/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.org/get"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("https://httpbin/get"), defaultOptions));
     }
 
     [Fact]
@@ -87,27 +87,29 @@ public class UriPatternTests
     [Fact]
     public void Matches_ExactPath_MatchesAnyUrlWithThatExactPath()
     {
-        UriPattern route = new() { Path = Value.Exact("/get") };
+        UriPattern pattern = new() { Path = Value.Exact("/get") };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get?query=test"), defaultOptions));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/get/status"), defaultOptions));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/GET"), defaultOptions));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/GET"), new() { PathCaseInsensitive = false }));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/post"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?query=test"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.com/get/status"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/GET"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.com/GET"), new() { PathCaseInsensitive = false }));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.com/post"), defaultOptions));
+
+        Assert.False(new UriPattern { Path = Value.Exact("/test/../example") }.Matches(new Uri("http://httpbin.com/example"), defaultOptions));
     }
 
     [Fact]
     public void Matches_PatternPath_MatchesAnyUrlWithThatExactPath()
     {
-        UriPattern route = new() { Path = Value.Pattern("/get*") };
+        UriPattern pattern = new() { Path = Value.Pattern("/get*") };
 
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get?query=test"), defaultOptions));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/get/status"), defaultOptions));
-        Assert.True(route.Matches(new Uri("https://httpbin.com/GET"), defaultOptions));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/GET"), new() { PathCaseInsensitive = false }));
-        Assert.False(route.Matches(new Uri("https://httpbin.com/post"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get?query=test"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/get/status"), defaultOptions));
+        Assert.True(pattern.Matches(new Uri("https://httpbin.com/GET"), defaultOptions));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.com/GET"), new() { PathCaseInsensitive = false }));
+        Assert.False(pattern.Matches(new Uri("https://httpbin.com/post"), defaultOptions));
     }
 
     [Fact]

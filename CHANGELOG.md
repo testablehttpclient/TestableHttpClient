@@ -17,13 +17,13 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `HttpResponseMessageBuilder` and `RespondWith(this TestableHttpMessageHandler, HttpResponseMessageBuilder)` has been removed, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
 
 ### Added
-- Uri patterns now support query parameters and by default will use the unescaped values, note that the order is still important.
-- Uri pattern parsing is extended to be able to parse most URI's.
+- URI patterns now support query parameters and by default will use the unescaped values, note that the order is still important.
+- URI pattern parsing is extended to be able to parse most URI's.
 
 ### Changed
 - Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.
 - `RouteParserException` has been renamed to `UriPatternParserException`.
-- Renamed `RoutingOptions` to `UriPatternMatchingOptions`
+- Renamed `RoutingOptions` to `UriPatternMatchingOptions`.
 
 ## [0.9] - 2022-11-25
 ### Deprecated

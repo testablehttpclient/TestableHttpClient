@@ -3,7 +3,7 @@
 namespace TestableHttpClient.Utils;
 
 /// <summary>
-/// Exception thrown when the route string can not be parsed correctly.
+/// Exception thrown when the URI pattern string can not be parsed correctly.
 /// </summary>
 [SuppressMessage("SonarSource", "S3925", Justification = "These exceptions don't need to be serialized.")]
 public sealed class UriPatternParserException : Exception

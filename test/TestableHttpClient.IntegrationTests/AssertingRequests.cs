@@ -95,9 +95,9 @@ public class AssertingRequests
 
         _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com");
 
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("/*?email=admin@example.com");
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("/*?email=*");
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("/*?email=admin%40example.com"));
+        testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=admin@example.com");
+        testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=*");
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=admin%40example.com"));
     }
 
     [Fact]

@@ -1,7 +1,7 @@
 ﻿namespace TestableHttpClient;
 
 /// <summary>
-/// Options specific for Uri pattern matching.
+/// Options specific for URI pattern matching.
 /// </summary>
 #pragma warning disable CS0618 // Type or member is obsolete, needed for backwards compatibility
 public class UriPatternMatchingOptions : RoutingOptions
