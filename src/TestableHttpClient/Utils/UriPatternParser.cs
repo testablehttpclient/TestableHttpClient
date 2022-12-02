@@ -34,56 +34,6 @@ internal static class UriPatternParser
         }
 
         ReadOnlySpan<char> queryPattern = patternSpan[indexOfQuerySeperator..];
-
-/* Unmerged change from project 'TestableHttpClient(net6.0)'
-Added:
-        patternSpan = patternSpan[..indexOfQuerySeperator];
-
-        if (patternSpan is ['/', '/', ..])
-        {
-            patternSpan = patternSpan[2..];
-        }
-
-        if (patternSpan is [':', '/', '/', ..])
-        {
-            patternSpan = patternSpan[3..];
-        }
-
-        int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
-        int indexOfPathSeperator = patternSpan.IndexOf('/');
-        if (indexOfPathSeperator == -1)
-        {
-            indexOfPathSeperator = patternSpan.Length;
-        }
-
-        ReadOnlySpan<char> hostPattern = patternSpan[(indexOfUserInfoSeperator + 1)..indexOfPathSeperator];
-        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
-*/
-
-/* Unmerged change from project 'TestableHttpClient(net7.0)'
-Added:
-        patternSpan = patternSpan[..indexOfQuerySeperator];
-
-        if (patternSpan is ['/', '/', ..])
-        {
-            patternSpan = patternSpan[2..];
-        }
-
-        if (patternSpan is [':', '/', '/', ..])
-        {
-            patternSpan = patternSpan[3..];
-        }
-
-        int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
-        int indexOfPathSeperator = patternSpan.IndexOf('/');
-        if (indexOfPathSeperator == -1)
-        {
-            indexOfPathSeperator = patternSpan.Length;
-        }
-
-        ReadOnlySpan<char> hostPattern = patternSpan[(indexOfUserInfoSeperator + 1)..indexOfPathSeperator];
-        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
-*/
         patternSpan = patternSpan[..indexOfQuerySeperator];
 
         if (patternSpan is ['/', '/', ..])
