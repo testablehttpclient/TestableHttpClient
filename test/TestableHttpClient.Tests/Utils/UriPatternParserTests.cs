@@ -60,17 +60,19 @@ public class UriPatternParserTests
     }
 
     [Theory]
-    [InlineData("*://httpbin.org/*?*")]
-    [InlineData("*://httpbin.org/*")]
-    [InlineData("*://httpbin.org")]
-    [InlineData("//httpbin.org")]
-    [InlineData("//user:pass@httpbin.org")]
-    [InlineData("httpbin.org")]
-    public void Parse_ExactHost_ReturnsUriPatternWithExactHost(string input)
+    [InlineData("*://httpbin.org/*?*", "httpbin.org")]
+    [InlineData("*://httpbin.org/*", "httpbin.org")]
+    [InlineData("*://httpbin.org", "httpbin.org")]
+    [InlineData("//httpbin.org", "httpbin.org")]
+    [InlineData("//user:pass@httpbin.org", "httpbin.org")]
+    [InlineData("httpbin.org", "httpbin.org")]
+    [InlineData("127.0.0.1", "127.0.0.1")]
+    [InlineData("[::1]", "[::1]")]
+    public void Parse_ExactHost_ReturnsUriPatternWithExactHost(string input, string expectedValue)
     {
         UriPattern result = UriPatternParser.Parse(input);
         Assert.Equal(Value.Any(), result.Scheme);
-        Assert.Equal(Value.Exact("httpbin.org"), result.Host);
+        Assert.Equal(Value.Exact(expectedValue), result.Host);
         Assert.Equal(Value.Any(), result.Port);
         Assert.Equal(Value.Any(), result.Path);
         Assert.Equal(Value.Any(), result.Query);

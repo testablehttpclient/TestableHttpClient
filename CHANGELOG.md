@@ -18,6 +18,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 - Uri patterns now support query parameters and by default will use the unescaped values, note that the order is still important.
+- Uri pattern parsing is extended to be able to parse most URI's.
 
 ### Changed
 - Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.

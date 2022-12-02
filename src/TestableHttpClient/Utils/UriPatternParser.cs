@@ -50,19 +50,21 @@ internal static class UriPatternParser
         patternSpan = patternSpan[(indexOfUserInfoSeperator + 1)..];
 
         int indexOfPathSeperator = patternSpan.IndexOf('/');
-        int indexOfPortSeperator = patternSpan.IndexOf(':');
         if (indexOfPathSeperator == -1)
         {
             indexOfPathSeperator = patternSpan.Length;
         }
-        if (indexOfPortSeperator == -1)
-        {
-            indexOfPortSeperator = indexOfPathSeperator;
-        }
 
-        ReadOnlySpan<char> hostPattern = patternSpan[..indexOfPortSeperator];
-        ReadOnlySpan<char> portPattern = patternSpan[indexOfPortSeperator..indexOfPathSeperator];
+        ReadOnlySpan<char> hostPattern = patternSpan[..indexOfPathSeperator];
         ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
+        int indexOfPortSeperator = hostPattern.LastIndexOf(':');
+        int indexOfIpV6Part = hostPattern.LastIndexOf(']');
+        if (indexOfPortSeperator == -1 || indexOfPortSeperator < indexOfIpV6Part)
+        {
+            indexOfPortSeperator = hostPattern.Length;
+        }
+        ReadOnlySpan<char> portPattern = hostPattern[indexOfPortSeperator..];
+        hostPattern = hostPattern[..indexOfPortSeperator];
 
         return new()
         {
