@@ -55,7 +55,7 @@ internal static class UriPatternParser
         {
             indexOfPathSeperator = patternSpan.Length;
         }
-        if(indexOfPortSeperator == -1)
+        if (indexOfPortSeperator == -1)
         {
             indexOfPortSeperator = indexOfPathSeperator;
         }

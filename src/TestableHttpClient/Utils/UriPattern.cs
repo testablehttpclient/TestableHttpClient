@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient.Utils;
+﻿using System.Globalization;
+
+namespace TestableHttpClient.Utils;
 
 internal class UriPattern
 {
@@ -13,7 +15,7 @@ internal class UriPattern
     public bool Matches(Uri requestUri, UriPatternMatchingOptions options) =>
         Scheme.Matches(requestUri.Scheme, options.SchemeCaseInsensitive) &&
         Host.Matches(requestUri.Host, options.HostCaseInsensitive) &&
-        Port.Matches(requestUri.Port.ToString(), true) &&
+        Port.Matches(requestUri.Port.ToString(CultureInfo.InvariantCulture), true) &&
         Path.Matches(requestUri.AbsolutePath, options.PathCaseInsensitive) &&
         Query.Matches(requestUri.GetComponents(UriComponents.Query, options.DefaultQueryFormat), options.QueryCaseInsensitive);
 }
