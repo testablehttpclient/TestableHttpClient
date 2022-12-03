@@ -1,12 +1,13 @@
+using System.Net.Http;
+
 namespace TestableHttpClient.Tests;
 
 public partial class HttpRequestMessageExtensionsTests
 {
-#nullable disable
     [Fact]
     public void HasContentHeader_NullRequest_ThrowsArgumentNullException()
     {
-        HttpRequestMessage sut = null;
+        HttpRequestMessage sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContentHeader("Content-Disposition"));
         Assert.Equal("httpRequestMessage", exception.ParamName);
@@ -17,7 +18,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("")]
     public void HasContentHeader_NullHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        using var sut = new HttpRequestMessage();
+        using HttpRequestMessage sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContentHeader(headerName));
         Assert.Equal("headerName", exception.ParamName);
@@ -26,7 +27,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasContentHeader_NullRequestNonNullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
     {
-        HttpRequestMessage sut = null;
+        HttpRequestMessage sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContentHeader("Content-Disposition", "inline"));
         Assert.Equal("httpRequestMessage", exception.ParamName);
@@ -37,7 +38,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("")]
     public void HasContentHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException(string headerName)
     {
-        using var sut = new HttpRequestMessage();
+        using HttpRequestMessage sut = new();
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContentHeader(headerName, "inline"));
         Assert.Equal("headerName", exception.ParamName);
     }
@@ -47,16 +48,15 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("")]
     public void HasContentHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException(string headerValue)
     {
-        using var sut = new HttpRequestMessage();
+        using HttpRequestMessage sut = new();
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasContentHeader("Content-Disposition", headerValue));
         Assert.Equal("headerValue", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void HasContentHeader_ExistingHeaderName_ReturnsTrue()
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("")
         };
@@ -70,7 +70,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("Content-Disposition")]
     public void HasContentHeader_NotExistingHeaderName_ReturnsFalse(string headerName)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("")
         };
@@ -81,7 +81,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasContentHeader_NoContent_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = null
         };
@@ -96,7 +96,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("*")]
     public void HasContentHeader_ExistingHeaderNameMatchingValue_ReturnsTrue(string value)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("")
         };
@@ -111,7 +111,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasContentHeader_NotExitingHeaderNameAndValue_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("")
         };
@@ -122,7 +122,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasContentHeader_NullContentNotExitingHeaderNameAndValue_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = null
         };
@@ -136,7 +136,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("*; filename=empty.file")]
     public void HasContentHeader_ExistingHeaderNameNotMatchingValue_ReturnsFalse(string value)
     {
-        using var sut = new HttpRequestMessage
+        using HttpRequestMessage sut = new()
         {
             Content = new StringContent("")
         };

@@ -4,13 +4,12 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 public class WithFormUrlEncodedContent
 {
-#nullable disable
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_NulCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>()));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>()));
 
         Assert.Equal("check", exception.ParamName);
     }
@@ -18,9 +17,9 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithNumberOfRequests_NulCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string, string>>(), 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>(), 1));
 
         Assert.Equal("check", exception.ParamName);
     }
@@ -28,9 +27,9 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_NullNameValueCollection_ThrowsArgumentNullException()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithFormUrlEncodedContent(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithFormUrlEncodedContent(null!));
 
         Assert.Equal("nameValueCollection", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
@@ -39,19 +38,18 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithNumberOfRequests_NullNameValueCollection_ThrowsArgumentNullException()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithFormUrlEncodedContent(null, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithFormUrlEncodedContent(null!, 1));
 
         Assert.Equal("nameValueCollection", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
     }
-#nullable restore
 
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") });
 
@@ -61,7 +59,7 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }, 1);
 
@@ -71,11 +69,11 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_RequestWithMatchingContent_ReturnsHttpRequestMessageAsserter()
     {
-        var request = new HttpRequestMessage
+        using HttpRequestMessage request = new()
         {
             Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>())
         };
-        var sut = new HttpRequestMessageAsserter(new[] { request });
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var result = sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>());
 
@@ -86,11 +84,11 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_RequestWithNotMatchingContent_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
     {
-        var request = new HttpRequestMessage
+        using HttpRequestMessage request = new()
         {
             Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>())
         };
-        var sut = new HttpRequestMessageAsserter(new[] { request });
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }));
 
@@ -100,12 +98,12 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_RequestWithNotMatchingContentType_ThrowsHttpRequestMessageAssertionExceptionWithSpecificMessage()
     {
-        var request = new HttpRequestMessage
+        using HttpRequestMessage request = new()
         {
             Content = new FormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") })
         };
         request.Content.Headers.ContentType = new MediaTypeHeaderValue("plain/text");
-        var sut = new HttpRequestMessageAsserter(new[] { request });
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }));
 

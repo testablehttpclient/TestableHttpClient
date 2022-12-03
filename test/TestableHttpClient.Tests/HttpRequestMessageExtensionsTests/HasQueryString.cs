@@ -3,11 +3,10 @@
 [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
 public partial class HttpRequestMessageExtensionsTests
 {
-#nullable disable
     [Fact]
     public void HasQueryString_NullHttpRequestMessage_ThrowsArgumentNullException()
     {
-        HttpRequestMessage sut = null;
+        HttpRequestMessage sut = null!;
         var exception = Assert.Throws<ArgumentNullException>(() => sut.HasQueryString("lang=en"));
         Assert.Equal("httpRequestMessage", exception.ParamName);
     }
@@ -15,16 +14,15 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_NullPattern_ThrowsArgumentNullException()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com?lang=en") };
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasQueryString(null));
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com?lang=en") };
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasQueryString(null!));
         Assert.Equal("pattern", exception.ParamName);
     }
-#nullable restore
 
     [Fact]
     public void HasQueryString_QueryInUrlButEmptyPattern_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com?lang=en") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com?lang=en") };
 
         Assert.False(sut.HasQueryString(string.Empty));
     }
@@ -32,7 +30,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_NullRequestUri_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage { RequestUri = null };
+        using HttpRequestMessage sut = new() { RequestUri = null };
 
         Assert.False(sut.HasQueryString("*"));
     }
@@ -40,7 +38,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_MatchingEmptyPattern_ReturnsTrue()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com") };
 
         Assert.True(sut.HasQueryString(string.Empty));
     }
@@ -48,7 +46,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_NoQueryInRequestAndWildcardPattern_ReturnsTrue()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com") };
 
         Assert.True(sut.HasQueryString("*"));
     }
@@ -56,7 +54,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_NoQueryInUrlButExactPattern_ReturnsFalse()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com") };
 
         Assert.False(sut.HasQueryString("lang=en"));
     }
@@ -64,7 +62,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_QueryInUrlAndExactPattern_ReturnsTrue()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com?lang=en") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com?lang=en") };
 
         Assert.True(sut.HasQueryString("lang=en"));
     }
@@ -72,7 +70,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Fact]
     public void HasQueryString_UrlEncodedQueryInUrlAndExactPattern_ReturnsTrue()
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com?email=test%40example.com") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com?email=test%40example.com") };
 
         Assert.True(sut.HasQueryString("email=test@example.com"));
     }
@@ -83,7 +81,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("*email=*")]
     public void HasQueryString_MatchingPatternContainingWildcard_ReturnsTrue(string pattern)
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com?lang=en&email=test%40example.com") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com?lang=en&email=test%40example.com") };
 
         Assert.True(sut.HasQueryString(pattern));
     }
@@ -94,7 +92,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("*uri=*")]
     public void HasQueryString_NotMatchingPatternContainingWildcard_ReturnsFalse(string pattern)
     {
-        using var sut = new HttpRequestMessage { RequestUri = new Uri("https://example.com?lang=en&email=test%40example.com") };
+        using HttpRequestMessage sut = new() { RequestUri = new Uri("https://example.com?lang=en&email=test%40example.com") };
 
         Assert.False(sut.HasQueryString(pattern));
     }

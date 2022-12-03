@@ -16,7 +16,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClient_CorrectTestableHttpMessageHandler_AddsHandlerToHttpClient()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
 
         using var client = sut.CreateClient();
 

@@ -4,11 +4,10 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 public class WithHeaderNameAndValue
 {
-#nullable disable
     [Fact]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", "someValue"));
 
@@ -18,7 +17,7 @@ public class WithHeaderNameAndValue
     [Fact]
     public void WithHeaderNameAndValue_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", "someValue", 1));
 
@@ -30,7 +29,7 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, "someValue"));
 
@@ -43,7 +42,7 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, "someValue", 1));
 
@@ -56,7 +55,7 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader("someHeader", headerValue));
 
@@ -69,19 +68,18 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithNumberOfRequests_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader("someHeader", headerValue, 1));
 
         Assert.Equal("headerValue", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
     }
-#nullable restore
 
     [Fact]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithHeader("someHeader", "someValue");
 
@@ -91,7 +89,7 @@ public class WithHeaderNameAndValue
     [Fact]
     public void WithHeaderNameAndValue_WithNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithHeader("someHeader", "someValue", 1);
 
