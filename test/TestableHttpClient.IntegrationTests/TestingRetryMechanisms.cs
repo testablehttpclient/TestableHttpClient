@@ -3,6 +3,7 @@ using Microsoft.Extensions.Http;
 
 using Polly;
 using Polly.Extensions.Http;
+using Polly.Retry;
 
 using static TestableHttpClient.Responses;
 
@@ -14,7 +15,7 @@ public class TestingRetryMechanisms
     public async Task TestingRetryPolicies()
     {
         // Create TestableHttpMessageHandler as usual.
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
         testableHttpMessageHandler.RespondWith(
             Sequenced(
                 StatusCode(HttpStatusCode.ServiceUnavailable),
@@ -23,13 +24,13 @@ public class TestingRetryMechanisms
                 ));
 
         // Configure the retry policy
-        var policy = HttpPolicyExtensions.HandleTransientHttpError().RetryAsync(2);
+        AsyncRetryPolicy<HttpResponseMessage> policy = HttpPolicyExtensions.HandleTransientHttpError().RetryAsync(2);
         using PolicyHttpMessageHandler retryPolicyHandler = new(policy);
 
-        using var client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
+        using HttpClient client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
 
         // Make a request, which should pass
-        var response = await client.GetAsync("https://httpbin.com/get");
+        HttpResponseMessage response = await client.GetAsync("https://httpbin.com/get");
 
         // Now use the assertions to make sure the request was actually made multiple times.
         _ = testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get", 3);
@@ -42,17 +43,17 @@ public class TestingRetryMechanisms
     public void SimulateTimeoutDoesNotRetry()
     {
         // Create TestableHttpMessageHandler as usual.
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
         testableHttpMessageHandler.RespondWith(Timeout());
 
         // Configure the retry policy
-        var policy = HttpPolicyExtensions.HandleTransientHttpError().RetryAsync(2);
+        AsyncRetryPolicy<HttpResponseMessage> policy = HttpPolicyExtensions.HandleTransientHttpError().RetryAsync(2);
         using PolicyHttpMessageHandler retryPolicyHandler = new(policy);
 
-        using var client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
+        using HttpClient client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
 
-        
-        var task  = client.GetAsync("https://httpbin.com/get");
+
+        Task<HttpResponseMessage> task = client.GetAsync("https://httpbin.com/get");
         Assert.True(task.IsCanceled);
 
         // Now use the assertions to make sure the request was actually made once, so polly didn't run.

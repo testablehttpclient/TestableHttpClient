@@ -18,7 +18,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurer_NullConfigureAction_ThrowsArgumentNullException()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
         Action<HttpClient> configureClient = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient));
@@ -28,7 +28,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurer_ReturnsHttpClientWithHandlerConfigured()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
         static void configureClient(HttpClient client) { }
 
         using var client = sut.CreateClient(configureClient);
@@ -41,8 +41,8 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
     {
-        using var sut = new TestableHttpMessageHandler();
-        var configureClient = new Mock<Action<HttpClient>>();
+        using TestableHttpMessageHandler sut = new();
+        Mock<Action<HttpClient>> configureClient = new();
 
         using var client = sut.CreateClient(configureClient.Object);
 

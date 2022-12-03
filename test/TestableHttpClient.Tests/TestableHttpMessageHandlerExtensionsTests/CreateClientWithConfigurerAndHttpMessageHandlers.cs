@@ -19,7 +19,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurerAndHttpMessageHandlers_NullConfigureAction_ThrowsArgumentNullException()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
         Action<HttpClient> configureClient = null!;
         var handlers = Enumerable.Empty<DelegatingHandler>();
 
@@ -30,7 +30,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurerAndHttpMessageHandlers_NullHttpMessageHandlers_ThrowsArgumentNullException()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
 
         static void configureClient(HttpClient _) { }
         IEnumerable<DelegatingHandler> handlers = null!;
@@ -42,7 +42,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurerAndHtppMessageHandlers_CallsConfigureClientWithClientToReturn()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
         var configureClient = Mock.Of<Action<HttpClient>>();
         var handlers = Enumerable.Empty<DelegatingHandler>();
 
@@ -54,7 +54,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurerAndHttpMessageHandlers_WhenHttpMessageHandlersArePassed_HandlersAreCorrectlyLinked()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
         static void configureClient(HttpClient _) { }
         IEnumerable<DelegatingHandler> handlers = new DelegatingHandler[]
         {

@@ -4,11 +4,10 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 public class WithHttpMethod
 {
-#nullable disable
     [Fact]
     public void WithHttpMethod_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpMethod(HttpMethod.Get));
 
@@ -18,7 +17,7 @@ public class WithHttpMethod
     [Fact]
     public void WithHttpMethod_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpMethod(HttpMethod.Get, 1));
 
@@ -28,9 +27,9 @@ public class WithHttpMethod
     [Fact]
     public void WithHttpMethod_WithoutNumberOfRequests_NullHttpMethod_ThrowsArgumentNullException()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null!));
 
         Assert.Equal("httpMethod", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
@@ -39,19 +38,18 @@ public class WithHttpMethod
     [Fact]
     public void WithHttpMethod_WithNumberOfRequests_NullHttpMethod_ThrowsArgumentNullException()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpMethod(null!, 1));
 
         Assert.Equal("httpMethod", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
     }
-#nullable restore
 
     [Fact]
     public void WithHttpMethod_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithHttpMethod(HttpMethod.Get);
 
@@ -61,7 +59,7 @@ public class WithHttpMethod
     [Fact]
     public void WithHttpMethod_WithNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithHttpMethod(HttpMethod.Get, 1);
 

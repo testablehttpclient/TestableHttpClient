@@ -26,7 +26,7 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_NullPredicate_ThrowsArgumentNullException()
     {
-        var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
+        HttpRequestMessageAsserter sut = new(Enumerable.Empty<HttpRequestMessage>());
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFilter(null!, "check"));
         Assert.Equal("predicate", exception.ParamName);
     }
@@ -34,7 +34,8 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
     {
-        var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, string.Empty));
         Assert.Equal("Expected at least one request to be made, but no requests were made.", exception.Message);
@@ -43,7 +44,8 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
     {
-        var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, "custom check"));
         Assert.Equal("Expected at least one request to be made with custom check, but no requests were made.", exception.Message);
@@ -52,24 +54,24 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
     {
-        var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         sut.WithFilter(x => x != null, string.Empty);
     }
 
-#nullable disable
     [Fact]
     public void WithFilter_WithRequestExpectations_NullPredicate_ThrowsArgumentNullException()
     {
-        var sut = new HttpRequestMessageAsserter(Enumerable.Empty<HttpRequestMessage>());
-        Assert.Throws<ArgumentNullException>("predicate", () => sut.WithFilter(null, 1, "check"));
+        HttpRequestMessageAsserter sut = new(Enumerable.Empty<HttpRequestMessage>());
+        Assert.Throws<ArgumentNullException>("predicate", () => sut.WithFilter(null!, 1, "check"));
     }
-#nullable restore
 
     [Fact]
     public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
     {
-        var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, 1, string.Empty));
         Assert.Equal("Expected one request to be made, but no requests were made.", exception.Message);
@@ -78,7 +80,8 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
     {
-        var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, 1, "custom check"));
         Assert.Equal("Expected one request to be made with custom check, but no requests were made.", exception.Message);
@@ -87,7 +90,8 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_WithRequestExpectation_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
     {
-        var sut = new HttpRequestMessageAsserter(new[] { new HttpRequestMessage(HttpMethod.Get, "https://example.com") });
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new(new[] { request });
 
         sut.WithFilter(x => x != null, 1, string.Empty);
     }
@@ -97,7 +101,7 @@ public class HttpRequestMessageAsserterTests
     {
         StringContent content = new("");
         content.Dispose();
-        HttpRequestMessage request = new() { Content = content };
+        using HttpRequestMessage request = new() { Content = content };
         HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContent("test", 1));

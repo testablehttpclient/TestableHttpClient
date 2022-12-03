@@ -4,11 +4,10 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 public class WithHeaderName
 {
-#nullable disable
     [Fact]
     public void WithHeader_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader"));
 
@@ -18,7 +17,7 @@ public class WithHeaderName
     [Fact]
     public void WithHeader_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", 1));
 
@@ -30,7 +29,7 @@ public class WithHeaderName
     [InlineData("")]
     public void WithHeader_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName));
 
@@ -43,19 +42,18 @@ public class WithHeaderName
     [InlineData("")]
     public void WithHeader_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, 1));
 
         Assert.Equal("headerName", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
     }
-#nullable restore
 
     [Fact]
     public void WithHeader_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithHeader("Content-Type");
 
@@ -65,7 +63,7 @@ public class WithHeaderName
     [Fact]
     public void WithHeader_WithNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithHeader("Content-Type", 1);
 

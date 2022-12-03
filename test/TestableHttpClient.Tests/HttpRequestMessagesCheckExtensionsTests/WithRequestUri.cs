@@ -29,7 +29,7 @@ public class WithRequestUri
     [InlineData("")]
     public void WithRequestUri_NullOrEmptyPattern_ThrowsArgumentNullException(string pattern)
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestUri(pattern));
 
@@ -40,7 +40,7 @@ public class WithRequestUri
     [Fact]
     public void WithRequestUri_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithRequestUri("https://example.com/");
 
@@ -51,7 +51,7 @@ public class WithRequestUri
     [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public void WithRequestUri_WithoutNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithRequestUri("https://example.com/", ignoreCase: false);
 
@@ -62,7 +62,7 @@ public class WithRequestUri
     [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public void WithRequestUri_WithNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithRequestUri("https://example.com/", ignoreCase: false, 2);
 

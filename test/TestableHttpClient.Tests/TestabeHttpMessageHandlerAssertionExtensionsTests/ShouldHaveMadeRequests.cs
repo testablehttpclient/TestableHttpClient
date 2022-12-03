@@ -23,7 +23,7 @@ public class ShouldHaveMadeRequests
     [Fact]
     public void ShouldHaveMadeRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests());
     }
@@ -31,7 +31,7 @@ public class ShouldHaveMadeRequests
     [Fact]
     public void ShouldHaveMadeRequestsWithNumberOfRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
     {
-        using var sut = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler sut = new();
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests(1));
     }
@@ -39,8 +39,8 @@ public class ShouldHaveMadeRequests
     [Fact]
     public async Task ShouldHaveMadeRequests_WhenRequestsWereMade_ReturnsHttpRequestMessageAsserter()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
 
         _ = await client.GetAsync(new Uri("https://example.com/"));
 
@@ -54,8 +54,8 @@ public class ShouldHaveMadeRequests
     [Fact]
     public async Task ShouldHaveMadeRequestsWithNumberOfRequests_WhenRequestsWereMade_ReturnsHttpRequestMessageAsserter()
     {
-        using var sut = new TestableHttpMessageHandler();
-        using var client = new HttpClient(sut);
+        using TestableHttpMessageHandler sut = new();
+        using HttpClient client = new(sut);
 
         _ = await client.GetAsync(new Uri("https://example.com/"));
 

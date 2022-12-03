@@ -5,11 +5,10 @@ namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well")]
 public class WithQueryString
 {
-#nullable disable
     [Fact]
     public void WithQueryString_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithQueryString("*"));
 
@@ -19,7 +18,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null;
+        IHttpRequestMessagesCheck sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithQueryString("*", 1));
 
@@ -29,9 +28,9 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithoutNumberOfRequests_NullPattern_ThrowsArgumentNullException()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithQueryString(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithQueryString(null!));
 
         Assert.Equal("pattern", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
@@ -40,19 +39,18 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithNumberOfRequests_NullPattern_ThrowsArgumentNullException()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithQueryString(null, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithQueryString(null!, 1));
 
         Assert.Equal("pattern", exception.ParamName);
         sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
     }
-#nullable restore
 
     [Fact]
     public void WithQueryString_WithoutNumberOfRequests_WithoutPattern_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithQueryString("");
 
@@ -62,7 +60,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithNumberOfRequests_WithoutPattern_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithQueryString("", 2);
 
@@ -72,7 +70,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithoutNumberOfRequests_WithStarPattern_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithQueryString("*");
 
@@ -82,7 +80,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithNumberOfRequests_WithStarPattern_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithQueryString("*", 2);
 
@@ -92,7 +90,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithQueryString("email=test@example.com");
 
@@ -102,7 +100,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithNumberOfRequests_CallsWithCorrectly()
     {
-        var sut = new Mock<IHttpRequestMessagesCheck>();
+        Mock<IHttpRequestMessagesCheck> sut = new();
 
         sut.Object.WithQueryString("email=test@example.com", 2);
 
