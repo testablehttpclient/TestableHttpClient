@@ -14,7 +14,7 @@ public class TimeoutResponseTests
         using CancellationTokenSource cancellationTokenSource = new();
         using HttpRequestMessage requestMessage = new();
         using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
+        HttpResponseContext context = new(requestMessage, new List<HttpRequestMessage>(), responseMessage);
         var task = sut.ExecuteAsync(context, cancellationTokenSource.Token);
 
         Assert.True(cancellationTokenSource.IsCancellationRequested);
@@ -25,10 +25,7 @@ public class TimeoutResponseTests
     public async Task ExecuteAsync_WithCancelllationTokenWithoutSource_CancelsTheTaskAsync()
     {
         TimeoutResponse sut = new();
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
 
-        _ = await Assert.ThrowsAsync<TaskCanceledException>(() => sut.ExecuteAsync(context, CancellationToken.None));
+        _ = await Assert.ThrowsAsync<TaskCanceledException>(() => sut.TestAsync());
     }
 }

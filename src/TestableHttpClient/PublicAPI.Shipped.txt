@@ -43,7 +43,6 @@ static TestableHttpClient.Responses.Timeout() -> TestableHttpClient.IResponse!
 
 TestableHttpClient.HttpResponseContext
 TestableHttpClient.HttpResponseContext.HttpRequestMessage.get -> System.Net.Http.HttpRequestMessage!
-TestableHttpClient.HttpResponseContext.HttpResponseContext(System.Net.Http.HttpRequestMessage! httpRequestMessage, System.Net.Http.HttpResponseMessage! httpResponseMessage, TestableHttpClient.TestableHttpMessageHandlerOptions? options = null) -> void
 TestableHttpClient.HttpResponseContext.HttpResponseMessage.get -> System.Net.Http.HttpResponseMessage!
 TestableHttpClient.HttpResponseContext.Options.get -> TestableHttpClient.TestableHttpMessageHandlerOptions!
 

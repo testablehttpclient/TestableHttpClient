@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading;
-
-using TestableHttpClient.Response;
+﻿using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
@@ -22,12 +19,10 @@ public class DelayedResponseTests
     [Fact]
     public async Task GetResponseAsync_ByDefault_ReturnsInnerResponse()
     {
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
         HttpResponse delayedResponse = new(HttpStatusCode.Created);
         DelayedResponse sut = new(delayedResponse, TimeSpan.Zero);
 
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(HttpStatusCode.Created, responseMessage.StatusCode);
     }

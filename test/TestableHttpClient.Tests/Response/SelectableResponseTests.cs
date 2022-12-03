@@ -30,10 +30,7 @@ public class SelectableResponseTests
 
         SelectableResponse sut = new(SelectResponse);
 
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.True(wasCalled);
         Assert.Equal(HttpStatusCode.NoContent, responseMessage.StatusCode);

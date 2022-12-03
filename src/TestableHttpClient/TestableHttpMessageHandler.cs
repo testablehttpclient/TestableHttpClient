@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-using TestableHttpClient.Response;
+﻿using TestableHttpClient.Response;
 
 namespace TestableHttpClient;
 /// <summary>
@@ -8,7 +6,8 @@ namespace TestableHttpClient;
 /// </summary>
 public class TestableHttpMessageHandler : HttpMessageHandler
 {
-    private readonly ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new();
+    private readonly Queue<HttpRequestMessage> httpRequestMessages = new();
+
     private IResponse response = new HttpResponse(HttpStatusCode.OK);
 
     public TestableHttpMessageHandlerOptions Options { get; } = new TestableHttpMessageHandlerOptions();
@@ -24,7 +23,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
 
         HttpResponseMessage responseMessage;
         responseMessage = new();
-        HttpResponseContext context = new(request, responseMessage, Options);
+        HttpResponseContext context = new(request, httpRequestMessages, responseMessage, Options);
         await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
 
         if (responseMessage.RequestMessage is null)
@@ -53,5 +52,16 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     public void RespondWith(IResponse response)
     {
         this.response = response ?? throw new ArgumentNullException(nameof(response));
+    }
+
+    /// <summary>
+    /// Clear the registration of requests that were made with this handler.
+    /// </summary>
+    /// Sometimes the TestableHttpMessageHandler can't be replaced with a new instance, but it can be cleared.
+    /// The configuration is not cleared and will be kept the same.
+    /// <remarks>The configuration it self (Options and the configure IResponse) will not be cleared or reset.</remarks>
+    public void ClearRequests()
+    {
+        httpRequestMessages.Clear();
     }
 }

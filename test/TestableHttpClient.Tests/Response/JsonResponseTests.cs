@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Threading;
 
 using TestableHttpClient.Response;
 
@@ -14,9 +13,8 @@ public class JsonResponseTests
     public async Task ExecuteAsync_WithSimpleContent_SetsJsonStringToContent(object? input, string expectedJson)
     {
         JsonResponse sut = new(input);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         var json = await responseMessage.Content.ReadAsStringAsync();
 
@@ -29,11 +27,12 @@ public class JsonResponseTests
     {
         var input = new { Value = 42 };
         JsonResponse sut = new(input);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        TestableHttpMessageHandlerOptions options = new();
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, options), CancellationToken.None);
+        using TestableHttpMessageHandler handler = new();
+        handler.Options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        handler.RespondWith(sut);
+        using HttpClient client = new(handler);
+
+        using HttpResponseMessage responseMessage = await client.GetAsync("http://example");
 
         var json = await responseMessage.Content.ReadAsStringAsync();
 
@@ -46,9 +45,7 @@ public class JsonResponseTests
     {
         var input = new { Value = 42 };
         JsonResponse sut = new(input);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, new TestableHttpMessageHandlerOptions()), CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         var json = await responseMessage.Content.ReadAsStringAsync();
 
@@ -64,10 +61,8 @@ public class JsonResponseTests
         {
             JsonSerializerOptions = new JsonSerializerOptions()
         };
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        TestableHttpMessageHandlerOptions options = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage, options), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         var json = await responseMessage.Content.ReadAsStringAsync();
 
@@ -80,9 +75,8 @@ public class JsonResponseTests
     {
         var input = new[] { 1, 2, 3, 4 };
         JsonResponse sut = new(input);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         var json = await responseMessage.Content.ReadAsStringAsync();
 
@@ -94,9 +88,8 @@ public class JsonResponseTests
     public async Task ExecuteAsync_WithOutCustomContentType_SetsMediaType()
     {
         JsonResponse sut = new(null, null);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal("application/json", sut.ContentType);
         Assert.Equal("application/json", responseMessage.Content.Headers.ContentType?.MediaType);
@@ -106,9 +99,8 @@ public class JsonResponseTests
     public async Task ExecuteAsync_WithCustomContentType_SetsMediaType()
     {
         JsonResponse sut = new(null, "application/problem+json");
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal("application/problem+json", sut.ContentType);
         Assert.Equal("application/problem+json", responseMessage.Content.Headers.ContentType?.MediaType);

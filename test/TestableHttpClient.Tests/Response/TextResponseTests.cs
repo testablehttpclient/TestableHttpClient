@@ -17,10 +17,8 @@ public class TextResponseTests
     public async Task TextResponse_WithEmtpyString_SetsStringToContent()
     {
         TextResponse sut = new(string.Empty);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-        await sut.ExecuteAsync(context, CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(string.Empty, sut.Content);
         Assert.Equal(string.Empty, await responseMessage.Content.ReadAsStringAsync());
@@ -30,10 +28,8 @@ public class TextResponseTests
     public async Task TextResponse_WithNotString_SetsStringToContent()
     {
         TextResponse sut = new("Hello World");
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-        await sut.ExecuteAsync(context, CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal("Hello World", sut.Content);
         Assert.Equal("Hello World", await responseMessage.Content.ReadAsStringAsync());
@@ -43,9 +39,8 @@ public class TextResponseTests
     public async Task ExecuteAsync_WithCustomEncoding_SetsEncoding()
     {
         TextResponse sut = new("", Encoding.ASCII, null);
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(Encoding.ASCII, sut.Encoding);
         Assert.Equal("text/plain", sut.MediaType);
@@ -57,9 +52,8 @@ public class TextResponseTests
     public async Task ExecuteAsync_WithCustomMediaType_SetsMediaType()
     {
         TextResponse sut = new("", null, "text/xml");
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(Encoding.UTF8, sut.Encoding);
         Assert.Equal("text/xml", sut.MediaType);

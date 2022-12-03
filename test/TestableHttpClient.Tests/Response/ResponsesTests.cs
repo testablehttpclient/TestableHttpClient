@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading;
-
-using TestableHttpClient.Response;
-using TestableHttpClient.Utils;
+﻿using TestableHttpClient.Response;
 
 using static TestableHttpClient.Responses;
 
