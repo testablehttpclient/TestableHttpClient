@@ -1,0 +1,5 @@
+name: "TestableHttpClient codeql configuration"
+
+query-filters:
+  - exclude:
+      id: cs/call-to-obsolete-method
