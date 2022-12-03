@@ -12,11 +12,9 @@ The documentation for the specific library should be placed in a `README.md` fil
 
 ## Changelog
 
-Currently no official changelog is kept. The changelog described in the github release is manually created based on the commits since the last release.
+The Changelog is kept in CHANGELOG.md and should be updated with every PR. On release a summary and the most important parts are mentioned.
 
 For every release a milestone is created and all issues and PullRequests are linked to the milestone where they will appear in. This can than act as the official changelog.
-
-Note that we currently don't use the changelog functionality of nuget itself, to prevent merge conflicts when multiple PR's need to be merged.
 
 ## Versioning
 
