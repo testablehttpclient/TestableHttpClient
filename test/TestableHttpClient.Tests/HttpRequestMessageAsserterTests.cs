@@ -44,7 +44,7 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
     {
-        HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, "custom check"));
@@ -54,7 +54,7 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_PredicateThatDoesMatchAnyRequests_DoesNotThrow()
     {
-        HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new(new[] { request });
 
         sut.WithFilter(x => x != null, string.Empty);
@@ -70,7 +70,7 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequests_ThrowsAssertionException()
     {
-        HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, 1, string.Empty));
@@ -80,7 +80,7 @@ public class HttpRequestMessageAsserterTests
     [Fact]
     public void WithFilter_WithRequestExpectation_PredicateThatDoesNotMatchAnyRequestsAndMessageIsGiven_ThrowsAssertionException()
     {
-        HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new(new[] { request });
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFilter(x => x == null, 1, "custom check"));
