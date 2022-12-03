@@ -15,6 +15,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `TestableHttpMessageHandler.RespondWith(Func<HttpRequestMessage, HttpResponseMessage>)` has been removed, it's functionality is replaced by IResponse.
 - `RespondWith(this TestableHttpMessageHandler, HttpResponseMessage)` has been removed, the response is modified with every call, so it doesn't work reliably and is different from how HttpClientHandler works, which creates a HttpResponseMessage for every request.
 - `HttpResponseMessageBuilder` and `RespondWith(this TestableHttpMessageHandler, HttpResponseMessageBuilder)` has been removed, it's functionality can be replaced with ConfiguredResponse or a custom IResponse.
+- `HttpResponseContext` now has an internal constructor instead of a public one.
 
 ### Added
 - URI patterns now support query parameters and by default will use the unescaped values, note that the order is still important.
@@ -25,6 +26,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.
 - `RouteParserException` has been renamed to `UriPatternParserException`.
 - Renamed `RoutingOptions` to `UriPatternMatchingOptions`.
+- `SequencedResponse` now is able to recover from a reset.
 
 ## [0.9] - 2022-11-25
 ### Deprecated

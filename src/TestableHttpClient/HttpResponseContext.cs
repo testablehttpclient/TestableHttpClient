@@ -5,9 +5,10 @@
 /// </summary>
 public class HttpResponseContext
 {
-    public HttpResponseContext(HttpRequestMessage httpRequestMessage, HttpResponseMessage httpResponseMessage, TestableHttpMessageHandlerOptions? options = null)
+    internal HttpResponseContext(HttpRequestMessage httpRequestMessage, IReadOnlyCollection<HttpRequestMessage> httpRequestMessages, HttpResponseMessage httpResponseMessage, TestableHttpMessageHandlerOptions? options = null)
     {
         HttpRequestMessage = httpRequestMessage;
+        HttpRequestMessages = httpRequestMessages;
         HttpResponseMessage = httpResponseMessage;
         Options = options ?? new TestableHttpMessageHandlerOptions();
     }
@@ -17,8 +18,15 @@ public class HttpResponseContext
     /// </summary>
     public HttpRequestMessage HttpRequestMessage { get; }
     /// <summary>
+    /// The requests that were send by the HttpClient.
+    /// </summary>
+    public IReadOnlyCollection<HttpRequestMessage> HttpRequestMessages { get; }
+    /// <summary>
     /// The response message that will be send back to the HttpClient.
     /// </summary>
     public HttpResponseMessage HttpResponseMessage { get; }
+    /// <summary>
+    /// The options that can be used by different responses.
+    /// </summary>
     public TestableHttpMessageHandlerOptions Options { get; }
 }

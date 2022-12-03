@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using TestableHttpClient.Response;
+﻿using TestableHttpClient.Response;
 using TestableHttpClient.Utils;
 
 using static TestableHttpClient.Responses;
@@ -12,13 +10,9 @@ public class RoutingResponseTests
     [Fact]
     public async Task ExecuteAsync_NoConfiguredRoutes_Returns404NotFound()
     {
-        using HttpRequestMessage requestMessage = new(HttpMethod.Get, "https://httpbin.org/notexisting");
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
+        RoutingResponse sut = new();
 
-        RoutingResponse response = new();
-
-        await response.ExecuteAsync(context, CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(HttpStatusCode.NotFound, responseMessage.StatusCode);
     }
@@ -26,16 +20,12 @@ public class RoutingResponseTests
     [Fact]
     public async Task ExecuteAsync_ConfiguredFallBack_ReturnsCorrectFallBackResponse()
     {
-        using HttpRequestMessage requestMessage = new(HttpMethod.Get, "https://httpbin.org/notexisting");
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-
-        RoutingResponse response = new()
+        RoutingResponse sut = new()
         {
             FallBackResponse = StatusCode(HttpStatusCode.OK)
         };
 
-        await response.ExecuteAsync(context, CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
     }
@@ -46,11 +36,7 @@ public class RoutingResponseTests
     [InlineData("https://httpbin.org/post")]
     public async Task ExecuteAsync_ConfiguredCatchAllRoute_ReturnsResponseForEveryRequest(string requestUri)
     {
-        using HttpRequestMessage requestMessage = new(HttpMethod.Get, requestUri);
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-
-        RoutingResponse response = new()
+        RoutingResponse sut = new()
         {
             ResponseMap = new()
             {
@@ -58,7 +44,7 @@ public class RoutingResponseTests
             }
         };
 
-        await response.ExecuteAsync(context, CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync(requestUri);
 
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
     }
@@ -66,11 +52,7 @@ public class RoutingResponseTests
     [Fact]
     public async Task ExecuteAsync_ConfiguredExactPathMatch_ReturnsResponseForExactMatch()
     {
-        using HttpRequestMessage requestMessage = new(HttpMethod.Get, "https://httpbin.org/get");
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-
-        RoutingResponse response = new()
+        RoutingResponse sut = new()
         {
             ResponseMap = new()
             {
@@ -78,7 +60,7 @@ public class RoutingResponseTests
             }
         };
 
-        await response.ExecuteAsync(context, CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync("https://httpbin.org/get");
 
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
     }
@@ -88,11 +70,7 @@ public class RoutingResponseTests
     [InlineData("https://httpbin.org/getsomething")]
     public async Task ExecuteAsync_ConfiguredExactPathMatch_ReturnsFallBackResponseForNoMatch(string requestUri)
     {
-        using HttpRequestMessage requestMessage = new(HttpMethod.Get, requestUri);
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-
-        RoutingResponse response = new()
+        RoutingResponse sut = new()
         {
             ResponseMap = new()
             {
@@ -100,7 +78,7 @@ public class RoutingResponseTests
             }
         };
 
-        await response.ExecuteAsync(context, CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync(requestUri);
 
         Assert.Equal(HttpStatusCode.NotFound, responseMessage.StatusCode);
     }
@@ -108,11 +86,7 @@ public class RoutingResponseTests
     [Fact]
     public async Task ExecuteAsync_ConfiguredPartialWildcard_ReturnsResponseForMatch()
     {
-        using HttpRequestMessage requestMessage = new(HttpMethod.Get, "https://httpbin.org/delay/100");
-        using HttpResponseMessage responseMessage = new();
-        HttpResponseContext context = new(requestMessage, responseMessage);
-
-        RoutingResponse response = new()
+        RoutingResponse sut = new()
         {
             ResponseMap = new()
             {
@@ -120,7 +94,7 @@ public class RoutingResponseTests
             }
         };
 
-        await response.ExecuteAsync(context, CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync("https://httpbin.org/delay/100");
 
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
     }

@@ -1,29 +1,22 @@
-﻿using System.Collections.Concurrent;
-
-namespace TestableHttpClient.Response;
+﻿namespace TestableHttpClient.Response;
 
 internal class SequencedResponse : IResponse
 {
-    private readonly ConcurrentQueue<IResponse> responses;
-    private readonly IResponse _lastResponse;
+    private readonly List<IResponse> responses;
     public SequencedResponse(IEnumerable<IResponse> responses)
     {
         this.responses = new(responses ?? throw new ArgumentNullException(nameof(responses)));
-        if (this.responses.IsEmpty)
+        if (this.responses.Count == 0)
         {
             throw new ArgumentException("Responses can't be empty.", nameof(responses));
         }
-        _lastResponse = this.responses.Last();
     }
 
     public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
-        var response = GetResponse();
-        return response.ExecuteAsync(context, cancellationToken);
-    }
+        int responseIndex = Math.Min(responses.Count - 1, context.HttpRequestMessages.Count - 1);
 
-    private IResponse GetResponse()
-    {
-        return responses.TryDequeue(out var response) ? response : _lastResponse;
+        IResponse response = responses[responseIndex];
+        return response.ExecuteAsync(context, cancellationToken);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using TestableHttpClient.Response;
+﻿using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
@@ -24,17 +22,14 @@ public class SequencedResponseTests
     [Fact]
     public async Task GetReponseAsync_WithSingleResponse_ReturnsSameResponseEveryCall()
     {
-        using HttpRequestMessage requestMessage = new();
         HttpResponse innerResponse = new(HttpStatusCode.Created);
-        var sut = new SequencedResponse(new[] { innerResponse });
+        SequencedResponse sut = new(new[] { innerResponse });
+        using TestableHttpMessageHandler handler = new();
+        handler.RespondWith(sut);
 
-        using HttpResponseMessage responseMessage1 = new();
-        using HttpResponseMessage responseMessage2 = new();
-        using HttpResponseMessage responseMessage3 = new();
-
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage1), CancellationToken.None);
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage2), CancellationToken.None);
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage3), CancellationToken.None);
+        using HttpResponseMessage responseMessage1 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage2 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage3 = await handler.TestAsync();
 
         Assert.Equal(HttpStatusCode.Created, responseMessage1.StatusCode);
         Assert.Equal(HttpStatusCode.Created, responseMessage2.StatusCode);
@@ -44,24 +39,49 @@ public class SequencedResponseTests
     [Fact]
     public async Task GetReponseAsync_WithMultpleResponses_ReturnsDifferentResponseForEachRequest()
     {
-        using HttpRequestMessage requestMessage = new();
-
-        var sut = new SequencedResponse(new[]
+        SequencedResponse sut = new(new[]
         {
             new HttpResponse(HttpStatusCode.Created),
             new HttpResponse(HttpStatusCode.Accepted),
             new HttpResponse(HttpStatusCode.NoContent),
         });
 
-        using HttpResponseMessage responseMessage1 = new();
-        using HttpResponseMessage responseMessage2 = new();
-        using HttpResponseMessage responseMessage3 = new();
-        using HttpResponseMessage responseMessage4 = new();
+        using TestableHttpMessageHandler handler = new();
+        handler.RespondWith(sut);
 
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage1), CancellationToken.None);
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage2), CancellationToken.None);
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage3), CancellationToken.None);
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage4), CancellationToken.None);
+        using HttpResponseMessage responseMessage1 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage2 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage3 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage4 = await handler.TestAsync();
+
+        Assert.Equal(HttpStatusCode.Created, responseMessage1.StatusCode);
+        Assert.Equal(HttpStatusCode.Accepted, responseMessage2.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, responseMessage3.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, responseMessage4.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetResponseAsync_AfterHandlerReset_ReturnsCorrectResponseForEachRequest()
+    {
+        SequencedResponse sut = new(new[]
+        {
+            new HttpResponse(HttpStatusCode.Created),
+            new HttpResponse(HttpStatusCode.Accepted),
+            new HttpResponse(HttpStatusCode.NoContent),
+        });
+
+        using TestableHttpMessageHandler handler = new();
+        handler.RespondWith(sut);
+
+        _ = await handler.TestAsync();
+        _ = await handler.TestAsync();
+
+        handler.ClearRequests();
+
+        using HttpResponseMessage responseMessage1 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage2 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage3 = await handler.TestAsync();
+        using HttpResponseMessage responseMessage4 = await handler.TestAsync();
 
         Assert.Equal(HttpStatusCode.Created, responseMessage1.StatusCode);
         Assert.Equal(HttpStatusCode.Accepted, responseMessage2.StatusCode);

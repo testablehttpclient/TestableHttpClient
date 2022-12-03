@@ -29,7 +29,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
 
         HttpResponseMessage responseMessage;
         responseMessage = new();
-        HttpResponseContext context = new(request, responseMessage, Options);
+        HttpResponseContext context = new(request, httpRequestMessages, responseMessage, Options);
         await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
 
         if (responseMessage.RequestMessage is null)

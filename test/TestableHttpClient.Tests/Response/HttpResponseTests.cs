@@ -19,11 +19,9 @@ public class HttpResponseTests
     [Fact]
     public async Task ExecuteAsync_WithHttpStatusCode_ReturnsCorrectStatusCode()
     {
-        using HttpRequestMessage requestMessage = new();
-        using HttpResponseMessage responseMessage = new();
         HttpResponse sut = new(HttpStatusCode.Continue);
 
-        await sut.ExecuteAsync(new HttpResponseContext(requestMessage, responseMessage), CancellationToken.None);
+        using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(HttpStatusCode.Continue, responseMessage.StatusCode);
         Assert.Equal(HttpStatusCode.Continue, sut.StatusCode);
