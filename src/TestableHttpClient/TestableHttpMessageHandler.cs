@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-using TestableHttpClient.Response;
+﻿using TestableHttpClient.Response;
 
 namespace TestableHttpClient;
 /// <summary>
@@ -8,11 +6,7 @@ namespace TestableHttpClient;
 /// </summary>
 public class TestableHttpMessageHandler : HttpMessageHandler
 {
-    private
-#if !NETSTANDARD
-    readonly
-#endif
-    ConcurrentQueue<HttpRequestMessage> httpRequestMessages = new();
+    private readonly Queue<HttpRequestMessage> httpRequestMessages = new();
 
     private IResponse response = new HttpResponse(HttpStatusCode.OK);
 
@@ -68,10 +62,6 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// <remarks>The configuration it self (Options and the configure IResponse) will not be cleared or reset.</remarks>
     public void ClearRequests()
     {
-#if NETSTANDARD
-        httpRequestMessages = new();
-#else
         httpRequestMessages.Clear();
-#endif
     }
 }
