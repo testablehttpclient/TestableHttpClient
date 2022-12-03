@@ -7,8 +7,8 @@ public class CreatingClients
     [Fact]
     public async Task CreateASimpleHttpClient()
     {
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        using var client = testableHttpMessageHandler.CreateClient();
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
+        using HttpClient client = testableHttpMessageHandler.CreateClient();
 
         await client.GetAsync("https://httpbin.org/get");
 
@@ -18,8 +18,8 @@ public class CreatingClients
     [Fact]
     public async Task CreateClientWithConfiguration()
     {
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        using var client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
+        using HttpClient client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
 
         await client.GetAsync("https://httpbin.org/get");
 
@@ -29,9 +29,9 @@ public class CreatingClients
     [Fact]
     public async Task CreateClientWithCustomHandlers()
     {
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
-        var handler = new TestHandler();
-        using var client = testableHttpMessageHandler.CreateClient(handler);
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
+        using TestHandler handler = new();
+        using HttpClient client = testableHttpMessageHandler.CreateClient(handler);
 
         await client.GetAsync("https://httpbin.org/get");
 

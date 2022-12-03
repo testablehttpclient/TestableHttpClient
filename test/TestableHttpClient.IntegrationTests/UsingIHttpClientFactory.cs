@@ -22,10 +22,10 @@ public class UsingIHttpClientFactory
         // Register an HttpClient and configure the TestableHttpMessageHandler as the PrimaryHttpMessageHandler
         services.AddHttpClient(string.Empty).ConfigurePrimaryHttpMessageHandler(() => testableHttpMessageHandler);
 
-        var serviceProvider = services.BuildServiceProvider();
+        ServiceProvider serviceProvider = services.BuildServiceProvider();
 
         // Request the IHttpClientFactory
-        var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+        IHttpClientFactory httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
         // Create the HttpClient
         using HttpClient client = httpClientFactory.CreateClient();
         // And use it...
@@ -45,30 +45,30 @@ public class UsingIHttpClientFactory
     public async Task ConfigureMultipleHttpMessageHandlers()
     {
         // Create multiple TestableHttpMessageHandlers as usual, if the response is not important, a single TestableHttpMessageHandler can be used.
-        using var testableGithubHandler = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler testableGithubHandler = new();
         testableGithubHandler.RespondWith(Configured(Text(string.Empty), x => x.Headers.Add("Server", "github")));
 
-        using var testableHttpBinHandler = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler testableHttpBinHandler = new();
         testableHttpBinHandler.RespondWith(Configured(StatusCode(HttpStatusCode.NotFound), x => x.Headers.Add("Server", "httpbin")));
 
-        var services = new ServiceCollection();
+        ServiceCollection services = new();
         // Register named HttpClients and configure the correct TestableHttpMessageHandler as the PrimaryHttpMessageHandler
         services.AddHttpClient("github").ConfigurePrimaryHttpMessageHandler(() => testableGithubHandler);
         services.AddHttpClient("httpbin").ConfigurePrimaryHttpMessageHandler(() => testableHttpBinHandler);
-        var serviceProvider = services.BuildServiceProvider();
+        ServiceProvider serviceProvider = services.BuildServiceProvider();
 
         // Request the IHttpClientFactory
-        var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+        IHttpClientFactory httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
         // Create the named HttpClient
-        using var githubClient = httpClientFactory.CreateClient("github");
+        using HttpClient githubClient = httpClientFactory.CreateClient("github");
         // And use it.
-        var result = await githubClient.GetAsync("https://github.com/api/users");
+        HttpResponseMessage result = await githubClient.GetAsync("https://github.com/api/users");
         Assert.Equal("github", result.Headers.Server.ToString());
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
         // Create another named HttpClient
-        using var httpbinClient = httpClientFactory.CreateClient("httpbin");
+        using HttpClient httpbinClient = httpClientFactory.CreateClient("httpbin");
         // And use it...
         result = await httpbinClient.GetAsync("https://httpbin.com/get");
         Assert.Equal("httpbin", result.Headers.Server.ToString());
@@ -83,11 +83,11 @@ public class UsingIHttpClientFactory
     public async Task ConfigureViaConfigureTestServicesOnHostBuilder()
     {
         // Create TestableHttpMessageHandler as usual.
-        using var testableHttpMessageHandler = new TestableHttpMessageHandler();
+        using TestableHttpMessageHandler testableHttpMessageHandler = new();
         testableHttpMessageHandler.RespondWith(StatusCode(HttpStatusCode.NoContent));
 
         // Setup a TestServer
-        using var host = await new HostBuilder()
+        using IHost host = await new HostBuilder()
             .ConfigureWebHost(webBuilder =>
             {
                 webBuilder.UseTestServer()
@@ -98,7 +98,7 @@ public class UsingIHttpClientFactory
             })
             .StartAsync();
 
-        using var client = host.GetTestClient();
+        using HttpClient client = host.GetTestClient();
         // Make a request to the testserver
         _ = await client.GetAsync("/");
 
@@ -117,8 +117,8 @@ public class UsingIHttpClientFactory
         {
             app.Run(async context =>
             {
-                var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
-                var httpClient = httpClientFactory.CreateClient();
+                IHttpClientFactory httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
+                HttpClient httpClient = httpClientFactory.CreateClient();
                 await httpClient.GetAsync("https://httpbin.com/get");
                 await context.Response.WriteAsync("Hello");
             });

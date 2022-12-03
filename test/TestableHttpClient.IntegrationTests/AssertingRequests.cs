@@ -5,8 +5,8 @@ public class AssertingRequests
     [Fact]
     public void BasicAssertionsWhenNoCallsWereMade()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         testHandler.ShouldHaveMadeRequests(0);
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests());
@@ -15,8 +15,8 @@ public class AssertingRequests
     [Fact]
     public async Task WhenAssertingCallsAreNotMade_AndCallsWereMade_AssertionExceptionIsThrow()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -27,8 +27,8 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingCallsAreNotMadeToSpecificUri()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -39,8 +39,8 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingCallsAreMadeToSpecificUriPattern()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -58,8 +58,8 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingCallsUsingUriPattern()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -77,8 +77,8 @@ public class AssertingRequests
     [Fact]
     public async Task ChainUriPatternAssertions()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -90,8 +90,8 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingCallWithQueryParameters()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com");
 
@@ -103,11 +103,11 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingHttpMethods()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
         _ = await client.GetAsync("https://httpbin.org/get");
-        using var content = new StringContent("");
+        using StringContent content = new("");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
         testHandler.ShouldHaveMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Get);
@@ -119,8 +119,8 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingRequestHeaders()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
         client.DefaultRequestHeaders.Add("api-version", "1.0");
         _ = await client.GetAsync("https://httpbin.org/get");
 
@@ -136,10 +136,10 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingContentHeaders()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
-        using var content = new StringContent("", Encoding.UTF8, "application/json");
+        using StringContent content = new("", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
         testHandler.ShouldHaveMadeRequests().WithContentHeader("content-type");
@@ -156,10 +156,10 @@ public class AssertingRequests
     [Fact]
     public async Task AssertingContent()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
-        using var content = new StringContent("my special content");
+        using StringContent content = new("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
 #if NETFRAMEWORK
@@ -178,10 +178,10 @@ public class AssertingRequests
     [Fact]
     public async Task AssertJsonContent()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
-        using var content = new StringContent("{}", Encoding.UTF8, "application/json");
+        using StringContent content = new("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
 #if NETFRAMEWORK
@@ -195,10 +195,10 @@ public class AssertingRequests
     [Fact]
     public async Task CustomAssertions()
     {
-        using var testHandler = new TestableHttpMessageHandler();
-        using var client = new HttpClient(testHandler);
+        using TestableHttpMessageHandler testHandler = new();
+        using HttpClient client = new(testHandler);
 
-        using var content = new StringContent("", Encoding.UTF8, "application/json");
+        using StringContent content = new("", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content);
 
         testHandler.ShouldHaveMadeRequests().WithFilter(x => x.Content is not null && x.Content.Headers.ContentType?.MediaType == "application/json", "");
