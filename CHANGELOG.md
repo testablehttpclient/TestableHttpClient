@@ -269,6 +269,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.10]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.9...v0.10
 [0.9]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.8...v0.9
 [0.8]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.7...v0.8
 [0.7]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.6...v0.7
