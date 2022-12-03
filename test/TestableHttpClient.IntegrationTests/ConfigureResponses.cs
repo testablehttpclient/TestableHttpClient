@@ -9,7 +9,7 @@ public class ConfigureResponses
     {
         using TestableHttpMessageHandler testHandler = new();
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/200");
 
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
@@ -22,7 +22,7 @@ public class ConfigureResponses
         using TestableHttpMessageHandler testHandler = new();
         testHandler.RespondWith(Text("HttpClient testing is easy"));
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/200");
 
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
@@ -36,7 +36,7 @@ public class ConfigureResponses
         testHandler.RespondWith(Text("HttpClient testing is easy"));
         testHandler.RespondWith(Json("Not Found", HttpStatusCode.NotFound));
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/201");
 
         Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
@@ -49,7 +49,7 @@ public class ConfigureResponses
         using TestableHttpMessageHandler testHandler = new();
         testHandler.RespondWith(Text("HttpClient testing is easy"));
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         string[] urls = new[]
         {
             "http://httpbin.org/status/200",
@@ -81,7 +81,7 @@ public class ConfigureResponses
         };
         testHandler.RespondWith(SelectResponse(PathBasedResponse));
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         HttpResponseMessage response = await httpClient.GetAsync("http://httpbin/status/200");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -104,7 +104,7 @@ public class ConfigureResponses
             builder.Map("/status/400", StatusCode(HttpStatusCode.BadRequest));
         }));
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         HttpResponseMessage response = await httpClient.GetAsync("http://httpbin/status/200");
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
 
@@ -124,7 +124,7 @@ public class ConfigureResponses
         using TestableHttpMessageHandler testHandler = new();
         testHandler.RespondWith(Timeout());
 
-        using HttpClient httpClient = new HttpClient(testHandler);
+        using HttpClient httpClient = new(testHandler);
         await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500"));
     }
 
