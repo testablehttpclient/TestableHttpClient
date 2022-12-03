@@ -1,9 +1,1 @@
-﻿TestableHttpClient.HttpResponseContext.HttpRequestMessages.get -> System.Collections.Generic.IReadOnlyCollection<System.Net.Http.HttpRequestMessage!>!
-TestableHttpClient.TestableHttpMessageHandler.ClearRequests() -> void
-TestableHttpClient.TestableHttpMessageHandlerOptions.UriPatternMatchingOptions.get -> TestableHttpClient.UriPatternMatchingOptions!
-TestableHttpClient.UriPatternMatchingOptions
-TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.get -> System.UriFormat
-TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.set -> void
-TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.get -> bool
-TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.set -> void
-TestableHttpClient.UriPatternMatchingOptions.UriPatternMatchingOptions() -> void
+﻿

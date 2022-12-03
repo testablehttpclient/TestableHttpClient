@@ -1,5 +1,6 @@
 ﻿#nullable enable
 TestableHttpClient.TestableHttpMessageHandler
+TestableHttpClient.TestableHttpMessageHandler.ClearRequests() -> void
 TestableHttpClient.TestableHttpMessageHandler.Options.get -> TestableHttpClient.TestableHttpMessageHandlerOptions!
 TestableHttpClient.TestableHttpMessageHandler.Requests.get -> System.Collections.Generic.IEnumerable<System.Net.Http.HttpRequestMessage!>!
 TestableHttpClient.TestableHttpMessageHandler.RespondWith(TestableHttpClient.IResponse! response) -> void
@@ -10,6 +11,7 @@ TestableHttpClient.TestableHttpMessageHandlerOptions
 TestableHttpClient.TestableHttpMessageHandlerOptions.JsonSerializerOptions.get -> System.Text.Json.JsonSerializerOptions!
 TestableHttpClient.TestableHttpMessageHandlerOptions.TestableHttpMessageHandlerOptions() -> void
 TestableHttpClient.TestableHttpMessageHandlerOptions.RoutingOptions.get -> TestableHttpClient.RoutingOptions!
+TestableHttpClient.TestableHttpMessageHandlerOptions.UriPatternMatchingOptions.get -> TestableHttpClient.UriPatternMatchingOptions!
 
 TestableHttpClient.RoutingOptions
 TestableHttpClient.RoutingOptions.HostCaseInsensitive.get -> bool
@@ -19,6 +21,13 @@ TestableHttpClient.RoutingOptions.PathCaseInsensitive.set -> void
 TestableHttpClient.RoutingOptions.RoutingOptions() -> void
 TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.get -> bool
 TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.set -> void
+
+TestableHttpClient.UriPatternMatchingOptions
+TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.get -> System.UriFormat
+TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.set -> void
+TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.get -> bool
+TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.set -> void
+TestableHttpClient.UriPatternMatchingOptions.UriPatternMatchingOptions() -> void
 
 TestableHttpClient.IRoutingResponseBuilder
 TestableHttpClient.IRoutingResponseBuilder.Map(string! route, TestableHttpClient.IResponse! response) -> void
@@ -43,6 +52,7 @@ static TestableHttpClient.Responses.Timeout() -> TestableHttpClient.IResponse!
 
 TestableHttpClient.HttpResponseContext
 TestableHttpClient.HttpResponseContext.HttpRequestMessage.get -> System.Net.Http.HttpRequestMessage!
+TestableHttpClient.HttpResponseContext.HttpRequestMessages.get -> System.Collections.Generic.IReadOnlyCollection<System.Net.Http.HttpRequestMessage!>!
 TestableHttpClient.HttpResponseContext.HttpResponseMessage.get -> System.Net.Http.HttpResponseMessage!
 TestableHttpClient.HttpResponseContext.Options.get -> TestableHttpClient.TestableHttpMessageHandlerOptions!
 

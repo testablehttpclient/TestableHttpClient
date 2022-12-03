@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.10] - unplanned
+## [0.10] - 2022-12-03
 ### Deprecated
 - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
 - `WithRequestUri(this IHttpRequestMessagesCheck, string, bool)` and `WithRequestUri(this IHttpRequestMessagesCheck, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
