@@ -33,6 +33,7 @@ jobs:
       with:
         queries: security-and-quality
         languages: csharp
+        config-file: ./.github/codeql-config.yml
     - name: Build source code
       run: dotnet build --configuration Release --framework net6.0
     - name: Perform CodeQL Analysis
