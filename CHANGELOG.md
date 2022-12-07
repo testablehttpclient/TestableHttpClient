@@ -4,6 +4,13 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11] - Unplanned
+### Removed
+- `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `WithRequestUri(this IHttpRequestMessagesCheck, string, bool)` and `WithRequestUri(this IHttpRequestMessagesCheck, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `WithQueryString` has been removed, since `ShouldHaveMadeRequestTo` and `WithRequestUri` now properly support querystrings.
+ 
+
 ## [0.10] - 2022-12-03
 ### Deprecated
 - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been deprecated. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
@@ -23,7 +30,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `TestableHttpMessageHandler.ClearRequests` was added for situations where it is not possible to create and use a new instance.
 
 ### Changed
-- Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.
+- Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.  
+  This introduced a breaking change where `*/customers` no longer validate the URI Path as a pattern that **ends** with `/customers`, but as an exact match for `/customers`.
 - `RouteParserException` has been renamed to `UriPatternParserException`.
 - Renamed `RoutingOptions` to `UriPatternMatchingOptions`.
 - `SequencedResponse` now is able to recover from a reset.
@@ -269,6 +277,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.11]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.10...v0.11
 [0.10]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.9...v0.10
 [0.9]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.8...v0.9
 [0.8]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.7...v0.8

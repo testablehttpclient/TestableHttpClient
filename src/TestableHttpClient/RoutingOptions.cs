@@ -3,7 +3,7 @@
 /// <summary>
 /// Options specific for routing.
 /// </summary>
-[Obsolete("Renamed to UriPatternMatchingOptions")]
+[Obsolete("Renamed to UriPatternMatchingOptions", true)]
 public class RoutingOptions
 {
     /// <summary>

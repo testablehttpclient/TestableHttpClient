@@ -48,24 +48,24 @@ public class WithRequestUri
     }
 
     [Fact]
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
     public void WithRequestUri_WithoutNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Mock.Of<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithRequestUri("https://example.com/", ignoreCase: false);
+        var result = sut.WithRequestUri("https://example.com/", ignoreCase: false);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "uri pattern 'https://example.com/'"));
+        Assert.Same(sut, result);
     }
 
     [Fact]
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
+    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
     public void WithRequestUri_WithNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Mock.Of<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithRequestUri("https://example.com/", ignoreCase: false, 2);
+        var result = sut.WithRequestUri("https://example.com/", ignoreCase: false, 2);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)2, "uri pattern 'https://example.com/'"));
+        Assert.Same(sut, result);
     }
 }

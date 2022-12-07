@@ -62,10 +62,10 @@ Some examples:
 
 Uri pattern | Matches
 ------------|--------
-*|Matches any URL
+\*|Matches any URL
 \*://\*/\*?\* | Matches any URL
 /get | Matches any URL that uses the path `/get`
-http*://* | Matches any URL that uses the scheme `http` or `https` (or any other scheme that starts with `http`)
+http\*://\* | Matches any URL that uses the scheme `http` or `https` (or any other scheme that starts with `http`)
 localhost:5000 | Matches any URL that uses localhost for the host and port 5000, no matter what scheme or path is used.
 
 ## Controlling the behaviour of pattern matching
