@@ -24,9 +24,8 @@ public void Issue()
 A clear and concise description of what you expected to happen.
 
 **Background (please complete the following information):**
- - OS: [e.g. iOS]
- - Version of library: [e.g. 22]
- - Version of dotnet core: [e.g. 3.1]
+  - Version of library: [e.g. 0.10]
+ - Version of .NET: [e.g. 7.0]
 
 **Additional context**
 Add any other context about the problem here.

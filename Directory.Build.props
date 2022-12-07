@@ -5,35 +5,5 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-
-    <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsTestProject)' == 'false'">
-    <Version>0.0.1</Version>
-    <Authors>David Perfors</Authors>
-    <Copyright>Copyright (c) 2022 David Perfors</Copyright>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <DevelopmentDependency>false</DevelopmentDependency>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/testablehttpclient/TestableHttpClient</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon>
-
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <DebugType>full</DebugType>
-    
-    <IncludeSource>true</IncludeSource>
-    <RepositoryUrl>https://github.com/testablehttpclient/TestableHttpClient</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(IsTestProject)' == 'false'">
-    <None Include="$(MSBuildThisFileDirectory)/images/icon.png" Pack="true" PackagePath="" />
-    <None Include="$(MSBuildThisFileDirectory)/LICENSE.md" Pack="true" PackagePath="" />
-    <None Include="$(MSBuildThisFileDirectory)/README.md" Pack="true" PackagePath="" />
-  </ItemGroup>
 </Project>

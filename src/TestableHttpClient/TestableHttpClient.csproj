@@ -2,22 +2,58 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
+  </PropertyGroup>
 
+  <PropertyGroup>
+    <Title>TestableHttpClient</Title>
     <Description>A simple library to make testing HttpClient and related classes easier.</Description>
+    <Version>0.0.1</Version>
+    <Authors>David Perfors</Authors>
+    <Copyright>Copyright (c) 2022 David Perfors</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <DevelopmentDependency>false</DevelopmentDependency>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/testablehttpclient/TestableHttpClient</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageTags>httpclient;unittesting;dotnet;mock</PackageTags>
+    <PackageReleaseNotes>All release notes for TestableHttpClient can be found on the GitHub site - https://github.com/testablehttpclient/TestableHttpClient/releases</PackageReleaseNotes>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>full</DebugType>
+    
+    <IncludeSource>true</IncludeSource>
+    <RepositoryUrl>https://github.com/testablehttpclient/TestableHttpClient</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Text.Json" Version="4.6.0" />
     <PackageReference Include="IndexRange" Version="1.0.2" />
+    <PackageReference Include="Perfors.UnreachableException" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Perfors.UnreachableException" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.3">
-      <PrivateAssets>all</PrivateAssets>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.3" PrivateAssets="All">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../images/icon.png" Pack="true" PackagePath="" />
+    <None Include="../../LICENSE.md" Pack="true" PackagePath="" />
+    <None Include="../../README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
