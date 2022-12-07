@@ -30,7 +30,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `TestableHttpMessageHandler.ClearRequests` was added for situations where it is not possible to create and use a new instance.
 
 ### Changed
-- Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.
+- Use the same parser for the assertion methods `WithRequestUri` (which is used by `ShouldHaveMadeRequestsTo`) as for the RoutingResponse functionality.  
+  This introduced a breaking change where `*/customers` no longer validate the URI Path as a pattern that **ends** with `/customers`, but as an exact match for `/customers`.
 - `RouteParserException` has been renamed to `UriPatternParserException`.
 - Renamed `RoutingOptions` to `UriPatternMatchingOptions`.
 - `SequencedResponse` now is able to recover from a reset.
