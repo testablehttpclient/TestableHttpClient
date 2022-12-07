@@ -11,7 +11,7 @@ public sealed class TestableHttpMessageHandlerOptions
     };
 
     [ExcludeFromCodeCoverage]
-    [Obsolete("Renamed to UriPatternMatchingOptions")]
-    public RoutingOptions RoutingOptions => UriPatternMatchingOptions;
+    [Obsolete("Renamed to UriPatternMatchingOptions", true)]
+    public RoutingOptions RoutingOptions => new();
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; } = new UriPatternMatchingOptions();
 }

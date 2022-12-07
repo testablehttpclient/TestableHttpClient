@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.11] - Unplanned
+### Removed
+- `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `WithRequestUri(this IHttpRequestMessagesCheck, string, bool)` and `WithRequestUri(this IHttpRequestMessagesCheck, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
+- `WithQueryString` has been removed, since `ShouldHaveMadeRequestTo` and `WithRequestUri` now properly support querystrings.
+ 
 
 ## [0.10] - 2022-12-03
 ### Deprecated
