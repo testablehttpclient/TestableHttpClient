@@ -155,7 +155,7 @@ public class TestableHttpMessageHandlerTests
         Assert.True(doesNotHang);
     }
 
-    private class CustomResponse : IResponse
+    private sealed class CustomResponse : IResponse
     {
         public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {
@@ -167,7 +167,7 @@ public class TestableHttpMessageHandlerTests
         }
     }
 
-    private class SingleThreadedSynchronizationContext : SynchronizationContext, IDisposable
+    private sealed class SingleThreadedSynchronizationContext : SynchronizationContext, IDisposable
     {
         private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = new();
 

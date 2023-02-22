@@ -39,7 +39,7 @@ public class CreatingClients
         Assert.True(handler.WasCalled);
     }
 
-    private class TestHandler : DelegatingHandler
+    private sealed class TestHandler : DelegatingHandler
     {
         public TestHandler() { }
         public bool WasCalled { get; private set; }

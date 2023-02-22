@@ -106,7 +106,7 @@ public class UsingIHttpClientFactory
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get");
     }
 
-    private class StartUpWithDefaultHttpHandler
+    private sealed class StartUpWithDefaultHttpHandler
     {
         public static void ConfigureServices(IServiceCollection services)
         {
