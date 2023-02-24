@@ -27,7 +27,7 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
+          7.0.103
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dotnet tools
