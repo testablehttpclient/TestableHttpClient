@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net462;net47;net48;net6.0;net7.0</TargetFrameworks>
@@ -19,7 +19,7 @@
 
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.6.0" />
   </ItemGroup>
 
 
