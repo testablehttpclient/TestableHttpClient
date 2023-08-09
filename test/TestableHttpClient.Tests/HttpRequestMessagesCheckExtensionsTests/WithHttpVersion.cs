@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -25,42 +25,42 @@ public class WithHttpVersion
     [Fact]
     public void WithHttpVersion_WithoutNumberOfRequests_NullHttpVersion_ThrowsArgumentNullException()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpVersion(null!));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpVersion(null!));
 
         Assert.Equal("httpVersion", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithHttpVersion_WithNumberOfRequests_NullHttpVersion_ThrowsArgumentNullException()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHttpVersion(null!, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHttpVersion(null!, 1));
 
         Assert.Equal("httpVersion", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithHttpVersion_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithHttpVersion(HttpVersion.Version11);
+        sut.WithHttpVersion(HttpVersion.Version11);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "HTTP Version '1.1'"));
+        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "HTTP Version '1.1'");
     }
 
     [Fact]
     public void WithHttpVersion_WithNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithHttpVersion(HttpVersion.Version11, 1);
+        sut.WithHttpVersion(HttpVersion.Version11, 1);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "HTTP Version '1.1'"));
+        sut.Received().WithFilter(Args.AnyPredicate(), (int?)1, "HTTP Version '1.1'");
     }
 }

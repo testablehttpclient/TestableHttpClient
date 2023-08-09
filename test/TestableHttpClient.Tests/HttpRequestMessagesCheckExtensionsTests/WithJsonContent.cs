@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-using Moq;
+using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -29,50 +29,50 @@ public class WithJsonContent
     [Fact]
     public void WithJsonContent_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
-        sut.SetupGet(x => x.Options).Returns(new TestableHttpMessageHandlerOptions());
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
 
-        sut.Object.WithJsonContent(null);
+        sut.WithJsonContent(null);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "json content 'null'"));
-        sut.Verify(x => x.Options, Times.Once());
+        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "json content 'null'");
+        _ = sut.Received(1).Options;
     }
 
     [Fact]
     public void WithJsonContent_WithoutNumberOfRequestsWithCustomJsonSerializerOptions_DoesnotCallOptionsFromCheck()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
-        sut.SetupGet(x => x.Options).Returns(new TestableHttpMessageHandlerOptions());
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
 
-        sut.Object.WithJsonContent(null, new JsonSerializerOptions());
+        sut.WithJsonContent(null, new JsonSerializerOptions());
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "json content 'null'"));
-        sut.Verify(x => x.Options, Times.Never());
+        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "json content 'null'");
+        _ = sut.DidNotReceive().Options;
     }
 
     [Fact]
     public void WithJsonContent_WithNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
-        sut.SetupGet(x => x.Options).Returns(new TestableHttpMessageHandlerOptions());
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
 
-        sut.Object.WithJsonContent(null, 1);
+        sut.WithJsonContent(null, 1);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "json content 'null'"));
-        sut.Verify(x => x.Options, Times.Once());
+        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "json content 'null'");
+        _ = sut.Received(1).Options;
     }
 
 
     [Fact]
     public void WithJsonContent_WithNumberOfRequestsAndJsonSerializerOptions_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
-        sut.SetupGet(x => x.Options).Returns(new TestableHttpMessageHandlerOptions());
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
 
-        sut.Object.WithJsonContent(null, new JsonSerializerOptions(), 1);
+        sut.WithJsonContent(null, new JsonSerializerOptions(), 1);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "json content 'null'"));
-        sut.Verify(x => x.Options, Times.Never());
+        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "json content 'null'");
+        _ = sut.DidNotReceive().Options;
     }
 
     [Fact]

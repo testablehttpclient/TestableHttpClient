@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -29,12 +29,12 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, "someValue"));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName, "someValue"));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Theory]
@@ -42,12 +42,12 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader(headerName, "someValue", 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader(headerName, "someValue", 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Theory]
@@ -55,12 +55,12 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader("someHeader", headerValue));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", headerValue));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Theory]
@@ -68,31 +68,31 @@ public class WithHeaderNameAndValue
     [InlineData("")]
     public void WithHeaderNameAndValue_WithNumberOfRequests_NullOrEmptyValue_ThrowsArgumentNullException(string headerValue)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithHeader("someHeader", headerValue, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithHeader("someHeader", headerValue, 1));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithHeaderNameAndValue_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithHeader("someHeader", "someValue");
+        sut.WithHeader("someHeader", "someValue");
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "header 'someHeader' and value 'someValue'"));
+        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "header 'someHeader' and value 'someValue'");
     }
 
     [Fact]
     public void WithHeaderNameAndValue_WithNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithHeader("someHeader", "someValue", 1);
+        sut.WithHeader("someHeader", "someValue", 1);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "header 'someHeader' and value 'someValue'"));
+        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "header 'someHeader' and value 'someValue'");
     }
 }

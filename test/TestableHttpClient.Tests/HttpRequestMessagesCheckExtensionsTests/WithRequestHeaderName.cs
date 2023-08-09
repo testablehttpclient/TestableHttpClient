@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -29,12 +29,12 @@ public class WithRequestHeaderName
     [InlineData("")]
     public void WithRequestHeader_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader(headerName));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader(headerName));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Theory]
@@ -42,31 +42,31 @@ public class WithRequestHeaderName
     [InlineData("")]
     public void WithRequestHeader_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestHeader(headerName, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader(headerName, 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeader_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithRequestHeader("api-version");
+        sut.WithRequestHeader("api-version");
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "request header 'api-version'"));
+        sut.Received().WithFilter(Args.AnyPredicate(), null, "request header 'api-version'");
     }
 
     [Fact]
     public void WithRequestHeader_WithNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithRequestHeader("api-version", 1);
+        sut.WithRequestHeader("api-version", 1);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "request header 'api-version'"));
+        sut.Received().WithFilter(Args.AnyPredicate(), (int?)1, "request header 'api-version'");
     }
 }

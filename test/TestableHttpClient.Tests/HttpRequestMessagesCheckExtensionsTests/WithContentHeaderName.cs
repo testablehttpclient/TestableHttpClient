@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -29,12 +29,12 @@ public class WithContentHeaderName
     [InlineData("")]
     public void WithContentHeader_WithoutNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithContentHeader(headerName));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader(headerName));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Theory]
@@ -42,31 +42,31 @@ public class WithContentHeaderName
     [InlineData("")]
     public void WithContentHeader_WithNumberOfRequests_NullOrEmptyHeaderName_ThrowsArgumentNullException(string headerName)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithContentHeader(headerName, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader(headerName, 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeader_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithContentHeader("Content-Type");
+        sut.WithContentHeader("Content-Type");
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "content header 'Content-Type'"));
+        sut.Received().WithFilter(Args.AnyPredicate(), null, "content header 'Content-Type'");
     }
 
     [Fact]
     public void WithContentHeader_WithNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithContentHeader("Content-Type", 1);
+        sut.WithContentHeader("Content-Type", 1);
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), (int?)1, "content header 'Content-Type'"));
+        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "content header 'Content-Type'");
     }
 }

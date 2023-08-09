@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -28,7 +28,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithoutNumberOfRequests_ReturnsSut()
     {
-        IHttpRequestMessagesCheck sut = Mock.Of<IHttpRequestMessagesCheck>();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
         IHttpRequestMessagesCheck result = sut.WithQueryString("");
 
@@ -38,7 +38,7 @@ public class WithQueryString
     [Fact]
     public void WithQueryString_WithNumberOfRequests_ReturnsSut()
     {
-        IHttpRequestMessagesCheck sut = Mock.Of<IHttpRequestMessagesCheck>();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
         IHttpRequestMessagesCheck result = sut.WithQueryString("", 2);
 
