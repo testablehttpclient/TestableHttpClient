@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests;
 
@@ -43,12 +43,12 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     public void CreateClientWithConfigurerAndHtppMessageHandlers_CallsConfigureClientWithClientToReturn()
     {
         using TestableHttpMessageHandler sut = new();
-        var configureClient = Mock.Of<Action<HttpClient>>();
+        var configureClient = Substitute.For<Action<HttpClient>>();
         var handlers = Enumerable.Empty<DelegatingHandler>();
 
         using var client = sut.CreateClient(configureClient, handlers);
 
-        Mock.Get(configureClient).Verify(x => x.Invoke(client), Times.Once);
+        configureClient.Received(1).Invoke(client);
     }
 
     [Fact]
@@ -58,8 +58,8 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         static void configureClient(HttpClient _) { }
         IEnumerable<DelegatingHandler> handlers = new DelegatingHandler[]
         {
-            Mock.Of<DelegatingHandler>(),
-            Mock.Of<DelegatingHandler>()
+            Substitute.For<DelegatingHandler>(),
+            Substitute.For<DelegatingHandler>()
         };
 
         using var client = sut.CreateClient(configureClient, handlers);

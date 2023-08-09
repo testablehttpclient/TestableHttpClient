@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-using Moq;
+using NSubstitute;
 
 namespace TestableHttpClient.Tests;
 
@@ -40,12 +40,11 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_ByDefault_CallsExecutAsyncOnIResponse()
     {
-        IResponse mockedResponse = Mock.Of<IResponse>();
+        IResponse mockedResponse = Substitute.For<IResponse>();
         HttpResponseContext? context = null;
-        Mock.Get(mockedResponse)
-            .Setup(x => x.ExecuteAsync(It.IsAny<HttpResponseContext>(), It.IsAny<CancellationToken>()))
-            .Callback((HttpResponseContext c, CancellationToken _) => context = c)
-            .Returns(Task.CompletedTask);
+        mockedResponse.ExecuteAsync(Arg.Any<HttpResponseContext>(), Arg.Any<CancellationToken>())
+            .Returns(Task.CompletedTask)
+            .AndDoes(x => context = x[0] as HttpResponseContext);
 
         using TestableHttpMessageHandler sut = new();
         sut.RespondWith(mockedResponse);

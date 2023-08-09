@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
@@ -29,29 +29,29 @@ public class WithRequestUri
     [InlineData("")]
     public void WithRequestUri_NullOrEmptyPattern_ThrowsArgumentNullException(string pattern)
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.Object.WithRequestUri(pattern));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestUri(pattern));
 
         Assert.Equal("pattern", exception.ParamName);
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), It.IsAny<int?>(), It.IsAny<string>()), Times.Never());
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestUri_WithoutNumberOfRequests_CallsWithCorrectly()
     {
-        Mock<IHttpRequestMessagesCheck> sut = new();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.Object.WithRequestUri("https://example.com/");
+        sut.WithRequestUri("https://example.com/");
 
-        sut.Verify(x => x.WithFilter(Its.AnyPredicate(), null, "uri pattern 'https://example.com/'"));
+        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "uri pattern 'https://example.com/'");
     }
 
     [Fact]
     [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
     public void WithRequestUri_WithoutNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
-        IHttpRequestMessagesCheck sut = Mock.Of<IHttpRequestMessagesCheck>();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
         var result = sut.WithRequestUri("https://example.com/", ignoreCase: false);
 
@@ -62,7 +62,7 @@ public class WithRequestUri
     [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
     public void WithRequestUri_WithNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
     {
-        IHttpRequestMessagesCheck sut = Mock.Of<IHttpRequestMessagesCheck>();
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
         var result = sut.WithRequestUri("https://example.com/", ignoreCase: false, 2);
 

@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using TestableHttpClient.Response;
+﻿using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 

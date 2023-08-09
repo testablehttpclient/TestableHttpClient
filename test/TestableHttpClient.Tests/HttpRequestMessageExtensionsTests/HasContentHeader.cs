@@ -1,5 +1,3 @@
-using System.Net.Http;
-
 namespace TestableHttpClient.Tests;
 
 public partial class HttpRequestMessageExtensionsTests

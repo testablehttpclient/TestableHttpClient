@@ -9,7 +9,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
 - `WithRequestUri(this IHttpRequestMessagesCheck, string, bool)` and `WithRequestUri(this IHttpRequestMessagesCheck, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
 - `WithQueryString` has been removed, since `ShouldHaveMadeRequestTo` and `WithRequestUri` now properly support querystrings.
- 
+- Replaced Moq with NSubstitute in test project because of the SponsorLink dependencies.
 
 ## [0.10] - 2022-12-03
 ### Deprecated

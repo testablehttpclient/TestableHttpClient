@@ -21,7 +21,7 @@ jobs:
     - name: Update Java SDK for SonarQube
       uses: actions/setup-java@v1
       with:
-        java-version: '11'
+        java-version: '17'
     - name: Setup .NET versions
       uses: actions/setup-dotnet@v1
       with:
@@ -77,7 +77,7 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
+          7.0.306
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dependencies
