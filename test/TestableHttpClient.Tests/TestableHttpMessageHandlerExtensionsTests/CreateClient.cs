@@ -40,7 +40,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         var handlerField = privateFields.FirstOrDefault(x => x.FieldType == typeof(HttpMessageHandler));
         if (handlerField == null)
         {
-            Assert.True(false, "Can't find the private HttpMessageHandler field on HttpClient.");
+            Assert.Fail("Can't find the private HttpMessageHandler field on HttpClient.");
             return null;
         }
         return handlerField.GetValue(client) as HttpMessageHandler;
