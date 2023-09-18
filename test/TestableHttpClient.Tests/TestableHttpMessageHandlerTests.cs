@@ -137,6 +137,7 @@ public class TestableHttpMessageHandlerTests
     }
 
     [Fact]
+    [SuppressMessage("Usage", "xUnit1031:Do not use blocking task operations in test method", Justification = "Here it is necessary, if it blocks the test, it will time out and breaks the test.")]
     public void GetAsync_ShouldNotHang()
     {
         using TestableHttpMessageHandler sut = new();
