@@ -24,14 +24,23 @@ public class WithRequestUri
         Assert.Equal("check", exception.ParamName);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void WithRequestUri_NullOrEmptyPattern_ThrowsArgumentNullException(string pattern)
+    [Fact]
+    public void WithRequestUri_NullPattern_ThrowsArgumentNullException()
     {
         IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestUri(pattern));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestUri(null!));
+
+        Assert.Equal("pattern", exception.ParamName);
+        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
+    }
+
+    [Fact]
+    public void WithRequestUri_EmptyPattern_ThrowsArgumentException()
+    {
+        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+
+        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestUri(string.Empty));
 
         Assert.Equal("pattern", exception.ParamName);
         sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());

@@ -22,7 +22,7 @@ public class TimeoutResponseTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_WithCancelllationTokenWithoutSource_CancelsTheTaskAsync()
+    public async Task ExecuteAsync_WithCancellationTokenWithoutSource_CancelsTheTaskAsync()
     {
         TimeoutResponse sut = new();
 

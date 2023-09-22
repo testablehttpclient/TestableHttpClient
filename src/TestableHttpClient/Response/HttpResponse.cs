@@ -17,10 +17,7 @@ internal class HttpResponse : IResponse
 
     public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        Guard.ThrowIfNull(context);
         return ExecuteAsyncImpl(context, cancellationToken);
     }
 

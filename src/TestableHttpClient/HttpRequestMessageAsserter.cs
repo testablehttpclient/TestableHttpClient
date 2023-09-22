@@ -47,7 +47,7 @@ internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// Asserts whether requests comply with a specific filter.
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
-    /// <param name="condition">The name of the conditon, used in the exception message.</param>
+    /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
@@ -56,7 +56,7 @@ internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// Asserts whether requests comply with a specific filter.
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
-    /// <param name="condition">The name of the conditon, used in the exception message.</param>
+    /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);

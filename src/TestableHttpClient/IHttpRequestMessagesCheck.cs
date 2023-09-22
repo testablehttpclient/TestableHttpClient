@@ -14,7 +14,7 @@ public interface IHttpRequestMessagesCheck
     /// Asserts whether requests comply with a specific filter.
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
-    /// <param name="condition">The name of the conditon, used in the exception message.</param>
+    /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition);
 
@@ -23,7 +23,7 @@ public interface IHttpRequestMessagesCheck
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
-    /// <param name="condition">The name of the conditon, used in the exception message.</param>
+    /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition);
 
@@ -32,7 +32,7 @@ public interface IHttpRequestMessagesCheck
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests, when null is passed "at least one" is presumed.</param>
-    /// <param name="condition">The name of the conditon, used in the exception message.</param>
+    /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition);
 }

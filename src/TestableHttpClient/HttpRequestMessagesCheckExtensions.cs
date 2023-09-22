@@ -27,15 +27,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(pattern))
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(pattern);
 
         var condition = string.Empty;
         if (pattern != "*")
@@ -92,15 +85,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithHttpMethod(this IHttpRequestMessagesCheck check, HttpMethod httpMethod, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (httpMethod == null)
-        {
-            throw new ArgumentNullException(nameof(httpMethod));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNull(httpMethod);
 
         return check.WithFilter(x => x.HasHttpMethod(httpMethod), expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
     }
@@ -124,15 +110,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithHttpVersion(this IHttpRequestMessagesCheck check, Version httpVersion, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (httpVersion == null)
-        {
-            throw new ArgumentNullException(nameof(httpVersion));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNull(httpVersion);
 
         return check.WithFilter(x => x.HasHttpVersion(httpVersion), expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
     }
@@ -158,15 +137,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(headerName);
 
         return check.WithFilter(x => x.HasRequestHeader(headerName), expectedNumberOfRequests, $"request header '{headerName}'");
     }
@@ -194,20 +166,9 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
-
-        if (string.IsNullOrEmpty(headerValue))
-        {
-            throw new ArgumentNullException(nameof(headerValue));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(headerName);
+        Guard.ThrowIfNullOrEmpty(headerValue);
 
         return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue), expectedNumberOfRequests, $"request header '{headerName}' and value '{headerValue}'");
     }
@@ -233,15 +194,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(headerName);
 
         return check.WithFilter(x => x.HasContentHeader(headerName), expectedNumberOfRequests, $"content header '{headerName}'");
     }
@@ -269,20 +223,9 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
-
-        if (string.IsNullOrEmpty(headerValue))
-        {
-            throw new ArgumentNullException(nameof(headerValue));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(headerName);
+        Guard.ThrowIfNullOrEmpty(headerValue);
 
         return check.WithFilter(x => x.HasContentHeader(headerName, headerValue), expectedNumberOfRequests, $"content header '{headerName}' and value '{headerValue}'");
     }
@@ -306,15 +249,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(headerName);
 
         return check.WithFilter(x => x.HasRequestHeader(headerName) || x.HasContentHeader(headerName), expectedNumberOfRequests, $"header '{headerName}'");
     }
@@ -340,20 +276,9 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
-
-        if (string.IsNullOrEmpty(headerValue))
-        {
-            throw new ArgumentNullException(nameof(headerValue));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNullOrEmpty(headerName);
+        Guard.ThrowIfNullOrEmpty(headerValue);
 
         return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue) || x.HasContentHeader(headerName, headerValue), expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
     }
@@ -379,21 +304,14 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithContent(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (pattern == null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNull(pattern);
 
         return check.WithFilter(x => x.HasContent(pattern), expectedNumberOfRequests, $"content '{pattern}'");
     }
 
     /// <summary>
-    /// Asserts wheter requests are made with specific json content.
+    /// Asserts whether requests are made with specific json content.
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
@@ -402,7 +320,7 @@ public static class HttpRequestMessagesCheckExtensions
     public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject) => WithJsonContent(check, jsonObject, null, null);
 
     /// <summary>
-    /// Asserts wheter requests are made with specific json content.
+    /// Asserts whether requests are made with specific json content.
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
@@ -411,7 +329,7 @@ public static class HttpRequestMessagesCheckExtensions
     public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, JsonSerializerOptions jsonSerializerOptions) => WithJsonContent(check, jsonObject, jsonSerializerOptions, null);
 
     /// <summary>
-    /// Asserts wheter requests are made with specific json content.
+    /// Asserts whether requests are made with specific json content.
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
@@ -421,7 +339,7 @@ public static class HttpRequestMessagesCheckExtensions
     public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int expectedNumberOfRequests) => WithJsonContent(check, jsonObject, null, (int?)expectedNumberOfRequests);
 
     /// <summary>
-    /// Asserts wheter requests are made with specific json content.
+    /// Asserts whether requests are made with specific json content.
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
@@ -432,10 +350,7 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, JsonSerializerOptions? jsonSerializerOptions, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
+        Guard.ThrowIfNull(check);
 
         var jsonString = JsonSerializer.Serialize(jsonObject, jsonSerializerOptions ?? check.Options.JsonSerializerOptions);
 
@@ -443,7 +358,7 @@ public static class HttpRequestMessagesCheckExtensions
     }
 
     /// <summary>
-    /// Asserts wheter requests are made with specific url encoded content.
+    /// Asserts whether requests are made with specific url encoded content.
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
@@ -452,7 +367,7 @@ public static class HttpRequestMessagesCheckExtensions
     public static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection) => WithFormUrlEncodedContent(check, nameValueCollection, null);
 
     /// <summary>
-    /// Asserts wheter requests are made with specific url encoded content.
+    /// Asserts whether requests are made with specific url encoded content.
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="nameValueCollection">The collection of key/value pairs that should be url encoded.</param>
@@ -463,15 +378,8 @@ public static class HttpRequestMessagesCheckExtensions
 
     private static IHttpRequestMessagesCheck WithFormUrlEncodedContent(this IHttpRequestMessagesCheck check, IEnumerable<KeyValuePair<string?, string?>> nameValueCollection, int? expectedNumberOfRequests)
     {
-        if (check == null)
-        {
-            throw new ArgumentNullException(nameof(check));
-        }
-
-        if (nameValueCollection == null)
-        {
-            throw new ArgumentNullException(nameof(nameValueCollection));
-        }
+        Guard.ThrowIfNull(check);
+        Guard.ThrowIfNull(nameValueCollection);
 
         using var content = new FormUrlEncodedContent(nameValueCollection);
         var contentString = content.ReadAsStringAsync().Result;

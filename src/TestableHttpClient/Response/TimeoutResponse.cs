@@ -2,14 +2,18 @@
 
 internal class TimeoutResponse : IResponse
 {
-    public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
+    public async Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
         var cancelationSource = cancellationToken.GetSource();
 
         if (cancelationSource is not null)
         {
+#if NET8_0_OR_GREATER
+            await cancelationSource.CancelAsync().ConfigureAwait(true);
+#else
             cancelationSource.Cancel(false);
-            return Task.FromCanceled<HttpResponseMessage>(cancellationToken);
+            await Task.FromCanceled<HttpResponseMessage>(cancellationToken).ConfigureAwait(true);
+#endif
         }
 
         throw new TaskCanceledException();

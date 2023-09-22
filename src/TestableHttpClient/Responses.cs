@@ -40,7 +40,7 @@ public static class Responses
     /// <returns>A ConfiguredResponse</returns>
     public static IResponse Configured(IResponse response, Action<HttpResponseMessage> configureResponse) => new ConfiguredResponse(response, configureResponse);
     /// <summary>
-    /// Create a response that changes whith every call.
+    /// Create a response that changes with every call.
     /// </summary>
     /// <param name="responses">The response to return in order.</param>
     /// <returns>A sequenced response.</returns>
@@ -48,7 +48,7 @@ public static class Responses
     /// <summary>
     /// Create a response with a specific status code.
     /// </summary>
-    /// <param name="statusCode">The statuscode to set on the HttpResponseMessage.</param>
+    /// <param name="statusCode">The status code to set on the HttpResponseMessage.</param>
     /// <returns>An HttpResponse with the configured StatusCode.</returns>
     public static IResponse StatusCode(HttpStatusCode statusCode) => new HttpResponse(statusCode);
     /// <summary>
@@ -79,20 +79,17 @@ public static class Responses
     /// </summary>
     /// <param name="builder">The route builder that can be used to configure multiple routes.</param>
     /// <returns>A response with routing capabilities.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the builder paramater is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when the builder parameter is null.</exception>
     public static IResponse Route(Action<IRoutingResponseBuilder> builder)
     {
-        if (builder is null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
+        Guard.ThrowIfNull(builder);
 
         RoutingResponseBuilder routingResponseBuilder = new();
         builder(routingResponseBuilder);
         return routingResponseBuilder.RoutingResponse;
     }
     /// <summary>
-    /// Entrypoint for extensions.
+    /// Entry point for extensions.
     /// </summary>
     public static IResponsesExtensions Extensions { get; } = new ResponseExtensions();
     private sealed class ResponseExtensions : IResponsesExtensions { }

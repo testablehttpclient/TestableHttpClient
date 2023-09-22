@@ -29,14 +29,21 @@ public partial class HttpRequestMessageExtensionsTests
         Assert.Equal("httpMethod", exception.ParamName);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void HasHttpMethod_WithString_NullHttpMethod_ThrowsArgumentNullException(string httpMethod)
+    [Fact]
+    public void HasHttpMethod_WithString_NullHttpMethod_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new() { Method = HttpMethod.Get };
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHttpMethod(httpMethod));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHttpMethod((string)null!));
+        Assert.Equal("httpMethod", exception.ParamName);
+    }
+
+    [Fact]
+    public void HasHttpMethod_WithString_EmptyHttpMethod_ThrowsArgumentException()
+    {
+        using HttpRequestMessage sut = new() { Method = HttpMethod.Get };
+
+        var exception = Assert.Throws<ArgumentException>(() => sut.HasHttpMethod(string.Empty));
         Assert.Equal("httpMethod", exception.ParamName);
     }
 
