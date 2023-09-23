@@ -30,7 +30,7 @@ public class ConfigureResponses
     }
 
     [Fact]
-    public async Task UsingTestHandlerWithMultipleCustomRepsonse_ReturnsLastCustomResponse()
+    public async Task UsingTestHandlerWithMultipleCustomResponse_ReturnsLastCustomResponse()
     {
         using TestableHttpMessageHandler testHandler = new();
         testHandler.RespondWith(Text("HttpClient testing is easy"));
@@ -50,14 +50,13 @@ public class ConfigureResponses
         testHandler.RespondWith(Text("HttpClient testing is easy"));
 
         using HttpClient httpClient = new(testHandler);
-        string[] urls = new[]
-        {
+        string[] urls = [
             "http://httpbin.org/status/200",
             "http://httpbin.org/status/201",
             "http://httpbin.org/status/400",
             "http://httpbin.org/status/401",
             "http://httpbin.org/status/503",
-        };
+        ];
 
         foreach (string? url in urls)
         {
@@ -69,7 +68,7 @@ public class ConfigureResponses
     }
 
     [Fact]
-    public async Task UsingTestHandlerWithCustomResponseFactory_AllowsForAdvancedUsecases()
+    public async Task UsingTestHandlerWithCustomResponseFactory_AllowsForAdvancedUseCases()
     {
         using TestableHttpMessageHandler testHandler = new();
 
@@ -93,7 +92,7 @@ public class ConfigureResponses
     }
 
     [Fact]
-    public async Task UsingTestHandlerWithRoute_AllowsForRoutingUsecases()
+    public async Task UsingTestHandlerWithRoute_AllowsForRoutingUseCases()
     {
         using TestableHttpMessageHandler testHandler = new();
 
@@ -169,7 +168,7 @@ public class ConfigureResponses
     }
 
     [Fact]
-    public async Task YsingTestHandlerWithConfiguredResponses_WillConfigureTHeResponse()
+    public async Task UsingTestHandlerWithConfiguredResponses_WillConfigureTheResponse()
     {
         using TestableHttpMessageHandler testHandler = new();
         testHandler.RespondWith(Configured(StatusCode(HttpStatusCode.NoContent), x => x.Headers.Add("server", "test")));

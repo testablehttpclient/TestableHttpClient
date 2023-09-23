@@ -8,7 +8,7 @@ namespace TestableHttpClient.IntegrationTests;
 public class CustomizeJsonSerialization
 {
     [Fact]
-    public async Task ByDefault_CamelCasing_is_used_for_jsonserialization()
+    public async Task ByDefault_CamelCasing_is_used_for_json_serialization()
     {
         using TestableHttpMessageHandler sut = new();
         sut.RespondWith(Json(new { Name = "Charlie" }));

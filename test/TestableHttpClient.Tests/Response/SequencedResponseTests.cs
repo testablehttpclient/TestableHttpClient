@@ -20,10 +20,10 @@ public class SequencedResponseTests
     }
 
     [Fact]
-    public async Task GetReponseAsync_WithSingleResponse_ReturnsSameResponseEveryCall()
+    public async Task GetResponseAsync_WithSingleResponse_ReturnsSameResponseEveryCall()
     {
         HttpResponse innerResponse = new(HttpStatusCode.Created);
-        SequencedResponse sut = new(new[] { innerResponse });
+        SequencedResponse sut = new([ innerResponse ]);
         using TestableHttpMessageHandler handler = new();
         handler.RespondWith(sut);
 
@@ -37,14 +37,13 @@ public class SequencedResponseTests
     }
 
     [Fact]
-    public async Task GetReponseAsync_WithMultpleResponses_ReturnsDifferentResponseForEachRequest()
+    public async Task GetResponseAsync_WithMultipleResponses_ReturnsDifferentResponseForEachRequest()
     {
-        SequencedResponse sut = new(new[]
-        {
+        SequencedResponse sut = new([
             new HttpResponse(HttpStatusCode.Created),
             new HttpResponse(HttpStatusCode.Accepted),
             new HttpResponse(HttpStatusCode.NoContent),
-        });
+        ]);
 
         using TestableHttpMessageHandler handler = new();
         handler.RespondWith(sut);
@@ -63,12 +62,11 @@ public class SequencedResponseTests
     [Fact]
     public async Task GetResponseAsync_AfterHandlerReset_ReturnsCorrectResponseForEachRequest()
     {
-        SequencedResponse sut = new(new[]
-        {
+        SequencedResponse sut = new([
             new HttpResponse(HttpStatusCode.Created),
             new HttpResponse(HttpStatusCode.Accepted),
             new HttpResponse(HttpStatusCode.NoContent),
-        });
+        ]);
 
         using TestableHttpMessageHandler handler = new();
         handler.RespondWith(sut);

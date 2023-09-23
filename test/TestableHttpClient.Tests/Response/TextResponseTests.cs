@@ -12,7 +12,7 @@ public class TextResponseTests
     }
 
     [Fact]
-    public async Task TextResponse_WithEmtpyString_SetsStringToContent()
+    public async Task TextResponse_WithEmptyString_SetsStringToContent()
     {
         TextResponse sut = new(string.Empty);
 

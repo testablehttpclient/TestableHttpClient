@@ -7,7 +7,7 @@ public class MessageBuilderTests
     [Fact]
     public void BuildMessage_NoExpectedCountZeroActualCountNoConditions()
     {
-        var result = MessageBuilder.BuildMessage(null, 0, Enumerable.Empty<string>());
+        var result = MessageBuilder.BuildMessage(null, 0, []);
 
         Assert.Equal("Expected at least one request to be made, but no requests were made.", result);
     }
@@ -18,7 +18,7 @@ public class MessageBuilderTests
     [InlineData(10, "10 requests were made")]
     public void BuildMessage_NoExpectedCountVariableActualCountNoConditions(int actualCount, string expectedMessage)
     {
-        var result = MessageBuilder.BuildMessage(null, actualCount, Enumerable.Empty<string>());
+        var result = MessageBuilder.BuildMessage(null, actualCount, []);
 
         Assert.Equal($"Expected at least one request to be made, and {expectedMessage}.", result);
     }
@@ -26,7 +26,7 @@ public class MessageBuilderTests
     [Fact]
     public void BuildMessage_ZeroExpectedCountZeroActualCountNoConditions()
     {
-        var result = MessageBuilder.BuildMessage(0, 0, Enumerable.Empty<string>());
+        var result = MessageBuilder.BuildMessage(0, 0, []);
 
         Assert.Equal($"Expected no requests to be made, and no requests were made.", result);
     }
@@ -37,7 +37,7 @@ public class MessageBuilderTests
     [InlineData(10, "10 requests")]
     public void BuildMessage_VariableExpectedCountZeroActualCountNoConditions(int expectedCount, string expectedMessage)
     {
-        var result = MessageBuilder.BuildMessage(expectedCount, 0, Enumerable.Empty<string>());
+        var result = MessageBuilder.BuildMessage(expectedCount, 0, []);
 
         Assert.Equal($"Expected {expectedMessage} to be made, but no requests were made.", result);
     }

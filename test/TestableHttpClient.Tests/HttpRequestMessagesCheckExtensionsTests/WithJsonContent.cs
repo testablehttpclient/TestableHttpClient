@@ -39,7 +39,7 @@ public class WithJsonContent
     }
 
     [Fact]
-    public void WithJsonContent_WithoutNumberOfRequestsWithCustomJsonSerializerOptions_DoesnotCallOptionsFromCheck()
+    public void WithJsonContent_WithoutNumberOfRequestsWithCustomJsonSerializerOptions_DoesNotCallOptionsFromCheck()
     {
         IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
         sut.Options.Returns(new TestableHttpMessageHandlerOptions());
@@ -82,7 +82,7 @@ public class WithJsonContent
         {
             Content = new StringContent("null", Encoding.UTF8, "application/json")
         };
-        HttpRequestMessageAsserter sut = new(new[] { request });
+        HttpRequestMessageAsserter sut = new([ request ]);
 
         IHttpRequestMessagesCheck result = sut.WithJsonContent(null);
 
@@ -97,7 +97,7 @@ public class WithJsonContent
         {
             Content = new StringContent("{}", Encoding.UTF8, "application/json")
         };
-        HttpRequestMessageAsserter sut = new(new[] { request });
+        HttpRequestMessageAsserter sut = new([ request ]);
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithJsonContent(null));
         Assert.Equal("Expected at least one request to be made with json content 'null', but no requests were made.", exception.Message);
@@ -110,7 +110,7 @@ public class WithJsonContent
         {
             Content = new StringContent("null", Encoding.UTF8)
         };
-        HttpRequestMessageAsserter sut = new(new[] { request });
+        HttpRequestMessageAsserter sut = new([ request ]);
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithJsonContent(null));
         Assert.Equal("Expected at least one request to be made with json content 'null', but no requests were made.", exception.Message);
