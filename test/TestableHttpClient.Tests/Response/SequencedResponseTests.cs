@@ -23,7 +23,7 @@ public class SequencedResponseTests
     public async Task GetResponseAsync_WithSingleResponse_ReturnsSameResponseEveryCall()
     {
         HttpResponse innerResponse = new(HttpStatusCode.Created);
-        SequencedResponse sut = new([ innerResponse ]);
+        SequencedResponse sut = new([innerResponse]);
         using TestableHttpMessageHandler handler = new();
         handler.RespondWith(sut);
 

@@ -34,7 +34,7 @@ public class TestableHttpMessageHandlerTests
         _ = await client.SendAsync(request3);
         _ = await client.SendAsync(request4);
 
-        Assert.Equal([ request1, request2, request3, request4 ], sut.Requests);
+        Assert.Equal([request1, request2, request3, request4], sut.Requests);
     }
 
     [Fact]

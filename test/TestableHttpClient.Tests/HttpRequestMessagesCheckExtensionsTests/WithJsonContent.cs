@@ -82,7 +82,7 @@ public class WithJsonContent
         {
             Content = new StringContent("null", Encoding.UTF8, "application/json")
         };
-        HttpRequestMessageAsserter sut = new([ request ]);
+        HttpRequestMessageAsserter sut = new([request]);
 
         IHttpRequestMessagesCheck result = sut.WithJsonContent(null);
 
@@ -97,7 +97,7 @@ public class WithJsonContent
         {
             Content = new StringContent("{}", Encoding.UTF8, "application/json")
         };
-        HttpRequestMessageAsserter sut = new([ request ]);
+        HttpRequestMessageAsserter sut = new([request]);
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithJsonContent(null));
         Assert.Equal("Expected at least one request to be made with json content 'null', but no requests were made.", exception.Message);
@@ -110,7 +110,7 @@ public class WithJsonContent
         {
             Content = new StringContent("null", Encoding.UTF8)
         };
-        HttpRequestMessageAsserter sut = new([ request ]);
+        HttpRequestMessageAsserter sut = new([request]);
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithJsonContent(null));
         Assert.Equal("Expected at least one request to be made with json content 'null', but no requests were made.", exception.Message);
