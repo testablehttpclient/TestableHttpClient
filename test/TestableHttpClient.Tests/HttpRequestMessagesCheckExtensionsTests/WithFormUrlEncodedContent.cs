@@ -9,7 +9,7 @@ public class WithFormUrlEncodedContent
     {
         IHttpRequestMessagesCheck sut = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>()));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent([]));
 
         Assert.Equal("check", exception.ParamName);
     }
@@ -19,7 +19,7 @@ public class WithFormUrlEncodedContent
     {
         IHttpRequestMessagesCheck sut = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>(), 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent([], 1));
 
         Assert.Equal("check", exception.ParamName);
     }
@@ -51,7 +51,7 @@ public class WithFormUrlEncodedContent
     {
         IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") });
+        sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]);
 
         sut.Received(1).WithFilter(Args.AnyPredicate(), null, "form url encoded content 'username=alice'");
     }
@@ -61,7 +61,7 @@ public class WithFormUrlEncodedContent
     {
         IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
 
-        sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }, 1);
+        sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")], 1);
 
         sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "form url encoded content 'username=alice'");
     }
@@ -71,11 +71,11 @@ public class WithFormUrlEncodedContent
     {
         using HttpRequestMessage request = new()
         {
-            Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>())
+            Content = new FormUrlEncodedContent([])
         };
-        HttpRequestMessageAsserter sut = new(new[] { request });
+        HttpRequestMessageAsserter sut = new([request]);
 
-        var result = sut.WithFormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>());
+        var result = sut.WithFormUrlEncodedContent([]);
 
         Assert.NotNull(result);
         Assert.IsType<HttpRequestMessageAsserter>(result);
@@ -86,11 +86,11 @@ public class WithFormUrlEncodedContent
     {
         using HttpRequestMessage request = new()
         {
-            Content = new FormUrlEncodedContent(Enumerable.Empty<KeyValuePair<string?, string?>>())
+            Content = new FormUrlEncodedContent([])
         };
-        HttpRequestMessageAsserter sut = new(new[] { request });
+        HttpRequestMessageAsserter sut = new([request]);
 
-        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }));
+        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]));
 
         Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
     }
@@ -100,12 +100,12 @@ public class WithFormUrlEncodedContent
     {
         using HttpRequestMessage request = new()
         {
-            Content = new FormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") })
+            Content = new FormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")])
         };
         request.Content.Headers.ContentType = new MediaTypeHeaderValue("plain/text");
-        HttpRequestMessageAsserter sut = new(new[] { request });
+        HttpRequestMessageAsserter sut = new([request]);
 
-        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent(new[] { new KeyValuePair<string?, string?>("username", "alice") }));
+        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]));
 
         Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
     }

@@ -40,7 +40,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     }
 
     [Fact]
-    public void CreateClientWithConfigurerAndHtppMessageHandlers_CallsConfigureClientWithClientToReturn()
+    public void CreateClientWithConfigurerAndHttpMessageHandlers_CallsConfigureClientWithClientToReturn()
     {
         using TestableHttpMessageHandler sut = new();
         var configureClient = Substitute.For<Action<HttpClient>>();

@@ -26,16 +26,10 @@ public class TestableHttpMessageHandler : HttpMessageHandler
         HttpResponseContext context = new(request, httpRequestMessages, responseMessage, Options);
         await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
 
-        if (responseMessage.RequestMessage is null)
-        {
-            responseMessage.RequestMessage = request;
-        }
+        responseMessage.RequestMessage ??= request;
 
 #if !NET6_0_OR_GREATER
-        if (responseMessage.Content is null)
-        {
-            responseMessage.Content = new StringContent("");
-        }
+        responseMessage.Content ??= new StringContent("");
 #endif
 
         return responseMessage;
@@ -45,7 +39,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// Configure a response that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
     /// </summary>
     /// <param name="response">The response that should be created.</param>
-    /// <remarks>By default each request will receive a new response, however this is dependend on the implementation.</remarks>
+    /// <remarks>By default each request will receive a new response, however this is dependent on the implementation.</remarks>
     /// <example>
     /// testableHttpMessageHander.RespondWith(Responses.StatusCode(HttpStatusCode.OK));
     /// </example>

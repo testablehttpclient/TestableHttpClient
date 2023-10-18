@@ -13,15 +13,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
     internal static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, Version httpVersion)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (httpVersion == null)
-        {
-            throw new ArgumentNullException(nameof(httpVersion));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNull(httpVersion);
 
         return httpRequestMessage.Version == httpVersion;
     }
@@ -34,15 +27,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
     internal static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, string httpVersion)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (string.IsNullOrEmpty(httpVersion))
-        {
-            throw new ArgumentNullException(nameof(httpVersion));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNullOrEmpty(httpVersion);
 
         return httpRequestMessage.HasHttpVersion(new Version(httpVersion));
     }
@@ -55,15 +41,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the HttpMethod matches; otherwise, false.</returns>
     internal static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, HttpMethod httpMethod)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (httpMethod == null)
-        {
-            throw new ArgumentNullException(nameof(httpMethod));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNull(httpMethod);
 
         return httpRequestMessage.Method == httpMethod;
     }
@@ -76,15 +55,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the HttpMethod matches; otherwise, false.</returns>
     internal static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, string httpMethod)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (string.IsNullOrEmpty(httpMethod))
-        {
-            throw new ArgumentNullException(nameof(httpMethod));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNullOrEmpty(httpMethod);
 
         return httpRequestMessage.HasHttpMethod(new HttpMethod(httpMethod));
     }
@@ -98,15 +70,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
     internal static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNullOrEmpty(headerName);
 
         return httpRequestMessage.Headers.HasHeader(headerName);
     }
@@ -121,20 +86,9 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
     internal static bool HasRequestHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
-
-        if (string.IsNullOrEmpty(headerValue))
-        {
-            throw new ArgumentNullException(nameof(headerValue));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNullOrEmpty(headerName);
+        Guard.ThrowIfNullOrEmpty(headerValue);
 
         return httpRequestMessage.Headers.HasHeader(headerName, headerValue);
     }
@@ -148,15 +102,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the request contains a header with the specified name; otherwise, false.</returns>
     internal static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNullOrEmpty(headerName);
 
         if (httpRequestMessage.Content == null)
         {
@@ -176,20 +123,9 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the request contains a header with the specified name and value; otherwise, false.</returns>
     internal static bool HasContentHeader(this HttpRequestMessage httpRequestMessage, string headerName, string headerValue)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (string.IsNullOrEmpty(headerName))
-        {
-            throw new ArgumentNullException(nameof(headerName));
-        }
-
-        if (string.IsNullOrEmpty(headerValue))
-        {
-            throw new ArgumentNullException(nameof(headerValue));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNullOrEmpty(headerName);
+        Guard.ThrowIfNullOrEmpty(headerValue);
 
         if (httpRequestMessage.Content == null)
         {
@@ -206,10 +142,7 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the request has content; otherwise, false.</returns>
     internal static bool HasContent(this HttpRequestMessage httpRequestMessage)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
 
         return httpRequestMessage.Content != null;
     }
@@ -222,15 +155,8 @@ internal static class HttpRequestMessageExtensions
     /// <returns>true when the request content matches the pattern; otherwise, false.</returns>
     internal static bool HasContent(this HttpRequestMessage httpRequestMessage, string pattern)
     {
-        if (httpRequestMessage == null)
-        {
-            throw new ArgumentNullException(nameof(httpRequestMessage));
-        }
-
-        if (pattern == null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(httpRequestMessage);
+        Guard.ThrowIfNull(pattern);
 
         if (httpRequestMessage.Content == null)
         {

@@ -1,5 +1,4 @@
-﻿
-using NSubstitute;
+﻿using NSubstitute;
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 

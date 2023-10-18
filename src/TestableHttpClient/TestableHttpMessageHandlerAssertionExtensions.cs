@@ -12,10 +12,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequests(this TestableHttpMessageHandler handler)
     {
-        if (handler == null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
+        Guard.ThrowIfNull(handler);
 
         return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri("*");
     }
@@ -31,10 +28,7 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequests(this TestableHttpMessageHandler handler, int expectedNumberOfRequests)
     {
-        if (handler == null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
+        Guard.ThrowIfNull(handler);
 
         return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri("*", expectedNumberOfRequests);
     }
@@ -50,15 +44,8 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern)
     {
-        if (handler == null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
-
-        if (pattern == null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(handler);
+        Guard.ThrowIfNull(pattern);
 
         return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri(pattern);
     }
@@ -76,15 +63,8 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern, bool ignoreCase)
     {
-        if (handler == null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
-
-        if (pattern == null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(handler);
+        Guard.ThrowIfNull(pattern);
 
         return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri(pattern, ignoreCase);
     }
@@ -101,15 +81,8 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     [AssertionMethod]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern, int expectedNumberOfRequests)
     {
-        if (handler == null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
-
-        if (pattern == null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(handler);
+        Guard.ThrowIfNull(pattern);
 
         return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri(pattern, expectedNumberOfRequests);
     }
@@ -127,15 +100,8 @@ public static class TestableHttpMessageHandlerAssertionExtensions
     [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.")]
     public static IHttpRequestMessagesCheck ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler handler, string pattern, bool ignoreCase, int expectedNumberOfRequests)
     {
-        if (handler == null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
-
-        if (pattern == null)
-        {
-            throw new ArgumentNullException(nameof(pattern));
-        }
+        Guard.ThrowIfNull(handler);
+        Guard.ThrowIfNull(pattern);
 
         return new HttpRequestMessageAsserter(handler.Requests, handler.Options).WithRequestUri(pattern, ignoreCase, expectedNumberOfRequests);
     }

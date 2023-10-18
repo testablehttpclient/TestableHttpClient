@@ -73,7 +73,7 @@ public class JsonResponseTests
     [Fact]
     public async Task ExecuteAsync_WithCollectionContent_SetsJsonStringToContent()
     {
-        var input = new[] { 1, 2, 3, 4 };
+        int[] input = [1, 2, 3, 4];
         JsonResponse sut = new(input);
 
         using HttpResponseMessage responseMessage = await sut.TestAsync();

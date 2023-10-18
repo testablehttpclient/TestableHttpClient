@@ -36,10 +36,8 @@ public partial class HttpRequestMessageExtensionsTests
         Assert.Equal("httpVersion", exception.ParamName);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void HasHttpVersion_WithString_NullVersion_ThrowsArgumentNullException(string httpVersion)
+    [Fact]
+    public void HasHttpVersion_WithString_NullVersion_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new()
         {
@@ -50,7 +48,23 @@ public partial class HttpRequestMessageExtensionsTests
 #endif
         };
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHttpVersion(httpVersion));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasHttpVersion((string)null!));
+        Assert.Equal("httpVersion", exception.ParamName);
+    }
+
+    [Fact]
+    public void HasHttpVersion_WithString_EmptyVersion_ThrowsArgumentException()
+    {
+        using HttpRequestMessage sut = new()
+        {
+#if NETFRAMEWORK
+            Version = new Version(0, 0)
+#else
+            Version = HttpVersion.Unknown
+#endif
+        };
+
+        var exception = Assert.Throws<ArgumentException>(() => sut.HasHttpVersion(string.Empty));
         Assert.Equal("httpVersion", exception.ParamName);
     }
 

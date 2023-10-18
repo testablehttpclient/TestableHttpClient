@@ -11,14 +11,21 @@ public partial class HttpRequestMessageExtensionsTests
         Assert.Equal("httpRequestMessage", exception.ParamName);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void HasRequestHeader_NullHeaderName_ThrowsArgumentNullException(string headerName)
+    [Fact]
+    public void HasRequestHeader_NullHeaderName_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader(headerName));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader(null!));
+        Assert.Equal("headerName", exception.ParamName);
+    }
+
+    [Fact]
+    public void HasRequestHeader_EmptyHeaderName_ThrowsArgumentException()
+    {
+        using HttpRequestMessage sut = new();
+
+        var exception = Assert.Throws<ArgumentException>(() => sut.HasRequestHeader(string.Empty));
         Assert.Equal("headerName", exception.ParamName);
     }
 
@@ -31,23 +38,35 @@ public partial class HttpRequestMessageExtensionsTests
         Assert.Equal("httpRequestMessage", exception.ParamName);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void HasRequestHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException(string headerName)
+    [Fact]
+    public void HasRequestHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader(headerName, "value"));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader(null!, "value"));
         Assert.Equal("headerName", exception.ParamName);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void HasRequestHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException(string headerValue)
+    [Fact]
+    public void HasRequestHeader_EmptyHeaderNameAndNonNullHeaderValue_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader("Host", headerValue));
+        var exception = Assert.Throws<ArgumentException>(() => sut.HasRequestHeader(string.Empty, "value"));
+        Assert.Equal("headerName", exception.ParamName);
+    }
+
+    [Fact]
+    public void HasRequestHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException()
+    {
+        using HttpRequestMessage sut = new();
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.HasRequestHeader("Host", null!));
+        Assert.Equal("headerValue", exception.ParamName);
+    }
+
+    [Fact]
+    public void HasRequestHeader_NonNullHeaderNameAndEmptyHeaderValue_ThrowsArgumentException()
+    {
+        using HttpRequestMessage sut = new();
+        var exception = Assert.Throws<ArgumentException>(() => sut.HasRequestHeader("Host", string.Empty));
         Assert.Equal("headerValue", exception.ParamName);
     }
 

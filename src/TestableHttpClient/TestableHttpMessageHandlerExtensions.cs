@@ -28,20 +28,9 @@ public static class TestableHttpMessageHandlerExtensions
 
     public static HttpClient CreateClient(this TestableHttpMessageHandler handler, Action<HttpClient> configureClient, IEnumerable<DelegatingHandler> httpMessageHandlers)
     {
-        if (handler is null)
-        {
-            throw new ArgumentNullException(nameof(handler));
-        }
-
-        if (configureClient is null)
-        {
-            throw new ArgumentNullException(nameof(configureClient));
-        }
-
-        if (httpMessageHandlers is null)
-        {
-            throw new ArgumentNullException(nameof(httpMessageHandlers));
-        }
+        Guard.ThrowIfNull(handler);
+        Guard.ThrowIfNull(configureClient);
+        Guard.ThrowIfNull(httpMessageHandlers);
 
         if (httpMessageHandlers.Any(x => x is null))
         {

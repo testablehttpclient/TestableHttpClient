@@ -13,7 +13,7 @@ public interface IRoutingResponseBuilder
     /// <example>x.Map("*", Responses.StatusCode(HttpStatusCode.OK))</example>
     void Map(string route, IResponse response);
     /// <summary>
-    /// Maps a custom response for when a request did't match any route. Defaults to Responses.StatusCode(HttpStatusCode.NotFound).
+    /// Maps a custom response for when a request didn't match any route. Defaults to Responses.StatusCode(HttpStatusCode.NotFound).
     /// </summary>
     /// <param name="fallBackResponse">The response that should be returned when no route matches.</param>
     void MapFallBackResponse(IResponse fallBackResponse);
