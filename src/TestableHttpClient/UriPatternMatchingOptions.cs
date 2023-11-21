@@ -3,7 +3,7 @@
 /// <summary>
 /// Options specific for URI pattern matching.
 /// </summary>
-public class UriPatternMatchingOptions
+public sealed class UriPatternMatchingOptions
 {
     /// <summary>
     /// Indicates whether or not the scheme of an URI should be treated as case insensitive. Default: true

@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Utils;
 
-internal class RoutingResponseBuilder : IRoutingResponseBuilder
+internal sealed class RoutingResponseBuilder : IRoutingResponseBuilder
 {
     public RoutingResponse RoutingResponse { get; } = new();
 
