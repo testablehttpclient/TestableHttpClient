@@ -75,64 +75,49 @@ internal static class UriPatternParser
             Query = ParseQuery(queryPattern)
         };
 
-        static Value ParseScheme(ReadOnlySpan<char> scheme)
+        static Value<string> ParseScheme(ReadOnlySpan<char> scheme) => scheme switch
         {
-            return scheme switch
-            {
-                [] => Value.Any(),
-                ['*'] => Value.Any(),
-                _ when scheme.IndexOf('*') != -1 => Value.Pattern(scheme.ToString()),
-                _ => Value.Exact(scheme.ToString())
-            };
-        }
+            [] => Value.Any(),
+            ['*'] => Value.Any(),
+            _ when scheme.IndexOf('*') != -1 => Value.Pattern(scheme.ToString()),
+            _ => Value.Exact(scheme.ToString())
+        };
 
-        static Value ParseHost(ReadOnlySpan<char> host)
+        static Value<string> ParseHost(ReadOnlySpan<char> host) => host switch
         {
-            return host switch
-            {
-                [] => Value.Any(),
-                ['*'] => Value.Any(),
-                _ when host.IndexOf('*') != -1 => Value.Pattern(host.ToString()),
-                _ => Value.Exact(host.ToString())
-            };
-        }
+            [] => Value.Any(),
+            ['*'] => Value.Any(),
+            _ when host.IndexOf('*') != -1 => Value.Pattern(host.ToString()),
+            _ => Value.Exact(host.ToString())
+        };
 
-        static Value ParsePort(ReadOnlySpan<char> port)
+        static Value<string> ParsePort(ReadOnlySpan<char> port) => port switch
         {
-            return port switch
-            {
-                [] => Value.Any(),
-                [':'] => throw new UriPatternParserException("Invalid port"),
-                [':', '*'] => Value.Any(),
-                [':', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
-                [':', .. var rest] => Value.Exact(rest.ToString()),
-                _ => throw new UnreachableException()
-            };
-        }
+            [] => Value.Any(),
+            [':'] => throw new UriPatternParserException("Invalid port"),
+            [':', '*'] => Value.Any(),
+            [':', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
+            [':', .. var rest] => Value.Exact(rest.ToString()),
+            _ => throw new UnreachableException()
+        };
 
-        static Value ParsePath(ReadOnlySpan<char> path)
+        static Value<string> ParsePath(ReadOnlySpan<char> path) => path switch
         {
-            return path switch
-            {
-                [] => Value.Any(),
-                ['/', '*'] => Value.Any(),
-                ['/', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(path.ToString()),
-                ['/', ..] => Value.Exact(path.ToString()),
-                _ => throw new UnreachableException()
-            };
-        }
+            [] => Value.Any(),
+            ['/', '*'] => Value.Any(),
+            ['/', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(path.ToString()),
+            ['/', ..] => Value.Exact(path.ToString()),
+            _ => throw new UnreachableException()
+        };
 
-        static Value ParseQuery(ReadOnlySpan<char> query)
+        static Value<string> ParseQuery(ReadOnlySpan<char> query) => query switch
         {
-            return query switch
-            {
-                [] => Value.Any(),
-                ['?'] => Value.Any(),
-                ['?', '*'] => Value.Any(),
-                ['?', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
-                ['?', .. var rest] => Value.Exact(rest.ToString()),
-                _ => throw new UnreachableException()
-            };
-        }
+            [] => Value.Any(),
+            ['?'] => Value.Any(),
+            ['?', '*'] => Value.Any(),
+            ['?', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
+            ['?', .. var rest] => Value.Exact(rest.ToString()),
+            _ => throw new UnreachableException()
+        };
     }
 }

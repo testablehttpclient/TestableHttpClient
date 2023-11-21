@@ -2,17 +2,19 @@
 
 namespace TestableHttpClient.Utils;
 
-internal class UriPattern
+internal sealed class UriPattern
 {
     public static UriPattern Any { get; } = new UriPattern();
 
-    public Value Scheme { get; init; } = Value.Any();
-    public Value Host { get; init; } = Value.Any();
-    public Value Port { get; init; } = Value.Any();
-    public Value Path { get; init; } = Value.Any();
-    public Value Query { get; init; } = Value.Any();
+    public Value<string> Scheme { get; init; } = Value.Any();
+    public Value<string> Host { get; init; } = Value.Any();
+    public Value<string> Port { get; init; } = Value.Any();
+    public Value<string> Path { get; init; } = Value.Any();
+    public Value<string> Query { get; init; } = Value.Any();
 
-    public bool Matches(Uri requestUri, UriPatternMatchingOptions options) =>
+    public bool Matches(Uri? requestUri, UriPatternMatchingOptions options) =>
+        (requestUri is null && this == Any) ||
+        requestUri is not null &&
         Scheme.Matches(requestUri.Scheme, options.SchemeCaseInsensitive) &&
         Host.Matches(requestUri.Host, options.HostCaseInsensitive) &&
         Port.Matches(requestUri.Port.ToString(CultureInfo.InvariantCulture), true) &&
