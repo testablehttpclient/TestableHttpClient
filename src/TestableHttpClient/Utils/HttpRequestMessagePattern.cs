@@ -38,7 +38,7 @@ internal sealed class HttpRequestMessagePattern
 
         foreach (var header in Headers)
         {
-            bool matched = false;
+            bool matched = IsAnyHeader(header);
 
             foreach (var requestHeader in requestHeaders)
             {
@@ -52,6 +52,11 @@ internal sealed class HttpRequestMessagePattern
         }
 
         return true;
+    }
+
+    private bool IsAnyHeader(KeyValuePair<Value<string>, Value<string>> header)
+    {
+        return header.Key == Value.Any<string>() && header.Value == Value.Any<string>();
     }
 
     private bool MatchesContent(HttpContent? requestContent)
@@ -79,5 +84,7 @@ internal sealed class HttpRequestMessagePatternMatchingResult
     public bool Version { get; init; }
     public bool Headers { get; init; }
     public bool Content { get; init; }
+
+    public bool All => Method && RequestUri && Version && Headers && Content;
 }
 
