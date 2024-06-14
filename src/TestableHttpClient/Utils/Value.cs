@@ -12,13 +12,13 @@ internal abstract record Value
 }
 
 [DebuggerDisplay("Any value")]
-file record AnyValue : Value
+file sealed record AnyValue : Value
 {
     internal override bool Matches(string value, bool ignoreCase) => true;
 }
 
 [DebuggerDisplay("Exact value: {expectedValue}")]
-file record ExactValue : Value
+file sealed record ExactValue : Value
 {
     private readonly string expectedValue;
     public ExactValue(string expectedValue) => this.expectedValue = expectedValue;
@@ -26,7 +26,7 @@ file record ExactValue : Value
 }
 
 [DebuggerDisplay("Pattern value: {pattern}")]
-file record PatternValue : Value
+file sealed record PatternValue : Value
 {
     private readonly string pattern;
     public PatternValue(string pattern) => this.pattern = pattern;
