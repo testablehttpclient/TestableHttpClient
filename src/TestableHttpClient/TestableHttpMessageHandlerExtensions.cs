@@ -2,6 +2,8 @@
 
 public static class TestableHttpMessageHandlerExtensions
 {
+    private const string DefaultBaseAddress = "https://localhost";
+
     /// <summary>
     /// Create an <seealso cref="HttpClient"/> configured with the TestableHttpMessageHandler.
     /// </summary>
@@ -37,7 +39,10 @@ public static class TestableHttpMessageHandlerExtensions
             throw new ArgumentNullException(nameof(httpMessageHandlers));
         }
 
-        var httpClient = new HttpClient(CreateHandlerChain(handler, httpMessageHandlers));
+        HttpClient httpClient = new(CreateHandlerChain(handler, httpMessageHandlers))
+        {
+            BaseAddress = new Uri(DefaultBaseAddress)
+        };
         configureClient(httpClient);
 
         return httpClient;

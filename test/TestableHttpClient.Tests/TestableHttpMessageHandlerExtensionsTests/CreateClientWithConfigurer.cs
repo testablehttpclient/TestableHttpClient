@@ -39,6 +39,28 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     }
 
     [Fact]
+    public void CreateClientWithConfigurer_ByDefault_SetsDefaultBaseAddress()
+    {
+        using TestableHttpMessageHandler sut = new();
+        static void configureClient(HttpClient client) { }
+
+        using var client = sut.CreateClient(configureClient);
+
+        Assert.Equal(new Uri("https://localhost"), client.BaseAddress);
+    }
+
+    [Fact]
+    public void CreateClientWithConfigurer_WhenConfiguringBaseAddress_DoesNotOverrideWithDefault()
+    {
+        using TestableHttpMessageHandler sut = new();
+        static void configureClient(HttpClient client) { client.BaseAddress = new Uri("https://example"); }
+
+        using var client = sut.CreateClient(configureClient);
+
+        Assert.Equal(new Uri("https://example"), client.BaseAddress);
+    }
+
+    [Fact]
     public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
     {
         using TestableHttpMessageHandler sut = new();
