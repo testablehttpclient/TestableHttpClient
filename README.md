@@ -1,6 +1,6 @@
 # TestableHttpClient
 
-![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/testablehttpclient/TestableHttpClient/ci.yaml) ![Nuget](https://img.shields.io/nuget/v/TestableHttpClient)  [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4010/badge)](https://bestpractices.coreinfrastructure.org/projects/4010)
+![GitHub](https://img.shields.io/github/license/testablehttpclient/TestableHttpClient) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/testablehttpclient/TestableHttpClient/ci.yaml) ![Nuget](https://img.shields.io/nuget/v/TestableHttpClient)  [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4010/badge)](https://bestpractices.coreinfrastructure.org/projects/4010)
 
 Creating unittest for code that uses `HttpClient` can be difficult to test. It requires a custom HttpMessageHandler or a mocked version. TestableHttpClient provides a testable version of HttpMessageHandler and several helper functions to configure the `TestableHttpHandler` and several ways to assert which requests were made.
 
