@@ -56,11 +56,11 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         static void configureClient(HttpClient _) { }
-        IEnumerable<DelegatingHandler> handlers = new DelegatingHandler[]
-        {
+        IEnumerable<DelegatingHandler> handlers =
+        [
             Substitute.For<DelegatingHandler>(),
             Substitute.For<DelegatingHandler>()
-        };
+        ];
 
         using var client = sut.CreateClient(configureClient, handlers);
 
@@ -70,6 +70,38 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         var delegatingHandler2 = Assert.IsAssignableFrom<DelegatingHandler>(delegatingHandler1.InnerHandler);
         Assert.Same(handlers.Last(), delegatingHandler2);
         Assert.Same(sut, delegatingHandler2.InnerHandler);
+    }
+
+    [Fact]
+    public void CreateClientWithConfigurerAndHttpMessageHandlers_ByDefault_SetsDefaultBaseAddress()
+    {
+        using TestableHttpMessageHandler sut = new();
+        static void configureClient(HttpClient client) { }
+        IEnumerable<DelegatingHandler> handlers =
+        [
+            Substitute.For<DelegatingHandler>(),
+            Substitute.For<DelegatingHandler>()
+        ];
+
+        using var client = sut.CreateClient(configureClient, handlers);
+
+        Assert.Equal(new Uri("https://localhost"), client.BaseAddress);
+    }
+
+    [Fact]
+    public void CreateClientWithConfigurerAndHttpMessageHandlers_WhenConfiguringBaseAddress_DoesNotOverrideWithDefault()
+    {
+        using TestableHttpMessageHandler sut = new();
+        static void configureClient(HttpClient client) { client.BaseAddress = new Uri("https://example"); }
+        IEnumerable<DelegatingHandler> handlers =
+        [
+            Substitute.For<DelegatingHandler>(),
+            Substitute.For<DelegatingHandler>()
+        ];
+
+        using var client = sut.CreateClient(configureClient, handlers);
+
+        Assert.Equal(new Uri("https://example"), client.BaseAddress);
     }
 }
 

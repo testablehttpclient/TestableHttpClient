@@ -4,7 +4,7 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.11] - 2024-06-14
+## [0.11] - 2024-06-15
 ### Removed
 - .NET 7.0 target, since it is no longer supported
 - `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool)` and `ShouldHaveMadeRequestsTo(this TestableHttpMessageHandler, string, bool, int)` have been removed. CaseInsensitivity is controlled by the `UriPatternMatchingOptions` that can be set on the `TestableHttpMessageHandler`.
@@ -16,6 +16,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 - Support for .NET 8
+- `CreateClient` now sets `https://localhost` as default BaseAddress on the created `HttpClient`.
 
 ## [0.10] - 2022-12-03
 ### Deprecated

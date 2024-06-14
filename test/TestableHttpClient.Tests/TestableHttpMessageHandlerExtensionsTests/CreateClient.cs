@@ -26,6 +26,16 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     }
 
     [Fact]
+    public void CreateClient_ByDefault_SetsBaseAddress()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        using var client = sut.CreateClient();
+
+        Assert.Equal(new Uri("https://localhost"), client.BaseAddress);
+    }
+
+    [Fact]
     public void CreateClient_NullDelegateHandler_ThrowsArgumentNullException()
     {
         using TestableHttpMessageHandler sut = new();
