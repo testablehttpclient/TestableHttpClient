@@ -1,6 +1,1 @@
-﻿TestableHttpClient.UriPatternMatchingOptions.HostCaseInsensitive.get -> bool
-TestableHttpClient.UriPatternMatchingOptions.HostCaseInsensitive.set -> void
-TestableHttpClient.UriPatternMatchingOptions.PathCaseInsensitive.get -> bool
-TestableHttpClient.UriPatternMatchingOptions.PathCaseInsensitive.set -> void
-TestableHttpClient.UriPatternMatchingOptions.SchemeCaseInsensitive.get -> bool
-TestableHttpClient.UriPatternMatchingOptions.SchemeCaseInsensitive.set -> void
+﻿
