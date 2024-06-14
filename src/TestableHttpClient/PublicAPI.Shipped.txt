@@ -25,8 +25,14 @@ TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.set -> void
 TestableHttpClient.UriPatternMatchingOptions
 TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.get -> System.UriFormat
 TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.set -> void
+TestableHttpClient.UriPatternMatchingOptions.HostCaseInsensitive.get -> bool
+TestableHttpClient.UriPatternMatchingOptions.HostCaseInsensitive.set -> void
+TestableHttpClient.UriPatternMatchingOptions.PathCaseInsensitive.get -> bool
+TestableHttpClient.UriPatternMatchingOptions.PathCaseInsensitive.set -> void
 TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.get -> bool
 TestableHttpClient.UriPatternMatchingOptions.QueryCaseInsensitive.set -> void
+TestableHttpClient.UriPatternMatchingOptions.SchemeCaseInsensitive.get -> bool
+TestableHttpClient.UriPatternMatchingOptions.SchemeCaseInsensitive.set -> void
 TestableHttpClient.UriPatternMatchingOptions.UriPatternMatchingOptions() -> void
 
 TestableHttpClient.IRoutingResponseBuilder
