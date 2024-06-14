@@ -158,6 +158,16 @@ public class HttpRequestMessagePatternTests
     }
 
     [Fact]
+    public void Matches_HttpRequestMessageWithoutHeaders_DoesMatchAnyHeaders()
+    {
+        HttpRequestMessagePattern sut = new();
+
+        using HttpRequestMessage matchingRequest = new();
+
+        Assert.True(sut.Matches(matchingRequest, defaultOptions).Headers);
+    }
+
+    [Fact]
     public void Matches_HttpRequestMessageWithHeaders_DoesMatchAnyHeaders()
     {
         HttpRequestMessagePattern sut = new();
