@@ -4,6 +4,8 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12] - unplanned
+
 ## [0.11] - 2024-06-15
 ### Removed
 - .NET 7.0 target, since it is no longer supported
@@ -284,6 +286,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.12]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.11...v0.12
 [0.11]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.10...v0.11
 [0.10]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.9...v0.10
 [0.9]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.8...v0.9

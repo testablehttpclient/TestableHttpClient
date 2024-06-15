@@ -55,26 +55,4 @@ public class WithRequestUri
 
         sut.Received(1).WithFilter(Args.AnyPredicate(), null, "uri pattern 'https://example.com/'");
     }
-
-    [Fact]
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
-    public void WithRequestUri_WithoutNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
-    {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
-
-        var result = sut.WithRequestUri("https://example.com/", ignoreCase: false);
-
-        Assert.Same(sut, result);
-    }
-
-    [Fact]
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
-    public void WithRequestUri_WithNumberOfRequestsAndNotIgnoringCase_CallsWithCorrectly()
-    {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
-
-        var result = sut.WithRequestUri("https://example.com/", ignoreCase: false, 2);
-
-        Assert.Same(sut, result);
-    }
 }

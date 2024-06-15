@@ -10,17 +10,7 @@ override TestableHttpClient.TestableHttpMessageHandler.SendAsync(System.Net.Http
 TestableHttpClient.TestableHttpMessageHandlerOptions
 TestableHttpClient.TestableHttpMessageHandlerOptions.JsonSerializerOptions.get -> System.Text.Json.JsonSerializerOptions!
 TestableHttpClient.TestableHttpMessageHandlerOptions.TestableHttpMessageHandlerOptions() -> void
-TestableHttpClient.TestableHttpMessageHandlerOptions.RoutingOptions.get -> TestableHttpClient.RoutingOptions!
 TestableHttpClient.TestableHttpMessageHandlerOptions.UriPatternMatchingOptions.get -> TestableHttpClient.UriPatternMatchingOptions!
-
-TestableHttpClient.RoutingOptions
-TestableHttpClient.RoutingOptions.HostCaseInsensitive.get -> bool
-TestableHttpClient.RoutingOptions.HostCaseInsensitive.set -> void
-TestableHttpClient.RoutingOptions.PathCaseInsensitive.get -> bool
-TestableHttpClient.RoutingOptions.PathCaseInsensitive.set -> void
-TestableHttpClient.RoutingOptions.RoutingOptions() -> void
-TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.get -> bool
-TestableHttpClient.RoutingOptions.SchemeCaseInsensitive.set -> void
 
 TestableHttpClient.UriPatternMatchingOptions
 TestableHttpClient.UriPatternMatchingOptions.DefaultQueryFormat.get -> System.UriFormat
@@ -71,8 +61,6 @@ TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions
 static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequests(this TestableHttpClient.TestableHttpMessageHandler! handler) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequests(this TestableHttpClient.TestableHttpMessageHandler! handler, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern, bool ignoreCase) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern, bool ignoreCase, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.TestableHttpMessageHandlerAssertionExtensions.ShouldHaveMadeRequestsTo(this TestableHttpClient.TestableHttpMessageHandler! handler, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 
 TestableHttpClient.IHttpRequestMessagesCheck
@@ -107,15 +95,11 @@ static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(thi
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, System.Text.Json.JsonSerializerOptions! jsonSerializerOptions) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, System.Text.Json.JsonSerializerOptions! jsonSerializerOptions, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithQueryString(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithQueryString(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, bool ignoreCase) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, bool ignoreCase, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 
 TestableHttpClient.Utils.UriPatternParserException
