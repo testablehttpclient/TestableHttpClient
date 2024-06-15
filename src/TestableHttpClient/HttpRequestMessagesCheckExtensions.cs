@@ -10,9 +10,6 @@ public static class HttpRequestMessagesCheckExtensions
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern) => WithRequestUri(check, pattern, null);
 
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
-    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase) => WithRequestUri(check, pattern, ignoreCase, null);
-
     /// <summary>
     /// Asserts whether requests were made to a given URI based on a pattern.
     /// </summary>
@@ -21,9 +18,6 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithRequestUri(check, pattern, (int?)expectedNumberOfRequests);
-
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
-    public static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase, int expectedNumberOfRequests) => WithRequestUri(check, pattern, ignoreCase, (int?)expectedNumberOfRequests);
 
     private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests)
     {
@@ -40,31 +34,6 @@ public static class HttpRequestMessagesCheckExtensions
 
         return check.WithFilter(x => x.RequestUri is not null && uriPattern.Matches(x.RequestUri, check.Options.UriPatternMatchingOptions), expectedNumberOfRequests, condition);
     }
-
-    [Obsolete("Please use an overload without the 'ignoreCase', since ignoring casing is now controlled globally.", true)]
-    private static IHttpRequestMessagesCheck WithRequestUri(this IHttpRequestMessagesCheck check, string pattern, bool ignoreCase, int? expectedNumberOfRequests) => check;
-
-    /// <summary>
-    /// Asserts whether requests were made with a given querystring based on a pattern. For asserting the decoded version of the querystring is used.
-    /// </summary>
-    /// <param name="check">The implementation that hold all the request messages.</param>
-    /// <param name="pattern">The querystring pattern that is expected.</param>
-    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well", true)]
-    public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern) => WithQueryString(check, pattern, null);
-
-    /// <summary>
-    /// Asserts whether requests were made with a given querystring based on a pattern. For asserting the decoded version of the querystring is used.
-    /// </summary>
-    /// <param name="check">The implementation that hold all the request messages.</param>
-    /// <param name="pattern">The querystring pattern that is expected.</param>
-    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
-    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well", true)]
-    public static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int expectedNumberOfRequests) => WithQueryString(check, pattern, (int?)expectedNumberOfRequests);
-
-    [Obsolete("Use WithRequestUri instead, since it now properly supports QueryStrings as well", true)]
-    private static IHttpRequestMessagesCheck WithQueryString(this IHttpRequestMessagesCheck check, string pattern, int? expectedNumberOfRequests) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a given HTTP Method.
