@@ -54,11 +54,11 @@ jobs:
       run: dotnet format --no-restore --verify-no-changes
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: artifacts
         path: ./artifacts
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: coverage
         path: ./**/TestResults/**/coverage.opencover.xml
@@ -102,7 +102,7 @@ jobs:
         dotnet-version: |
           8.0.x
         include-prerelease: true
-    - uses: actions/download-artifact@v4.1.7
+    - uses: actions/download-artifact@v4
       with:
         name: artifacts
         path: ./artifacts
