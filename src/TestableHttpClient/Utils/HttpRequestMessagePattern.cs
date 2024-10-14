@@ -8,9 +8,10 @@ internal sealed class HttpRequestMessagePattern
     public Dictionary<Value<string>, Value<string>> Headers { get; init; } = new() { [Value.Any<string>()] = Value.Any<string>() };
     public Value<string> Content { get; init; } = Value.Any<string>();
 
-    public HttpRequestMessagePatternMatchingResult Matches(HttpRequestMessage httpRequestMessage, HttpRequestMessagePatternMatchingOptions options) =>
+    internal HttpRequestMessagePatternMatchingResult Matches(HttpRequestMessage httpRequestMessage, HttpRequestMessagePatternMatchingOptions options) =>
         new()
         {
+            RequestMessage = httpRequestMessage,
             Method = Method.Matches(httpRequestMessage.Method, false),
             RequestUri = RequestUri.Matches(httpRequestMessage.RequestUri, options.RequestUriMatchingOptions),
             Version = Version.Matches(httpRequestMessage.Version, false),
@@ -54,16 +55,16 @@ internal sealed class HttpRequestMessagePattern
         return true;
     }
 
-    private bool IsAnyHeader(KeyValuePair<Value<string>, Value<string>> header)
+    private static bool IsAnyHeader(KeyValuePair<Value<string>, Value<string>> header)
     {
-        return header.Key == Value.Any<string>() && header.Value == Value.Any<string>();
+        return header.Key.IsAny && header.Value.IsAny;
     }
 
     private bool MatchesContent(HttpContent? requestContent)
     {
         if (requestContent == null)
         {
-            return Content == Value.Any<string>();
+            return Content.IsAny;
         }
 
         var contentValue = requestContent.ReadAsStringAsync().Result;
@@ -79,6 +80,7 @@ internal sealed class HttpRequestMessagePatternMatchingOptions
 
 internal sealed class HttpRequestMessagePatternMatchingResult
 {
+    public required HttpRequestMessage RequestMessage { get; init; }
     public bool Method { get; init; }
     public bool RequestUri { get; init; }
     public bool Version { get; init; }

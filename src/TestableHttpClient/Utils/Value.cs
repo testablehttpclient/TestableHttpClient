@@ -15,12 +15,14 @@ internal abstract record Value
 
 internal abstract record Value<T>
 {
+    public virtual bool IsAny => false;
     internal abstract bool Matches(T value, bool ignoreCase);
 }
 
 [DebuggerDisplay("Any value")]
 file sealed record AnyValue<T> : Value<T>
 {
+    public override bool IsAny => true;
     internal override bool Matches(T value, bool ignoreCase) => true;
 }
 
