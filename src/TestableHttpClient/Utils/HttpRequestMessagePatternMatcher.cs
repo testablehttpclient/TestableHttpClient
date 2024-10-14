@@ -16,15 +16,15 @@ internal class HttpRequestMessagePatternMatcher
             }
             else
             {
-                result.UnmatchedRequests.Add(request);
+                result.UnmatchedRequests.Add(match);
             }
         }
         return result;
     }
 }
 
-internal class HttpRequestMessagePatternMatchResult
+internal sealed class HttpRequestMessagePatternMatchResult
 {
     public List<HttpRequestMessage> MatchedRequests { get; } = new List<HttpRequestMessage>();
-    public List<HttpRequestMessage> UnmatchedRequests { get; } = new List<HttpRequestMessage>();
+    public List<HttpRequestMessagePatternMatchingResult> UnmatchedRequests { get; } = new List<HttpRequestMessagePatternMatchingResult>();
 }
