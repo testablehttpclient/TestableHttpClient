@@ -72,12 +72,16 @@ public class ConfigureResponses
     {
         using TestableHttpMessageHandler testHandler = new();
 
-        static IResponse PathBasedResponse(HttpResponseContext context) => context.HttpRequestMessage switch
+        static IResponse PathBasedResponse(HttpResponseContext context)
         {
-            _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/200" => StatusCode(HttpStatusCode.OK),
-            _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/400" => StatusCode(HttpStatusCode.BadRequest),
-            _ => StatusCode(HttpStatusCode.NotFound)
-        };
+            return context.HttpRequestMessage switch
+            {
+                _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/200" => StatusCode(HttpStatusCode.OK),
+                _ when context.HttpRequestMessage.RequestUri?.AbsolutePath == "/status/400" => StatusCode(HttpStatusCode.BadRequest),
+                _ => StatusCode(HttpStatusCode.NotFound)
+            };
+        }
+
         testHandler.RespondWith(SelectResponse(PathBasedResponse));
 
         using HttpClient httpClient = new(testHandler);

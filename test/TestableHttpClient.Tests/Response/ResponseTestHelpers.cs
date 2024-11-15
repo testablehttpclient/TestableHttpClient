@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.Response;
 
-public static class ResponseTestHelpers
+internal static class ResponseTestHelpers
 {
     public static Task<HttpResponseMessage> TestAsync(this IResponse response) => TestAsync(response, "http://httpbin.org");
     public static Task<HttpResponseMessage> TestAsync(this IResponse response, string url)
