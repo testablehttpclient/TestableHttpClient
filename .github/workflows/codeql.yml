@@ -27,8 +27,8 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
           8.0.x
+          9.0.x
         include-prerelease: true
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
@@ -37,6 +37,6 @@ jobs:
         languages: csharp
         config-file: ./.github/codeql-config.yml
     - name: Build source code
-      run: dotnet build --configuration Release --framework net6.0
+      run: dotnet build --configuration Release --framework net8.0
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2

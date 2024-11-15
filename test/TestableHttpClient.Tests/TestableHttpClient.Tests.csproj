@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net47;net48;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net462;net47;net48;net6.0;net8.0;net9.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.1" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
