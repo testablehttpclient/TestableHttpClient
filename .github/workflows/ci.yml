@@ -21,7 +21,8 @@ jobs:
     - name: Update Java SDK for SonarQube
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        distribution: 'microsoft'
+        java-version: '21'
     - name: Setup .NET versions
       uses: actions/setup-dotnet@v4
       with:
