@@ -4,8 +4,15 @@ updates:
   directory: "/"
   groups:
     all-dependencies:
-      patterns: "*"
+      patterns:
+      - "*"
   schedule:
     interval: "daily"
   reviewers:
-    - "dnperfors"
+  - "dnperfors"
+- package-ecosystem: "github-actions"
+  directory: ".github/"
+  schedule:
+    interval: "daily"
+  reviewers:
+  - "dnperfors"
