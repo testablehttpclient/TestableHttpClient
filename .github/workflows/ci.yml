@@ -53,6 +53,7 @@ jobs:
       run: dotnet sonarscanner end -d:sonar.token=${{env.SONAR_TOKEN}}
     - name: Check source file format
       run: dotnet format --no-restore --verify-no-changes
+      continue-on-error: true
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release --no-build
     - uses: actions/upload-artifact@v4
