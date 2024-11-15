@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace TestableHttpClient;
+﻿namespace TestableHttpClient;
 
 public sealed class TestableHttpMessageHandlerOptions
 {
