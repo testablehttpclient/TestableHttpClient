@@ -3,14 +3,14 @@
   "isRoot": true,
   "tools": {
     "dotnet-sonarscanner": {
-      "version": "9.0.0",
+      "version": "9.0.2",
       "commands": [
         "dotnet-sonarscanner"
       ],
       "rollForward": false
     },
     "nbgv": {
-      "version": "3.6.143",
+      "version": "3.7.112",
       "commands": [
         "nbgv"
       ],
