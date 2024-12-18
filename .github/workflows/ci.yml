@@ -27,7 +27,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
           8.0.x
           9.0.x
         include-prerelease: true
@@ -45,7 +44,7 @@ jobs:
     - name: Build source code
       run: dotnet build --configuration Release --no-restore
     - name: Test with dotnet
-      run: dotnet test --configuration Release --no-build --collect="Code Coverage" --framework="net6.0"
+      run: dotnet test --configuration Release --no-build --collect="Code Coverage" --framework="net8.0"
     - name: Upload sonarqube results
       if: ${{ github.actor != 'dependabot[bot]' }}
       env:
@@ -80,7 +79,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
           8.0.x
           9.0.x
         include-prerelease: true
