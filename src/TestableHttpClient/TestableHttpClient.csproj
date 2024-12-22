@@ -39,14 +39,6 @@
     <PackageReference Include="PolyKit.Embedded" Version="3.0.9" />
   </ItemGroup>
 
-<<<<<<< HEAD
-=======
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Perfors.UnreachableException" Version="1.0.0" />
-    <PackageReference Include="PolyKit.Embedded" Version="3.0.9" />
-  </ItemGroup>
-
->>>>>>> b3a5f8e (Add IsAny property to value.)
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" PrivateAssets="All">
