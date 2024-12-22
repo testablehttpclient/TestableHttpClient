@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class TimeoutResponse : IResponse
+internal sealed class TimeoutResponse : IResponse
 {
     public async Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
     {
@@ -8,11 +8,11 @@ internal class TimeoutResponse : IResponse
 
         if (cancelationSource is not null)
         {
-#if NET8_0_OR_GREATER
-            await cancelationSource.CancelAsync().ConfigureAwait(true);
-#else
+#if NETSTANDARD
             cancelationSource.Cancel(false);
             await Task.FromCanceled<HttpResponseMessage>(cancellationToken).ConfigureAwait(true);
+#else
+            await cancelationSource.CancelAsync().ConfigureAwait(true);
 #endif
         }
 

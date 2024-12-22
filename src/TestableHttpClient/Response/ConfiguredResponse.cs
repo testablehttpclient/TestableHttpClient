@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class ConfiguredResponse : IResponse
+internal sealed class ConfiguredResponse : IResponse
 {
     private readonly IResponse innerResponse;
     private readonly Action<HttpResponseMessage> configureResponse;

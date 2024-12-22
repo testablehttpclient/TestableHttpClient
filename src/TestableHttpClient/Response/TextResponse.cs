@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class TextResponse : HttpResponse
+internal sealed class TextResponse : HttpResponse
 {
     public TextResponse(string content, Encoding? encoding = null, string? mediaType = null)
     {

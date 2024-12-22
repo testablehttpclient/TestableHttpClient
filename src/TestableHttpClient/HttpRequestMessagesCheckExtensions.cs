@@ -88,7 +88,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
@@ -97,7 +97,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
@@ -115,7 +115,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
@@ -125,7 +125,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpRequestHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
@@ -145,7 +145,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
@@ -154,7 +154,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
@@ -172,17 +172,17 @@ public static class HttpRequestMessagesCheckExtensions
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithContentHeader(check, headerName, headerValue, (int?)null);
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithContentHeader(check, headerName, headerValue, null);
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
     /// </summary>
-    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeader"/></remarks>
+    /// <remarks>This method only asserts headers on <see cref="System.Net.Http.Headers.HttpContentHeaders"/></remarks>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
@@ -231,7 +231,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithHeader(check, headerName, headerValue, (int?)null);
+    public static IHttpRequestMessagesCheck WithHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithHeader(check, headerName, headerValue, null);
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -293,6 +293,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
+    /// <param name="jsonSerializerOptions">The serializer options that should be used for serializing te content.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>
     public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, JsonSerializerOptions jsonSerializerOptions) => WithJsonContent(check, jsonObject, jsonSerializerOptions, null);
@@ -312,6 +313,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// </summary>
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
+    /// <param name="jsonSerializerOptions">The serializer options that should be used for serializing the content.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     /// <remarks>Note that on .NET Framework, the HttpClient might dispose the content after sending the request.</remarks>

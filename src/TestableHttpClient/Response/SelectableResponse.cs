@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class SelectableResponse : IResponse
+internal sealed class SelectableResponse : IResponse
 {
     private readonly Func<HttpResponseContext, IResponse> selector;
 

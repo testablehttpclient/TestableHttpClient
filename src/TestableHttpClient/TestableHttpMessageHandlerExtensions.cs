@@ -8,6 +8,7 @@ public static class TestableHttpMessageHandlerExtensions
     /// Create an <seealso cref="HttpClient"/> configured with the TestableHttpMessageHandler.
     /// </summary>
     /// <param name="handler">The TestableHttpMessageHandler to set on the client.</param>
+    /// <param name="httpMessageHandlers">Additional handlers to add to the client.</param>
     /// <returns>An HttpClient configure with the TestableHttpMessageHandler.</returns>
     /// <exception cref="ArgumentNullException">The `handler` is `null`</exception>
     /// <remarks>Using this method is equivalent to `new HttClient(handler)`.</remarks>
@@ -25,7 +26,7 @@ public static class TestableHttpMessageHandlerExtensions
     /// <exception cref="ArgumentNullException">The `handler` or `configureClient` is `null`</exception>
     public static HttpClient CreateClient(this TestableHttpMessageHandler handler, Action<HttpClient> configureClient)
     {
-        return CreateClient(handler, configureClient, Enumerable.Empty<DelegatingHandler>());
+        return CreateClient(handler, configureClient, []);
     }
 
     public static HttpClient CreateClient(this TestableHttpMessageHandler handler, Action<HttpClient> configureClient, IEnumerable<DelegatingHandler> httpMessageHandlers)

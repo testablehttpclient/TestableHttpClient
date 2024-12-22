@@ -7,22 +7,19 @@ internal static class Guard
 {
     internal static void ThrowIfNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
     {
-#if NET6_0_OR_GREATER
-        ArgumentNullException.ThrowIfNull(argument, paramName);
-#else
+#if NETSTANDARD
         if (argument is null)
         {
             throw new ArgumentNullException(paramName);
         }
+#else
+        ArgumentNullException.ThrowIfNull(argument, paramName);
 #endif
     }
 
     internal static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
     {
-#if NET7_0_OR_GREATER
-        ArgumentNullException.ThrowIfNullOrEmpty(argument, paramName);
-#else
-
+#if NETSTANDARD
         if (argument is null)
         {
             throw new ArgumentNullException(paramName);
@@ -31,6 +28,8 @@ internal static class Guard
         {
             throw new ArgumentException("String should not be empty", paramName);
         }
+#else
+        ArgumentNullException.ThrowIfNullOrEmpty(argument, paramName);
 #endif
     }
 }

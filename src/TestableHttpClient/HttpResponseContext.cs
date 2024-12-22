@@ -3,7 +3,7 @@
 /// <summary>
 /// This class contains contextual information for generating responses.
 /// </summary>
-public class HttpResponseContext
+public sealed class HttpResponseContext
 {
     internal HttpResponseContext(HttpRequestMessage httpRequestMessage, IReadOnlyCollection<HttpRequestMessage> httpRequestMessages, HttpResponseMessage httpResponseMessage, TestableHttpMessageHandlerOptions? options = null)
     {
@@ -14,7 +14,7 @@ public class HttpResponseContext
     }
 
     /// <summary>
-    /// The request message that is send by the HttpClient.
+    /// The request message that is sent by the HttpClient.
     /// </summary>
     public HttpRequestMessage HttpRequestMessage { get; }
     /// <summary>
@@ -22,7 +22,7 @@ public class HttpResponseContext
     /// </summary>
     public IReadOnlyCollection<HttpRequestMessage> HttpRequestMessages { get; }
     /// <summary>
-    /// The response message that will be send back to the HttpClient.
+    /// The response message that will be sent back to the HttpClient.
     /// </summary>
     public HttpResponseMessage HttpResponseMessage { get; }
     /// <summary>

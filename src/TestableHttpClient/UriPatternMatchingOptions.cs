@@ -3,26 +3,26 @@
 /// <summary>
 /// Options specific for URI pattern matching.
 /// </summary>
-public class UriPatternMatchingOptions
+public sealed class UriPatternMatchingOptions
 {
     /// <summary>
-    /// Indicates whether or not the scheme of an URI should be treated as case insensitive. Default: true
+    /// Indicates whether the scheme of a URI should be treated as case-insensitive. Default: true
     /// </summary>
     public bool SchemeCaseInsensitive { get; set; } = true;
     /// <summary>
-    /// Indicates whether or not the host of an URI should be treated as case insensitive. Default: true
+    /// Indicates whether the host of a URI should be treated as case-insensitive. Default: true
     /// </summary>
     public bool HostCaseInsensitive { get; set; } = true;
     /// <summary>
-    /// Indicates whether or not the path of an URI should be treated as case insensitive. Default: true
+    /// Indicates whether the path of a URI should be treated as case-insensitive. Default: true
     /// </summary>
     public bool PathCaseInsensitive { get; set; } = true;
     /// <summary>
-    /// Indicates whether or not the query parameters of an URI should be treated as case insensitive. Default: true
+    /// Indicates whether the query parameters of a URI should be treated as case-insensitive. Default: true
     /// </summary>
     public bool QueryCaseInsensitive { get; set; } = true;
     /// <summary>
-    /// The default format that should be used for getting the query string from an URI. Default: Unescaped.
+    /// The default format that should be used for getting the query string from a URI. Default: Unescaped.
     /// </summary>
     public UriFormat DefaultQueryFormat { get; set; } = UriFormat.Unescaped;
 }
