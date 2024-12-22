@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -24,7 +24,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <DebugType>full</DebugType>
-    
+
     <IncludeSource>true</IncludeSource>
     <RepositoryUrl>https://github.com/testablehttpclient/TestableHttpClient</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -39,16 +39,12 @@
     <PackageReference Include="PolyKit.Embedded" Version="3.0.9" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Perfors.UnreachableException" Version="1.0.0" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" PrivateAssets="All">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.143" PrivateAssets="All" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.112" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
