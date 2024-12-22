@@ -11,7 +11,7 @@ updates:
   reviewers:
   - "dnperfors"
 - package-ecosystem: "github-actions"
-  directory: ".github/"
+  directory: "/"
   schedule:
     interval: "daily"
   reviewers:
