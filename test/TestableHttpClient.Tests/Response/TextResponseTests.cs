@@ -19,7 +19,7 @@ public class TextResponseTests
         using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal(string.Empty, sut.Content);
-        Assert.Equal(string.Empty, await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal(string.Empty, await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class TextResponseTests
         using HttpResponseMessage responseMessage = await sut.TestAsync();
 
         Assert.Equal("Hello World", sut.Content);
-        Assert.Equal("Hello World", await responseMessage.Content.ReadAsStringAsync());
+        Assert.Equal("Hello World", await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]

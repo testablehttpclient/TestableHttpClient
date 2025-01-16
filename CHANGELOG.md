@@ -7,6 +7,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [0.12] - unplanned
 ### Removed
 - .NET 6.0 target, since it is no longer supported
+- .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
 ### Added
 - Support for .NET 9.0
 

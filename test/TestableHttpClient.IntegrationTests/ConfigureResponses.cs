@@ -10,10 +10,10 @@ public class ConfigureResponses
         using TestableHttpMessageHandler testHandler = new();
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/200");
+        HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/200", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-        Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+        Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -23,10 +23,10 @@ public class ConfigureResponses
         testHandler.RespondWith(Text("HttpClient testing is easy"));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/200");
+        HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/200", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-        Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
+        Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -37,10 +37,10 @@ public class ConfigureResponses
         testHandler.RespondWith(Json("Not Found", HttpStatusCode.NotFound));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/201");
+        HttpResponseMessage result = await httpClient.GetAsync("http://httpbin.org/status/201", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
-        Assert.Equal("\"Not Found\"", await result.Content.ReadAsStringAsync());
+        Assert.Equal("\"Not Found\"", await result.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -60,10 +60,10 @@ public class ConfigureResponses
 
         foreach (string? url in urls)
         {
-            HttpResponseMessage result = await httpClient.GetAsync(url);
+            HttpResponseMessage result = await httpClient.GetAsync(url, TestContext.Current.CancellationToken);
 
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync());
+            Assert.Equal("HttpClient testing is easy", await result.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
         }
     }
 
@@ -85,13 +85,13 @@ public class ConfigureResponses
         testHandler.RespondWith(SelectResponse(PathBasedResponse));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin/status/200");
+        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin/status/200", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        response = await httpClient.GetAsync("http://httpbin.org/status/400");
+        response = await httpClient.GetAsync("http://httpbin.org/status/400", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        response = await httpClient.GetAsync("http://httpbin.org/status/500");
+        response = await httpClient.GetAsync("http://httpbin.org/status/500", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -108,16 +108,16 @@ public class ConfigureResponses
         }));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin/status/200");
+        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin/status/200", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
 
-        response = await httpClient.GetAsync("https://httpbin/status/200");
+        response = await httpClient.GetAsync("https://httpbin/status/200", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        response = await httpClient.GetAsync("https://httpbin.org/status/400");
+        response = await httpClient.GetAsync("https://httpbin.org/status/400", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        response = await httpClient.GetAsync("https://httpbin.org/status/500");
+        response = await httpClient.GetAsync("https://httpbin.org/status/500", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -128,7 +128,7 @@ public class ConfigureResponses
         testHandler.RespondWith(Timeout());
 
         using HttpClient httpClient = new(testHandler);
-        await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500"));
+        await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.GetAsync("https://httpbin.org/delay/500", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -143,20 +143,20 @@ public class ConfigureResponses
             ));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin.org/anything");
+        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
 
-        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         // Last configured response is returned when all other responses are used.
-        response = await httpClient.GetAsync("http://httpbin.org/anything");
+        response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -167,7 +167,7 @@ public class ConfigureResponses
         testHandler.RespondWith(Delayed(StatusCode(HttpStatusCode.OK), TimeSpan.FromSeconds(1)));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin.org/anything");
+        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -178,7 +178,7 @@ public class ConfigureResponses
         testHandler.RespondWith(Configured(StatusCode(HttpStatusCode.NoContent), x => x.Headers.Add("server", "test")));
 
         using HttpClient httpClient = new(testHandler);
-        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin.org/anything");
+        HttpResponseMessage response = await httpClient.GetAsync("http://httpbin.org/anything", TestContext.Current.CancellationToken);
         Assert.Equal("test", response.Headers.Server.ToString());
     }
 }

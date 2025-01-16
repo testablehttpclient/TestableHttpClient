@@ -49,7 +49,7 @@ public class CustomizeJsonSerialization
     {
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = sut.CreateClient();
-        await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" });
+        await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, cancellationToken: TestContext.Current.CancellationToken);
 
 #if NETFRAMEWORK
         // Well this doesn't really work on .NET Framework.
@@ -70,7 +70,7 @@ public class CustomizeJsonSerialization
             WriteIndented = true
         };
 
-        await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, options);
+        await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, options, cancellationToken: TestContext.Current.CancellationToken);
 
 #if NETFRAMEWORK
         // Well this doesn't really work on .NET Framework.

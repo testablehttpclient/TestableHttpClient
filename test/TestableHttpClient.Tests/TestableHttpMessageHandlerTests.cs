@@ -14,7 +14,7 @@ public class TestableHttpMessageHandlerTests
         using HttpClient client = new(sut);
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com/");
 
-        _ = await client.SendAsync(request);
+        _ = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
         Assert.Contains(request, sut.Requests);
     }
@@ -29,10 +29,10 @@ public class TestableHttpMessageHandlerTests
         using HttpRequestMessage request3 = new(HttpMethod.Delete, "https://example3.com/");
         using HttpRequestMessage request4 = new(HttpMethod.Head, "https://example4.com/");
 
-        _ = await client.SendAsync(request1);
-        _ = await client.SendAsync(request2);
-        _ = await client.SendAsync(request3);
-        _ = await client.SendAsync(request4);
+        _ = await client.SendAsync(request1, TestContext.Current.CancellationToken);
+        _ = await client.SendAsync(request2, TestContext.Current.CancellationToken);
+        _ = await client.SendAsync(request3, TestContext.Current.CancellationToken);
+        _ = await client.SendAsync(request4, TestContext.Current.CancellationToken);
 
         Assert.Equal([request1, request2, request3, request4], sut.Requests);
     }
@@ -50,7 +50,7 @@ public class TestableHttpMessageHandlerTests
         sut.RespondWith(mockedResponse);
         using HttpClient client = new(sut);
         using HttpRequestMessage request = new(HttpMethod.Get, new Uri("https://example.com/"));
-        using HttpResponseMessage response = await client.SendAsync(request);
+        using HttpResponseMessage response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
         Assert.NotNull(context);
         Assert.Same(request, context.HttpRequestMessage);
@@ -64,10 +64,10 @@ public class TestableHttpMessageHandlerTests
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        using HttpResponseMessage result = await client.GetAsync(new Uri("https://example.com/"));
+        using HttpResponseMessage result = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-        Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync());
+        Assert.Equal(string.Empty, await result.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
         Assert.NotNull(result.RequestMessage);
     }
 
@@ -77,8 +77,8 @@ public class TestableHttpMessageHandlerTests
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        using HttpResponseMessage result1 = await client.GetAsync(new Uri("https://example.com/"));
-        using HttpResponseMessage result2 = await client.GetAsync(new Uri("https://example.com/"));
+        using HttpResponseMessage result1 = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
+        using HttpResponseMessage result2 = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
 
         Assert.NotSame(result1, result2);
     }
@@ -92,8 +92,8 @@ public class TestableHttpMessageHandlerTests
         using HttpRequestMessage request1 = new(HttpMethod.Get, new Uri("https://example.com/1"));
         using HttpRequestMessage request2 = new(HttpMethod.Post, new Uri("https://example.com/2"));
 
-        using HttpResponseMessage response1 = await client.SendAsync(request1);
-        using HttpResponseMessage response2 = await client.SendAsync(request2);
+        using HttpResponseMessage response1 = await client.SendAsync(request1, TestContext.Current.CancellationToken);
+        using HttpResponseMessage response2 = await client.SendAsync(request2, TestContext.Current.CancellationToken);
 
         Assert.Same(request1, response1.RequestMessage);
         Assert.Same(request2, response2.RequestMessage);
@@ -116,7 +116,7 @@ public class TestableHttpMessageHandlerTests
         sut.RespondWith(Responses.StatusCode(HttpStatusCode.NoContent));
 
         using HttpClient client = new(sut);
-        using HttpResponseMessage response = await client.GetAsync("https://example.com");
+        using HttpResponseMessage response = await client.GetAsync("https://example.com", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.NotNull(response.RequestMessage);
@@ -127,7 +127,7 @@ public class TestableHttpMessageHandlerTests
     {
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
-        _ = await client.GetAsync("https://example.com");
+        _ = await client.GetAsync("https://example.com", TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(sut.Requests);
 
@@ -138,6 +138,7 @@ public class TestableHttpMessageHandlerTests
 
     [Fact]
     [SuppressMessage("Usage", "xUnit1031:Do not use blocking task operations in test method", Justification = "Here it is necessary, if it blocks the test, it will time out and breaks the test.")]
+    [SuppressMessage("Usage", "xUnit1051:Calls to methods which accept CancellationToken should use TestContext.Current.CancellationToken", Justification = "We don't want xunit to interfere with this test.")]
     public void GetAsync_ShouldNotHang()
     {
         using TestableHttpMessageHandler sut = new();

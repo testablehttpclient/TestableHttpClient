@@ -16,7 +16,7 @@ public class JsonResponseTests
 
         using HttpResponseMessage responseMessage = await sut.TestAsync();
 
-        var json = await responseMessage.Content.ReadAsStringAsync();
+        var json = await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(expectedJson, json);
         Assert.Same(input, sut.Content);
@@ -32,9 +32,9 @@ public class JsonResponseTests
         handler.RespondWith(sut);
         using HttpClient client = new(handler);
 
-        using HttpResponseMessage responseMessage = await client.GetAsync("http://example");
+        using HttpResponseMessage responseMessage = await client.GetAsync("http://example", TestContext.Current.CancellationToken);
 
-        var json = await responseMessage.Content.ReadAsStringAsync();
+        var json = await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("{\"Value\":42}", json);
         Assert.Same(input, sut.Content);
@@ -47,7 +47,7 @@ public class JsonResponseTests
         JsonResponse sut = new(input);
         using HttpResponseMessage responseMessage = await sut.TestAsync();
 
-        var json = await responseMessage.Content.ReadAsStringAsync();
+        var json = await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("{\"value\":42}", json);
         Assert.Same(input, sut.Content);
@@ -64,7 +64,7 @@ public class JsonResponseTests
 
         using HttpResponseMessage responseMessage = await sut.TestAsync();
 
-        var json = await responseMessage.Content.ReadAsStringAsync();
+        var json = await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("{\"Value\":42}", json);
         Assert.Same(input, sut.Content);
@@ -78,7 +78,7 @@ public class JsonResponseTests
 
         using HttpResponseMessage responseMessage = await sut.TestAsync();
 
-        var json = await responseMessage.Content.ReadAsStringAsync();
+        var json = await responseMessage.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("[1,2,3,4]", json);
         Assert.Same(input, sut.Content);
