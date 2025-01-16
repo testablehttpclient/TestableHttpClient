@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class SequencedResponse : IResponse
+internal sealed class SequencedResponse : IResponse
 {
     private readonly List<IResponse> responses;
     public SequencedResponse(IEnumerable<IResponse> responses)

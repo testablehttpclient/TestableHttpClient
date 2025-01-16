@@ -3,7 +3,7 @@
 /// <summary>
 /// This class makes it easy to create assertions on a collection of <seealso cref="HttpRequestMessage"/>s.
 /// </summary>
-internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
+internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 {
     private readonly List<string> _expectedConditions = new();
 
@@ -56,6 +56,7 @@ internal class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// Asserts whether requests comply with a specific filter.
     /// </summary>
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
+    /// <param name="expectedNumberOfRequests">The number of requests with this filter.</param>
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]

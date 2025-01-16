@@ -59,11 +59,13 @@ public static class Responses
     /// <param name="mediaType">The media type of the content, defaults to 'text/plain'.</param>
     /// <returns>A response with specific content.</returns>
     public static IResponse Text(string content, Encoding? encoding = null, string? mediaType = null) => new TextResponse(content, encoding, mediaType);
+
     /// <summary>
     /// Create a response with json content.
     /// </summary>
     /// <param name="content">The content to serialize.</param>
     /// <param name="contentType">The content type of the response, defaults to 'application/json'.</param>
+    /// <param name="jsonSerializerOptions">The serializer settings to use for serializing the content.</param>
     /// <returns>A response with specific content.</returns>
     public static IResponse Json(object? content, string? contentType = null, JsonSerializerOptions? jsonSerializerOptions = null) => new JsonResponse(content, contentType) { JsonSerializerOptions = jsonSerializerOptions };
     /// <summary>
@@ -72,6 +74,7 @@ public static class Responses
     /// <param name="content">The content to serialize.</param>
     /// <param name="statusCode">The status code for the response.</param>
     /// <param name="contentType">The content type of the response, defaults to 'application/json'.</param>
+    /// <param name="jsonSerializerOptions">The serializer settings to use for serializing the content.</param>
     /// <returns>A response with specific content.</returns>
     public static IResponse Json(object? content, HttpStatusCode statusCode, string? contentType = null, JsonSerializerOptions? jsonSerializerOptions = null) => new JsonResponse(content, contentType) { StatusCode = statusCode, JsonSerializerOptions = jsonSerializerOptions };
     /// <summary>

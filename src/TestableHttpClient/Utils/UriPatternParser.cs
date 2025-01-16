@@ -16,25 +16,25 @@ internal static class UriPatternParser
 
     private static UriPattern ParsePattern(ReadOnlySpan<char> patternSpan)
     {
-        int indexOfSchemeSeperator = Math.Max(0, patternSpan.IndexOf("://".AsSpan(), StringComparison.Ordinal));
-        ReadOnlySpan<char> schemePattern = patternSpan[0..indexOfSchemeSeperator];
-        patternSpan = patternSpan[indexOfSchemeSeperator..];
-        int indexOfFragmentSeperator = patternSpan.LastIndexOf('#');
-        if (indexOfFragmentSeperator == -1)
+        int indexOfSchemeSeparator = Math.Max(0, patternSpan.IndexOf("://".AsSpan(), StringComparison.Ordinal));
+        ReadOnlySpan<char> schemePattern = patternSpan[0..indexOfSchemeSeparator];
+        patternSpan = patternSpan[indexOfSchemeSeparator..];
+        int indexOfFragmentSeparator = patternSpan.LastIndexOf('#');
+        if (indexOfFragmentSeparator == -1)
         {
-            indexOfFragmentSeperator = patternSpan.Length;
+            indexOfFragmentSeparator = patternSpan.Length;
         }
 
-        _ = patternSpan[indexOfFragmentSeperator..];
-        patternSpan = patternSpan[..indexOfFragmentSeperator];
-        int indexOfQuerySeperator = patternSpan.LastIndexOf('?');
-        if (indexOfQuerySeperator == -1)
+        _ = patternSpan[indexOfFragmentSeparator..];
+        patternSpan = patternSpan[..indexOfFragmentSeparator];
+        int indexOfQuerySeparator = patternSpan.LastIndexOf('?');
+        if (indexOfQuerySeparator == -1)
         {
-            indexOfQuerySeperator = patternSpan.Length;
+            indexOfQuerySeparator = patternSpan.Length;
         }
 
-        ReadOnlySpan<char> queryPattern = patternSpan[indexOfQuerySeperator..];
-        patternSpan = patternSpan[..indexOfQuerySeperator];
+        ReadOnlySpan<char> queryPattern = patternSpan[indexOfQuerySeparator..];
+        patternSpan = patternSpan[..indexOfQuerySeparator];
 
         if (patternSpan is ['/', '/', ..])
         {
@@ -46,25 +46,25 @@ internal static class UriPatternParser
             patternSpan = patternSpan[3..];
         }
 
-        int indexOfUserInfoSeperator = patternSpan.IndexOf('@');
-        patternSpan = patternSpan[(indexOfUserInfoSeperator + 1)..];
+        int indexOfUserInfoSeparator = patternSpan.IndexOf('@');
+        patternSpan = patternSpan[(indexOfUserInfoSeparator + 1)..];
 
-        int indexOfPathSeperator = patternSpan.IndexOf('/');
-        if (indexOfPathSeperator == -1)
+        int indexOfPathSeparator = patternSpan.IndexOf('/');
+        if (indexOfPathSeparator == -1)
         {
-            indexOfPathSeperator = patternSpan.Length;
+            indexOfPathSeparator = patternSpan.Length;
         }
 
-        ReadOnlySpan<char> hostPattern = patternSpan[..indexOfPathSeperator];
-        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeperator..];
-        int indexOfPortSeperator = hostPattern.LastIndexOf(':');
+        ReadOnlySpan<char> hostPattern = patternSpan[..indexOfPathSeparator];
+        ReadOnlySpan<char> pathPattern = patternSpan[indexOfPathSeparator..];
+        int indexOfPortSeparator = hostPattern.LastIndexOf(':');
         int indexOfIpV6Part = hostPattern.LastIndexOf(']');
-        if (indexOfPortSeperator == -1 || indexOfPortSeperator < indexOfIpV6Part)
+        if (indexOfPortSeparator == -1 || indexOfPortSeparator < indexOfIpV6Part)
         {
-            indexOfPortSeperator = hostPattern.Length;
+            indexOfPortSeparator = hostPattern.Length;
         }
-        ReadOnlySpan<char> portPattern = hostPattern[indexOfPortSeperator..];
-        hostPattern = hostPattern[..indexOfPortSeperator];
+        ReadOnlySpan<char> portPattern = hostPattern[indexOfPortSeparator..];
+        hostPattern = hostPattern[..indexOfPortSeparator];
 
         return new()
         {

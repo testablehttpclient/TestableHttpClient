@@ -21,8 +21,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     {
         httpRequestMessages.Enqueue(request);
 
-        HttpResponseMessage responseMessage;
-        responseMessage = new();
+        HttpResponseMessage responseMessage = new();
         HttpResponseContext context = new(request, httpRequestMessages, responseMessage, Options);
         await response.ExecuteAsync(context, cancellationToken).ConfigureAwait(false);
 
@@ -39,9 +38,9 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// Configure a response that creates a <see cref="HttpResponseMessage"/> that should be returned for a request.
     /// </summary>
     /// <param name="response">The response that should be created.</param>
-    /// <remarks>By default each request will receive a new response, however this is dependent on the implementation.</remarks>
+    /// <remarks>By default, each request will receive a new response, however this is dependent on the implementation.</remarks>
     /// <example>
-    /// testableHttpMessageHander.RespondWith(Responses.StatusCode(HttpStatusCode.OK));
+    /// testableHttpMessageHandler.RespondWith(Responses.StatusCode(HttpStatusCode.OK));
     /// </example>
     public void RespondWith(IResponse response)
     {
@@ -53,7 +52,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// </summary>
     /// Sometimes the TestableHttpMessageHandler can't be replaced with a new instance, but it can be cleared.
     /// The configuration is not cleared and will be kept the same.
-    /// <remarks>The configuration it self (Options and the configure IResponse) will not be cleared or reset.</remarks>
+    /// <remarks>The configuration itself (Options and the configured IResponse) will not be cleared or reset.</remarks>
     public void ClearRequests()
     {
         httpRequestMessages.Clear();

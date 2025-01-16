@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class DelayedResponse : IResponse
+internal sealed class DelayedResponse : IResponse
 {
     private readonly IResponse delayedResponse;
     private readonly TimeSpan delay;

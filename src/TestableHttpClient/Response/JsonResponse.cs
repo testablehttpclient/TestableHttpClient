@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Response;
 
-internal class JsonResponse : HttpResponse
+internal sealed class JsonResponse : HttpResponse
 {
     public JsonResponse(object? content, string? contentType = null)
     {
