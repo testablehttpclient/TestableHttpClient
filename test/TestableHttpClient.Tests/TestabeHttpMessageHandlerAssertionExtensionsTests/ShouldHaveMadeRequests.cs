@@ -42,7 +42,7 @@ public class ShouldHaveMadeRequests
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://example.com/"));
+        _ = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
 
         var result = sut.ShouldHaveMadeRequests();
 
@@ -57,7 +57,7 @@ public class ShouldHaveMadeRequests
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://example.com/"));
+        _ = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
 
         var result = sut.ShouldHaveMadeRequests(1);
 

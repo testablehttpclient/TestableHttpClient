@@ -10,7 +10,7 @@ public class CreatingClients
         using TestableHttpMessageHandler testableHttpMessageHandler = new();
         using HttpClient client = testableHttpMessageHandler.CreateClient();
 
-        await client.GetAsync("https://httpbin.org/get");
+        await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get");
     }
@@ -21,7 +21,7 @@ public class CreatingClients
         using TestableHttpMessageHandler testableHttpMessageHandler = new();
         using HttpClient client = testableHttpMessageHandler.CreateClient(client => client.DefaultRequestHeaders.Add("test", "test"));
 
-        await client.GetAsync("https://httpbin.org/get");
+        await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testableHttpMessageHandler.ShouldHaveMadeRequests().WithRequestHeader("test", "test");
     }
@@ -33,7 +33,7 @@ public class CreatingClients
         using TestHandler handler = new();
         using HttpClient client = testableHttpMessageHandler.CreateClient(handler);
 
-        await client.GetAsync("https://httpbin.org/get");
+        await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get");
         Assert.True(handler.WasCalled);

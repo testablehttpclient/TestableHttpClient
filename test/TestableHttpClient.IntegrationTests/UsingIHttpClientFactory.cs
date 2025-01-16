@@ -29,7 +29,7 @@ public class UsingIHttpClientFactory
         // Create the HttpClient
         using HttpClient client = httpClientFactory.CreateClient();
         // And use it...
-        _ = await client.GetAsync("https://httpbin.com/get");
+        _ = await client.GetAsync("https://httpbin.com/get", TestContext.Current.CancellationToken);
 
         // Now use the assertions to make sure the request was actually made.
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get");
@@ -63,14 +63,14 @@ public class UsingIHttpClientFactory
         // Create the named HttpClient
         using HttpClient githubClient = httpClientFactory.CreateClient("github");
         // And use it.
-        HttpResponseMessage result = await githubClient.GetAsync("https://github.com/api/users");
+        HttpResponseMessage result = await githubClient.GetAsync("https://github.com/api/users", TestContext.Current.CancellationToken);
         Assert.Equal("github", result.Headers.Server.ToString());
         Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
         // Create another named HttpClient
         using HttpClient httpbinClient = httpClientFactory.CreateClient("httpbin");
         // And use it...
-        result = await httpbinClient.GetAsync("https://httpbin.com/get");
+        result = await httpbinClient.GetAsync("https://httpbin.com/get", TestContext.Current.CancellationToken);
         Assert.Equal("httpbin", result.Headers.Server.ToString());
         Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
 
@@ -96,11 +96,11 @@ public class UsingIHttpClientFactory
                     // Reconfigure the default HttpClient and set the TestableHttpMessageHandler as the primary HttpMessageHandler
                     .ConfigureTestServices(services => services.AddHttpClient(string.Empty).ConfigurePrimaryHttpMessageHandler(() => testableHttpMessageHandler));
             })
-            .StartAsync();
+            .StartAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         using HttpClient client = host.GetTestClient();
         // Make a request to the testserver
-        _ = await client.GetAsync("/");
+        _ = await client.GetAsync("/", TestContext.Current.CancellationToken);
 
         // Assert that the code in the test server made the expected request.
         testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get");

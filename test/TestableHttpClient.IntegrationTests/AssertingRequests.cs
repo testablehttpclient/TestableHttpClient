@@ -18,7 +18,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequests();
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(0));
@@ -30,7 +30,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequestsTo("https://example.org", 0);
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get", 0));
@@ -42,7 +42,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequestsTo("https://*");
         testHandler.ShouldHaveMadeRequestsTo("https://*.org/get");
@@ -61,7 +61,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*");
         testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*.org/get");
@@ -80,7 +80,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequestsTo("https://*")
                    .WithRequestUri("*://httpbin.org/*")
@@ -93,7 +93,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com");
+        _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=admin@example.com");
         testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=*");
@@ -106,9 +106,9 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
 
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
         using StringContent content = new("");
-        _ = await client.PostAsync("https://httpbin.org/post", content);
+        _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Get);
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Post));
@@ -122,7 +122,7 @@ public class AssertingRequests
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
         client.DefaultRequestHeaders.Add("api-version", "1.0");
-        _ = await client.GetAsync("https://httpbin.org/get");
+        _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version");
         testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version", "1.0");
@@ -140,7 +140,7 @@ public class AssertingRequests
         using HttpClient client = new(testHandler);
 
         using StringContent content = new("", Encoding.UTF8, "application/json");
-        _ = await client.PostAsync("https://httpbin.org/post", content);
+        _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequests().WithContentHeader("content-type");
         testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type");
@@ -160,7 +160,7 @@ public class AssertingRequests
         using HttpClient client = new(testHandler);
 
         using StringContent content = new("my special content");
-        _ = await client.PostAsync("https://httpbin.org/post", content);
+        _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
 #if NETFRAMEWORK
         // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
@@ -182,7 +182,7 @@ public class AssertingRequests
         using HttpClient client = new(testHandler);
 
         using StringContent content = new("{}", Encoding.UTF8, "application/json");
-        _ = await client.PostAsync("https://httpbin.org/post", content);
+        _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
 #if NETFRAMEWORK
         // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
@@ -199,7 +199,7 @@ public class AssertingRequests
         using HttpClient client = new(testHandler);
 
         using StringContent content = new("", Encoding.UTF8, "application/json");
-        _ = await client.PostAsync("https://httpbin.org/post", content);
+        _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
         testHandler.ShouldHaveMadeRequests().WithFilter(x => x.Content is not null && x.Content.Headers.ContentType?.MediaType == "application/json", "");
     }

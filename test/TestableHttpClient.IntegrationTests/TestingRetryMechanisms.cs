@@ -30,7 +30,7 @@ public class TestingRetryMechanisms
         using HttpClient client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
 
         // Make a request, which should pass
-        HttpResponseMessage response = await client.GetAsync("https://httpbin.com/get");
+        HttpResponseMessage response = await client.GetAsync("https://httpbin.com/get", TestContext.Current.CancellationToken);
 
         // Now use the assertions to make sure the request was actually made multiple times.
         _ = testableHttpMessageHandler.ShouldHaveMadeRequestsTo("https://httpbin.com/get", 3);
@@ -53,7 +53,7 @@ public class TestingRetryMechanisms
         using HttpClient client = testableHttpMessageHandler.CreateClient(retryPolicyHandler);
 
 
-        Task<HttpResponseMessage> task = client.GetAsync("https://httpbin.com/get");
+        Task<HttpResponseMessage> task = client.GetAsync("https://httpbin.com/get", TestContext.Current.CancellationToken);
         Assert.True(task.IsCanceled);
 
         // Now use the assertions to make sure the request was actually made once, so polly didn't run.

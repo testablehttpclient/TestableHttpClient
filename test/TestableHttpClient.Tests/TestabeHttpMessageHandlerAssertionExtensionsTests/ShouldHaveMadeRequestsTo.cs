@@ -72,7 +72,7 @@ public class ShouldHaveMadeRequestsTo
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://example.com/"));
+        _ = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
 
         var result = sut.ShouldHaveMadeRequestsTo("https://example.com/");
 
@@ -87,7 +87,7 @@ public class ShouldHaveMadeRequestsTo
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://example.com/"));
+        _ = await client.GetAsync(new Uri("https://example.com/"), TestContext.Current.CancellationToken);
 
         var result = sut.ShouldHaveMadeRequestsTo("https://example.com/", 1);
 
@@ -102,7 +102,7 @@ public class ShouldHaveMadeRequestsTo
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"), TestContext.Current.CancellationToken);
 
         var result = sut.ShouldHaveMadeRequestsTo("https://example.com/test");
 
@@ -118,7 +118,7 @@ public class ShouldHaveMadeRequestsTo
         sut.Options.UriPatternMatchingOptions.PathCaseInsensitive = false;
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"), TestContext.Current.CancellationToken);
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test"));
     }
@@ -129,7 +129,7 @@ public class ShouldHaveMadeRequestsTo
         using TestableHttpMessageHandler sut = new();
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"), TestContext.Current.CancellationToken);
 
         var result = sut.ShouldHaveMadeRequestsTo("https://example.com/test", 1);
 
@@ -145,7 +145,7 @@ public class ShouldHaveMadeRequestsTo
         sut.Options.UriPatternMatchingOptions.PathCaseInsensitive = false;
         using HttpClient client = new(sut);
 
-        _ = await client.GetAsync(new Uri("https://Example.com/Test"));
+        _ = await client.GetAsync(new Uri("https://Example.com/Test"), TestContext.Current.CancellationToken);
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequestsTo("https://example.com/test", 1));
     }
