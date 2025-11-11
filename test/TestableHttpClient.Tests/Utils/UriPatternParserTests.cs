@@ -1,6 +1,7 @@
 ﻿using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests.Utils;
+
 public class UriPatternParserTests
 {
     [Theory]

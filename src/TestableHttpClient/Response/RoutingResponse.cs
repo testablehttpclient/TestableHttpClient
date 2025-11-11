@@ -2,6 +2,7 @@
 using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.Response;
+
 internal sealed class RoutingResponse : IResponse
 {
     public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
