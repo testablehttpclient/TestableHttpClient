@@ -14,7 +14,11 @@ public class CustomizeJsonSerialization
         sut.RespondWith(Json(new { Name = "Charlie" }));
         using HttpClient client = sut.CreateClient();
 
+#if NETFRAMEWORK
         string json = await client.GetStringAsync("http://localhost/myjson");
+#else
+        string json = await client.GetStringAsync("http://localhost/myjson", TestContext.Current.CancellationToken);
+#endif
 
         Assert.Equal("{\"name\":\"Charlie\"}", json);
     }
@@ -27,7 +31,11 @@ public class CustomizeJsonSerialization
         sut.RespondWith(Json(new { Name = "Charlie" }));
         using HttpClient client = sut.CreateClient();
 
+#if NETFRAMEWORK
         string json = await client.GetStringAsync("http://localhost/myjson");
+#else
+        string json = await client.GetStringAsync("http://localhost/myjson", TestContext.Current.CancellationToken);
+#endif
 
         Assert.Equal("{\"Name\":\"Charlie\"}", json);
     }
@@ -39,7 +47,11 @@ public class CustomizeJsonSerialization
         sut.RespondWith(Json(new { Name = "Charlie" }, jsonSerializerOptions: new JsonSerializerOptions()));
         using HttpClient client = sut.CreateClient();
 
+#if NETFRAMEWORK
         string json = await client.GetStringAsync("http://localhost/myjson");
+#else
+        string json = await client.GetStringAsync("http://localhost/myjson", TestContext.Current.CancellationToken);
+#endif
 
         Assert.Equal("{\"Name\":\"Charlie\"}", json);
     }

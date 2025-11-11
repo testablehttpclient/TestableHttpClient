@@ -11,5 +11,5 @@ public interface IResponse
     /// <param name="context">The context for this request.</param>
     /// <param name="cancellationToken">The cancellationToken.</param>
     /// <returns></returns>
-    Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken);
+    public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken);
 }
