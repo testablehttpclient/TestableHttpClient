@@ -84,6 +84,7 @@ The following versions are being actively tested and thus supported:
 - .NET Framework 4.7.2 and 4.8
 - .NET 8.0
 - .NET 9.0
+- .NET 10.0
 
 These versions are supported as long as Microsoft supports them, we do our best to test and support newer versions as soon as possible.
 

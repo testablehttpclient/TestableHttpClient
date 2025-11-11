@@ -10,6 +10,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
 ### Added
 - Support for .NET 9.0
+- support for .NET 10.0
 
 ## [0.11] - 2024-06-15
 ### Removed

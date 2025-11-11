@@ -29,6 +29,7 @@ jobs:
         dotnet-version: |
           8.0.x
           9.0.x
+          10.0.x
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dotnet tools
@@ -80,6 +81,7 @@ jobs:
         dotnet-version: |
           8.0.x
           9.0.x
+          10.0.x
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dependencies
@@ -100,7 +102,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          9.0.x
+          10.0.x
     - uses: actions/download-artifact@v4
       with:
         name: artifacts

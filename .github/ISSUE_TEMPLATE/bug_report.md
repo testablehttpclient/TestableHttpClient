@@ -25,7 +25,7 @@ A clear and concise description of what you expected to happen.
 
 **Background (please complete the following information):**
   - Version of library: [e.g. 0.10]
- - Version of .NET: [e.g. 8.0]
+ - Version of .NET: [e.g. 10.0]
 
 **Additional context**
 Add any other context about the problem here.
