@@ -34,7 +34,7 @@ jobs:
     - name: Build source code
       run: dotnet build --configuration Release --no-restore
     - name: Test with dotnet
-      run: dotnet test --configuration Release --no-build --collect="Code Coverage" --framework="net8.0"
+      run: dotnet test --configuration Release --no-build --framework="net8.0"
     - name: Check source file format
       run: dotnet format --no-restore --verify-no-changes
       continue-on-error: true
@@ -44,10 +44,6 @@ jobs:
       with:
         name: artifacts
         path: ./artifacts
-    - uses: actions/upload-artifact@v4
-      with:
-        name: coverage
-        path: ./**/TestResults/**/coverage.opencover.xml
 
   testOnSupportedDotnetVersions:
     strategy:
