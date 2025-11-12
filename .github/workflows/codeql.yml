@@ -19,23 +19,23 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
     - name: Setup .NET versions
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
           8.0.x
           9.0.x
           10.0.x
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         queries: security-and-quality
         languages: csharp
         config-file: ./.github/codeql-config.yml
     - name: Build source code
-      run: dotnet build --configuration Release --framework net8.0
+      run: dotnet build --configuration Release --framework net10.0
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
