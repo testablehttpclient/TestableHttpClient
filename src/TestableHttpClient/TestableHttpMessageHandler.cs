@@ -17,9 +17,20 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// </summary>
     public IEnumerable<HttpRequestMessage> Requests => httpRequestMessages;
 
+    protected override void Dispose(bool disposing)
+    {
+        DisposeRequestMessages();
+        base.Dispose(disposing);
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "It gets disposed in the dispose method")]
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        httpRequestMessages.Enqueue(request);
+#if NET8_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(request);
+#endif
+
+        httpRequestMessages.Enqueue(await HttpRequestMessageCloner.ClonaAsync(request, cancellationToken).ConfigureAwait(false));
 
         HttpResponseMessage responseMessage = new();
         HttpResponseContext context = new(request, httpRequestMessages, responseMessage, Options);
@@ -55,6 +66,15 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     /// <remarks>The configuration itself (Options and the configured IResponse) will not be cleared or reset.</remarks>
     public void ClearRequests()
     {
+        DisposeRequestMessages();
         httpRequestMessages.Clear();
+    }
+
+    private void DisposeRequestMessages()
+    {
+        foreach (HttpRequestMessage request in httpRequestMessages)
+        {
+            request.Dispose();
+        }
     }
 }

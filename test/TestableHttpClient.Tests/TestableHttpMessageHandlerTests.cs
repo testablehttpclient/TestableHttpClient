@@ -16,7 +16,7 @@ public class TestableHttpMessageHandlerTests
 
         _ = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
-        Assert.Contains(request, sut.Requests);
+        Assert.Contains(request, sut.Requests, new SimpleHttpRequestMessageComparer());
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class TestableHttpMessageHandlerTests
         _ = await client.SendAsync(request3, TestContext.Current.CancellationToken);
         _ = await client.SendAsync(request4, TestContext.Current.CancellationToken);
 
-        Assert.Equal([request1, request2, request3, request4], sut.Requests);
+        Assert.Equal([request1, request2, request3, request4], sut.Requests, new SimpleHttpRequestMessageComparer());
     }
 
     [Fact]
@@ -209,5 +209,25 @@ public class TestableHttpMessageHandlerTests
             _queue.Dispose();
             GC.SuppressFinalize(this);
         }
+    }
+
+    private sealed class SimpleHttpRequestMessageComparer : IEqualityComparer<HttpRequestMessage>
+    {
+        public bool Equals(HttpRequestMessage? x, HttpRequestMessage? y)
+        {
+            if (x is null && y is null)
+            {
+                return true;
+            }
+
+            if (x is null || y is null)
+            {
+                return false;
+            }
+
+            return x.Method == y.Method && x.RequestUri == y.RequestUri && x.Version == y.Version;
+        }
+
+        public int GetHashCode([DisallowNull] HttpRequestMessage obj) => HashCode.Combine(obj.Method, obj.RequestUri, obj.Version);
     }
 }
