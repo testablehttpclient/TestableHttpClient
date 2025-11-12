@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
     - name: Setup .NET versions
