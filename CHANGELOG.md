@@ -8,6 +8,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Removed
 - .NET 6.0 target, since it is no longer supported
 - .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
+- automatic nuget updates by dependabot, since we want to test against the lowest supported nuget version and most of the time dependabot does not choose the right package.
 ### Added
 - Support for .NET 9.0
 - Support for .NET 10.0
