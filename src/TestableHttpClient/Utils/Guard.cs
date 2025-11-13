@@ -29,7 +29,7 @@ internal static class Guard
             throw new ArgumentException("String should not be empty", paramName);
         }
 #else
-        ArgumentNullException.ThrowIfNullOrEmpty(argument, paramName);
+        ArgumentException.ThrowIfNullOrEmpty(argument, paramName);
 #endif
     }
 }

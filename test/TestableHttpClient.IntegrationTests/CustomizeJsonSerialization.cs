@@ -14,11 +14,7 @@ public class CustomizeJsonSerialization
         sut.RespondWith(Json(new { Name = "Charlie" }));
         using HttpClient client = sut.CreateClient();
 
-#if NETFRAMEWORK
-        string json = await client.GetStringAsync("http://localhost/myjson");
-#else
         string json = await client.GetStringAsync("http://localhost/myjson", TestContext.Current.CancellationToken);
-#endif
 
         Assert.Equal("{\"name\":\"Charlie\"}", json);
     }
@@ -31,11 +27,7 @@ public class CustomizeJsonSerialization
         sut.RespondWith(Json(new { Name = "Charlie" }));
         using HttpClient client = sut.CreateClient();
 
-#if NETFRAMEWORK
-        string json = await client.GetStringAsync("http://localhost/myjson");
-#else
         string json = await client.GetStringAsync("http://localhost/myjson", TestContext.Current.CancellationToken);
-#endif
 
         Assert.Equal("{\"Name\":\"Charlie\"}", json);
     }
@@ -47,11 +39,7 @@ public class CustomizeJsonSerialization
         sut.RespondWith(Json(new { Name = "Charlie" }, jsonSerializerOptions: new JsonSerializerOptions()));
         using HttpClient client = sut.CreateClient();
 
-#if NETFRAMEWORK
-        string json = await client.GetStringAsync("http://localhost/myjson");
-#else
         string json = await client.GetStringAsync("http://localhost/myjson", TestContext.Current.CancellationToken);
-#endif
 
         Assert.Equal("{\"Name\":\"Charlie\"}", json);
     }
@@ -63,12 +51,7 @@ public class CustomizeJsonSerialization
         using HttpClient client = sut.CreateClient();
         await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, cancellationToken: TestContext.Current.CancellationToken);
 
-#if NETFRAMEWORK
-        // Well this doesn't really work on .NET Framework.
-        sut.ShouldHaveMadeRequests();
-#else
         sut.ShouldHaveMadeRequests().WithJsonContent(new { Name = "Charlie" });
-#endif
     }
 
     [Fact]
@@ -84,11 +67,6 @@ public class CustomizeJsonSerialization
 
         await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, options, cancellationToken: TestContext.Current.CancellationToken);
 
-#if NETFRAMEWORK
-        // Well this doesn't really work on .NET Framework.
-        sut.ShouldHaveMadeRequests();
-#else
         sut.ShouldHaveMadeRequests().WithJsonContent(new { Name = "Charlie" }, options);
-#endif
     }
 }
