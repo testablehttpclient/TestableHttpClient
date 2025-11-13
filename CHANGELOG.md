@@ -12,7 +12,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Support for .NET 9.0
 - Support for .NET 10.0
 ### Changed
-- The TestableHttpMessageHandler now makes a clone of the original request, so that the original request can be disposed.
+- The TestableHttpMessageHandler now makes a clone of the original request, so that the original request can be disposed.  
+  This change also makes it possible to assert the content on .NET Framework.
 
 ## [0.11] - 2024-06-15
 ### Removed

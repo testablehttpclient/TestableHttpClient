@@ -162,17 +162,12 @@ public class AssertingRequests
         using StringContent content = new("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
-#if NETFRAMEWORK
-        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
-        testHandler.ShouldHaveMadeRequests();
-#else
         testHandler.ShouldHaveMadeRequests().WithContent("my special content");
         testHandler.ShouldHaveMadeRequests().WithContent("my*content");
         testHandler.ShouldHaveMadeRequests().WithContent("*");
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent(""));
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent("my"));
-#endif
     }
 
     [Fact]
@@ -186,17 +181,12 @@ public class AssertingRequests
             _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
         }
 
-#if NETFRAMEWORK
-        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
-        testHandler.ShouldHaveMadeRequests();
-#else
         testHandler.ShouldHaveMadeRequests().WithContent("my special content");
         testHandler.ShouldHaveMadeRequests().WithContent("my*content");
         testHandler.ShouldHaveMadeRequests().WithContent("*");
 
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent(""));
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent("my"));
-#endif
     }
 
     [Fact]
@@ -208,12 +198,7 @@ public class AssertingRequests
         using StringContent content = new("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
-#if NETFRAMEWORK
-        // On .NET Framework the HttpClient disposes the content automatically. So we can't perform the same test.
-        testHandler.ShouldHaveMadeRequests();
-#else
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
-#endif
     }
 
     [Fact]

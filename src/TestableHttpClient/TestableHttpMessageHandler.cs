@@ -26,9 +26,7 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "It gets disposed in the dispose method")]
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-#if NET8_0_OR_GREATER
-        ArgumentNullException.ThrowIfNull(request);
-#endif
+        Guard.ThrowIfNull(request);
 
         httpRequestMessages.Enqueue(await HttpRequestMessageCloner.ClonaAsync(request, cancellationToken).ConfigureAwait(false));
 
@@ -38,9 +36,9 @@ public class TestableHttpMessageHandler : HttpMessageHandler
 
         responseMessage.RequestMessage ??= request;
 
-#if !NET6_0_OR_GREATER
+        // In .NET Standard, a response message can be null, but we need it to be at least empty like in the newer versions.
+        // Newer versions will always have a content, even if it's empty.
         responseMessage.Content ??= new StringContent("");
-#endif
 
         return responseMessage;
     }
