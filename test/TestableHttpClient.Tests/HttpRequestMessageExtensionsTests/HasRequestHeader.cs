@@ -3,6 +3,7 @@ namespace TestableHttpClient.Tests;
 public partial class HttpRequestMessageExtensionsTests
 {
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NullRequest_ThrowsArgumentNullException()
     {
         HttpRequestMessage sut = null!;
@@ -12,6 +13,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NullHeaderName_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
@@ -21,6 +23,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_EmptyHeaderName_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
@@ -30,6 +33,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NullRequestNonNullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
     {
         HttpRequestMessage sut = null!;
@@ -39,6 +43,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
@@ -47,6 +52,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_EmptyHeaderNameAndNonNullHeaderValue_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
@@ -55,6 +61,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
@@ -63,6 +70,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NonNullHeaderNameAndEmptyHeaderValue_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
@@ -71,6 +79,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_ExistingHeaderName_ReturnsTrue()
     {
         using HttpRequestMessage sut = new();
@@ -82,6 +91,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Theory]
     [InlineData("Host")]
     [InlineData("Content-Type")]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NotExistingHeaderName_ReturnsFalse(string headerName)
     {
         using HttpRequestMessage sut = new();
@@ -94,6 +104,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("example*")]
     [InlineData("*.com")]
     [InlineData("*")]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_ExistingHeaderNameMatchingValue_ReturnsTrue(string value)
     {
         using HttpRequestMessage sut = new();
@@ -103,6 +114,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_NotExitingHeaderNameAndValue_ReturnsFalse()
     {
         using HttpRequestMessage sut = new();
@@ -114,6 +126,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("example.com")]
     [InlineData("example*")]
     [InlineData("*.com")]
+    [Obsolete("Use HasHeader instead.")]
     public void HasRequestHeader_ExistingHeaderNameNotMatchingValue_ReturnsFalse(string value)
     {
         using HttpRequestMessage sut = new();

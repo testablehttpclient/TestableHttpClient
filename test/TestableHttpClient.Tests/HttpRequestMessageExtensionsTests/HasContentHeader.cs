@@ -3,6 +3,7 @@ namespace TestableHttpClient.Tests;
 public partial class HttpRequestMessageExtensionsTests
 {
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NullRequest_ThrowsArgumentNullException()
     {
         HttpRequestMessage sut = null!;
@@ -12,6 +13,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NullHeaderName_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
@@ -21,6 +23,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_EmptyHeaderName_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
@@ -30,6 +33,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NullRequestNonNullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
     {
         HttpRequestMessage sut = null!;
@@ -39,6 +43,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NullHeaderNameAndNonNullHeaderValue_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
@@ -47,6 +52,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_EmptyHeaderNameAndNonNullHeaderValue_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
@@ -55,6 +61,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentNullException()
     {
         using HttpRequestMessage sut = new();
@@ -63,6 +70,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NonNullHeaderNameAndNullHeaderValue_ThrowsArgumentException()
     {
         using HttpRequestMessage sut = new();
@@ -71,6 +79,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_ExistingHeaderName_ReturnsTrue()
     {
         using HttpRequestMessage sut = new()
@@ -85,6 +94,7 @@ public partial class HttpRequestMessageExtensionsTests
     [Theory]
     [InlineData("Host")]
     [InlineData("Content-Disposition")]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NotExistingHeaderName_ReturnsFalse(string headerName)
     {
         using HttpRequestMessage sut = new()
@@ -96,6 +106,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NoContent_ReturnsFalse()
     {
         using HttpRequestMessage sut = new()
@@ -111,6 +122,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("inline; *")]
     [InlineData("*; filename=empty.file")]
     [InlineData("*")]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_ExistingHeaderNameMatchingValue_ReturnsTrue(string value)
     {
         using HttpRequestMessage sut = new()
@@ -126,6 +138,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NotExitingHeaderNameAndValue_ReturnsFalse()
     {
         using HttpRequestMessage sut = new()
@@ -137,6 +150,7 @@ public partial class HttpRequestMessageExtensionsTests
     }
 
     [Fact]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_NullContentNotExitingHeaderNameAndValue_ReturnsFalse()
     {
         using HttpRequestMessage sut = new()
@@ -151,6 +165,7 @@ public partial class HttpRequestMessageExtensionsTests
     [InlineData("inline; filename=emtpy.file")]
     [InlineData("inline; *")]
     [InlineData("*; filename=empty.file")]
+    [Obsolete("Use HasHeader instead.")]
     public void HasContentHeader_ExistingHeaderNameNotMatchingValue_ReturnsFalse(string value)
     {
         using HttpRequestMessage sut = new()

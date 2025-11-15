@@ -117,20 +117,20 @@ public class AssertingRequests
     }
 
     [Fact]
-    public async Task AssertingRequestHeaders()
+    public async Task AssertingHeaders()
     {
         using TestableHttpMessageHandler testHandler = new();
         using HttpClient client = new(testHandler);
         client.DefaultRequestHeaders.Add("api-version", "1.0");
         _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version");
-        testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version", "1.0");
-        testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version", "1*");
+        testHandler.ShouldHaveMadeRequests().WithHeader("api-version");
+        testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "1.0");
+        testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "1*");
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestHeader("my-version"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version", "1"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestHeader("api-version", "2*"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("my-version"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "1"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "2*"));
     }
 
     [Fact]
@@ -142,15 +142,15 @@ public class AssertingRequests
         using StringContent content = new("", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithContentHeader("content-type");
-        testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type");
-        testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "application/json; charset=utf-8");
-        testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "application/json*");
-        testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "*charset=utf-8");
+        testHandler.ShouldHaveMadeRequests().WithHeader("content-type");
+        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type");
+        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "application/json; charset=utf-8");
+        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "application/json*");
+        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "*charset=utf-8");
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Disposition"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "application/json"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContentHeader("Content-Type", "*=utf-16"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("Content-Disposition"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "application/json"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "*=utf-16"));
     }
 
     [Fact]

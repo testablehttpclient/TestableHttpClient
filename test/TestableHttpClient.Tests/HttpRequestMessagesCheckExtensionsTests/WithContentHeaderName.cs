@@ -2,6 +2,7 @@
 
 namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
+[Obsolete("Use WithHeader")]
 public class WithContentHeaderName
 {
     [Fact]

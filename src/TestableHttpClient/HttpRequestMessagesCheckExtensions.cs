@@ -92,6 +92,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName) => WithRequestHeader(check, headerName, (int?)null);
 
     /// <summary>
@@ -102,8 +103,10 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests) => WithRequestHeader(check, headerName, (int?)expectedNumberOfRequests);
 
+    [Obsolete("Use WithHeader instead.")]
     private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
@@ -120,6 +123,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithRequestHeader(check, headerName, headerValue, null);
 
     /// <summary>
@@ -131,8 +135,10 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests) => WithRequestHeader(check, headerName, headerValue, (int?)expectedNumberOfRequests);
 
+    [Obsolete("Use WithHeader instead.")]
     private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
@@ -149,6 +155,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName) => WithContentHeader(check, headerName, (int?)null);
 
     /// <summary>
@@ -159,8 +166,10 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests) => WithContentHeader(check, headerName, (int?)expectedNumberOfRequests);
 
+    [Obsolete("Use WithHeader instead.")]
     private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
@@ -177,6 +186,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithContentHeader(check, headerName, headerValue, null);
 
     /// <summary>
@@ -188,8 +198,10 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("Use WithHeader instead.")]
     public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests) => WithContentHeader(check, headerName, headerValue, (int?)expectedNumberOfRequests);
 
+    [Obsolete("Use WithHeader instead.")]
     private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
@@ -221,7 +233,7 @@ public static class HttpRequestMessagesCheckExtensions
         Guard.ThrowIfNull(check);
         Guard.ThrowIfNullOrEmpty(headerName);
 
-        return check.WithFilter(x => x.HasRequestHeader(headerName) || x.HasContentHeader(headerName), expectedNumberOfRequests, $"header '{headerName}'");
+        return check.WithFilter(x => x.HasHeader(headerName), expectedNumberOfRequests, $"header '{headerName}'");
     }
 
     /// <summary>
@@ -249,7 +261,7 @@ public static class HttpRequestMessagesCheckExtensions
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(headerValue);
 
-        return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue) || x.HasContentHeader(headerName, headerValue), expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
+        return check.WithFilter(x => x.HasHeader(headerName, headerValue), expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
     }
 
     /// <summary>
@@ -319,7 +331,7 @@ public static class HttpRequestMessagesCheckExtensions
 
         var jsonString = JsonSerializer.Serialize(jsonObject, jsonSerializerOptions ?? check.Options.JsonSerializerOptions);
 
-        return check.WithFilter(x => x.HasContent(jsonString) && x.HasContentHeader("Content-Type", "application/json*"), expectedNumberOfRequests, $"json content '{jsonString}'");
+        return check.WithFilter(x => x.HasContent(jsonString) && x.HasHeader("Content-Type", "application/json*"), expectedNumberOfRequests, $"json content '{jsonString}'");
     }
 
     /// <summary>
@@ -347,6 +359,6 @@ public static class HttpRequestMessagesCheckExtensions
         using var content = new FormUrlEncodedContent(nameValueCollection);
         var contentString = content.ReadAsStringAsync().Result;
 
-        return check.WithFilter(x => x.HasContent(contentString) && x.HasContentHeader("Content-Type", "application/x-www-form-urlencoded*"), expectedNumberOfRequests, $"form url encoded content '{contentString}'");
+        return check.WithFilter(x => x.HasContent(contentString) && x.HasHeader("Content-Type", "application/x-www-form-urlencoded*"), expectedNumberOfRequests, $"form url encoded content '{contentString}'");
     }
 }
