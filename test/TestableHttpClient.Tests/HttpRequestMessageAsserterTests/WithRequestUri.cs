@@ -1,13 +1,9 @@
-﻿using NSubstitute;
-
-using TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
-
-namespace TestableHttpClient.Tests.HttpRequestMessageAsserterTests;
+﻿namespace TestableHttpClient.Tests.HttpRequestMessageAsserterTests;
 
 public sealed class WithRequestUri
 {
     [Fact]
-    public void NullPattern_ThrowsArgumentNullException()
+    public void NullRequestUri_ThrowsArgumentNullException()
     {
         HttpRequestMessageAsserter sut = new([]);
 
@@ -17,7 +13,7 @@ public sealed class WithRequestUri
     }
 
     [Fact]
-    public void EmptyPattern_ThrowsArgumentException()
+    public void EmptyRequestUri_ThrowsArgumentException()
     {
         HttpRequestMessageAsserter sut = new([]);
 
@@ -27,7 +23,7 @@ public sealed class WithRequestUri
     }
 
     [Fact]
-    public void WithPatternMatchingARequest_DoesNotThrow()
+    public void WithMatchingRequestUri_DoesNotThrow()
     {
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new([request]);
@@ -36,7 +32,7 @@ public sealed class WithRequestUri
     }
 
     [Fact]
-    public void WithPatternNotMatchingAnyRequest_ThrowsHttpRequestMessageAssertionException()
+    public void WithNonMatchingRequestUri_ThrowsHttpRequestMessageAssertionException()
     {
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new([request]);
@@ -46,7 +42,7 @@ public sealed class WithRequestUri
 
 
     [Fact]
-    public void WithPatternNotMatchingAnyRequestWithCustomOptions_ThrowsHttpRequestMessageAssertionException()
+    public void WithNonMatchinRequestUri_WithCustomOptions_ThrowsHttpRequestMessageAssertionException()
     {
         TestableHttpMessageHandlerOptions options = new();
         options.UriPatternMatchingOptions.HostCaseInsensitive = false;
@@ -59,16 +55,25 @@ public sealed class WithRequestUri
     }
 
     [Fact]
-    public void WithPatternMatchingASingleRequest_DoesNotThrow()
+    public void WithMatchingNumberOfRequests_WithMatchingRequestUri_DoesNotThrow()
+    {
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        HttpRequestMessageAsserter sut = new([request, request]);
+
+        sut.WithRequestUri("https://example.com/", 2);
+    }
+
+    [Fact]
+    public void WithNonMatchingNumberOfRequest_WithMatchingRequestUris_ThrowsHttpRequestMessageAssertionException()
     {
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new([request]);
 
-        sut.WithRequestUri("https://example.com/", 1);
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestUri("https://example.com/", 2));
     }
 
     [Fact]
-    public void WithPatternMatchingMultipleRequestsButOnlyOneReceived_ThrowsHttpRequestMessageAssertionException()
+    public void WithNonMatchingNumberOfRequest_WithNonMatchingRequestUris_ThrowsHttpRequestMessageAssertionException()
     {
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new([request]);

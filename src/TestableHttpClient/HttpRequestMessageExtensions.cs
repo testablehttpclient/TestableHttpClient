@@ -20,20 +20,6 @@ internal static class HttpRequestMessageExtensions
     }
 
     /// <summary>
-    /// Determines whether a specific HttpVersion is set on a request.
-    /// </summary>
-    /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct version on.</param>
-    /// <param name="httpVersion">The expected version.</param>
-    /// <returns>true when the HttpVersion matches; otherwise, false.</returns>
-    internal static bool HasHttpVersion(this HttpRequestMessage httpRequestMessage, string httpVersion)
-    {
-        Guard.ThrowIfNull(httpRequestMessage);
-        Guard.ThrowIfNullOrEmpty(httpVersion);
-
-        return httpRequestMessage.HasHttpVersion(new Version(httpVersion));
-    }
-
-    /// <summary>
     /// Determines whether a specific HttpMethod is set on a request.
     /// </summary>
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
@@ -45,20 +31,6 @@ internal static class HttpRequestMessageExtensions
         Guard.ThrowIfNull(httpMethod);
 
         return httpRequestMessage.Method == httpMethod;
-    }
-
-    /// <summary>
-    /// Determines whether a specific HttpMethod is set on a request.
-    /// </summary>
-    /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct method on.</param>
-    /// <param name="httpMethod">The expected method.</param>
-    /// <returns>true when the HttpMethod matches; otherwise, false.</returns>
-    internal static bool HasHttpMethod(this HttpRequestMessage httpRequestMessage, string httpMethod)
-    {
-        Guard.ThrowIfNull(httpRequestMessage);
-        Guard.ThrowIfNullOrEmpty(httpMethod);
-
-        return httpRequestMessage.HasHttpMethod(new HttpMethod(httpMethod));
     }
 
     /// <summary>
