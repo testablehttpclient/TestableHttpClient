@@ -114,7 +114,10 @@ internal static class HttpRequestMessageExtensions
             return false;
         }
 
-        var stringContent = httpRequestMessage.Content.ReadAsStringAsync().Result;
+        var stringContent = httpRequestMessage.Content.ReadAsStringAsync()
+            .ConfigureAwait(false)
+            .GetAwaiter()
+            .GetResult();
 
         return pattern switch
         {

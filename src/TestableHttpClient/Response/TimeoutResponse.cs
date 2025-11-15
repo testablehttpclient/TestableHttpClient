@@ -10,9 +10,9 @@ internal sealed class TimeoutResponse : IResponse
         {
 #if NETSTANDARD
             cancelationSource.Cancel(false);
-            await Task.FromCanceled<HttpResponseMessage>(cancellationToken).ConfigureAwait(true);
+            await Task.FromCanceled<HttpResponseMessage>(cancellationToken).ConfigureAwait(false);
 #else
-            await cancelationSource.CancelAsync().ConfigureAwait(true);
+            await cancelationSource.CancelAsync().ConfigureAwait(false);
 #endif
         }
 
