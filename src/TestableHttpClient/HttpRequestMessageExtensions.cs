@@ -99,18 +99,6 @@ internal static class HttpRequestMessageExtensions
     }
 
     /// <summary>
-    /// Determines whether the request has content.
-    /// </summary>
-    /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check for content.</param>
-    /// <returns>true when the request has content; otherwise, false.</returns>
-    internal static bool HasContent(this HttpRequestMessage httpRequestMessage)
-    {
-        Guard.ThrowIfNull(httpRequestMessage);
-
-        return httpRequestMessage.Content != null;
-    }
-
-    /// <summary>
     /// Determines whether the request content matches a string pattern.
     /// </summary>
     /// <param name="httpRequestMessage">A <see cref="HttpRequestMessage"/> to check the correct content on.</param>
