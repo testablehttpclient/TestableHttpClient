@@ -5,13 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.12] - unplanned
+### Deprecated
+- The methods `WithRequestHeader` and `WithContentHeader` are deprecated, please use `WithHeader` instead.
+
 ### Removed
 - .NET 6.0 target, since it is no longer supported
 - .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
 - automatic nuget updates by dependabot, since we want to test against the lowest supported nuget version and most of the time dependabot does not choose the right package.
+
 ### Added
 - Support for .NET 9.0
 - Support for .NET 10.0
+
 ### Changed
 - The TestableHttpMessageHandler now makes a clone of the original request, so that the original request can be disposed.  
   This change also makes it possible to assert the content on .NET Framework.
