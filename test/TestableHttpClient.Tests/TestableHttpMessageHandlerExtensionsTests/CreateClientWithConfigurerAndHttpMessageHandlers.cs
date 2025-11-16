@@ -1,6 +1,4 @@
-﻿using NSubstitute;
-
-namespace TestableHttpClient.Tests;
+﻿namespace TestableHttpClient.Tests;
 
 public partial class TestableHttpMessageHandlerExtensionsTests
 {
@@ -10,9 +8,8 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         TestableHttpMessageHandler sut = null!;
 
         static void configureClient(HttpClient _) { }
-        var handlers = Enumerable.Empty<DelegatingHandler>();
-
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, handlers));
+        
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, []));
         Assert.Equal("handler", exception.ParamName);
     }
 
@@ -21,9 +18,8 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         Action<HttpClient> configureClient = null!;
-        var handlers = Enumerable.Empty<DelegatingHandler>();
-
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, handlers));
+        
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, []));
         Assert.Equal("configureClient", exception.ParamName);
     }
 
@@ -42,13 +38,13 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurerAndHttpMessageHandlers_CallsConfigureClientWithClientToReturn()
     {
+        HttpClient? capturedClient = null;
         using TestableHttpMessageHandler sut = new();
-        var configureClient = Substitute.For<Action<HttpClient>>();
-        var handlers = Enumerable.Empty<DelegatingHandler>();
+        void configureClient(HttpClient client) => capturedClient = client;
+        
+        using var client = sut.CreateClient(configureClient, []);
 
-        using var client = sut.CreateClient(configureClient, handlers);
-
-        configureClient.Received(1).Invoke(client);
+        Assert.Same(client, capturedClient);
     }
 
     [Fact]
@@ -56,19 +52,16 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         static void configureClient(HttpClient _) { }
-        IEnumerable<DelegatingHandler> handlers =
-        [
-            Substitute.For<DelegatingHandler>(),
-            Substitute.For<DelegatingHandler>()
-        ];
+        using TestDelegateHandler delegate1 = new();
+        using TestDelegateHandler delegate2 = new();
 
-        using var client = sut.CreateClient(configureClient, handlers);
+        using var client = sut.CreateClient(configureClient, [delegate1, delegate2]);
 
         var handler = GetPrivateHandler(client);
         var delegatingHandler1 = Assert.IsAssignableFrom<DelegatingHandler>(handler);
-        Assert.Same(handlers.First(), delegatingHandler1);
+        Assert.Same(delegate1, delegatingHandler1);
         var delegatingHandler2 = Assert.IsAssignableFrom<DelegatingHandler>(delegatingHandler1.InnerHandler);
-        Assert.Same(handlers.Last(), delegatingHandler2);
+        Assert.Same(delegate2, delegatingHandler2);
         Assert.Same(sut, delegatingHandler2.InnerHandler);
     }
 
@@ -77,13 +70,10 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         static void configureClient(HttpClient client) { }
-        IEnumerable<DelegatingHandler> handlers =
-        [
-            Substitute.For<DelegatingHandler>(),
-            Substitute.For<DelegatingHandler>()
-        ];
+        using TestDelegateHandler delegate1 = new();
+        using TestDelegateHandler delegate2 = new();
 
-        using var client = sut.CreateClient(configureClient, handlers);
+        using var client = sut.CreateClient(configureClient, [delegate1, delegate2]);
 
         Assert.Equal(new Uri("https://localhost"), client.BaseAddress);
     }
@@ -93,15 +83,14 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         static void configureClient(HttpClient client) { client.BaseAddress = new Uri("https://example"); }
-        IEnumerable<DelegatingHandler> handlers =
-        [
-            Substitute.For<DelegatingHandler>(),
-            Substitute.For<DelegatingHandler>()
-        ];
+        using TestDelegateHandler delegate1 = new();
+        using TestDelegateHandler delegate2 = new();
 
-        using var client = sut.CreateClient(configureClient, handlers);
+        using var client = sut.CreateClient(configureClient, [delegate1, delegate2]);
 
         Assert.Equal(new Uri("https://example"), client.BaseAddress);
     }
+
+    private sealed class TestDelegateHandler : DelegatingHandler { }
 }
 

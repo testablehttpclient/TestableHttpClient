@@ -5,16 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.12] - unplanned
+### Deprecated
+- The methods `WithRequestHeader` and `WithContentHeader` are deprecated, please use `WithHeader` instead.
+- The `WithFilter` method is deprecated and will be made internal or be removed. If there is a specific assertion that is missing, please open an issue.
+
 ### Removed
 - .NET 6.0 target, since it is no longer supported
 - .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
 - automatic nuget updates by dependabot, since we want to test against the lowest supported nuget version and most of the time dependabot does not choose the right package.
+
 ### Added
 - Support for .NET 9.0
 - Support for .NET 10.0
+
 ### Changed
 - The TestableHttpMessageHandler now makes a clone of the original request, so that the original request can be disposed.  
   This change also makes it possible to assert the content on .NET Framework.
+- The methods `WithRequestHeader` and `WithContentHeader` now work the same as `WithHeader`, this might lead to slight changes in the behavior since now the headers from both the request and the content of that request are checked.
+- Moved `WithHttpMethod`, `WithRequestUri`, `WithHttpVersion`, `WithHeader` and `WithContent` from `HttpRequestMessagesCheckExtensions` to `HttpRequestMessageAsserter` and specify them on the `IHttpRequestMessagesCheck` interface.
 
 ## [0.11] - 2024-06-15
 ### Removed

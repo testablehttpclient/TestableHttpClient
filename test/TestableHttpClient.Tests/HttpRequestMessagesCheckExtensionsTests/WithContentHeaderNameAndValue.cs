@@ -1,13 +1,12 @@
-﻿using NSubstitute;
+﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
-namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
-
+[Obsolete("Use WithHeader")]
 public class WithContentHeaderNameAndValue
 {
     [Fact]
-    public void WihtContentHeaderNameAndValue_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
+    public void WithContentHeaderNameAndValue_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader("someHeader", "someValue"));
 
@@ -15,9 +14,9 @@ public class WithContentHeaderNameAndValue
     }
 
     [Fact]
-    public void WihtContentHeaderNameAndValue_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
+    public void WithContentHeaderNameAndValue_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader("someHeader", "someValue", 1));
 
@@ -27,108 +26,187 @@ public class WithContentHeaderNameAndValue
     [Fact]
     public void WithContentHeaderNameAndValue_WithoutNumberOfRequests_NullHeaderName_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader(null!, "someValue"));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithoutNumberOfRequests_EmptyHeaderName_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentException>(() => sut.WithContentHeader(string.Empty, "someValue"));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithNumberOfRequests_NullHeaderName_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader(null!, "someValue", 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithNumberOfRequests_EmptyHeaderName_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentException>(() => sut.WithContentHeader(string.Empty, "someValue", 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithoutNumberOfRequests_NullValue_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader("someHeader", null!));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithoutNumberOfRequests_EmptyValue_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentException>(() => sut.WithContentHeader("someHeader", string.Empty));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithNumberOfRequests_NullValue_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithContentHeader("someHeader", null!, 1));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithContentHeaderNameAndValue_WithNumberOfRequests_EmptyValue_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentException>(() => sut.WithContentHeader("someHeader", string.Empty, 1));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
+    }
+
+    [Theory]
+    [InlineData("*")]
+    [InlineData("application/*")]
+    [InlineData("application/json*")]
+    [InlineData("application/json; charset=utf-8")]
+    public void WithMatchingContentHeaderNameAndValue_WithoutNumberOfRequests_DoesNotThrow(string headerValue)
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        sut.WithContentHeader("Content-Type", headerValue);
+    }
+
+    [Theory]
+    [InlineData("*")]
+    [InlineData("application/*")]
+    [InlineData("application/json*")]
+    [InlineData("application/json; charset=utf-8")]
+    public void WithContentHeaderNameAndValue_WithNumberOfRequests_DoesNotThrow(string headerValue)
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request, request]);
+
+        sut.WithContentHeader("Content-Type", headerValue, 2);
     }
 
     [Fact]
-    public void WithContentHeaderNameAndValue_WithoutNumberOfRequests_CallsWithCorrectly()
+    public void WithNoContent_WithoutNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        using HttpRequestMessage request = new();
+        request.Content = null;
 
-        sut.WithContentHeader("someHeader", "someValue");
+        HttpRequestMessageAsserter sut = new([request]);
 
-        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "content header 'someHeader' and value 'someValue'");
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "application/json*"));
     }
 
     [Fact]
-    public void WithContentHeaderNameAndValue_WithNumberOfRequests_CallsWithCorrectly()
+    public void WithNoContent_WithNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        using HttpRequestMessage request = new();
+        request.Content = null;
 
-        sut.WithContentHeader("someHeader", "someValue", 1);
+        HttpRequestMessageAsserter sut = new([request, request]);
 
-        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "content header 'someHeader' and value 'someValue'");
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "application/json*", 2));
+    }
+
+    [Fact]
+    public void WithNotMatchingContentHeaderNameAndMatchingValue_WithoutNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Host", "application/json*"));
+    }
+
+    [Fact]
+    public void WithNotMatchingContentHeaderNameAndMatchingValue_WithNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request, request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Host", "application/json*", 2));
+    }
+
+    [Fact]
+    public void WithMatchingContentHeaderNameAndNotMatchingValue_WithoutNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "text/yaml*"));
+    }
+
+    [Fact]
+    public void WithMatchingContentHeaderNameAndNotMatchingValue_WithNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request, request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "text/yaml*", 2));
+    }
+
+    [Fact]
+    public void WithMatchingContentHeaderNameAndMatchingValue_WithNotMatchingNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithContentHeader("Content-Type", "application/json*", 2));
     }
 }

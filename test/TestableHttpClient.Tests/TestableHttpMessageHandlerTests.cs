@@ -1,8 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-using NSubstitute;
-
 namespace TestableHttpClient.Tests;
 
 public class TestableHttpMessageHandlerTests
@@ -40,11 +38,8 @@ public class TestableHttpMessageHandlerTests
     [Fact]
     public async Task SendAsync_ByDefault_CallsExecutAsyncOnIResponse()
     {
-        IResponse mockedResponse = Substitute.For<IResponse>();
+        CustomResponse mockedResponse = new();
         HttpResponseContext? context = null;
-        mockedResponse.ExecuteAsync(Arg.Any<HttpResponseContext>(), Arg.Any<CancellationToken>())
-            .Returns(Task.CompletedTask)
-            .AndDoes(x => context = x[0] as HttpResponseContext);
 
         using TestableHttpMessageHandler sut = new();
         sut.RespondWith(mockedResponse);
@@ -52,6 +47,7 @@ public class TestableHttpMessageHandlerTests
         using HttpRequestMessage request = new(HttpMethod.Get, new Uri("https://example.com/"));
         using HttpResponseMessage response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
+        context = mockedResponse.Context;
         Assert.NotNull(context);
         Assert.Same(request, context.HttpRequestMessage);
         Assert.Same(response, context.HttpResponseMessage);
@@ -142,7 +138,7 @@ public class TestableHttpMessageHandlerTests
     public void GetAsync_ShouldNotHang()
     {
         using TestableHttpMessageHandler sut = new();
-        sut.RespondWith(Responses.Delayed(new CustomResponse(), TimeSpan.FromSeconds(1)));
+        sut.RespondWith(Responses.Delayed(new CustomAsyncResponse(), TimeSpan.FromSeconds(1)));
 
         bool doesNotHang = Task.Run(() =>
         {
@@ -157,6 +153,18 @@ public class TestableHttpMessageHandlerTests
     }
 
     private sealed class CustomResponse : IResponse
+    {
+        public HttpResponseContext? Context { get; private set; }
+
+        public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
+        {
+            Context = context;
+            return Task.CompletedTask;
+        }
+    }
+
+    // This class intentionally used the wrong patterns for running async code, please do not use in production!
+    private sealed class CustomAsyncResponse : IResponse
     {
         public Task ExecuteAsync(HttpResponseContext context, CancellationToken cancellationToken)
         {

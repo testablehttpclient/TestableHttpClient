@@ -1,15 +1,11 @@
-﻿using System.Text.Json;
-
-using NSubstitute;
-
-namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
+﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 public class WithJsonContent
 {
     [Fact]
     public void WithJsonContent_WithoutNumberOfRequests_NullChecker_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithJsonContent(null));
 
@@ -19,60 +15,11 @@ public class WithJsonContent
     [Fact]
     public void WithJsonContent_WithNumberOfRequests_NullChecker_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithJsonContent(null, 1));
 
         Assert.Equal("check", exception.ParamName);
-    }
-
-    [Fact]
-    public void WithJsonContent_WithoutNumberOfRequests_CallsWithCorrectly()
-    {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
-        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
-
-        sut.WithJsonContent(null);
-
-        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "json content 'null'");
-        _ = sut.Received(1).Options;
-    }
-
-    [Fact]
-    public void WithJsonContent_WithoutNumberOfRequestsWithCustomJsonSerializerOptions_DoesNotCallOptionsFromCheck()
-    {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
-        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
-
-        sut.WithJsonContent(null, new JsonSerializerOptions());
-
-        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "json content 'null'");
-        _ = sut.DidNotReceive().Options;
-    }
-
-    [Fact]
-    public void WithJsonContent_WithNumberOfRequests_CallsWithCorrectly()
-    {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
-        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
-
-        sut.WithJsonContent(null, 1);
-
-        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "json content 'null'");
-        _ = sut.Received(1).Options;
-    }
-
-
-    [Fact]
-    public void WithJsonContent_WithNumberOfRequestsAndJsonSerializerOptions_CallsWithCorrectly()
-    {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
-        sut.Options.Returns(new TestableHttpMessageHandlerOptions());
-
-        sut.WithJsonContent(null, new JsonSerializerOptions(), 1);
-
-        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "json content 'null'");
-        _ = sut.DidNotReceive().Options;
     }
 
     [Fact]
@@ -100,7 +47,7 @@ public class WithJsonContent
         HttpRequestMessageAsserter sut = new([request]);
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithJsonContent(null));
-        Assert.Equal("Expected at least one request to be made with json content 'null', but no requests were made.", exception.Message);
+        Assert.Equal("Expected at least one request to be made with content 'null', but no requests were made.", exception.Message);
     }
 
     [Fact]
@@ -113,6 +60,6 @@ public class WithJsonContent
         HttpRequestMessageAsserter sut = new([request]);
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithJsonContent(null));
-        Assert.Equal("Expected at least one request to be made with json content 'null', but no requests were made.", exception.Message);
+        Assert.Equal("Expected at least one request to be made with content 'null', header 'Content-Type' and value 'application/json*', but no requests were made.", exception.Message);
     }
 }

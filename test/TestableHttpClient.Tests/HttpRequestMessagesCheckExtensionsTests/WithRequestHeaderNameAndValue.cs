@@ -1,15 +1,14 @@
-﻿using NSubstitute;
+﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
-namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
-
+[Obsolete("Use WithHeader")]
 public class WithRequestHeaderNameAndValue
 {
     [Fact]
     public void WithRequestHeaderNameAndValue_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("someHeader", "someValue"));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("host", "example.com"));
 
         Assert.Equal("check", exception.ParamName);
     }
@@ -17,9 +16,9 @@ public class WithRequestHeaderNameAndValue
     [Fact]
     public void WithRequestHeaderNameAndValue_WithNumberOfRequests_NullCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("someHeader", "someValue", 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("host", "example.com", 1));
 
         Assert.Equal("check", exception.ParamName);
     }
@@ -27,108 +26,165 @@ public class WithRequestHeaderNameAndValue
     [Fact]
     public void WithRequestHeaderNameAndValue_WithoutNumberOfRequests_NullHeaderName_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader(null!, "someValue"));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader(null!, "example.com"));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithoutNumberOfRequests_EmptyHeaderName_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader(string.Empty, "someValue"));
+        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader(string.Empty, "example.com"));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithNumberOfRequests_NullHeaderName_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader(null!, "someValue", 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader(null!, "example.com", 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithNumberOfRequests_EmptyHeaderName_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader(string.Empty, "someValue", 1));
+        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader(string.Empty, "example.com", 1));
 
         Assert.Equal("headerName", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithoutNumberOfRequests_NullValue_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("someHeader", null!));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("host", null!));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithoutNumberOfRequests_EmptyValue_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader("someHeader", string.Empty));
+        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader("host", string.Empty));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithNumberOfRequests_NullValue_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("someHeader", null!, 1));
+        var exception = Assert.Throws<ArgumentNullException>(() => sut.WithRequestHeader("host", null!, 1));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithRequestHeaderNameAndValue_WithNumberOfRequests_EmptyValue_ThrowsArgumentException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
-        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader("someHeader", string.Empty, 1));
+        var exception = Assert.Throws<ArgumentException>(() => sut.WithRequestHeader("host", string.Empty, 1));
 
         Assert.Equal("headerValue", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
+    }
+
+    [Theory]
+    [InlineData("*")]
+    [InlineData("*.com")]
+    [InlineData("example*")]
+    [InlineData("example.com")]
+    public void WithMatchingRequestHeaderNameAndValue_WithoutNumberOfRequests_DoesNotThrow(string headerValue)
+    {
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        sut.WithRequestHeader("host", headerValue);
+    }
+
+    [Theory]
+    [InlineData("*")]
+    [InlineData("*.com")]
+    [InlineData("example*")]
+    [InlineData("example.com")]
+    public void WithRequestHeaderNameAndValue_WithNumberOfRequests_DoesNotThrow(string headerValue)
+    {
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
+
+        HttpRequestMessageAsserter sut = new([request, request]);
+
+        sut.WithRequestHeader("host", headerValue, 2);
     }
 
     [Fact]
-    public void WithRequestHeaderNameAndValue_WithoutNumberOfRequests_CallsWithCorrectly()
+    public void WithNotMatchingRequestHeaderNameAndMatchingValue_WithoutNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
 
-        sut.WithRequestHeader("someHeader", "someValue");
+        HttpRequestMessageAsserter sut = new([request]);
 
-        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "request header 'someHeader' and value 'someValue'");
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestHeader("Via", "example.com"));
     }
 
     [Fact]
-    public void WithRequestHeaderNameAndValue_WithNumberOfRequests_CallsWithCorrectly()
+    public void WithNotMatchingRequestHeaderNameAndMatchingValue_WithNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
 
-        sut.WithRequestHeader("someHeader", "someValue", 1);
+        HttpRequestMessageAsserter sut = new([request, request]);
 
-        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "request header 'someHeader' and value 'someValue'");
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestHeader("Via", "example.com", 2));
+    }
+
+    [Fact]
+    public void WithMatchingRequestHeaderNameAndNotMatchingValue_WithoutNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestHeader("Host", "text/yaml*"));
+    }
+
+    [Fact]
+    public void WithMatchingRequestHeaderNameAndNotMatchingValue_WithNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
+
+        HttpRequestMessageAsserter sut = new([request, request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestHeader("Host", "text/yaml*", 2));
+    }
+
+    [Fact]
+    public void WithMatchingRequestHeaderNameAndMatchingValue_WithNotMatchingNumberOfRequests_ThrowsHttpRequestMessageAssertionException()
+    {
+        using HttpRequestMessage request = new();
+        request.Headers.Host = "example.com";
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestHeader("Host", "example.com", 2));
     }
 }

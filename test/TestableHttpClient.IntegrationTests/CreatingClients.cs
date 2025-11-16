@@ -23,7 +23,7 @@ public class CreatingClients
 
         await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
-        testableHttpMessageHandler.ShouldHaveMadeRequests().WithRequestHeader("test", "test");
+        testableHttpMessageHandler.ShouldHaveMadeRequests().WithHeader("test", "test");
     }
 
     [Fact]
