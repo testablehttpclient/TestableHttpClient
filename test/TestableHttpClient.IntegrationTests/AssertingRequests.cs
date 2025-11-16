@@ -200,16 +200,4 @@ public class AssertingRequests
 
         testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
     }
-
-    [Fact]
-    public async Task CustomAssertions()
-    {
-        using TestableHttpMessageHandler testHandler = new();
-        using HttpClient client = new(testHandler);
-
-        using StringContent content = new("", Encoding.UTF8, "application/json");
-        _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
-
-        testHandler.ShouldHaveMadeRequests().WithFilter(x => x.Content is not null && x.Content.Headers.ContentType?.MediaType == "application/json", "");
-    }
 }

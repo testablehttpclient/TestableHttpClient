@@ -7,6 +7,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [0.12] - unplanned
 ### Deprecated
 - The methods `WithRequestHeader` and `WithContentHeader` are deprecated, please use `WithHeader` instead.
+- The `WithFilter` method is deprecated and will be made internal or be removed. If there is a specific assertion that is missing, please open an issue.
 
 ### Removed
 - .NET 6.0 target, since it is no longer supported

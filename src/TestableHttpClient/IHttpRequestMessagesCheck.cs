@@ -16,6 +16,7 @@ public interface IHttpRequestMessagesCheck
     /// <param name="requestFilter">The filter to filter requests with before asserting.</param>
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition);
 
     /// <summary>
@@ -25,6 +26,7 @@ public interface IHttpRequestMessagesCheck
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition);
 
     /// <summary>
@@ -34,6 +36,7 @@ public interface IHttpRequestMessagesCheck
     /// <param name="expectedNumberOfRequests">The expected number of requests, when null is passed "at least one" is presumed.</param>
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition);
 
     /// <summary>
