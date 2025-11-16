@@ -10,7 +10,12 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName) => WithRequestHeader(check, headerName, (int?)null);
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName)
+    {
+        Guard.ThrowIfNull(check);
+
+        return check.WithHeader(headerName);
+    }
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
@@ -21,15 +26,11 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests) => WithRequestHeader(check, headerName, (int?)expectedNumberOfRequests);
-
-    [Obsolete("Use WithHeader instead.")]
-    private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
-        Guard.ThrowIfNullOrEmpty(headerName);
 
-        return check.WithFilter(x => x.HasRequestHeader(headerName), expectedNumberOfRequests, $"request header '{headerName}'");
+        return check.WithHeader(headerName, expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -41,7 +42,12 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithRequestHeader(check, headerName, headerValue, null);
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue)
+    {
+        Guard.ThrowIfNull(check);
+
+        return check.WithHeader(headerName, headerValue);
+    }
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -53,16 +59,11 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests) => WithRequestHeader(check, headerName, headerValue, (int?)expectedNumberOfRequests);
-
-    [Obsolete("Use WithHeader instead.")]
-    private static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
-        Guard.ThrowIfNullOrEmpty(headerName);
-        Guard.ThrowIfNullOrEmpty(headerValue);
 
-        return check.WithFilter(x => x.HasRequestHeader(headerName, headerValue), expectedNumberOfRequests, $"request header '{headerName}' and value '{headerValue}'");
+        return check.WithHeader(headerName, headerValue, expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -73,7 +74,12 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName) => WithContentHeader(check, headerName, (int?)null);
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName)
+    {
+        Guard.ThrowIfNull(check);
+
+        return check.WithHeader(headerName);
+    }
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
@@ -84,15 +90,11 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests) => WithContentHeader(check, headerName, (int?)expectedNumberOfRequests);
-
-    [Obsolete("Use WithHeader instead.")]
-    private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int? expectedNumberOfRequests)
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
-        Guard.ThrowIfNullOrEmpty(headerName);
 
-        return check.WithFilter(x => x.HasContentHeader(headerName), expectedNumberOfRequests, $"content header '{headerName}'");
+        return check.WithHeader(headerName, expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -104,7 +106,12 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => WithContentHeader(check, headerName, headerValue, null);
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue)
+    {
+        Guard.ThrowIfNull(check);
+
+        return check.WithHeader(headerName, headerValue);
+    }
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -116,16 +123,11 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests) => WithContentHeader(check, headerName, headerValue, (int?)expectedNumberOfRequests);
-
-    [Obsolete("Use WithHeader instead.")]
-    private static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int? expectedNumberOfRequests)
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);
-        Guard.ThrowIfNullOrEmpty(headerName);
-        Guard.ThrowIfNullOrEmpty(headerValue);
 
-        return check.WithFilter(x => x.HasContentHeader(headerName, headerValue), expectedNumberOfRequests, $"content header '{headerName}' and value '{headerValue}'");
+        return check.WithHeader(headerName, headerValue, expectedNumberOfRequests);
     }
 
     /// <summary>
