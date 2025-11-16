@@ -88,7 +88,7 @@ public class WithFormUrlEncodedContent
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]));
 
-        Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
+        Assert.Equal("Expected at least one request to be made with content 'username=alice', but no requests were made.", exception.Message);
     }
 
     [Fact]
@@ -103,6 +103,6 @@ public class WithFormUrlEncodedContent
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]));
 
-        Assert.Equal("Expected at least one request to be made with form url encoded content 'username=alice', but no requests were made.", exception.Message);
+        Assert.Equal("Expected at least one request to be made with content 'username=alice', header 'Content-Type' and value 'application/x-www-form-urlencoded*', but no requests were made.", exception.Message);
     }
 }
