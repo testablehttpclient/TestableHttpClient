@@ -1,13 +1,11 @@
-﻿using NSubstitute;
-
-namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
+﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 public class WithFormUrlEncodedContent
 {
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_NulCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent([]));
 
@@ -17,7 +15,7 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithNumberOfRequests_NulCheck_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = null!;
+        HttpRequestMessageAsserter sut = null!;
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent([], 1));
 
@@ -27,43 +25,41 @@ public class WithFormUrlEncodedContent
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_NullNameValueCollection_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(null!));
 
         Assert.Equal("nameValueCollection", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
     public void WithFormUrlEncodedContent_WithNumberOfRequests_NullNameValueCollection_ThrowsArgumentNullException()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        HttpRequestMessageAsserter sut = new([]);
 
         var exception = Assert.Throws<ArgumentNullException>(() => sut.WithFormUrlEncodedContent(null!, 1));
 
         Assert.Equal("nameValueCollection", exception.ParamName);
-        sut.DidNotReceive().WithFilter(Args.AnyPredicate(), Arg.Any<int?>(), Arg.Any<string>());
     }
 
     [Fact]
-    public void WithFormUrlEncodedContent_WithoutNumberOfRequests_CallsWithCorrectly()
+    public void WithFormMatchingUrlEncodedContent_WithoutNumberOfRequests_DoesNotThrow()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        using HttpRequestMessage request = new();
+        request.Content = new FormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]);
+        HttpRequestMessageAsserter sut = new([request]);
 
         sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]);
-
-        sut.Received(1).WithFilter(Args.AnyPredicate(), null, "form url encoded content 'username=alice'");
     }
 
     [Fact]
-    public void WithFormUrlEncodedContent_WithNumberOfRequests_CallsWithCorrectly()
+    public void WithMatchingFormUrlEncodedContent_WithNumberOfRequests_DoesNotThrow()
     {
-        IHttpRequestMessagesCheck sut = Substitute.For<IHttpRequestMessagesCheck>();
+        using HttpRequestMessage request = new();
+        request.Content = new FormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]);
+        HttpRequestMessageAsserter sut = new([request, request]);
 
-        sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")], 1);
-
-        sut.Received(1).WithFilter(Args.AnyPredicate(), (int?)1, "form url encoded content 'username=alice'");
+        sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")], 2);
     }
 
     [Fact]
