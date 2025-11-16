@@ -37,7 +37,8 @@ public sealed class WithRequestUri
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         HttpRequestMessageAsserter sut = new([request]);
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestUri("https://no-op.com/"));
+        var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithRequestUri("https://no-op.com/"));
+
     }
 
 

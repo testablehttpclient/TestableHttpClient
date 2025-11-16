@@ -1,6 +1,4 @@
-﻿using NSubstitute;
-
-namespace TestableHttpClient.Tests;
+﻿namespace TestableHttpClient.Tests;
 
 public partial class TestableHttpMessageHandlerExtensionsTests
 {
@@ -63,11 +61,12 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
     {
+        HttpClient? capturedClient= null;
         using TestableHttpMessageHandler sut = new();
-        Action<HttpClient> configureClient = Substitute.For<Action<HttpClient>>();
+        void configureClient(HttpClient client) => capturedClient = client;
 
         using var client = sut.CreateClient(configureClient);
 
-        configureClient.Received(1).Invoke(client);
+        Assert.Same(client, capturedClient);
     }
 }
