@@ -75,22 +75,12 @@ TestableHttpClient.HttpRequestMessageAssertionException.HttpRequestMessageAssert
 TestableHttpClient.HttpRequestMessageAssertionException.HttpRequestMessageAssertionException(string! message, System.Exception! innerException) -> void
 
 TestableHttpClient.HttpRequestMessagesCheckExtensions
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithContentHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithFormUrlEncodedContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string?, string?>>! nameValueCollection) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithFormUrlEncodedContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string?, string?>>! nameValueCollection, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpMethod(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpMethod(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Net.Http.HttpMethod! httpMethod, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpVersion(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Version! httpVersion) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithHttpVersion(this TestableHttpClient.IHttpRequestMessagesCheck! check, System.Version! httpVersion, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithJsonContent(this TestableHttpClient.IHttpRequestMessagesCheck! check, object? jsonObject, System.Text.Json.JsonSerializerOptions! jsonSerializerOptions) -> TestableHttpClient.IHttpRequestMessagesCheck!
@@ -99,8 +89,6 @@ static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(t
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
 static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestHeader(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
-static TestableHttpClient.HttpRequestMessagesCheckExtensions.WithRequestUri(this TestableHttpClient.IHttpRequestMessagesCheck! check, string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 
 TestableHttpClient.Utils.UriPatternParserException
 TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException() -> void

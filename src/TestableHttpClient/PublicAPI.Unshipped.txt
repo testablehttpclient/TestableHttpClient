@@ -1,1 +1,13 @@
 ﻿override TestableHttpClient.TestableHttpMessageHandler.Dispose(bool disposing) -> void
+TestableHttpClient.IHttpRequestMessagesCheck.WithContent(string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithContent(string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpMethod(System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpMethod(System.Net.Http.HttpMethod! httpMethod, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpVersion(System.Version! httpVersion) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpVersion(System.Version! httpVersion, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithRequestUri(string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithRequestUri(string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!

@@ -81,4 +81,148 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         }
         return this;
     }
+
+    /// <summary>
+    /// Asserts whether requests were made to a given URI based on a pattern.
+    /// </summary>
+    /// <param name="pattern">The uri pattern that is expected.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithRequestUri(string pattern) => WithRequestUri(pattern, null);
+
+    /// <summary>
+    /// Asserts whether requests were made to a given URI based on a pattern.
+    /// </summary>
+    /// <param name="pattern">The uri pattern that is expected.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithRequestUri(string pattern, int expectedNumberOfRequests) => WithRequestUri(pattern, (int?)expectedNumberOfRequests);
+
+    private IHttpRequestMessagesCheck WithRequestUri(string pattern, int? expectedNumberOfRequests)
+    {
+        Guard.ThrowIfNullOrEmpty(pattern);
+
+        var condition = string.Empty;
+        if (pattern != "*")
+        {
+            condition = $"uri pattern '{pattern}'";
+        }
+
+        UriPattern uriPattern = UriPatternParser.Parse(pattern);
+
+        return WithFilter(x => x.RequestUri is not null && uriPattern.Matches(x.RequestUri, Options.UriPatternMatchingOptions), expectedNumberOfRequests, condition);
+    }
+
+    /// <summary>
+    /// Asserts whether requests were made with a given HTTP Method.
+    /// </summary>
+    /// <param name="httpMethod">The <seealso cref="HttpMethod"/> that is expected.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHttpMethod(HttpMethod httpMethod) => WithHttpMethod(httpMethod, null);
+
+    /// <summary>
+    /// Asserts whether requests were made with a given HTTP Method.
+    /// </summary>
+    /// <param name="httpMethod">The <seealso cref="HttpMethod"/> that is expected.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHttpMethod(HttpMethod httpMethod, int expectedNumberOfRequests) => WithHttpMethod(httpMethod, (int?)expectedNumberOfRequests);
+
+    private IHttpRequestMessagesCheck WithHttpMethod(HttpMethod httpMethod, int? expectedNumberOfRequests)
+    {
+        Guard.ThrowIfNull(httpMethod);
+
+        return WithFilter(x => x.HasHttpMethod(httpMethod), expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
+    }
+
+    /// <summary>
+    /// Asserts whether requests were made using a specific HTTP Version.
+    /// </summary>
+    /// <param name="check">The implementation that hold all the request messages.</param>
+    /// <param name="httpVersion">The <seealso cref="System.Net.HttpVersion"/> that is expected.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHttpVersion(Version httpVersion) => WithHttpVersion(httpVersion, null);
+
+    /// <summary>
+    /// Asserts whether requests were made using a specific HTTP Version.
+    /// </summary>
+    /// <param name="httpVersion">The <seealso cref="System.Net.HttpVersion"/> that is expected.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHttpVersion(Version httpVersion, int expectedNumberOfRequests) => WithHttpVersion(httpVersion, (int?)expectedNumberOfRequests);
+
+    private IHttpRequestMessagesCheck WithHttpVersion(Version httpVersion, int? expectedNumberOfRequests)
+    {
+        Guard.ThrowIfNull(httpVersion);
+
+        return WithFilter(x => x.HasHttpVersion(httpVersion), expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
+    }
+
+    /// <summary>
+    /// Asserts whether requests were made with a specific header name. Values are ignored.
+    /// </summary>
+    /// <param name="headerName">The name of the header that is expected.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHeader(string headerName) => WithHeader(headerName, (int?)null);
+
+    /// <summary>
+    /// Asserts whether requests were made with a specific header name. Values are ignored.
+    /// </summary>
+    /// <param name="headerName">The name of the header that is expected.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHeader(string headerName, int expectedNumberOfRequests) => WithHeader(headerName, (int?)expectedNumberOfRequests);
+
+    private IHttpRequestMessagesCheck WithHeader(string headerName, int? expectedNumberOfRequests)
+    {
+        Guard.ThrowIfNullOrEmpty(headerName);
+
+        return WithFilter(x => x.HasHeader(headerName), expectedNumberOfRequests, $"header '{headerName}'");
+    }
+
+    /// <summary>
+    /// Asserts whether requests were made with a specific header name and value.
+    /// </summary>
+    /// <param name="headerName">The name of the header that is expected.</param>
+    /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHeader(string headerName, string headerValue) => WithHeader(headerName, headerValue, null);
+
+    /// <summary>
+    /// Asserts whether requests were made with a specific header name and value.
+    /// </summary>
+    /// <param name="headerName">The name of the header that is expected.</param>
+    /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithHeader(string headerName, string headerValue, int expectedNumberOfRequests) => WithHeader(headerName, headerValue, (int?)expectedNumberOfRequests);
+
+    private IHttpRequestMessagesCheck WithHeader(string headerName, string headerValue, int? expectedNumberOfRequests)
+    {
+        Guard.ThrowIfNullOrEmpty(headerName);
+        Guard.ThrowIfNullOrEmpty(headerValue);
+
+        return WithFilter(x => x.HasHeader(headerName, headerValue), expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
+    }
+
+    /// <summary>
+    /// Asserts whether requests were made with specific content.
+    /// </summary>
+    /// <param name="pattern">The expected content, supports wildcards.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithContent(string pattern) => WithContent(pattern, null);
+
+    /// <summary>
+    /// Asserts whether requests were made with specific content.
+    /// </summary>
+    /// <param name="pattern">The expected content, supports wildcards.</param>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithContent(string pattern, int expectedNumberOfRequests) => WithContent(pattern, (int?)expectedNumberOfRequests);
+
+    private IHttpRequestMessagesCheck WithContent(string pattern, int? expectedNumberOfRequests)
+    {
+        Guard.ThrowIfNull(pattern);
+
+        return WithFilter(x => x.HasContent(pattern), expectedNumberOfRequests, $"content '{pattern}'");
+    }
 }

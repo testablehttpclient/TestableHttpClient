@@ -20,6 +20,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Changed
 - The TestableHttpMessageHandler now makes a clone of the original request, so that the original request can be disposed.  
   This change also makes it possible to assert the content on .NET Framework.
+- Moved `WithHttpMethod`, `WithRequestUri`, `WithHttpVersion`, `WithHeader` and `WithContent` from `HttpRequestMessagesCheckExtensions` to `HttpRequestMessageAsserter` and specify them on the `IHttpRequestMessagesCheck` interface.
 
 ## [0.11] - 2024-06-15
 ### Removed
