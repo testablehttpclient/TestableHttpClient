@@ -8,7 +8,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         TestableHttpMessageHandler sut = null!;
 
         static void configureClient(HttpClient _) { }
-        
+
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, []));
         Assert.Equal("handler", exception.ParamName);
     }
@@ -18,7 +18,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     {
         using TestableHttpMessageHandler sut = new();
         Action<HttpClient> configureClient = null!;
-        
+
         var exception = Assert.Throws<ArgumentNullException>(() => sut.CreateClient(configureClient, []));
         Assert.Equal("configureClient", exception.ParamName);
     }
@@ -41,7 +41,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
         HttpClient? capturedClient = null;
         using TestableHttpMessageHandler sut = new();
         void configureClient(HttpClient client) => capturedClient = client;
-        
+
         using var client = sut.CreateClient(configureClient, []);
 
         Assert.Same(client, capturedClient);
