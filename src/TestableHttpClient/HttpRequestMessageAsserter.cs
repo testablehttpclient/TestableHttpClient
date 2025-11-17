@@ -29,9 +29,28 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// </summary>
     public TestableHttpMessageHandlerOptions Options { get; }
 
+    private HttpRequestMessageAsserter Assert(int? expectedCount = null, string condition = "")
+    {
+        if (!string.IsNullOrEmpty(condition))
+        {
+            _expectedConditions.Add(condition);
+        }
+        Assert(expectedCount);
+        return this;
+    }
+
     private void Assert(int? expectedCount = null)
     {
-        var actualCount = Requests.Count();
+        int actualCount;
+        try
+        {
+            actualCount = Requests.Count(expectedRequest.Equals);
+        }
+        catch (ObjectDisposedException)
+        {
+            throw new HttpRequestMessageAssertionException("Can't validate requests, because one or more requests have content that is already disposed.");
+        }
+
         var pass = expectedCount switch
         {
             null => actualCount > 0,
@@ -72,15 +91,9 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
             _expectedConditions.Add(condition);
         }
 
-        try
-        {
-            Requests = Requests.Where(requestFilter);
-            Assert(expectedNumberOfRequests);
-        }
-        catch (ObjectDisposedException)
-        {
-            throw new HttpRequestMessageAssertionException("Can't validate requests, because one or more requests have content that is already disposed.");
-        }
+        Requests = Requests.Where(requestFilter);
+        Assert(expectedNumberOfRequests);
+
         return this;
     }
 
@@ -112,7 +125,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         UriPattern uriPattern = UriPatternParser.Parse(pattern);
         expectedRequest = expectedRequest with { RequestUri = uriPattern };
 
-        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, condition);
+        return Assert(expectedNumberOfRequests, condition);
     }
 
     /// <summary>
@@ -134,7 +147,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(httpMethod);
         expectedRequest = expectedRequest with { HttpMethod = httpMethod };
-        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
+        return Assert(expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
     }
 
     /// <summary>
@@ -159,7 +172,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 
         expectedRequest = expectedRequest with { HttpVersion = httpVersion };
 
-        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
+        return Assert(expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
     }
 
     /// <summary>
@@ -181,7 +194,8 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNullOrEmpty(headerName);
 
-        return WithFilter(x => x.HasHeader(headerName), expectedNumberOfRequests, $"header '{headerName}'");
+        expectedRequest = expectedRequest.AddHeader(headerName);
+        return Assert(expectedNumberOfRequests, $"header '{headerName}'");
     }
 
     /// <summary>
@@ -206,7 +220,9 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(headerValue);
 
-        return WithFilter(x => x.HasHeader(headerName, headerValue), expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
+        expectedRequest = expectedRequest.AddHeader(headerName, headerValue);
+
+        return Assert(expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
     }
 
     /// <summary>
@@ -229,6 +245,6 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Guard.ThrowIfNull(pattern);
 
         expectedRequest = expectedRequest with { Content = pattern };
-        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, $"content '{pattern}'");
+        return Assert(expectedNumberOfRequests, $"content '{pattern}'");
     }
 }
