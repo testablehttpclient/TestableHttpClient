@@ -6,6 +6,7 @@
 internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 {
     private readonly List<string> _expectedConditions = new();
+    private Request expectedRequest;
 
     /// <summary>
     /// Construct a new HttpRequestMessageAsserter.
@@ -16,6 +17,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         Options = options ?? new TestableHttpMessageHandlerOptions();
+        expectedRequest = new Request(Options.UriPatternMatchingOptions);
     }
 
     /// <summary>
@@ -108,8 +110,9 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         }
 
         UriPattern uriPattern = UriPatternParser.Parse(pattern);
+        expectedRequest = expectedRequest with { RequestUri = uriPattern };
 
-        return WithFilter(x => x.RequestUri is not null && uriPattern.Matches(x.RequestUri, Options.UriPatternMatchingOptions), expectedNumberOfRequests, condition);
+        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, condition);
     }
 
     /// <summary>
@@ -130,8 +133,8 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     private IHttpRequestMessagesCheck WithHttpMethod(HttpMethod httpMethod, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(httpMethod);
-
-        return WithFilter(x => x.HasHttpMethod(httpMethod), expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
+        expectedRequest = expectedRequest with { HttpMethod = httpMethod };
+        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
     }
 
     /// <summary>
@@ -154,7 +157,9 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(httpVersion);
 
-        return WithFilter(x => x.HasHttpVersion(httpVersion), expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
+        expectedRequest = expectedRequest with { HttpVersion = httpVersion };
+
+        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
     }
 
     /// <summary>
@@ -223,6 +228,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(pattern);
 
-        return WithFilter(x => x.HasContent(pattern), expectedNumberOfRequests, $"content '{pattern}'");
+        expectedRequest = expectedRequest with { Content = pattern };
+        return WithFilter(x => expectedRequest.Equals(x), expectedNumberOfRequests, $"content '{pattern}'");
     }
 }
