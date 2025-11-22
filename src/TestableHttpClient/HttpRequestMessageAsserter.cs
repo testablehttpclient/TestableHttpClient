@@ -112,7 +112,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithRequestUri(string pattern, int expectedNumberOfRequests) => WithRequestUri(pattern, (int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithRequestUri(string pattern, int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithRequestUri(string pattern, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNullOrEmpty(pattern);
 
@@ -143,7 +143,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithHttpMethod(HttpMethod httpMethod, int expectedNumberOfRequests) => WithHttpMethod(httpMethod, (int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithHttpMethod(HttpMethod httpMethod, int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithHttpMethod(HttpMethod httpMethod, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(httpMethod);
         expectedRequest = expectedRequest with { HttpMethod = httpMethod };
@@ -166,7 +166,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithHttpVersion(Version httpVersion, int expectedNumberOfRequests) => WithHttpVersion(httpVersion, (int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithHttpVersion(Version httpVersion, int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithHttpVersion(Version httpVersion, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(httpVersion);
 
@@ -190,7 +190,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithHeader(string headerName, int expectedNumberOfRequests) => WithHeader(headerName, (int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithHeader(string headerName, int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithHeader(string headerName, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNullOrEmpty(headerName);
 
@@ -215,7 +215,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithHeader(string headerName, string headerValue, int expectedNumberOfRequests) => WithHeader(headerName, headerValue, (int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithHeader(string headerName, string headerValue, int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithHeader(string headerName, string headerValue, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(headerValue);
@@ -240,7 +240,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithContent(string pattern, int expectedNumberOfRequests) => WithContent(pattern, (int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithContent(string pattern, int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithContent(string pattern, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(pattern);
 
