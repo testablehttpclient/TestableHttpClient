@@ -17,18 +17,6 @@ public sealed class HttpRequestMessageFormatterTests
     }
 
     [Fact]
-    public void HttpRequestMessage_Debug_Test()
-    {
-        TestContext.Current.TestOutputHelper!.WriteLine(RuntimeInformation.FrameworkDescription);
-        TestContext.Current.TestOutputHelper.WriteLine($"OS: {RuntimeInformation.OSDescription}");
-        TestContext.Current.TestOutputHelper.WriteLine($"CLR/Environment version: {Environment.Version}");
-        TestContext.Current.TestOutputHelper.WriteLine($"Assembly: {typeof(HttpRequestMessage).Assembly.Location}");
-        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
-        TestContext.Current.TestOutputHelper.WriteLine($"Default version: {request.Version}");
-        Assert.Fail();
-    }
-
-    [Fact]
     public void Format_NullRequest_CreatesExpectedString()
     {
         HttpRequestMessage? request = null;
