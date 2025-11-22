@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 using TestableHttpClient.Utils;
 
@@ -14,6 +15,18 @@ public sealed class HttpRequestMessageFormatterTests
         filePath += ".verified.http";
         return File.ReadAllText(filePath);
     }
+
+    [Fact]
+    public void HttpRequestMessage_Debug_Test()
+    {
+        TestContext.Current.TestOutputHelper!.WriteLine(RuntimeInformation.FrameworkDescription);
+        TestContext.Current.TestOutputHelper.WriteLine($"OS: {RuntimeInformation.OSDescription}");
+        TestContext.Current.TestOutputHelper.WriteLine($"CLR/Environment version: {Environment.Version}");
+        TestContext.Current.TestOutputHelper.WriteLine($"Assembly: {typeof(HttpRequestMessage).Assembly.Location}");
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
+        TestContext.Current.TestOutputHelper.WriteLine($"Default version: {request.Version}");
+    }
+
     [Fact]
     public void Format_NullRequest_CreatesExpectedString()
     {
