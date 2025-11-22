@@ -43,9 +43,12 @@ public sealed class HttpRequestMessageFormatterTests
     }
 
     [Fact]
-    public void Format_SimplePostRequestWithHttpVersion2_CreatesExpectedString()
+    public void Format_SimplePostRequestWithHeadersAndBody_CreatesExpectedString()
     {
-        using HttpRequestMessage request = new(HttpMethod.Post, "https://example.com");
+        using HttpRequestMessage request = new(HttpMethod.Post, "https://example.com")
+        {
+            Version = HttpVersion.Version11
+        };
         request.Content = new StringContent("Hello, World!");
         request.Content.Headers.ContentLength = 13;
         string result = HttpRequestMessageFormatter.Format(request, HttpRequestMessageFormatOptions.All);
