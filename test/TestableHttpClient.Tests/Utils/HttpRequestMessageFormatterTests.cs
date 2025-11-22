@@ -25,6 +25,7 @@ public sealed class HttpRequestMessageFormatterTests
         TestContext.Current.TestOutputHelper.WriteLine($"Assembly: {typeof(HttpRequestMessage).Assembly.Location}");
         using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com");
         TestContext.Current.TestOutputHelper.WriteLine($"Default version: {request.Version}");
+        Assert.Fail();
     }
 
     [Fact]
