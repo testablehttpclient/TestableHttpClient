@@ -9,6 +9,9 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
+[*.verified.http]
+insert_final_newline = false
+
 [*.cs]
 indent_size = 4
 dotnet_style_qualification_for_field = false:warning
