@@ -13,17 +13,55 @@ internal static class HttpRequestMessageFormatter
 
         IFormatProvider formatProvider = CultureInfo.InvariantCulture;
         StringBuilder builder = new();
-        builder.Append(formatProvider, $"{request.Method} {request.RequestUri} HTTP/{request.Version}\r\n");
-        foreach(var header in request.Headers)
+        if (options.HasFlag(HttpRequestMessageFormatOptions.RequestLine))
         {
-            builder.Append(formatProvider, $"{header.Key}: {string.Join(", ", header.Value)}\r\n");
+            builder.Append(formatProvider, $"{request.Method} {request.RequestUri} HTTP/{request.Version}\r\n");
         }
-        foreach(var header in request.Content?.Headers ?? Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>())
+        else
         {
-            builder.Append(formatProvider, $"{header.Key}: {string.Join(", ", header.Value)}\r\n");
+            if (options.HasFlag(HttpRequestMessageFormatOptions.HttpMethod))
+            {
+                builder.Append(formatProvider, $"{request.Method}");
+            }
+            if (options.HasFlag(HttpRequestMessageFormatOptions.RequestUri))
+            {
+                if(builder.Length > 0)
+                {
+                    builder.Append(" ");
+                }
+                builder.Append(formatProvider, $"{request.RequestUri}");
+            }
+            if (options.HasFlag(HttpRequestMessageFormatOptions.HttpVersion))
+            {
+                if (builder.Length > 0)
+                {
+                    builder.Append(" ");
+                }
+                builder.Append(formatProvider, $"HTTP/{request.Version}");
+            }
+            if(options.HasFlag(HttpRequestMessageFormatOptions.Headers) || options.HasFlag(HttpRequestMessageFormatOptions.Content))
+            {
+                builder.Append("\r\n");
+            }
         }
-        builder.Append("\r\n");
-        builder.Append(request.Content?.ReadAsStringAsync().GetAwaiter().GetResult());
+
+        if (options.HasFlag(HttpRequestMessageFormatOptions.Headers))
+        {
+            foreach (var header in request.Headers)
+            {
+                builder.Append(formatProvider, $"{header.Key}: {string.Join(", ", header.Value)}\r\n");
+            }
+            foreach (var header in request.Content?.Headers ?? Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>())
+            {
+                builder.Append(formatProvider, $"{header.Key}: {string.Join(", ", header.Value)}\r\n");
+            }
+        }
+
+        if (options.HasFlag(HttpRequestMessageFormatOptions.Content))
+        {
+            builder.Append("\r\n");
+            builder.Append(request.Content?.ReadAsStringAsync().GetAwaiter().GetResult());
+        }
 
         return builder.ToString();
     }

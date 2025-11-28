@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 using TestableHttpClient.Utils;
+using static TestableHttpClient.Utils.HttpRequestMessageFormatter;
 
 namespace TestableHttpClient.Tests.Utils;
 
@@ -21,7 +21,7 @@ public sealed class HttpRequestMessageFormatterTests
     {
         HttpRequestMessage? request = null;
 
-        var result = HttpRequestMessageFormatter.Format(request, HttpRequestMessageFormatOptions.All);
+        var result = Format(request, HttpRequestMessageFormatOptions.All);
 
         Assert.Equal("null", result);
     }
@@ -37,7 +37,7 @@ public sealed class HttpRequestMessageFormatterTests
         {
             Version = Version.Parse(version)
         };
-        string result = HttpRequestMessageFormatter.Format(request, HttpRequestMessageFormatOptions.All);
+        string result = Format(request, HttpRequestMessageFormatOptions.All);
 
         string expected = FetchTestData($"simple_get_request_version_{version}");
 
@@ -53,9 +53,56 @@ public sealed class HttpRequestMessageFormatterTests
         };
         request.Content = new StringContent("Hello, World!");
         request.Content.Headers.ContentLength = 13;
-        string result = HttpRequestMessageFormatter.Format(request, HttpRequestMessageFormatOptions.All);
+        string result = Format(request, HttpRequestMessageFormatOptions.All);
 
         string expected = FetchTestData("simple_post_request");
+
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void FormatRequestLineOptions_AnyRequest_CreatesExpectedString()
+    {
+        using HttpRequestMessage request = new(HttpMethod.Get, "https://example.com") { Version = HttpVersion.Version11 };
+        
+        Assert.Multiple(
+            () => Assert.Equal("GET", Format(request, HttpRequestMessageFormatOptions.HttpMethod)),
+            () => Assert.Equal("https://example.com/", Format(request, HttpRequestMessageFormatOptions.RequestUri)),
+            () => Assert.Equal("HTTP/1.1", Format(request, HttpRequestMessageFormatOptions.HttpVersion)),
+            () => Assert.Equal("GET https://example.com/", Format(request, HttpRequestMessageFormatOptions.HttpMethod | HttpRequestMessageFormatOptions.RequestUri)),
+            () => Assert.Equal("https://example.com/ HTTP/1.1", Format(request, HttpRequestMessageFormatOptions.RequestUri | HttpRequestMessageFormatOptions.HttpVersion)),
+            () => Assert.Equal("GET https://example.com/ HTTP/1.1\r\n", Format(request, HttpRequestMessageFormatOptions.RequestLine))
+        );
+    }
+
+    [Fact]
+    public void FormatRequestLineHeaders_SimplePostRequestWithHeadersAndBody_CreatesExpectedString()
+    {
+        using HttpRequestMessage request = new(HttpMethod.Post, "https://example.com")
+        {
+            Version = HttpVersion.Version11
+        };
+        request.Content = new StringContent("Hello, World!");
+        request.Content.Headers.ContentLength = 13;
+        string result = Format(request, HttpRequestMessageFormatOptions.HttpMethod|HttpRequestMessageFormatOptions.RequestUri|HttpRequestMessageFormatOptions.Headers);
+
+        string expected = FetchTestData("method_uri_headers_post_request");
+
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void FormatRequestLineContent_SimplePostRequestWithHeadersAndBody_CreatesExpectedString()
+    {
+        using HttpRequestMessage request = new(HttpMethod.Post, "https://example.com")
+        {
+            Version = HttpVersion.Version11
+        };
+        request.Content = new StringContent("Hello, World!");
+        request.Content.Headers.ContentLength = 13;
+        string result = Format(request, HttpRequestMessageFormatOptions.HttpMethod | HttpRequestMessageFormatOptions.RequestUri | HttpRequestMessageFormatOptions.Content);
+
+        string expected = FetchTestData("method_uri_content_post_request");
 
         Assert.Equal(expected, result);
     }
