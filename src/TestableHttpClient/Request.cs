@@ -13,30 +13,19 @@ internal record Request : IEquatable<HttpRequestMessage>
     public UriPattern? RequestUri { get; init; }
     public Version? HttpVersion { get; init; }
 
-    public List<string>? HeaderNames { get; init; }
-    public Dictionary<string, string>? HeaderValues { get; init; }
+    public Dictionary<string, Value>? HeaderValues { get; init; }
 
     public string? Content { get; init; }
 
-    public Request AddHeader(string headerName)
-    {
-        if (HeaderNames is null)
-        {
-            List<string> headerNames = [headerName];
-            return this with { HeaderNames = headerNames };
-        }
-        else
-        {
-            HeaderNames.Add(headerName);
-            return this;
-        }
-    }
+    public Request AddHeader(string headerName) => AddHeader(headerName, Value.Any());
 
-    public Request AddHeader(string headerName, string headerValue)
+    public Request AddHeader(string headerName, string headerValue) => AddHeader(headerName, Value.Pattern(headerValue));
+
+    public Request AddHeader(string headerName, Value headerValue)
     {
         if (HeaderValues is null)
         {
-            Dictionary<string, string> headerValues = new() { [headerName] = headerValue };
+            Dictionary<string, Value> headerValues = new() { [headerName] = headerValue };
             return this with { HeaderValues = headerValues };
         }
         else
@@ -66,17 +55,6 @@ internal record Request : IEquatable<HttpRequestMessage>
         if (HttpVersion is not null && other.Version != HttpVersion)
         {
             return false;
-        }
-
-        if (HeaderNames is not null)
-        {
-            foreach (var headerName in HeaderNames)
-            {
-                if (!other.Headers.HasHeader(headerName) && (other.Content is null || !other.Content.Headers.HasHeader(headerName)))
-                {
-                    return false;
-                }
-            }
         }
 
         if (HeaderValues is not null)

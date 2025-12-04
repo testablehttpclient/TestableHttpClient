@@ -4,7 +4,7 @@ namespace TestableHttpClient.Utils;
 
 internal static class HttpRequestMessageFormatter
 {
-    internal static string Format(HttpRequestMessage? request, HttpRequestMessageFormatOptions options)
+    internal static string Format(HttpRequestMessage? request, RequestFormatOptions options)
     {
         if (request is null)
         {
@@ -13,17 +13,17 @@ internal static class HttpRequestMessageFormatter
 
         IFormatProvider formatProvider = CultureInfo.InvariantCulture;
         StringBuilder builder = new();
-        if (options.HasFlag(HttpRequestMessageFormatOptions.RequestLine))
+        if (options.HasFlag(RequestFormatOptions.RequestLine))
         {
             builder.Append(formatProvider, $"{request.Method} {request.RequestUri} HTTP/{request.Version}\r\n");
         }
         else
         {
-            if (options.HasFlag(HttpRequestMessageFormatOptions.HttpMethod))
+            if (options.HasFlag(RequestFormatOptions.HttpMethod))
             {
                 builder.Append(formatProvider, $"{request.Method}");
             }
-            if (options.HasFlag(HttpRequestMessageFormatOptions.RequestUri))
+            if (options.HasFlag(RequestFormatOptions.RequestUri))
             {
                 if(builder.Length > 0)
                 {
@@ -31,7 +31,7 @@ internal static class HttpRequestMessageFormatter
                 }
                 builder.Append(formatProvider, $"{request.RequestUri}");
             }
-            if (options.HasFlag(HttpRequestMessageFormatOptions.HttpVersion))
+            if (options.HasFlag(RequestFormatOptions.HttpVersion))
             {
                 if (builder.Length > 0)
                 {
@@ -39,13 +39,13 @@ internal static class HttpRequestMessageFormatter
                 }
                 builder.Append(formatProvider, $"HTTP/{request.Version}");
             }
-            if(options.HasFlag(HttpRequestMessageFormatOptions.Headers) || options.HasFlag(HttpRequestMessageFormatOptions.Content))
+            if(options.HasFlag(RequestFormatOptions.Headers) || options.HasFlag(RequestFormatOptions.Content))
             {
                 builder.Append("\r\n");
             }
         }
 
-        if (options.HasFlag(HttpRequestMessageFormatOptions.Headers))
+        if (options.HasFlag(RequestFormatOptions.Headers))
         {
             foreach (var header in request.Headers)
             {
@@ -57,7 +57,7 @@ internal static class HttpRequestMessageFormatter
             }
         }
 
-        if (options.HasFlag(HttpRequestMessageFormatOptions.Content))
+        if (options.HasFlag(RequestFormatOptions.Content))
         {
             builder.Append("\r\n");
             builder.Append(request.Content?.ReadAsStringAsync().GetAwaiter().GetResult());
@@ -65,16 +65,4 @@ internal static class HttpRequestMessageFormatter
 
         return builder.ToString();
     }
-}
-
-[Flags]
-internal enum HttpRequestMessageFormatOptions
-{
-    HttpMethod = 1,
-    RequestUri = 2,
-    HttpVersion = 4,
-    RequestLine = HttpMethod | RequestUri | HttpVersion,
-    Headers = 8,
-    Content = 16,
-    All = RequestLine | Headers | Content
 }
