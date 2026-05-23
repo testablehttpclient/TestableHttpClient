@@ -12,23 +12,25 @@ internal abstract record Value
 }
 
 [DebuggerDisplay("Any value")]
-file sealed record AnyValue : Value
+internal sealed record AnyValue : Value
 {
     internal override bool Matches(string value, bool ignoreCase) => true;
 }
 
 [DebuggerDisplay("Exact value: {expectedValue}")]
-file sealed record ExactValue : Value
+internal sealed record ExactValue : Value
 {
     private readonly string expectedValue;
     public ExactValue(string expectedValue) => this.expectedValue = expectedValue;
+    internal string ExpectedValue => expectedValue;
     internal override bool Matches(string value, bool ignoreCase) => expectedValue.Equals(value, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 }
 
 [DebuggerDisplay("Pattern value: {pattern}")]
-file sealed record PatternValue : Value
+internal sealed record PatternValue : Value
 {
     private readonly string pattern;
     public PatternValue(string pattern) => this.pattern = pattern;
+    internal string ExpectedPattern => pattern;
     internal override bool Matches(string value, bool ignoreCase) => StringMatcher.Matches(value, pattern, ignoreCase);
 }

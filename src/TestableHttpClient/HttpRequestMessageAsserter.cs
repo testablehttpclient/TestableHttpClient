@@ -35,11 +35,10 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         {
             _expectedConditions.Add(condition);
         }
-        Assert(expectedCount);
-        return this;
+        return Assert(expectedCount);
     }
 
-    private void Assert(int? expectedCount = null)
+    private HttpRequestMessageAsserter Assert(int? expectedCount = null)
     {
         int actualCount;
         try
@@ -59,9 +58,11 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 
         if (!pass)
         {
-            var message = MessageBuilder.BuildMessage(expectedCount, actualCount, _expectedConditions);
+            var message = MessageBuilder.BuildMessage(expectedCount, actualCount, expectedRequest, _expectedConditions);
             throw new HttpRequestMessageAssertionException(message);
         }
+
+        return this;
     }
 
     /// <summary>
@@ -71,6 +72,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
+    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
     /// <summary>
@@ -81,9 +83,11 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
+    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
 
     [AssertionMethod]
+    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
     {
         if (!string.IsNullOrEmpty(condition))
@@ -116,16 +120,10 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNullOrEmpty(pattern);
 
-        var condition = string.Empty;
-        if (pattern != "*")
-        {
-            condition = $"uri pattern '{pattern}'";
-        }
-
         UriPattern uriPattern = UriPatternParser.Parse(pattern);
         expectedRequest = expectedRequest with { RequestUri = uriPattern };
 
-        return Assert(expectedNumberOfRequests, condition);
+        return Assert(expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -147,7 +145,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(httpMethod);
         expectedRequest = expectedRequest with { HttpMethod = httpMethod };
-        return Assert(expectedNumberOfRequests, $"HTTP Method '{httpMethod}'");
+        return Assert(expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -195,7 +193,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Guard.ThrowIfNullOrEmpty(headerName);
 
         expectedRequest = expectedRequest.AddHeader(headerName);
-        return Assert(expectedNumberOfRequests, $"header '{headerName}'");
+        return Assert(expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -222,7 +220,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 
         expectedRequest = expectedRequest.AddHeader(headerName, headerValue);
 
-        return Assert(expectedNumberOfRequests, $"header '{headerName}' and value '{headerValue}'");
+        return Assert(expectedNumberOfRequests);
     }
 
     /// <summary>
@@ -245,6 +243,6 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Guard.ThrowIfNull(pattern);
 
         expectedRequest = expectedRequest with { Content = pattern };
-        return Assert(expectedNumberOfRequests, $"content '{pattern}'");
+        return Assert(expectedNumberOfRequests);
     }
 }
