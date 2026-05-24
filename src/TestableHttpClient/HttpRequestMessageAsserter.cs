@@ -144,7 +144,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     private HttpRequestMessageAsserter WithHttpMethod(HttpMethod httpMethod, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(httpMethod);
-        expectedRequest = expectedRequest with { HttpMethod = httpMethod };
+        expectedRequest = expectedRequest with { Method = httpMethod };
         return Assert(expectedNumberOfRequests);
     }
 
@@ -168,7 +168,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(httpVersion);
 
-        expectedRequest = expectedRequest with { HttpVersion = httpVersion };
+        expectedRequest = expectedRequest with { Version = httpVersion };
 
         return Assert(expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
     }

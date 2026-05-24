@@ -13,10 +13,10 @@ internal static class MessageBuilder
             null => actualCount > 0,
             _ => expectedCount == actualCount
         };
-        var method = expectedRequest.HttpMethod switch
+        var method = expectedRequest.Method switch
         {
             null => "",
-            _ => $"{expectedRequest.HttpMethod} "
+            _ => $"{expectedRequest.Method} "
         };
 
         var expectedMessage = expectedCount switch
@@ -33,10 +33,10 @@ internal static class MessageBuilder
             _ => BuildRequestUri(expectedRequest.RequestUri)
         };
 
-        var headers = expectedRequest.HeaderValues switch
+        var headers = expectedRequest.Headers switch
         {
             null => "",
-            _ => BuildHeaders(expectedRequest.HeaderValues)
+            _ => BuildHeaders(expectedRequest.Headers)
         };
 
         string content = string.Empty;

@@ -51,11 +51,11 @@ public class MessageBuilderTests
     [InlineData(1, "one GET request")]
     [InlineData(2, "2 GET requests")]
     [InlineData(10, "10 GET requests")]
-    public void BuildMessage_VariableExpectedCountZeroActualCountRequestSpecifyingHttpMethod(int? expectedCount, string expectedMessage)
+    public void BuildMessage_VariableExpectedCountZeroActualCountRequestSpecifyingMethod(int? expectedCount, string expectedMessage)
     {
         Request request = new(new())
         {
-            HttpMethod = HttpMethod.Get,
+            Method = HttpMethod.Get,
         };
 
         var result = MessageBuilder.BuildMessage(expectedCount, 0, request, []);
@@ -84,7 +84,7 @@ public class MessageBuilderTests
     {
         Request request = new(new())
         {
-            HeaderValues = new Dictionary<string, Value>()
+            Headers = new Dictionary<string, Value>()
             {
                 ["Header1"] = Value.Any(),
                 ["Header2"] = Value.Pattern("Value2"),
@@ -125,7 +125,7 @@ public class MessageBuilderTests
     {
         Request request = new(new())
         {
-            HeaderValues = new Dictionary<string, Value>()
+            Headers = new Dictionary<string, Value>()
             {
                 ["Content-Type"] = Value.Exact("application/json")
             },

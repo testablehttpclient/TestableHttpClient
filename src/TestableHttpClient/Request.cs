@@ -9,11 +9,11 @@ internal record Request : IEquatable<HttpRequestMessage>
 
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; }
 
-    public HttpMethod? HttpMethod { get; init; }
+    public HttpMethod? Method { get; init; }
     public UriPattern? RequestUri { get; init; }
-    public Version? HttpVersion { get; init; }
+    public Version? Version { get; init; }
 
-    public Dictionary<string, Value>? HeaderValues { get; init; }
+    public Dictionary<string, Value>? Headers { get; init; }
 
     public string? Content { get; init; }
 
@@ -23,14 +23,14 @@ internal record Request : IEquatable<HttpRequestMessage>
 
     public Request AddHeader(string headerName, Value headerValue)
     {
-        if (HeaderValues is null)
+        if (Headers is null)
         {
             Dictionary<string, Value> headerValues = new() { [headerName] = headerValue };
-            return this with { HeaderValues = headerValues };
+            return this with { Headers = headerValues };
         }
         else
         {
-            HeaderValues[headerName] = headerValue;
+            Headers[headerName] = headerValue;
             return this;
         }
     }
@@ -42,7 +42,7 @@ internal record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        if (HttpMethod is not null && other.Method != HttpMethod)
+        if (Method is not null && other.Method != Method)
         {
             return false;
         }
@@ -52,14 +52,14 @@ internal record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        if (HttpVersion is not null && other.Version != HttpVersion)
+        if (Version is not null && other.Version != Version)
         {
             return false;
         }
 
-        if (HeaderValues is not null)
+        if (Headers is not null)
         {
-            foreach (var keyValuePair in HeaderValues)
+            foreach (var keyValuePair in Headers)
             {
                 if (!other.Headers.HasHeader(keyValuePair.Key, keyValuePair.Value) && (other.Content is null || !other.Content.Headers.HasHeader(keyValuePair.Key, keyValuePair.Value)))
                 {

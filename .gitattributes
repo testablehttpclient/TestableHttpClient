@@ -5,4 +5,3 @@
 *.sln             text eol=crlf
 *.slnx            text eol=crlf
 *.csproj          text eol=crlf
-*.verified.http   text eol=crlf
