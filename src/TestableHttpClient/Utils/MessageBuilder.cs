@@ -166,7 +166,7 @@ internal static class MessageBuilder
         {
             AnyValue => "",
             ExactValue exactValue => exactValue.ExpectedValue,
-            PatternValue patternValue => patternValue.ExpectedPattern,
+            PatternValue patternValue => patternValue.ExpectedValue,
             _ => throw new UnreachableException()
         };
     }

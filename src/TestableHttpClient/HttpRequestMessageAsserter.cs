@@ -6,7 +6,8 @@
 internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 {
     private readonly List<string> _expectedConditions = new();
-    private Request expectedRequest;
+
+    private readonly RequestBuilder expectedRequestBuilder;
 
     /// <summary>
     /// Construct a new HttpRequestMessageAsserter.
@@ -17,7 +18,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         Options = options ?? new TestableHttpMessageHandlerOptions();
-        expectedRequest = new Request(Options.UriPatternMatchingOptions);
+        expectedRequestBuilder = new RequestBuilder(Options.UriPatternMatchingOptions);
     }
 
     /// <summary>
@@ -41,6 +42,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     private HttpRequestMessageAsserter Assert(int? expectedCount = null)
     {
         int actualCount;
+        Request expectedRequest = expectedRequestBuilder.Build();
         try
         {
             actualCount = Requests.Count(expectedRequest.Equals);
@@ -120,8 +122,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNullOrEmpty(pattern);
 
-        UriPattern uriPattern = UriPatternParser.Parse(pattern);
-        expectedRequest = expectedRequest with { RequestUri = uriPattern };
+        expectedRequestBuilder.WithRequestUri(pattern);
 
         return Assert(expectedNumberOfRequests);
     }
@@ -144,7 +145,9 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     private HttpRequestMessageAsserter WithHttpMethod(HttpMethod httpMethod, int? expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(httpMethod);
-        expectedRequest = expectedRequest with { Method = httpMethod };
+
+        expectedRequestBuilder.WithMethod(httpMethod);
+
         return Assert(expectedNumberOfRequests);
     }
 
@@ -168,7 +171,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(httpVersion);
 
-        expectedRequest = expectedRequest with { Version = httpVersion };
+        expectedRequestBuilder.WithVersion(httpVersion);
 
         return Assert(expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
     }
@@ -192,7 +195,8 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNullOrEmpty(headerName);
 
-        expectedRequest = expectedRequest.AddHeader(headerName);
+        expectedRequestBuilder.WithHeader(headerName);
+
         return Assert(expectedNumberOfRequests);
     }
 
@@ -218,7 +222,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(headerValue);
 
-        expectedRequest = expectedRequest.AddHeader(headerName, headerValue);
+        expectedRequestBuilder.WithHeader(headerName, headerValue);
 
         return Assert(expectedNumberOfRequests);
     }
@@ -242,7 +246,8 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Guard.ThrowIfNull(pattern);
 
-        expectedRequest = expectedRequest with { Content = pattern };
+        expectedRequestBuilder.WithContent(pattern);
+
         return Assert(expectedNumberOfRequests);
     }
 }

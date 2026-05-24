@@ -11,3 +11,10 @@ TestableHttpClient.IHttpRequestMessagesCheck.WithHttpVersion(System.Version! htt
 TestableHttpClient.IHttpRequestMessagesCheck.WithHttpVersion(System.Version! httpVersion, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 TestableHttpClient.IHttpRequestMessagesCheck.WithRequestUri(string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
 TestableHttpClient.IHttpRequestMessagesCheck.WithRequestUri(string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.RequestBuilder
+TestableHttpClient.RequestBuilder.WithContent(string! pattern) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithHeader(string! headerName) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithHeader(string! headerName, string! pattern) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithMethod(System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithRequestUri(string! pattern) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithVersion(System.Version! httpVersion) -> TestableHttpClient.RequestBuilder!

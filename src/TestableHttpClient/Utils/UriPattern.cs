@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Utils;
 
-internal sealed class UriPattern
+internal sealed record UriPattern
 {
     public static UriPattern Any { get; } = new UriPattern();
 
