@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace TestableHttpClient;
+﻿namespace TestableHttpClient;
 
 public static class HttpRequestMessagesCheckExtensions
 {

@@ -30,15 +30,6 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// </summary>
     public TestableHttpMessageHandlerOptions Options { get; }
 
-    private HttpRequestMessageAsserter Assert(int? expectedCount = null, string condition = "")
-    {
-        if (!string.IsNullOrEmpty(condition))
-        {
-            _expectedConditions.Add(condition);
-        }
-        return Assert(expectedCount);
-    }
-
     private HttpRequestMessageAsserter Assert(int? expectedCount = null)
     {
         int actualCount;
@@ -173,7 +164,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 
         expectedRequestBuilder.WithVersion(httpVersion);
 
-        return Assert(expectedNumberOfRequests, $"HTTP Version '{httpVersion}'");
+        return Assert(expectedNumberOfRequests);
     }
 
     /// <summary>
