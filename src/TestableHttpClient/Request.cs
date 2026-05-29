@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient;
 
-internal record Request : IEquatable<HttpRequestMessage>
+internal sealed record Request : IEquatable<HttpRequestMessage>
 {
     public Request(UriPatternMatchingOptions uriPatternMatchingOptions)
     {

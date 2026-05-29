@@ -1,7 +1,5 @@
 ﻿#if NETSTANDARD
 
-using System.Runtime.CompilerServices;
-
 namespace TestableHttpClient.Utils;
 
 internal static class NetStandardPollyFill
