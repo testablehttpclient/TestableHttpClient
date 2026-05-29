@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Response;
 
-public class ConfiguredResponseTests
+public sealed class ConfiguredResponseTests
 {
     [Fact]
     public void Constructor_NullResponse_ThrowsArgumentNullException()

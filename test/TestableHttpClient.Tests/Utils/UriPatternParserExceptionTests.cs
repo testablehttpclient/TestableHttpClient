@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Utils;
 
-public class UriPatternParserExceptionTests
+public sealed class UriPatternParserExceptionTests
 {
     [Fact]
     public void DefaultConstructor_SetsDefaultMessage()

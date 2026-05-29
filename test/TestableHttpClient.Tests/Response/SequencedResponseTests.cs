@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Response;
 
-public class SequencedResponseTests
+public sealed class SequencedResponseTests
 {
     [Fact]
     public void Constructor_NullCollection_ThrowsArgumentNullException()

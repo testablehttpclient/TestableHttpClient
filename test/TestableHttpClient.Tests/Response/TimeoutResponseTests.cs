@@ -4,7 +4,7 @@ using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class TimeoutResponseTests
+public sealed class TimeoutResponseTests
 {
     [Fact]
     public void ExecuteAsync_ByDefault_CancelsTheTaskAndToken()

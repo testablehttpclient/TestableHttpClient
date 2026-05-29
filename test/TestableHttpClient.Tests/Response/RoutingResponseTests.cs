@@ -5,7 +5,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class RoutingResponseTests
+public sealed class RoutingResponseTests
 {
     [Fact]
     public async Task ExecuteAsync_NoConfiguredRoutes_Returns404NotFound()

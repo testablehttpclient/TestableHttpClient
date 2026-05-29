@@ -5,7 +5,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class CustomizeJsonSerialization
+public sealed class CustomizeJsonSerialization
 {
     [Fact]
     public async Task ByDefault_CamelCasing_is_used_for_json_serialization()

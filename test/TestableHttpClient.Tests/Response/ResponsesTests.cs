@@ -4,7 +4,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class ResponsesTests
+public sealed class ResponsesTests
 {
     [Fact]
     public void Timeout_ReturnsTimeoutResponse()

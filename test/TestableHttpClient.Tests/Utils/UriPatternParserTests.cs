@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Utils;
 
-public class UriPatternParserTests
+public sealed class UriPatternParserTests
 {
     [Theory]
     [InlineData("*")]

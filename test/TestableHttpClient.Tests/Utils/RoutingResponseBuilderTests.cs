@@ -3,7 +3,7 @@ using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests.Utils;
 
-public class RoutingResponseBuilderTests
+public sealed class RoutingResponseBuilderTests
 
 {
     [Fact]

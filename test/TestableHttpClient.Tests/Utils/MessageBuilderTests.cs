@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Utils;
 
-public class MessageBuilderTests
+public sealed class MessageBuilderTests
 {
     [Fact]
     public void BuildMessage_NoExpectedCountZeroActualCountDefaultExpectedRequest()

@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
-public class WithFormUrlEncodedContent
+public sealed class WithFormUrlEncodedContent
 {
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_NulCheck_ThrowsArgumentNullException()

@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
-public class WithJsonContent
+public sealed class WithJsonContent
 {
     [Fact]
     public void WithJsonContent_WithoutNumberOfRequests_NullChecker_ThrowsArgumentNullException()

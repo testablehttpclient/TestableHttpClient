@@ -4,7 +4,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class SelectableResponseTests
+public sealed class SelectableResponseTests
 {
     [Fact]
     public void Constructor_NullSelector_ThrowsArgumentNullException()

@@ -4,7 +4,7 @@ using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class JsonResponseTests
+public sealed class JsonResponseTests
 {
     [Theory]
     [InlineData(null, "null")]

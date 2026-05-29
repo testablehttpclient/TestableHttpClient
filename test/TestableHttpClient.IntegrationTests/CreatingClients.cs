@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class CreatingClients
+public sealed class CreatingClients
 {
     [Fact]
     public async Task CreateASimpleHttpClient()

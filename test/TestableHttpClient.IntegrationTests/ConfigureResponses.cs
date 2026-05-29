@@ -2,7 +2,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class ConfigureResponses
+public sealed class ConfigureResponses
 {
     [Fact]
     public async Task UsingTestHandler_WithoutSettingUpResponse_Returns200OKWithoutContent()

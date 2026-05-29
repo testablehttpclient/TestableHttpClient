@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests;
 
-public class TestableHttpMessageHandlerOptionsTests
+public sealed class TestableHttpMessageHandlerOptionsTests
 {
     [Fact]
     public void Constructor_ByDefault_SetsSaneDefaults()

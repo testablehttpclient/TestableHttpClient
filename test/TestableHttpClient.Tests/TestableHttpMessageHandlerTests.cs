@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace TestableHttpClient.Tests;
 
-public class TestableHttpMessageHandlerTests
+public sealed class TestableHttpMessageHandlerTests
 {
     [Fact]
     public async Task SendAsync_WhenRequestsAreMade_LogsRequests()

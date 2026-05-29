@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.IntegrationTests;
 
-public class AssertingRequests
+public sealed class AssertingRequests
 {
     [Fact]
     public void BasicAssertionsWhenNoCallsWereMade()

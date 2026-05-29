@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Response;
 
-public class TextResponseTests
+public sealed class TextResponseTests
 {
     [Fact]
     public void TextResponse_WithNullString_ThrowsNewArgumentNullException()
