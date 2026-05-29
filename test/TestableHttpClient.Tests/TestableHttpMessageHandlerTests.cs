@@ -119,6 +119,38 @@ public class TestableHttpMessageHandlerTests
     }
 
     [Fact]
+    public void ShouldHaveMadeRequests_WhenRequestBuilderIsNUll_ThrowsArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequests(null!));
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests(x => { }));
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequestsWithNumberOfRequests_WhenRequestBuilderIsNUll_ThrowsArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequests(1, null!));
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequestsWithNumberOfRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests(1, x => { }));
+    }
+
+    [Fact]
     public async Task ClearRequests_ByDefault_ShouldClearRequests()
     {
         using TestableHttpMessageHandler sut = new();

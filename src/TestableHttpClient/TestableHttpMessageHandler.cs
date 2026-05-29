@@ -57,6 +57,34 @@ public class TestableHttpMessageHandler : HttpMessageHandler
     }
 
     /// <summary>
+    /// Asserts that one or more recorded HTTP requests match the criteria configured by the builder.
+    /// </summary>
+    /// <param name="builder">Action that configures a RequestBuilder to specify expected requests.</param>
+    /// <exception cref="ArgumentNullException">builder is `null`</exception>
+    /// <exception cref="HttpRequestMessageAssertionException">When no requests are made</exception>
+    [AssertionMethod]
+    public void ShouldHaveMadeRequests(Action<RequestBuilder> builder)
+    {
+        Guard.ThrowIfNull(builder);
+        new HttpRequestMessageAsserter(Requests, builder, Options).Assert();
+    }
+
+    /// <summary>
+    /// Asserts that a specific number of recorded HTTP requests match the criteria configured by the builder.
+    /// </summary>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <param name="builder">Action that configures a RequestBuilder to specify expected requests.</param>
+    /// <exception cref="ArgumentNullException">builder is `null`</exception>
+    /// <exception cref="HttpRequestMessageAssertionException">When no requests are made</exception>
+    [AssertionMethod]
+    public void ShouldHaveMadeRequests(int numberOfRequests, Action<RequestBuilder> builder)
+    {
+        Guard.ThrowIfNull(builder);
+
+        new HttpRequestMessageAsserter(Requests, builder, Options).Assert(numberOfRequests);
+    }
+
+    /// <summary>
     /// Clear the registration of requests that were made with this handler.
     /// </summary>
     /// Sometimes the TestableHttpMessageHandler can't be replaced with a new instance, but it can be cleared.

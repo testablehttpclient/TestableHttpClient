@@ -21,6 +21,14 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         expectedRequestBuilder = new RequestBuilder(Options.UriPatternMatchingOptions);
     }
 
+    public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, Action<RequestBuilder> requestBuilderAction, TestableHttpMessageHandlerOptions? options = null)
+    {
+        Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
+        Options = options ?? new TestableHttpMessageHandlerOptions();
+        expectedRequestBuilder = new RequestBuilder(Options.UriPatternMatchingOptions);
+        requestBuilderAction?.Invoke(expectedRequestBuilder);
+    }
+
     /// <summary>
     /// The list of requests received from <seealso cref="TestableHttpMessageHandler"/>.
     /// </summary>
@@ -30,7 +38,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// </summary>
     public TestableHttpMessageHandlerOptions Options { get; }
 
-    private HttpRequestMessageAsserter Assert(int? expectedCount = null)
+    internal HttpRequestMessageAsserter Assert(int? expectedCount = null)
     {
         int actualCount;
         Request expectedRequest = expectedRequestBuilder.Build();

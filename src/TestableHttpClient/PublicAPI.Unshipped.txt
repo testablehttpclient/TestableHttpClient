@@ -18,3 +18,5 @@ TestableHttpClient.RequestBuilder.WithHeader(string! headerName, string! pattern
 TestableHttpClient.RequestBuilder.WithMethod(System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.RequestBuilder!
 TestableHttpClient.RequestBuilder.WithRequestUri(string! pattern) -> TestableHttpClient.RequestBuilder!
 TestableHttpClient.RequestBuilder.WithVersion(System.Version! httpVersion) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.TestableHttpMessageHandler.ShouldHaveMadeRequests(int numberOfRequests, System.Action<TestableHttpClient.RequestBuilder!>! builder) -> void
+TestableHttpClient.TestableHttpMessageHandler.ShouldHaveMadeRequests(System.Action<TestableHttpClient.RequestBuilder!>! builder) -> void
