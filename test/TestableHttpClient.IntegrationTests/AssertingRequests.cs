@@ -32,6 +32,9 @@ public class AssertingRequests
 
         _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
+        testHandler.ShouldHaveMadeRequests(0, x => x.WithRequestUri("https://example.org"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(0, x => x.WithRequestUri("https://httpbin.org/get")));
+
         testHandler.ShouldHaveMadeRequestsTo("https://example.org", 0);
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get", 0));
     }
@@ -63,15 +66,15 @@ public class AssertingRequests
 
         _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*");
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*.org/get");
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("https://httpbin.org/*");
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("*://httpbin.org/get");
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("https://httpbin.org/get");
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("http://httpbin.org/get"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("https://httpbin.org/"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("https://*/post"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("https://example.org/"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://*"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://*.org/get"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://httpbin.org/*"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("*://httpbin.org/get"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://httpbin.org/get"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("http://httpbin.org/get")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://httpbin.org/")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://*/post")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("https://example.org/")));
     }
 
     [Fact]
@@ -95,9 +98,9 @@ public class AssertingRequests
 
         _ = await client.GetAsync("https://httpbin.org/get?email=admin@example.com", TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=admin@example.com");
-        testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=*");
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithRequestUri("?email=admin%40example.com"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("?email=admin@example.com"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("?email=*"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithRequestUri("?email=admin%40example.com")));
     }
 
     [Fact]
@@ -109,6 +112,11 @@ public class AssertingRequests
         _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
         using StringContent content = new("");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
+
+        testHandler.ShouldHaveMadeRequests(x => x.WithMethod(HttpMethod.Get).WithRequestUri("*/get"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithMethod(HttpMethod.Post).WithRequestUri("*/get")));
+        testHandler.ShouldHaveMadeRequests(x => x.WithMethod(HttpMethod.Post).WithRequestUri("*/post"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithMethod(HttpMethod.Get).WithRequestUri("*/post")));
 
         testHandler.ShouldHaveMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Get);
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequestsTo("*/get").WithHttpMethod(HttpMethod.Post));
@@ -124,13 +132,13 @@ public class AssertingRequests
         client.DefaultRequestHeaders.Add("api-version", "1.0");
         _ = await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithHeader("api-version");
-        testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "1.0");
-        testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "1*");
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("api-version"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("api-version", "1.0"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("api-version", "1*"));
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("my-version"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "1"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("api-version", "2*"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithHeader("my-version")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithHeader("api-version", "1")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithHeader("api-version", "2*")));
     }
 
     [Fact]
@@ -142,15 +150,15 @@ public class AssertingRequests
         using StringContent content = new("", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithHeader("content-type");
-        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type");
-        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "application/json; charset=utf-8");
-        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "application/json*");
-        testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "*charset=utf-8");
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("content-type"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Type"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Type", "application/json; charset=utf-8"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Type", "application/json*"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Type", "*charset=utf-8"));
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("Content-Disposition"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "application/json"));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithHeader("Content-Type", "*=utf-16"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Disposition")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Type", "application/json")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithHeader("Content-Type", "*=utf-16")));
     }
 
     [Fact]
@@ -162,12 +170,12 @@ public class AssertingRequests
         using StringContent content = new("my special content");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithContent("my special content");
-        testHandler.ShouldHaveMadeRequests().WithContent("my*content");
-        testHandler.ShouldHaveMadeRequests().WithContent("*");
+        testHandler.ShouldHaveMadeRequests(x => x.WithContent("my special content"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithContent("my*content"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithContent("*"));
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent(""));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent("my"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithContent("")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithContent("my")));
     }
 
     [Fact]
@@ -181,12 +189,12 @@ public class AssertingRequests
             _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
         }
 
-        testHandler.ShouldHaveMadeRequests().WithContent("my special content");
-        testHandler.ShouldHaveMadeRequests().WithContent("my*content");
-        testHandler.ShouldHaveMadeRequests().WithContent("*");
+        testHandler.ShouldHaveMadeRequests(x => x.WithContent("my special content"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithContent("my*content"));
+        testHandler.ShouldHaveMadeRequests(x => x.WithContent("*"));
 
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent(""));
-        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests().WithContent("my"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithContent("")));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(x => x.WithContent("my")));
     }
 
     [Fact]
