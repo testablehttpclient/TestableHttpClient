@@ -4,6 +4,7 @@ static TestableHttpClient.RequestBuilderExtension.Post(this TestableHttpClient.R
 static TestableHttpClient.RequestBuilderExtension.PostAsJson(this TestableHttpClient.RequestBuilder! builder, string! pattern, object? content) -> TestableHttpClient.RequestBuilder!
 static TestableHttpClient.RequestBuilderExtension.WithFormUrlEncodedContent(this TestableHttpClient.RequestBuilder! builder, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string?, string?>>! formValues) -> TestableHttpClient.RequestBuilder!
 static TestableHttpClient.RequestBuilderExtension.WithJsonContent(this TestableHttpClient.RequestBuilder! builder, object? content) -> TestableHttpClient.RequestBuilder!
+static TestableHttpClient.RequestBuilderExtension.WithJsonContent(this TestableHttpClient.RequestBuilder! builder, object? content, System.Text.Json.JsonSerializerOptions? options) -> TestableHttpClient.RequestBuilder!
 TestableHttpClient.IHttpRequestMessagesCheck.WithContent(string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
 TestableHttpClient.IHttpRequestMessagesCheck.WithContent(string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!

@@ -15,10 +15,8 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="httpRequestMessages">The list of requests to assert on.</param>
     /// <param name="options">Options that could be used by several assertions.</param>
     public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, TestableHttpMessageHandlerOptions? options = null)
+        : this(httpRequestMessages, _ => { }, options)
     {
-        Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
-        Options = options ?? new TestableHttpMessageHandlerOptions();
-        expectedRequestBuilder = new RequestBuilder(Options);
     }
 
     public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, Action<RequestBuilder> requestBuilderAction, TestableHttpMessageHandlerOptions? options = null)
@@ -33,6 +31,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// The list of requests received from <seealso cref="TestableHttpMessageHandler"/>.
     /// </summary>
     public IEnumerable<HttpRequestMessage> Requests { get; private set; }
+
     /// <summary>
     /// Options that could be used by several assertions.
     /// </summary>
@@ -73,7 +72,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
-    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
+    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
     /// <summary>
@@ -84,11 +83,11 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
-    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
+    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
 
     [AssertionMethod]
-    [Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
+    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.")]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
     {
         if (!string.IsNullOrEmpty(condition))

@@ -1,4 +1,6 @@
-﻿using TestableHttpClient.Utils;
+﻿using System.Text.Json;
+
+using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests;
 
@@ -130,6 +132,27 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Null(request.Version);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
         Assert.Equal("{\"hello\":1}", request.Content);
+    }
+
+    [Fact]
+    public void WithJsonContent_WithCustomOptions_ShouldBuildCorrectRequest()
+    {
+        JsonSerializerOptions options = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
+        Request request = sut.WithJsonContent(new { hello = 1 }, options).Build();
+
+        Assert.Null(request.Method);
+        Assert.Null(request.RequestUri);
+        Assert.Null(request.Version);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
+        Assert.Equal("""
+            {
+              "hello": 1
+            }
+            """, request.Content);
     }
 
     [Fact]

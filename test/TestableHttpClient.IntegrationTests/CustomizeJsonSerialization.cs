@@ -51,7 +51,7 @@ public sealed class CustomizeJsonSerialization
         using HttpClient client = sut.CreateClient();
         await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, cancellationToken: TestContext.Current.CancellationToken);
 
-        sut.ShouldHaveMadeRequests().WithJsonContent(new { Name = "Charlie" });
+        sut.ShouldHaveMadeRequests(x => x.WithJsonContent(new { Name = "Charlie" }));
     }
 
     [Fact]
@@ -67,6 +67,6 @@ public sealed class CustomizeJsonSerialization
 
         await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, options, cancellationToken: TestContext.Current.CancellationToken);
 
-        sut.ShouldHaveMadeRequests().WithJsonContent(new { Name = "Charlie" }, options);
+        sut.ShouldHaveMadeRequests(x => x.WithJsonContent(new { Name = "Charlie" }, options));
     }
 }

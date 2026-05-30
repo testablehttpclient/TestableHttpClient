@@ -21,11 +21,13 @@ public static class RequestBuilderExtension
         return builder.WithMethod(HttpMethod.Post).WithRequestUri(pattern).WithJsonContent(content);
     }
 
-    public static RequestBuilder WithJsonContent(this RequestBuilder builder, object? content)
+    public static RequestBuilder WithJsonContent(this RequestBuilder builder, object? content) => builder.WithJsonContent(content, null);
+
+    public static RequestBuilder WithJsonContent(this RequestBuilder builder, object? content, JsonSerializerOptions? options)
     {
         Guard.ThrowIfNull(builder);
 
-        string jsonContent = JsonSerializer.Serialize(content, builder.Options.JsonSerializerOptions);
+        string jsonContent = JsonSerializer.Serialize(content, options ?? builder.Options.JsonSerializerOptions);
 
         return builder.WithContent(jsonContent).WithHeader("Content-Type", "application/json*");
     }

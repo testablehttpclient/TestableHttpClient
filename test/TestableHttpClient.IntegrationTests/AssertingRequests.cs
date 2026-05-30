@@ -35,6 +35,9 @@ public sealed class AssertingRequests
         testHandler.ShouldHaveMadeRequests(0, x => x.WithRequestUri("https://example.org"));
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(0, x => x.WithRequestUri("https://httpbin.org/get")));
 
+        testHandler.ShouldHaveMadeRequests(0, x => x.Get("https://example.org"));
+        Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequests(0, x => x.Get("https://httpbin.org/get")));
+
         testHandler.ShouldHaveMadeRequestsTo("https://example.org", 0);
         Assert.Throws<HttpRequestMessageAssertionException>(() => testHandler.ShouldHaveMadeRequestsTo("https://httpbin.org/get", 0));
     }
@@ -206,6 +209,6 @@ public sealed class AssertingRequests
         using StringContent content = new("{}", Encoding.UTF8, "application/json");
         _ = await client.PostAsync("https://httpbin.org/post", content, TestContext.Current.CancellationToken);
 
-        testHandler.ShouldHaveMadeRequests().WithJsonContent(new { });
+        testHandler.ShouldHaveMadeRequests(x => x.WithJsonContent(new { }));
     }
 }
