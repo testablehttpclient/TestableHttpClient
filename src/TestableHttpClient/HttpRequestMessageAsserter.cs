@@ -18,14 +18,14 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     {
         Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         Options = options ?? new TestableHttpMessageHandlerOptions();
-        expectedRequestBuilder = new RequestBuilder(Options.UriPatternMatchingOptions);
+        expectedRequestBuilder = new RequestBuilder(Options);
     }
 
     public HttpRequestMessageAsserter(IEnumerable<HttpRequestMessage> httpRequestMessages, Action<RequestBuilder> requestBuilderAction, TestableHttpMessageHandlerOptions? options = null)
     {
         Requests = httpRequestMessages ?? throw new ArgumentNullException(nameof(httpRequestMessages));
         Options = options ?? new TestableHttpMessageHandlerOptions();
-        expectedRequestBuilder = new RequestBuilder(Options.UriPatternMatchingOptions);
+        expectedRequestBuilder = new RequestBuilder(Options);
         requestBuilderAction?.Invoke(expectedRequestBuilder);
     }
 

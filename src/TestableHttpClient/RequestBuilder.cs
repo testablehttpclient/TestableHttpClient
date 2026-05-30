@@ -3,10 +3,12 @@
 public sealed class RequestBuilder
 {
     private Request request;
+    internal TestableHttpMessageHandlerOptions Options { get; }
 
-    internal RequestBuilder(UriPatternMatchingOptions uriPatternMatchingOptions)
+    internal RequestBuilder(TestableHttpMessageHandlerOptions? options = null)
     {
-        request = new(uriPatternMatchingOptions);
+        Options = options ?? new();
+        request = new(Options.UriPatternMatchingOptions);
     }
 
     public RequestBuilder WithMethod(HttpMethod httpMethod)

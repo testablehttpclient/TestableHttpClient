@@ -4,7 +4,7 @@ namespace TestableHttpClient.Tests;
 
 public sealed class RequestBuilderTests
 {
-    private readonly RequestBuilder sut = new(new UriPatternMatchingOptions());
+    private readonly RequestBuilder sut = new(new());
 
     [Fact]
     public void Build_ByDefault_CreatesEmptyRequest()
