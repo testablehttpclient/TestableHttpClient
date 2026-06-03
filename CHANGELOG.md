@@ -7,16 +7,18 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [0.12] - unplanned
 ### Deprecated
 - The methods `WithRequestHeader` and `WithContentHeader` are deprecated, please use `WithHeader` instead.
-- The `WithFilter` method is deprecated and will be made internal or be removed. If there is a specific assertion that is missing, please open an issue.
+- The `WithFilter` method is deprecated and will be removed. If there is a specific assertion that is missing, please open an issue.
 
 ### Removed
 - .NET 6.0 target, since it is no longer supported
 - .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
-- automatic nuget updates by dependabot, since we want to test against the lowest supported nuget version and most of the time dependabot does not choose the right package.
+- Automatic nuget updates by dependabot, since we want to test against the lowest supported nuget version and most of the time dependabot does not choose the right package.
 
 ### Added
 - Support for .NET 9.0
 - Support for .NET 10.0
+- The class `RequestBuilder` to 'build' requests for assertion
+- The methods `TestableHttpClient.ShouldHaveMadeRequests(Action<RequestBuilder>)` and `TestableHttpClient.ShouldHaveMadeRequests(int, Action<RequestBuilder>)` as the new assertion mechanism
 
 ### Changed
 - The TestableHttpMessageHandler now makes a clone of the original request, so that the original request can be disposed.  

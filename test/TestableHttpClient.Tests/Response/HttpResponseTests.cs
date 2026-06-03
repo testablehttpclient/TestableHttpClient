@@ -4,7 +4,7 @@ using TestableHttpClient.Response;
 
 namespace TestableHttpClient.Tests.Response;
 
-public class HttpResponseTests
+public sealed class HttpResponseTests
 {
     [Fact]
     public async Task ExecuteAsync_WithNullContext_ThrowsArgumentNullException()

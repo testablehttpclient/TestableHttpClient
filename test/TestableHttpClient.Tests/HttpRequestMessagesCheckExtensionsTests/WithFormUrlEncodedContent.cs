@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
-public class WithFormUrlEncodedContent
+public sealed class WithFormUrlEncodedContent
 {
     [Fact]
     public void WithFormUrlEncodedContent_WithoutNumberOfRequests_NulCheck_ThrowsArgumentNullException()
@@ -88,7 +88,12 @@ public class WithFormUrlEncodedContent
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]));
 
-        Assert.Equal("Expected at least one request to be made with content 'username=alice', but no requests were made.", exception.Message);
+        Assert.Equal("""
+            Expected at least one request to be made with content:
+              username=alice
+            , but no requests were made.
+            """, exception.Message);
+
     }
 
     [Fact]
@@ -103,6 +108,12 @@ public class WithFormUrlEncodedContent
 
         var exception = Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]));
 
-        Assert.Equal("Expected at least one request to be made with content 'username=alice', header 'Content-Type' and value 'application/x-www-form-urlencoded*', but no requests were made.", exception.Message);
+        Assert.Equal("""
+            Expected at least one request to be made with headers:
+              Content-Type: 'application/x-www-form-urlencoded*'
+            and content:
+              username=alice
+            , but no requests were made.
+            """, exception.Message);
     }
 }

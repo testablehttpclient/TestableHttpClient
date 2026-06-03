@@ -1,5 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.HttpRequestMessageAsserterTests;
 
+[Obsolete("WithFilter will be made internal, since it should no longer be necesary to use.")]
 public sealed class WithFilter
 {
     [Fact]

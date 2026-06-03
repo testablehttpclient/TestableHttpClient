@@ -5,7 +5,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class CustomizeJsonSerialization
+public sealed class CustomizeJsonSerialization
 {
     [Fact]
     public async Task ByDefault_CamelCasing_is_used_for_json_serialization()
@@ -51,7 +51,7 @@ public class CustomizeJsonSerialization
         using HttpClient client = sut.CreateClient();
         await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, cancellationToken: TestContext.Current.CancellationToken);
 
-        sut.ShouldHaveMadeRequests().WithJsonContent(new { Name = "Charlie" });
+        sut.ShouldHaveMadeRequests(x => x.WithJsonContent(new { Name = "Charlie" }));
     }
 
     [Fact]
@@ -67,6 +67,6 @@ public class CustomizeJsonSerialization
 
         await client.PostAsJsonAsync("http://localhost", new { Name = "Charlie" }, options, cancellationToken: TestContext.Current.CancellationToken);
 
-        sut.ShouldHaveMadeRequests().WithJsonContent(new { Name = "Charlie" }, options);
+        sut.ShouldHaveMadeRequests(x => x.WithJsonContent(new { Name = "Charlie" }, options));
     }
 }

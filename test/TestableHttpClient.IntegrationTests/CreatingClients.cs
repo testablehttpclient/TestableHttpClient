@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class CreatingClients
+public sealed class CreatingClients
 {
     [Fact]
     public async Task CreateASimpleHttpClient()
@@ -23,7 +23,7 @@ public class CreatingClients
 
         await client.GetAsync("https://httpbin.org/get", TestContext.Current.CancellationToken);
 
-        testableHttpMessageHandler.ShouldHaveMadeRequests().WithHeader("test", "test");
+        testableHttpMessageHandler.ShouldHaveMadeRequests(x => x.WithHeader("test", "test"));
     }
 
     [Fact]

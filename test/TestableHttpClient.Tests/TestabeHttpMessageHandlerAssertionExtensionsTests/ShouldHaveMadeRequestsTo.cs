@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests.TestabeHttpMessageHandlerAssertionExtensionsTests;
 
-public class ShouldHaveMadeRequestsTo
+public sealed class ShouldHaveMadeRequestsTo
 {
     [Fact]
     public void ShouldHaveMadeRequestsTo_NullHandler_ThrowsArgumentNullException()

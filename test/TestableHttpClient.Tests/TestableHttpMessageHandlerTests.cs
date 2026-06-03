@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace TestableHttpClient.Tests;
 
-public class TestableHttpMessageHandlerTests
+public sealed class TestableHttpMessageHandlerTests
 {
     [Fact]
     public async Task SendAsync_WhenRequestsAreMade_LogsRequests()
@@ -116,6 +116,38 @@ public class TestableHttpMessageHandlerTests
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         Assert.NotNull(response.RequestMessage);
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequests_WhenRequestBuilderIsNUll_ThrowsArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequests(null!));
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests(x => { }));
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequestsWithNumberOfRequests_WhenRequestBuilderIsNUll_ThrowsArgumentNullException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<ArgumentNullException>(() => sut.ShouldHaveMadeRequests(1, null!));
+    }
+
+    [Fact]
+    public void ShouldHaveMadeRequestsWithNumberOfRequests_WhenNoRequestsWereMade_ThrowsHttpRequestMessageAssertionException()
+    {
+        using TestableHttpMessageHandler sut = new();
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.ShouldHaveMadeRequests(1, x => { }));
     }
 
     [Fact]

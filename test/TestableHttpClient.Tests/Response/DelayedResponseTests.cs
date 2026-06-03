@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Response;
 
-public class DelayedResponseTests
+public sealed class DelayedResponseTests
 {
     [Fact]
     public void Constructor_NullResponse_ThrowsArgumentNullException()

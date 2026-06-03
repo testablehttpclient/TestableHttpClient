@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests.Utils;
 
-public class UriPatternTests
+public sealed class UriPatternTests
 {
     private readonly UriPatternMatchingOptions defaultOptions = new();
 

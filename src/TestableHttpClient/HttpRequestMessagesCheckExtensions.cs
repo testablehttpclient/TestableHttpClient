@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace TestableHttpClient;
+﻿namespace TestableHttpClient;
 
 public static class HttpRequestMessagesCheckExtensions
 {
@@ -138,16 +136,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="jsonObject">The object representation of the expected request content.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject)
-    {
-
-        Guard.ThrowIfNull(check);
-
-        var jsonString = JsonSerializer.Serialize(jsonObject, check.Options.JsonSerializerOptions);
-
-        return check.WithContent(jsonString)
-                    .WithHeader("Content-Type", "application/json*");
-    }
+    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject) => check.WithJsonContent(jsonObject, null!);
 
     /// <summary>
     /// Asserts whether requests are made with specific json content.
@@ -173,15 +162,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="jsonObject">The object representation of the expected request content.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int expectedNumberOfRequests)
-    {
-        Guard.ThrowIfNull(check);
-
-        var jsonString = JsonSerializer.Serialize(jsonObject, check.Options.JsonSerializerOptions);
-
-        return check.WithContent(jsonString, expectedNumberOfRequests)
-                    .WithHeader("Content-Type", "application/json*", expectedNumberOfRequests);
-    }
+    public static IHttpRequestMessagesCheck WithJsonContent(this IHttpRequestMessagesCheck check, object? jsonObject, int expectedNumberOfRequests) => check.WithJsonContent(jsonObject, null!, expectedNumberOfRequests);
 
     /// <summary>
     /// Asserts whether requests are made with specific json content.

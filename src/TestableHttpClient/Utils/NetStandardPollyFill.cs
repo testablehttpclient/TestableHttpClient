@@ -13,6 +13,16 @@ internal static class NetStandardPollyFill
     {
         return input.Replace(oldValue, newValue);
     }
+
+    public static StringBuilder Append(this StringBuilder builder, IFormatProvider? provider, string handler)
+    {
+        return builder.Append(handler);
+    }
+
+    public static StringBuilder AppendLine(this StringBuilder builder, IFormatProvider? provider, string handler)
+    {
+        return builder.AppendLine(handler);
+    }
 }
 
 #endif

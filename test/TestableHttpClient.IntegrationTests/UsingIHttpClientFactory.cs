@@ -9,7 +9,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class UsingIHttpClientFactory
+public sealed class UsingIHttpClientFactory
 {
     [Fact]
     public async Task ConfigureIHttpClientFactoryToUseTestableHttpClient()

@@ -9,7 +9,7 @@ using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.IntegrationTests;
 
-public class TestingRetryMechanisms
+public sealed class TestingRetryMechanisms
 {
     [Fact]
     public async Task TestingRetryPolicies()

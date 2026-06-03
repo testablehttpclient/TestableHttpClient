@@ -1,7 +1,7 @@
 ﻿namespace TestableHttpClient.Tests.HttpRequestMessagesCheckExtensionsTests;
 
 [Obsolete("Use WithHeader")]
-public class WithRequestHeaderName
+public sealed class WithRequestHeaderName
 {
     [Fact]
     public void WithRequestHeader_WithoutNumberOfRequests_NullCheck_ThrowsArgumentNullException()

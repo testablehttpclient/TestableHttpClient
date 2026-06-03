@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests;
 
-public partial class TestableHttpMessageHandlerExtensionsTests
+public sealed partial class TestableHttpMessageHandlerExtensionsTests
 {
     [Fact]
     public void CreateClientWithConfigurer_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
@@ -61,7 +61,7 @@ public partial class TestableHttpMessageHandlerExtensionsTests
     [Fact]
     public void CreateClientWithConfigurer_CallsConfigureClientWithClientToReturn()
     {
-        HttpClient? capturedClient= null;
+        HttpClient? capturedClient = null;
         using TestableHttpMessageHandler sut = new();
         void configureClient(HttpClient client) => capturedClient = client;
 

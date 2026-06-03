@@ -1,6 +1,6 @@
 ﻿namespace TestableHttpClient.Tests;
 
-public class RouteParserExceptionTests
+public sealed class RouteParserExceptionTests
 {
     [Fact]
     public void DefaultConstructor_SetsDefaultMessage()

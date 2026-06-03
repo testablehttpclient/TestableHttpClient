@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Tests;
 
-public partial class TestableHttpMessageHandlerExtensionsTests
+public sealed partial class TestableHttpMessageHandlerExtensionsTests
 {
     [Fact]
     public void CreateClient_NullTestableHttpMessageHandler_ThrowsArgumentNullException()
