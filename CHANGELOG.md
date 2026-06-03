@@ -25,6 +25,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   This change also makes it possible to assert the content on .NET Framework.
 - The methods `WithRequestHeader` and `WithContentHeader` now work the same as `WithHeader`, this might lead to slight changes in the behavior since now the headers from both the request and the content of that request are checked.
 - Moved `WithHttpMethod`, `WithRequestUri`, `WithHttpVersion`, `WithHeader` and `WithContent` from `HttpRequestMessagesCheckExtensions` to `HttpRequestMessageAsserter` and specify them on the `IHttpRequestMessagesCheck` interface.
+- The methods `Map` and `MapFallBackResponse` on `IRoutingResponseBuilder` now return an `IRoutingResponseBuider` making it possible to chain calls.
 
 ## [0.11] - 2024-06-15
 ### Removed

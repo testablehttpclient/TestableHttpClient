@@ -26,8 +26,6 @@ TestableHttpClient.UriPatternMatchingOptions.SchemeCaseInsensitive.set -> void
 TestableHttpClient.UriPatternMatchingOptions.UriPatternMatchingOptions() -> void
 
 TestableHttpClient.IRoutingResponseBuilder
-TestableHttpClient.IRoutingResponseBuilder.Map(string! route, TestableHttpClient.IResponse! response) -> void
-TestableHttpClient.IRoutingResponseBuilder.MapFallBackResponse(TestableHttpClient.IResponse! fallBackResponse) -> void
 
 TestableHttpClient.IResponse
 TestableHttpClient.IResponse.ExecuteAsync(TestableHttpClient.HttpResponseContext! context, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
