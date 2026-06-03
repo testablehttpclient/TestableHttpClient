@@ -5,6 +5,9 @@ TestableHttpClient.TestableHttpMessageHandler.Options.get -> TestableHttpClient.
 TestableHttpClient.TestableHttpMessageHandler.Requests.get -> System.Collections.Generic.IEnumerable<System.Net.Http.HttpRequestMessage!>!
 TestableHttpClient.TestableHttpMessageHandler.RespondWith(TestableHttpClient.IResponse! response) -> void
 TestableHttpClient.TestableHttpMessageHandler.TestableHttpMessageHandler() -> void
+TestableHttpClient.TestableHttpMessageHandler.ShouldHaveMadeRequests(int numberOfRequests, System.Action<TestableHttpClient.RequestBuilder!>! builder) -> void
+TestableHttpClient.TestableHttpMessageHandler.ShouldHaveMadeRequests(System.Action<TestableHttpClient.RequestBuilder!>! builder) -> void
+override TestableHttpClient.TestableHttpMessageHandler.Dispose(bool disposing) -> void
 override TestableHttpClient.TestableHttpMessageHandler.SendAsync(System.Net.Http.HttpRequestMessage! request, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage!>!
 
 TestableHttpClient.TestableHttpMessageHandlerOptions
@@ -26,6 +29,8 @@ TestableHttpClient.UriPatternMatchingOptions.SchemeCaseInsensitive.set -> void
 TestableHttpClient.UriPatternMatchingOptions.UriPatternMatchingOptions() -> void
 
 TestableHttpClient.IRoutingResponseBuilder
+TestableHttpClient.IRoutingResponseBuilder.Map(string! route, TestableHttpClient.IResponse! response) -> TestableHttpClient.IRoutingResponseBuilder!
+TestableHttpClient.IRoutingResponseBuilder.MapFallBackResponse(TestableHttpClient.IResponse! fallBackResponse) -> TestableHttpClient.IRoutingResponseBuilder!
 
 TestableHttpClient.IResponse
 TestableHttpClient.IResponse.ExecuteAsync(TestableHttpClient.HttpResponseContext! context, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
@@ -66,6 +71,18 @@ TestableHttpClient.IHttpRequestMessagesCheck.Options.get -> TestableHttpClient.T
 TestableHttpClient.IHttpRequestMessagesCheck.WithFilter(System.Func<System.Net.Http.HttpRequestMessage!, bool>! requestFilter, int expectedNumberOfRequests, string! condition) -> TestableHttpClient.IHttpRequestMessagesCheck!
 TestableHttpClient.IHttpRequestMessagesCheck.WithFilter(System.Func<System.Net.Http.HttpRequestMessage!, bool>! requestFilter, int? expectedNumberOfRequests, string! condition) -> TestableHttpClient.IHttpRequestMessagesCheck!
 TestableHttpClient.IHttpRequestMessagesCheck.WithFilter(System.Func<System.Net.Http.HttpRequestMessage!, bool>! requestFilter, string! condition) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithContent(string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithContent(string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName, string! headerValue) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHeader(string! headerName, string! headerValue, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpMethod(System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpMethod(System.Net.Http.HttpMethod! httpMethod, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpVersion(System.Version! httpVersion) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithHttpVersion(System.Version! httpVersion, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithRequestUri(string! pattern) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithRequestUri(string! pattern, int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
 
 TestableHttpClient.HttpRequestMessageAssertionException
 TestableHttpClient.HttpRequestMessageAssertionException.HttpRequestMessageAssertionException() -> void
@@ -92,3 +109,19 @@ TestableHttpClient.Utils.UriPatternParserException
 TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException() -> void
 TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException(string! message) -> void
 TestableHttpClient.Utils.UriPatternParserException.UriPatternParserException(string! message, System.Exception! innerException) -> void
+
+TestableHttpClient.RequestBuilder
+TestableHttpClient.RequestBuilder.WithContent(string! pattern) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithHeader(string! headerName) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithHeader(string! headerName, string! pattern) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithMethod(System.Net.Http.HttpMethod! httpMethod) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithRequestUri(string! pattern) -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithVersion(System.Version! httpVersion) -> TestableHttpClient.RequestBuilder!
+
+TestableHttpClient.RequestBuilderExtension
+static TestableHttpClient.RequestBuilderExtension.Get(this TestableHttpClient.RequestBuilder! builder, string! pattern) -> TestableHttpClient.RequestBuilder!
+static TestableHttpClient.RequestBuilderExtension.Post(this TestableHttpClient.RequestBuilder! builder, string! pattern, string! content) -> TestableHttpClient.RequestBuilder!
+static TestableHttpClient.RequestBuilderExtension.PostAsJson(this TestableHttpClient.RequestBuilder! builder, string! pattern, object? content) -> TestableHttpClient.RequestBuilder!
+static TestableHttpClient.RequestBuilderExtension.WithFormUrlEncodedContent(this TestableHttpClient.RequestBuilder! builder, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string?, string?>>! formValues) -> TestableHttpClient.RequestBuilder!
+static TestableHttpClient.RequestBuilderExtension.WithJsonContent(this TestableHttpClient.RequestBuilder! builder, object? content) -> TestableHttpClient.RequestBuilder!
+static TestableHttpClient.RequestBuilderExtension.WithJsonContent(this TestableHttpClient.RequestBuilder! builder, object? content, System.Text.Json.JsonSerializerOptions? options) -> TestableHttpClient.RequestBuilder!
