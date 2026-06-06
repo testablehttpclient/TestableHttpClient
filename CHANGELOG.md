@@ -4,14 +4,14 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.12] - unplanned
+## [0.12] - 2026-06-06
 ### Deprecated
 - The methods `WithRequestHeader` and `WithContentHeader` are deprecated, please use `WithHeader` instead.
 - The `WithFilter` method is deprecated and will be removed. If there is a specific assertion that is missing, please open an issue.
 
 ### Removed
 - .NET 6.0 target, since it is no longer supported
-- .NET Framework 4.6.2, 4.7.0 and 4.7.2, since these can't be tested using xUnit v3
+- .NET Framework 4.6.2, 4.7.0 and 4.7.1, since these can't be tested using xUnit v3
 - Automatic nuget updates by dependabot, since we want to test against the lowest supported nuget version and most of the time dependabot does not choose the right package.
 
 ### Added

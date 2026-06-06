@@ -7,7 +7,7 @@ internal abstract record Value
     private static readonly Value _anyValue = new AnyValue();
     public static Value Any() => _anyValue;
     public static Value Exact(string value) => new ExactValue(value);
-    public static Value Pattern(string pattern) => new PatternValue(pattern);
+    public static Value Pattern(string pattern) => pattern == "*" ? _anyValue : new PatternValue(pattern);
     internal abstract bool Matches(string value, bool ignoreCase);
 }
 
