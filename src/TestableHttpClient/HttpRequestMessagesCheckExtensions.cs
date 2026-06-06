@@ -9,13 +9,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
@@ -25,13 +20,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName, expectedNumberOfRequests);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -41,13 +31,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName, headerValue);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -58,13 +43,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName, headerValue, expectedNumberOfRequests);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithRequestHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
@@ -73,13 +53,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="check">The implementation that hold all the request messages.</param>
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
@@ -89,13 +64,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName, expectedNumberOfRequests);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, int expectedNumberOfRequests) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -105,13 +75,8 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerName">The name of the header that is expected.</param>
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
-    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue)
-    {
-        Guard.ThrowIfNull(check);
-
-        return check.WithHeader(headerName, headerValue);
-    }
+    [Obsolete("Use WithHeader instead.", true)]
+    public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue) => check;
 
     /// <summary>
     /// Asserts whether requests were made with a specific header name and value.
@@ -122,7 +87,7 @@ public static class HttpRequestMessagesCheckExtensions
     /// <param name="headerValue">The value of the expected header, supports wildcards.</param>
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
-    [Obsolete("Use WithHeader instead.")]
+    [Obsolete("Use WithHeader instead.", true)]
     public static IHttpRequestMessagesCheck WithContentHeader(this IHttpRequestMessagesCheck check, string headerName, string headerValue, int expectedNumberOfRequests)
     {
         Guard.ThrowIfNull(check);

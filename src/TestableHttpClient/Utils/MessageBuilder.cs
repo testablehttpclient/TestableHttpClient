@@ -5,7 +5,7 @@ namespace TestableHttpClient.Utils;
 
 internal static class MessageBuilder
 {
-    internal static string BuildMessage(int? expectedCount, int actualCount, Request expectedRequest, IEnumerable<string> conditions)
+    internal static string BuildMessage(int? expectedCount, int actualCount, Request expectedRequest)
     {
         var pass = expectedCount switch
         {
@@ -60,12 +60,6 @@ internal static class MessageBuilder
             content = contentBuilder.ToString();
         }
 
-        var expectedConditions = string.Empty;
-        if (conditions is not null && conditions.Any())
-        {
-            expectedConditions = $" with {string.Join(", ", conditions)}";
-        }
-
         var actualMessage = actualCount switch
         {
             0 => "no requests were made",
@@ -75,8 +69,8 @@ internal static class MessageBuilder
 
         return pass switch
         {
-            true => $"Expected {expectedMessage} to be made{requestUri}{headers}{content}{expectedConditions}, and {actualMessage}.",
-            false => $"Expected {expectedMessage} to be made{requestUri}{headers}{content}{expectedConditions}, but {actualMessage}."
+            true => $"Expected {expectedMessage} to be made{requestUri}{headers}{content}, and {actualMessage}.",
+            false => $"Expected {expectedMessage} to be made{requestUri}{headers}{content}, but {actualMessage}."
         };
     }
 

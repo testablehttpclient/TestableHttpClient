@@ -5,8 +5,6 @@
 /// </summary>
 internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 {
-    private readonly List<string> _expectedConditions = new();
-
     private readonly RequestBuilder expectedRequestBuilder;
 
     /// <summary>
@@ -58,7 +56,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
 
         if (!pass)
         {
-            var message = MessageBuilder.BuildMessage(expectedCount, actualCount, expectedRequest, _expectedConditions);
+            var message = MessageBuilder.BuildMessage(expectedCount, actualCount, expectedRequest);
             throw new HttpRequestMessageAssertionException(message);
         }
 
@@ -72,7 +70,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
-    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.")]
+    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.", true)]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, string condition) => WithFilter(requestFilter, null, condition);
 
     /// <summary>
@@ -83,21 +81,13 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <param name="condition">The name of the condition, used in the exception message.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     [AssertionMethod]
-    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.")]
+    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.", true)]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int expectedNumberOfRequests, string condition) => WithFilter(requestFilter, (int?)expectedNumberOfRequests, condition);
 
     [AssertionMethod]
-    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.")]
+    [Obsolete("WithFilter will be removed, since it should no longer be necesary to use.", true)]
     public IHttpRequestMessagesCheck WithFilter(Func<HttpRequestMessage, bool> requestFilter, int? expectedNumberOfRequests, string condition)
     {
-        if (!string.IsNullOrEmpty(condition))
-        {
-            _expectedConditions.Add(condition);
-        }
-
-        Requests = Requests.Where(requestFilter);
-        Assert(expectedNumberOfRequests);
-
         return this;
     }
 

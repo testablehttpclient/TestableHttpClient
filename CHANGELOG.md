@@ -4,6 +4,11 @@ All notable changes to TestableHttpClient will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and 
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13] - unplanned
+### Removed
+- The methods `WithRequestHeader` and `WithContentHeader` have been removed, please use `WithHeader` instead.
+- The `WithFilter` method is removed.
+
 ## [0.12] - 2026-06-06
 ### Deprecated
 - The methods `WithRequestHeader` and `WithContentHeader` are deprecated, please use `WithHeader` instead.
@@ -307,6 +312,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Automatically build project when pushing changes to github and when creating a pull request
 - Automatically deploy to NuGet when creating a tag in github
 
+[0.12]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.12...v0.13
 [0.12]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.11...v0.12
 [0.11]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.10...v0.11
 [0.10]: https://github.com/testablehttpclient/TestableHttpClient/compare/v0.9...v0.10
