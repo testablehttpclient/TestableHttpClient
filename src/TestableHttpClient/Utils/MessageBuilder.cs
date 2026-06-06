@@ -32,10 +32,11 @@ internal static class MessageBuilder
             _ => BuildRequestUri(expectedRequest.RequestUri)
         };
 
-        var headers = expectedRequest.Headers switch
+        var headers = expectedRequest.Headers.Value switch
         {
-            null => "",
-            _ => BuildHeaders(expectedRequest.Headers)
+            AnyHeader => "",
+            HeaderList headerValues => BuildHeaders(headerValues),
+            _ => throw new UnreachableException()
         };
 
         string content = string.Empty;
@@ -123,7 +124,7 @@ internal static class MessageBuilder
         }
     }
 
-    private static string BuildHeaders(Dictionary<string, Value> headerValues)
+    private static string BuildHeaders(HeaderList headerValues)
     {
         StringBuilder headers = new();
 
