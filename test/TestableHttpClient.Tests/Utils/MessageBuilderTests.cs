@@ -8,7 +8,7 @@ public sealed class MessageBuilderTests
     public void BuildMessage_NoExpectedCountZeroActualCountDefaultExpectedRequest()
     {
         Request request = new(new());
-        var result = MessageBuilder.BuildMessage(null, 0, request, []);
+        var result = MessageBuilder.BuildMessage(null, 0, request);
 
         Assert.Equal("Expected at least one request to be made, but no requests were made.", result);
     }
@@ -20,7 +20,7 @@ public sealed class MessageBuilderTests
     public void BuildMessage_NoExpectedCountVariableActualCountDefaultExpectedRequest(int actualCount, string expectedMessage)
     {
         Request request = new(new());
-        var result = MessageBuilder.BuildMessage(null, actualCount, request, []);
+        var result = MessageBuilder.BuildMessage(null, actualCount, request);
 
         Assert.Equal($"Expected at least one request to be made, and {expectedMessage}.", result);
     }
@@ -29,7 +29,7 @@ public sealed class MessageBuilderTests
     public void BuildMessage_ZeroExpectedCountZeroActualCountDefaultExpectedRequest()
     {
         Request request = new(new());
-        var result = MessageBuilder.BuildMessage(0, 0, request, []);
+        var result = MessageBuilder.BuildMessage(0, 0, request);
 
         Assert.Equal($"Expected no requests to be made, and no requests were made.", result);
     }
@@ -41,7 +41,7 @@ public sealed class MessageBuilderTests
     public void BuildMessage_VariableExpectedCountZeroActualCountDefaultExpectedRequest(int expectedCount, string expectedMessage)
     {
         Request request = new(new());
-        var result = MessageBuilder.BuildMessage(expectedCount, 0, request, []);
+        var result = MessageBuilder.BuildMessage(expectedCount, 0, request);
 
         Assert.Equal($"Expected {expectedMessage} to be made, but no requests were made.", result);
     }
@@ -58,7 +58,7 @@ public sealed class MessageBuilderTests
             Method = HttpMethod.Get,
         };
 
-        var result = MessageBuilder.BuildMessage(expectedCount, 0, request, []);
+        var result = MessageBuilder.BuildMessage(expectedCount, 0, request);
 
         Assert.Equal($"Expected {expectedMessage} to be made, but no requests were made.", result);
     }
@@ -74,7 +74,7 @@ public sealed class MessageBuilderTests
             RequestUri = UriPatternParser.Parse(uri)
         };
 
-        var result = MessageBuilder.BuildMessage(1, 0, request, []);
+        var result = MessageBuilder.BuildMessage(1, 0, request);
 
         Assert.Equal($"Expected one request to be made to '{expectedRepresentation}', but no requests were made.", result);
     }
@@ -92,7 +92,7 @@ public sealed class MessageBuilderTests
             }
         };
 
-        var result = MessageBuilder.BuildMessage(1, 0, request, []);
+        var result = MessageBuilder.BuildMessage(1, 0, request);
 
         Assert.Equal("""
             Expected one request to be made with headers:
@@ -111,7 +111,7 @@ public sealed class MessageBuilderTests
             Content = "test"
         };
 
-        var result = MessageBuilder.BuildMessage(1, 0, request, []);
+        var result = MessageBuilder.BuildMessage(1, 0, request);
 
         Assert.Equal("""
             Expected one request to be made with content:
@@ -136,7 +136,7 @@ public sealed class MessageBuilderTests
             """
         };
 
-        var result = MessageBuilder.BuildMessage(1, 0, request, []);
+        var result = MessageBuilder.BuildMessage(1, 0, request);
 
         Assert.Equal("""
             Expected one request to be made with headers:
@@ -147,29 +147,5 @@ public sealed class MessageBuilderTests
               }
             , but no requests were made.
             """, result);
-    }
-
-    [Theory]
-    [InlineData("with condition 1", "condition 1")]
-    [InlineData("with condition 1, condition 2", "condition 1", "condition 2")]
-    [InlineData("with condition 1, condition 2, condition 3", "condition 1", "condition 2", "condition 3")]
-    public void BuildMessage_NullExpectedCountZeroActualCountVariableAmountOfConditions(string expectedCondition, params string[] conditions)
-    {
-        Request request = new(new());
-        var result = MessageBuilder.BuildMessage(null, 0, request, conditions);
-
-        Assert.Equal($"Expected at least one request to be made {expectedCondition}, but no requests were made.", result);
-    }
-
-    [Theory]
-    [InlineData("with condition 1", "condition 1")]
-    [InlineData("with condition 1, condition 2", "condition 1", "condition 2")]
-    [InlineData("with condition 1, condition 2, condition 3", "condition 1", "condition 2", "condition 3")]
-    public void BuildMessage_NullExpectedCountOneActualCountVariableAmountOfConditions(string expectedCondition, params string[] conditions)
-    {
-        Request request = new(new());
-        var result = MessageBuilder.BuildMessage(null, 1, request, conditions);
-
-        Assert.Equal($"Expected at least one request to be made {expectedCondition}, and one request was made.", result);
     }
 }
