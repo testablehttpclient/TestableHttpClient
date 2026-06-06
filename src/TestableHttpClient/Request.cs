@@ -1,4 +1,16 @@
-﻿namespace TestableHttpClient;
+﻿using System.Diagnostics;
+
+namespace TestableHttpClient;
+
+internal record struct AnyHeader;
+internal sealed class HeaderList : Dictionary<string, Value> { }
+internal readonly struct Headers
+{
+    public readonly object? Value { get; }
+    public Headers() => Value = new AnyHeader();
+    public Headers(AnyHeader value) => Value = value;
+    public Headers(HeaderList value) => Value = value;
+}
 
 internal sealed record Request : IEquatable<HttpRequestMessage>
 {
@@ -13,7 +25,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
     public UriPattern? RequestUri { get; init; }
     public Version? Version { get; init; }
 
-    public Dictionary<string, Value>? Headers { get; init; }
+    public Headers Headers { get; init; } = new();
 
     public string? Content { get; init; }
 
@@ -23,15 +35,20 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public Request AddHeader(string headerName, Value headerValue)
     {
-        if (Headers is null)
+
+        if (Headers.Value is AnyHeader)
         {
-            Dictionary<string, Value> headerValues = new() { [headerName] = headerValue };
-            return this with { Headers = headerValues };
+            HeaderList headerValues = new() { [headerName] = headerValue };
+            return this with { Headers = new Headers(headerValues) };
+        }
+        else if (Headers.Value is HeaderList headerValues)
+        {
+            headerValues[headerName] = headerValue;
+            return this;
         }
         else
         {
-            Headers[headerName] = headerValue;
-            return this;
+            throw new UnreachableException();
         }
     }
 
@@ -57,9 +74,9 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        if (Headers is not null)
+        if (Headers.Value is HeaderList headerValues)
         {
-            foreach (var keyValuePair in Headers)
+            foreach (var keyValuePair in headerValues)
             {
                 if (!other.Headers.HasHeader(keyValuePair.Key, keyValuePair.Value) && (other.Content is null || !other.Content.Headers.HasHeader(keyValuePair.Key, keyValuePair.Value)))
                 {

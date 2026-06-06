@@ -84,12 +84,12 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Headers = new Dictionary<string, Value>()
+            Headers = new(new HeaderList()
             {
                 ["Header1"] = Value.Any(),
                 ["Header2"] = Value.Pattern("Value2"),
                 ["Header3"] = Value.Exact("Value3"),
-            }
+            })
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);
@@ -125,10 +125,10 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Headers = new Dictionary<string, Value>()
+            Headers = new(new HeaderList()
             {
                 ["Content-Type"] = Value.Exact("application/json")
-            },
+            }),
             Content = """
             {
               "test": "value"
