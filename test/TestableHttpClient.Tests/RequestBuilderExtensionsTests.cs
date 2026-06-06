@@ -29,7 +29,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Get, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -60,7 +60,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Equal("{\"hello\":1}", request.Content);
     }
 
@@ -86,7 +86,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal("null", request.Content);
     }
 
@@ -98,7 +98,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal("{\"hello\":1}", request.Content);
     }
 
@@ -118,7 +118,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal("null", request.Content);
     }
 
@@ -130,7 +130,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal("{\"hello\":1}", request.Content);
     }
 
@@ -147,7 +147,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal("""
             {
               "hello": 1
@@ -177,7 +177,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/x-www-form-urlencoded*") }, request.Headers);
+        Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/x-www-form-urlencoded*") }, request.Headers.Value);
         Assert.Equal("username=alice", request.Content);
     }
 }

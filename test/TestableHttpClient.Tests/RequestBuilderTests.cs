@@ -14,7 +14,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -32,7 +32,7 @@ public sealed class RequestBuilderTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -56,7 +56,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.Method);
         Assert.Equal(UriPatternParser.Parse("http*//test.example"), request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -74,7 +74,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Equal(HttpVersion.Version11, request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -100,7 +100,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Any() }, request.Headers);
+        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Any() }, request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -124,7 +124,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Pattern("*") }, request.Headers);
+        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Pattern("*") }, request.Headers.Value);
         Assert.Null(request.Content);
     }
 
@@ -142,7 +142,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.Method);
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
-        Assert.Null(request.Headers);
+        Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Equal("content", request.Content);
     }
 }
