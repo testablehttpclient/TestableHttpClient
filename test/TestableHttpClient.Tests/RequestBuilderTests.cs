@@ -15,7 +15,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
-        Assert.Null(request.Content);
+        Assert.Equal(new AnyContent(), request.Content.Value);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
-        Assert.Null(request.Content);
+        Assert.Equal(new AnyContent(), request.Content.Value);
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public sealed class RequestBuilderTests
         Assert.Equal(UriPatternParser.Parse("http*//test.example"), request.RequestUri);
         Assert.Null(request.Version);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
-        Assert.Null(request.Content);
+        Assert.Equal(new AnyContent(), request.Content.Value);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.RequestUri);
         Assert.Equal(HttpVersion.Version11, request.Version);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
-        Assert.Null(request.Content);
+        Assert.Equal(new AnyContent(), request.Content.Value);
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
         Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Any() }, request.Headers.Value);
-        Assert.Null(request.Content);
+        Assert.Equal(new AnyContent(), request.Content.Value);
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public sealed class RequestBuilderTests
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
         Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Pattern("*") }, request.Headers.Value);
-        Assert.Null(request.Content);
+        Assert.Equal(new AnyContent(), request.Content.Value);
     }
 
     [Fact]
@@ -143,6 +143,6 @@ public sealed class RequestBuilderTests
         Assert.Null(request.RequestUri);
         Assert.Null(request.Version);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
-        Assert.Equal("content", request.Content);
+        Assert.Equal(new Pattern("content"), request.Content.Value);
     }
 }
