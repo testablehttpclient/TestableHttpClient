@@ -12,6 +12,16 @@ internal readonly struct Headers
     public Headers(HeaderList value) => Value = value;
 }
 
+internal record struct AnyContent;
+internal record struct Pattern(string pattern);
+internal readonly struct Content
+{
+    public readonly object? Value { get; }
+    public Content() => Value = new AnyContent();
+    public Content(AnyContent value) => Value = value;
+    public Content(Pattern value) => Value = value;
+}
+
 internal sealed record Request : IEquatable<HttpRequestMessage>
 {
     public Request(UriPatternMatchingOptions uriPatternMatchingOptions)
@@ -27,7 +37,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public Headers Headers { get; init; } = new();
 
-    public string? Content { get; init; }
+    public Content Content { get; init; } = new();
 
     public Request AddHeader(string headerName) => AddHeader(headerName, Value.Any());
 
@@ -85,31 +95,27 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             }
         }
 
-        if (Content is not null)
+        string? stringContent = null;
+        if (other.Content is not null)
         {
-            if (other.Content is null)
-            {
-                return false;
-            }
-
-            var stringContent = other.Content.ReadAsStringAsync()
+            stringContent = other.Content.ReadAsStringAsync()
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
-
-            var contentMatches = Content switch
-            {
-                "" => stringContent == Content,
-                "*" => true,
-                _ => StringMatcher.Matches(stringContent, Content),
-            };
-
-            if (!contentMatches)
-            {
-                return false;
-            }
         }
 
+        bool contentMatches = Content.Value switch
+        {
+            AnyContent => true,
+            Pattern value when stringContent is null => false,
+            Pattern value => StringMatcher.Matches(stringContent, value.pattern, false),
+            _ => throw new UnreachableException()
+        };
+
+        if (!contentMatches)
+        {
+            return false;
+        }
         return true;
     }
 }

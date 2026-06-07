@@ -39,27 +39,12 @@ internal static class MessageBuilder
             _ => throw new UnreachableException()
         };
 
-        string content = string.Empty;
-
-        if (!string.IsNullOrEmpty(expectedRequest.Content))
+        string content = expectedRequest.Content.Value switch
         {
-            StringBuilder contentBuilder = new();
-            if (string.IsNullOrEmpty(headers))
-            {
-                contentBuilder.AppendLine(" with content:");
-            }
-            else
-            {
-                contentBuilder.AppendLine("and content:");
-            }
-
-            string[] splitcontent = expectedRequest.Content!.Split(['\n']);
-            foreach (var line in splitcontent)
-            {
-                contentBuilder.AppendLine(CultureInfo.InvariantCulture, $"  {line.Trim('\r')}");
-            }
-            content = contentBuilder.ToString();
-        }
+            AnyContent => "",
+            Pattern pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
+            _ => throw new UnreachableException()
+        };
 
         var actualMessage = actualCount switch
         {
@@ -163,5 +148,25 @@ internal static class MessageBuilder
             PatternValue patternValue => patternValue.ExpectedValue,
             _ => throw new UnreachableException()
         };
+    }
+
+    private static string BuildContent(Pattern value, bool hasHeaders)
+    {
+        string[] content = value.pattern.Split(['\n']);
+
+        StringBuilder contentBuilder = new();
+        if (hasHeaders)
+        {
+            contentBuilder.AppendLine(" with content:");
+        }
+        else
+        {
+            contentBuilder.AppendLine("and content:");
+        }
+        foreach (var line in content)
+        {
+            contentBuilder.AppendLine(CultureInfo.InvariantCulture, $"  {line.Trim('\r')}");
+        }
+        return contentBuilder.ToString();
     }
 }
