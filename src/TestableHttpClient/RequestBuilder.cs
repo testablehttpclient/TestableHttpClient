@@ -85,7 +85,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(pattern);
 
-        request = request with { Content = pattern };
+        request = request with { Content = new(new Pattern(pattern)) };
         return this;
     }
 

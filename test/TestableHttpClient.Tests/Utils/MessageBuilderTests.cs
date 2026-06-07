@@ -108,7 +108,7 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Content = "test"
+            Content = new(new Pattern("test"))
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);
@@ -129,11 +129,11 @@ public sealed class MessageBuilderTests
             {
                 ["Content-Type"] = Value.Exact("application/json")
             }),
-            Content = """
+            Content = new(new Pattern("""
             {
               "test": "value"
             }
-            """
+            """))
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);
