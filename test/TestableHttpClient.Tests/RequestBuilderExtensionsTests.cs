@@ -26,9 +26,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.Get("https://localhost").Build();
 
-        Assert.Equal(HttpMethod.Get, request.Method);
+        Assert.Equal(HttpMethod.Get, request.Method.Value);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Equal(new AnyContent(), request.Content.Value);
     }
@@ -57,9 +57,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.Post("https://localhost", "{\"hello\":1}").Build();
 
-        Assert.Equal(HttpMethod.Post, request.Method);
+        Assert.Equal(HttpMethod.Post, request.Method.Value);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equal(new AnyHeader(), request.Headers.Value);
         Assert.Equal(new Pattern("{\"hello\":1}"), request.Content.Value);
     }
@@ -83,9 +83,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.PostAsJson("https://localhost", null).Build();
 
-        Assert.Equal(HttpMethod.Post, request.Method);
+        Assert.Equal(HttpMethod.Post, request.Method.Value);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal(new Pattern("null"), request.Content.Value);
     }
@@ -95,9 +95,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.PostAsJson("https://localhost", new { hello = 1 }).Build();
 
-        Assert.Equal(HttpMethod.Post, request.Method);
+        Assert.Equal(HttpMethod.Post, request.Method.Value);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal(new Pattern("{\"hello\":1}"), request.Content.Value);
     }
@@ -115,9 +115,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.WithJsonContent(null).Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal(new Pattern("null"), request.Content.Value);
     }
@@ -127,9 +127,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.WithJsonContent(new { hello = 1 }).Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal(new Pattern("{\"hello\":1}"), request.Content.Value);
     }
@@ -144,9 +144,9 @@ public sealed class RequestBuilderExtensionsTests
         };
         Request request = sut.WithJsonContent(new { hello = 1 }, options).Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/json*") }, request.Headers.Value);
         Assert.Equal(new Pattern("""
             {
@@ -174,9 +174,9 @@ public sealed class RequestBuilderExtensionsTests
     {
         Request request = sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]).Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
+        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(UriPattern.Any,request.RequestUri);
+        Assert.Equal(new Any(), request.Version.Value);
         Assert.Equivalent(new Dictionary<string, Value>() { ["Content-Type"] = Value.Pattern("application/x-www-form-urlencoded*") }, request.Headers.Value);
         Assert.Equal(new Pattern("username=alice"), request.Content.Value);
     }
