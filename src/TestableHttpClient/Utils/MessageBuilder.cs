@@ -12,10 +12,11 @@ internal static class MessageBuilder
             null => actualCount > 0,
             _ => expectedCount == actualCount
         };
-        var method = expectedRequest.Method switch
+        var method = expectedRequest.Method.Value switch
         {
-            null => "",
-            _ => $"{expectedRequest.Method} "
+            Any => "",
+            HttpMethod httpMethod => $"{httpMethod} ",
+            _ => throw new UnreachableException()
         };
 
         var expectedMessage = expectedCount switch
@@ -26,11 +27,7 @@ internal static class MessageBuilder
             _ => $"{expectedCount} {method}requests"
         };
 
-        var requestUri = expectedRequest.RequestUri switch
-        {
-            null => "",
-            _ => BuildRequestUri(expectedRequest.RequestUri)
-        };
+        var requestUri = BuildRequestUri(expectedRequest.RequestUri);
 
         var headers = expectedRequest.Headers.Value switch
         {
