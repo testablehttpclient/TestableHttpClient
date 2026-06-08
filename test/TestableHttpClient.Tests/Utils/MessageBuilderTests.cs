@@ -55,7 +55,7 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Method = HttpMethod.Get,
+            Method = new(HttpMethod.Get),
         };
 
         var result = MessageBuilder.BuildMessage(expectedCount, 0, request);

@@ -24,7 +24,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(httpMethod);
 
-        request = request with { Method = httpMethod };
+        request = request with { Method = new(httpMethod) };
         return this;
     }
 
@@ -50,7 +50,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(httpVersion);
 
-        request = request with { Version = httpVersion };
+        request = request with { Version = new(httpVersion) };
         return this;
     }
 

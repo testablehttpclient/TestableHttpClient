@@ -2,6 +2,15 @@
 
 namespace TestableHttpClient;
 
+internal record struct Any;
+internal readonly struct AnyOr<T>
+{
+    public readonly object? Value { get; }
+    public AnyOr() => Value = new Any();
+    public AnyOr(Any value) => Value = value;
+    public AnyOr(T value) => Value = value;
+}
+
 internal record struct AnyHeader;
 internal sealed class HeaderList : Dictionary<string, Value> { }
 internal readonly struct Headers
@@ -31,9 +40,9 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; }
 
-    public HttpMethod? Method { get; init; }
-    public UriPattern? RequestUri { get; init; }
-    public Version? Version { get; init; }
+    public AnyOr<HttpMethod> Method { get; init; } = new();
+    public UriPattern RequestUri { get; init; } = new();
+    public AnyOr<Version> Version { get; init; } = new();
 
     public Headers Headers { get; init; } = new();
 
@@ -69,17 +78,31 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        if (Method is not null && other.Method != Method)
+        bool methodMatches = Method.Value switch
+        {
+            Any => true,
+            HttpMethod value => other.Method == value,
+            _ => throw new UnreachableException()
+        };
+
+        if (!methodMatches)
         {
             return false;
         }
 
-        if (RequestUri is not null && other.RequestUri is not null && !RequestUri.Matches(other.RequestUri, UriPatternMatchingOptions))
+        if (other.RequestUri is not null && !RequestUri.Matches(other.RequestUri, UriPatternMatchingOptions))
         {
             return false;
         }
 
-        if (Version is not null && other.Version != Version)
+        bool versionMatches = Version.Value switch
+        {
+            Any => true,
+            Version value => other.Version == value,
+            _ => throw new UnreachableException()
+        };
+
+        if (!versionMatches)
         {
             return false;
         }
