@@ -11,23 +11,21 @@ internal readonly struct AnyOr<T>
     public AnyOr(T value) => Value = value;
 }
 
-internal record struct AnyHeader;
 internal sealed class HeaderList : Dictionary<string, Value> { }
 internal readonly struct Headers
 {
     public readonly object? Value { get; }
-    public Headers() => Value = new AnyHeader();
-    public Headers(AnyHeader value) => Value = value;
+    public Headers() => Value = new Any();
+    public Headers(Any value) => Value = value;
     public Headers(HeaderList value) => Value = value;
 }
 
-internal record struct AnyContent;
 internal record struct Pattern(string pattern);
 internal readonly struct Content
 {
     public readonly object? Value { get; }
-    public Content() => Value = new AnyContent();
-    public Content(AnyContent value) => Value = value;
+    public Content() => Value = new Any();
+    public Content(Any value) => Value = value;
     public Content(Pattern value) => Value = value;
 }
 
@@ -55,7 +53,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
     public Request AddHeader(string headerName, Value headerValue)
     {
 
-        if (Headers.Value is AnyHeader)
+        if (Headers.Value is Any)
         {
             HeaderList headerValues = new() { [headerName] = headerValue };
             return this with { Headers = new Headers(headerValues) };
@@ -129,7 +127,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
         bool contentMatches = Content.Value switch
         {
-            AnyContent => true,
+            Any => true,
             Pattern value when stringContent is null => false,
             Pattern value => StringMatcher.Matches(stringContent, value.pattern, false),
             _ => throw new UnreachableException()

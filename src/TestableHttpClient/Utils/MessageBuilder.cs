@@ -31,14 +31,14 @@ internal static class MessageBuilder
 
         var headers = expectedRequest.Headers.Value switch
         {
-            AnyHeader => "",
+            Any => "",
             HeaderList headerValues => BuildHeaders(headerValues),
             _ => throw new UnreachableException()
         };
 
         string content = expectedRequest.Content.Value switch
         {
-            AnyContent => "",
+            Any => "",
             Pattern pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
             _ => throw new UnreachableException()
         };

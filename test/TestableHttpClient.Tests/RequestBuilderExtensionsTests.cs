@@ -29,8 +29,8 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Get, request.Method.Value);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version.Value);
-        Assert.Equal(new AnyHeader(), request.Headers.Value);
-        Assert.Equal(new AnyContent(), request.Content.Value);
+        Assert.Equal(new Any(), request.Headers.Value);
+        Assert.Equal(new Any(), request.Content.Value);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method.Value);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version.Value);
-        Assert.Equal(new AnyHeader(), request.Headers.Value);
+        Assert.Equal(new Any(), request.Headers.Value);
         Assert.Equal(new Pattern("{\"hello\":1}"), request.Content.Value);
     }
 
