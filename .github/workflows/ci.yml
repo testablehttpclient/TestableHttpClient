@@ -25,6 +25,8 @@ jobs:
           8.0.x
           9.0.x
           10.0.x
+          11.0.x
+        dotnet-quality: preview
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dotnet tools
@@ -73,6 +75,8 @@ jobs:
           8.0.x
           9.0.x
           10.0.x
+          11.0.x
+        dotnet-quality: preview
     - name: Dump .NET info
       run: dotnet --info
     - name: Restore dependencies
@@ -94,6 +98,8 @@ jobs:
       with:
         dotnet-version: |
           10.0.x
+          11.0.x
+        dotnet-quality: preview
     - uses: actions/download-artifact@v8
       with:
         name: artifacts
