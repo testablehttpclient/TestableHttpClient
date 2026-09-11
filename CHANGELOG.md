@@ -8,6 +8,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Removed
 - The methods `WithRequestHeader` and `WithContentHeader` have been removed, please use `WithHeader` instead.
 - The `WithFilter` method is removed.
+- Mono support on linux, this is no longer supported by the SDK of .NET 11
 
 ## [0.12] - 2026-06-06
 ### Deprecated
