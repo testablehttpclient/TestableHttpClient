@@ -21,18 +21,13 @@ internal readonly struct Headers
 }
 
 internal record struct Pattern(string pattern);
-internal readonly struct Content
-{
-    public readonly object? Value { get; }
-    public Content() => Value = new Any();
-    public Content(Any value) => Value = value;
-    public Content(Pattern value) => Value = value;
-}
+internal readonly union Content(Any, Pattern);
 
 internal sealed record Request : IEquatable<HttpRequestMessage>
 {
     public Request(UriPatternMatchingOptions uriPatternMatchingOptions)
     {
+        Content = new Any();
         UriPatternMatchingOptions = uriPatternMatchingOptions;
     }
 
@@ -44,7 +39,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public Headers Headers { get; init; } = new();
 
-    public Content Content { get; init; } = new();
+    public Content Content { get; init; }
 
     public Request AddHeader(string headerName) => AddHeader(headerName, UriPatternValue.CreateAny());
 
@@ -125,7 +120,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
                 .GetResult();
         }
 
-        bool contentMatches = Content.Value switch
+        bool contentMatches = Content switch
         {
             Any => true,
             Pattern value when stringContent is null => false,
