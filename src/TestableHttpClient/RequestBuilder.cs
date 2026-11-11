@@ -72,7 +72,7 @@ public sealed class RequestBuilder
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(pattern);
 
-        request = request.AddHeader(headerName, Value.Pattern(pattern));
+        request = request.AddHeader(headerName, UriPatternValue.CreatePattern(pattern));
         return this;
     }
 

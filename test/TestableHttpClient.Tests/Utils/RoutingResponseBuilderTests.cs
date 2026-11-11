@@ -1,4 +1,4 @@
-﻿using TestableHttpClient.Response;
+using TestableHttpClient.Response;
 using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests.Utils;
@@ -37,9 +37,9 @@ public sealed class RoutingResponseBuilderTests
         builder.Map("https://httpbin.org", response);
 
         var routeDefintion = builder.RoutingResponse.ResponseMap.Keys.Single();
-        Assert.Equal(Value.Exact("https"), routeDefintion.Scheme);
-        Assert.Equal(Value.Exact("httpbin.org"), routeDefintion.Host);
-        Assert.Equal(Value.Any(), routeDefintion.Path);
+        Assert.Equal(UriPatternValue.CreateExact("https"), routeDefintion.Scheme);
+        Assert.Equal(UriPatternValue.CreateExact("httpbin.org"), routeDefintion.Host);
+        Assert.Equal(UriPatternValue.CreateAny(), routeDefintion.Path);
 
         var configuredResponse = builder.RoutingResponse.ResponseMap.Values.Single();
         Assert.Same(response, configuredResponse);

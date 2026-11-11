@@ -136,13 +136,13 @@ internal static class MessageBuilder
         }
     }
 
-    private static string BuildValue(Value value)
+    private static string BuildValue(UriPatternValue value)
     {
         return value switch
         {
-            AnyValue => "",
-            ExactValue exactValue => exactValue.ExpectedValue,
-            PatternValue patternValue => patternValue.ExpectedValue,
+            UriPatternValue.Any => "",
+            UriPatternValue.Exact exactValue => exactValue.ExpectedValue,
+            UriPatternValue.Pattern patternValue => patternValue.ExpectedValue,
             _ => throw new UnreachableException()
         };
     }

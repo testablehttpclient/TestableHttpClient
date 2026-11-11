@@ -6,11 +6,11 @@ internal sealed record UriPattern
 {
     public static UriPattern Any { get; } = new UriPattern();
 
-    public Value Scheme { get; init; } = Value.Any();
-    public Value Host { get; init; } = Value.Any();
-    public Value Port { get; init; } = Value.Any();
-    public Value Path { get; init; } = Value.Any();
-    public Value Query { get; init; } = Value.Any();
+    public UriPatternValue Scheme { get; init; } = UriPatternValue.CreateAny();
+    public UriPatternValue Host { get; init; } = UriPatternValue.CreateAny();
+    public UriPatternValue Port { get; init; } = UriPatternValue.CreateAny();
+    public UriPatternValue Path { get; init; } = UriPatternValue.CreateAny();
+    public UriPatternValue Query { get; init; } = UriPatternValue.CreateAny();
 
     public bool Matches(Uri requestUri, UriPatternMatchingOptions options) =>
         Scheme.Matches(requestUri.Scheme, options.SchemeCaseInsensitive) &&

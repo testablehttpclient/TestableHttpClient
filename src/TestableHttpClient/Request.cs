@@ -11,7 +11,7 @@ internal readonly struct AnyOr<T>
     public AnyOr(T value) => Value = value;
 }
 
-internal sealed class HeaderList : Dictionary<string, Value> { }
+internal sealed class HeaderList : Dictionary<string, UriPatternValue> { }
 internal readonly struct Headers
 {
     public readonly object? Value { get; }
@@ -46,11 +46,11 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public Content Content { get; init; } = new();
 
-    public Request AddHeader(string headerName) => AddHeader(headerName, Value.Any());
+    public Request AddHeader(string headerName) => AddHeader(headerName, UriPatternValue.CreateAny());
 
-    public Request AddHeader(string headerName, string headerValue) => AddHeader(headerName, Value.Pattern(headerValue));
+    public Request AddHeader(string headerName, string headerValue) => AddHeader(headerName, UriPatternValue.CreatePattern(headerValue));
 
-    public Request AddHeader(string headerName, Value headerValue)
+    public Request AddHeader(string headerName, UriPatternValue headerValue)
     {
 
         if (Headers.Value is Any)

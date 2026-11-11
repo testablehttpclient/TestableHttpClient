@@ -1,4 +1,4 @@
-﻿using TestableHttpClient.Utils;
+using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests.Utils;
 
@@ -86,9 +86,9 @@ public sealed class MessageBuilderTests
         {
             Headers = new(new HeaderList()
             {
-                ["Header1"] = Value.Any(),
-                ["Header2"] = Value.Pattern("Value2"),
-                ["Header3"] = Value.Exact("Value3"),
+                ["Header1"] = UriPatternValue.CreateAny(),
+                ["Header2"] = UriPatternValue.CreatePattern("Value2"),
+                ["Header3"] = UriPatternValue.CreateExact("Value3"),
             })
         };
 
@@ -127,7 +127,7 @@ public sealed class MessageBuilderTests
         {
             Headers = new(new HeaderList()
             {
-                ["Content-Type"] = Value.Exact("application/json")
+                ["Content-Type"] = UriPatternValue.CreateExact("application/json")
             }),
             Content = new(new Pattern("""
             {

@@ -1,4 +1,4 @@
-﻿using TestableHttpClient.Utils;
+using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests;
 
@@ -100,7 +100,7 @@ public sealed class RequestBuilderTests
         Assert.Equal(new Any(), request.Method.Value);
         Assert.Equal(UriPattern.Any, request.RequestUri);
         Assert.Equal(new Any(), request.Version.Value);
-        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Any() }, request.Headers.Value);
+        Assert.Equal(new Dictionary<string, UriPatternValue>() { ["Content-Length"] = UriPatternValue.CreateAny() }, request.Headers.Value);
         Assert.Equal(new Any(), request.Content.Value);
     }
 
@@ -124,7 +124,7 @@ public sealed class RequestBuilderTests
         Assert.Equal(new Any(), request.Method.Value);
         Assert.Equal(UriPattern.Any, request.RequestUri);
         Assert.Equal(new Any(), request.Version.Value);
-        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Pattern("*") }, request.Headers.Value);
+        Assert.Equal(new Dictionary<string, UriPatternValue>() { ["Content-Length"] = UriPatternValue.CreatePattern("*") }, request.Headers.Value);
         Assert.Equal(new Any(), request.Content.Value);
     }
 
