@@ -6,10 +6,11 @@ internal readonly struct Any;
 internal readonly union HttpMethodOrAny(Any, HttpMethod);
 internal readonly union VersionOrAny(Any, Version);
 
-internal sealed class HeaderList : Dictionary<string, UriPatternValue> { }
-internal readonly union Headers(Any, HeaderList);
-
 internal record struct Pattern(string pattern);
+internal record struct ExactValue(string value);
+internal readonly union HeaderValue(Any, Pattern);
+internal sealed class HeaderList : Dictionary<string, HeaderValue> { }
+internal readonly union Headers(Any, HeaderList);
 internal readonly union Content(Any, Pattern);
 
 internal sealed record Request : IEquatable<HttpRequestMessage>
@@ -34,11 +35,11 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public Content Content { get; init; }
 
-    public Request AddHeader(string headerName) => AddHeader(headerName, UriPatternValue.CreateAny());
+    public Request AddHeader(string headerName) => AddHeader(headerName, new Any());
 
-    public Request AddHeader(string headerName, string headerValue) => AddHeader(headerName, UriPatternValue.CreatePattern(headerValue));
+    public Request AddHeader(string headerName, string patternValue) => AddHeader(headerName, new Pattern(patternValue));
 
-    public Request AddHeader(string headerName, UriPatternValue headerValue)
+    public Request AddHeader(string headerName, HeaderValue headerValue)
     {
 
         if (Headers is Any)

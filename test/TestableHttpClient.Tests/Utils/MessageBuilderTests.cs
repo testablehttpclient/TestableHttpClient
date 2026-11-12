@@ -86,9 +86,8 @@ public sealed class MessageBuilderTests
         {
             Headers = new(new HeaderList()
             {
-                ["Header1"] = UriPatternValue.CreateAny(),
-                ["Header2"] = UriPatternValue.CreatePattern("Value2"),
-                ["Header3"] = UriPatternValue.CreateExact("Value3"),
+                ["Header1"] = new Any(),
+                ["Header2"] = new Pattern("Value2"),
             })
         };
 
@@ -98,7 +97,6 @@ public sealed class MessageBuilderTests
             Expected one request to be made with headers:
               Header1: <any value>
               Header2: 'Value2'
-              Header3: 'Value3'
             , but no requests were made.
             """, result);
     }
@@ -127,7 +125,7 @@ public sealed class MessageBuilderTests
         {
             Headers = new(new HeaderList()
             {
-                ["Content-Type"] = UriPatternValue.CreateExact("application/json")
+                ["Content-Type"] = new Pattern("application/json")
             }),
             Content = new(new Pattern("""
             {

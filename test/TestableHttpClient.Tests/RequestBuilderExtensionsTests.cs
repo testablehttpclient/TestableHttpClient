@@ -86,7 +86,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, UriPatternValue>() { ["Content-Type"] = UriPatternValue.CreatePattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
         Assert.Equal(new Pattern("null"), request.Content);
     }
 
@@ -98,7 +98,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, UriPatternValue>() { ["Content-Type"] = UriPatternValue.CreatePattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
         Assert.Equal(new Pattern("{\"hello\":1}"), request.Content);
     }
 
@@ -118,7 +118,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, UriPatternValue>() { ["Content-Type"] = UriPatternValue.CreatePattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
         Assert.Equal(new Pattern("null"), request.Content);
     }
 
@@ -130,7 +130,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, UriPatternValue>() { ["Content-Type"] = UriPatternValue.CreatePattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
         Assert.Equal(new Pattern("{\"hello\":1}"), request.Content);
     }
 
@@ -147,7 +147,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, UriPatternValue>() { ["Content-Type"] = UriPatternValue.CreatePattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
         Assert.Equal(new Pattern("""
             {
               "hello": 1
@@ -177,7 +177,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, UriPatternValue>() { ["Content-Type"] = UriPatternValue.CreatePattern("application/x-www-form-urlencoded*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/x-www-form-urlencoded*") }, request.Headers is HeaderList headerValues ? headerValues : null);
         Assert.Equal(new Pattern("username=alice"), request.Content);
     }
 }

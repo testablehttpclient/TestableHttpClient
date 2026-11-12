@@ -59,7 +59,13 @@ public sealed class RequestBuilder
     /// </summary>
     /// <param name="headerName">The expected header name.</param>
     /// <returns>The request builder.</returns>
-    public RequestBuilder WithHeader(string headerName) => WithHeader(headerName, "*");
+    public RequestBuilder WithHeader(string headerName)
+    {
+        Guard.ThrowIfNullOrEmpty(headerName);
+
+        request = request.AddHeader(headerName);
+        return this;
+    }
 
     /// <summary>
     /// Specify the header name and value that should be present in the request, the value can be a pattern.
@@ -72,7 +78,7 @@ public sealed class RequestBuilder
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(pattern);
 
-        request = request.AddHeader(headerName, UriPatternValue.CreatePattern(pattern));
+        request = request.AddHeader(headerName, pattern);
         return this;
     }
 

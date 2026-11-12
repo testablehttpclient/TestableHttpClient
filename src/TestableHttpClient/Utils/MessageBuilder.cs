@@ -112,7 +112,7 @@ internal static class MessageBuilder
 
         foreach (var header in headerValues)
         {
-            var value = BuildValue(header.Value);
+            var value = BuildHeaderValue(header.Value);
             if (string.IsNullOrEmpty(value))
             {
                 headers.AppendLine(CultureInfo.InvariantCulture, $"  {header.Key}: <any value>");
@@ -134,6 +134,16 @@ internal static class MessageBuilder
             headervalue.AppendLine(" with headers:").Append(result);
             return headervalue.ToString(); ;
         }
+    }
+
+    private static string BuildHeaderValue(HeaderValue value)
+    {
+        return value switch
+        {
+            Any => "",
+            Pattern pattern => pattern.pattern,
+            _ => throw new UnreachableException()
+        };
     }
 
     private static string BuildValue(UriPatternValue value)
