@@ -2,14 +2,9 @@
 
 namespace TestableHttpClient;
 
-internal record struct Any;
-internal readonly struct AnyOr<T>
-{
-    public readonly object? Value { get; }
-    public AnyOr() => Value = new Any();
-    public AnyOr(Any value) => Value = value;
-    public AnyOr(T value) => Value = value;
-}
+internal readonly struct Any;
+internal readonly union HttpMethodOrAny(Any, HttpMethod);
+internal readonly union VersionOrAny(Any, Version);
 
 internal sealed class HeaderList : Dictionary<string, UriPatternValue> { }
 internal readonly struct Headers
@@ -27,15 +22,18 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 {
     public Request(UriPatternMatchingOptions uriPatternMatchingOptions)
     {
-        Content = new Any();
         UriPatternMatchingOptions = uriPatternMatchingOptions;
+
+        Method = new Any();
+        Content = new Any();
+        Version = new Any();
     }
 
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; }
 
-    public AnyOr<HttpMethod> Method { get; init; } = new();
+    public HttpMethodOrAny Method { get; init; }
     public UriPattern RequestUri { get; init; } = new();
-    public AnyOr<Version> Version { get; init; } = new();
+    public VersionOrAny Version { get; init; }
 
     public Headers Headers { get; init; } = new();
 
@@ -71,7 +69,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        bool methodMatches = Method.Value switch
+        bool methodMatches = Method switch
         {
             Any => true,
             HttpMethod value => other.Method == value,
@@ -88,7 +86,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        bool versionMatches = Version.Value switch
+        bool versionMatches = Version switch
         {
             Any => true,
             Version value => other.Version == value,

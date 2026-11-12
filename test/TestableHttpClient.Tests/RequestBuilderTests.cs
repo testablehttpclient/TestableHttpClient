@@ -11,11 +11,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.Build();
 
-        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
-        Assert.Equal(new Any(), request.Version.Value);
+        Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Any(), request.Headers.Value);
-        Assert.Equal(new Any(), request.Content.Value);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -29,11 +29,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithMethod(HttpMethod.Post).Build();
 
-        Assert.Equal(HttpMethod.Post, request.Method.Value);
+        Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
-        Assert.Equal(new Any(), request.Version.Value);
+        Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Any(), request.Headers.Value);
-        Assert.Equal(new Any(), request.Content.Value);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -53,11 +53,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithRequestUri("http*//test.example").Build();
 
-        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPatternParser.Parse("http*//test.example"), request.RequestUri);
-        Assert.Equal(new Any(), request.Version.Value);
+        Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Any(), request.Headers.Value);
-        Assert.Equal(new Any(), request.Content.Value);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -71,11 +71,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithVersion(HttpVersion.Version11).Build();
 
-        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
-        Assert.Equal(HttpVersion.Version11, request.Version.Value);
+        Assert.Equal(HttpVersion.Version11, request.Version);
         Assert.Equal(new Any(), request.Headers.Value);
-        Assert.Equal(new Any(), request.Content.Value);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -97,11 +97,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithHeader("Content-Length").Build();
 
-        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
-        Assert.Equal(new Any(), request.Version.Value);
+        Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Dictionary<string, UriPatternValue>() { ["Content-Length"] = UriPatternValue.CreateAny() }, request.Headers.Value);
-        Assert.Equal(new Any(), request.Content.Value);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -121,11 +121,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithHeader("Content-Length", "*").Build();
 
-        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
-        Assert.Equal(new Any(), request.Version.Value);
+        Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Dictionary<string, UriPatternValue>() { ["Content-Length"] = UriPatternValue.CreatePattern("*") }, request.Headers.Value);
-        Assert.Equal(new Any(), request.Content.Value);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -139,10 +139,10 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithContent("content").Build();
 
-        Assert.Equal(new Any(), request.Method.Value);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPattern.Any, request.RequestUri);
-        Assert.Equal(new Any(), request.Version.Value);
+        Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Any(), request.Headers.Value);
-        Assert.Equal(new Pattern("content"), request.Content.Value);
+        Assert.Equal(new Pattern("content"), request.Content);
     }
 }

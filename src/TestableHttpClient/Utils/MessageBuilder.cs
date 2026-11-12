@@ -12,7 +12,7 @@ internal static class MessageBuilder
             null => actualCount > 0,
             _ => expectedCount == actualCount
         };
-        var method = expectedRequest.Method.Value switch
+        var method = expectedRequest.Method switch
         {
             Any => "",
             HttpMethod httpMethod => $"{httpMethod} ",
@@ -36,7 +36,7 @@ internal static class MessageBuilder
             _ => throw new UnreachableException()
         };
 
-        string content = expectedRequest.Content.Value switch
+        string content = expectedRequest.Content switch
         {
             Any => "",
             Pattern pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
