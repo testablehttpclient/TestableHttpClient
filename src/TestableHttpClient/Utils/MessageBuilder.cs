@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace TestableHttpClient.Utils;
 
 internal static class MessageBuilder
 {
+    [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
     internal static string BuildMessage(int? expectedCount, int actualCount, Request expectedRequest)
     {
         var pass = expectedCount switch
@@ -39,7 +41,7 @@ internal static class MessageBuilder
         string content = expectedRequest.Content switch
         {
             Any => "",
-            Pattern pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
+            PatternValue pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
             _ => throw new UnreachableException()
         };
 
@@ -141,7 +143,7 @@ internal static class MessageBuilder
         return value switch
         {
             Any => "",
-            Pattern pattern => pattern.pattern,
+            PatternValue pattern => pattern.pattern,
             _ => throw new UnreachableException()
         };
     }
@@ -150,14 +152,13 @@ internal static class MessageBuilder
     {
         return value switch
         {
-            UriPatternValue.Any => "",
-            UriPatternValue.Exact exactValue => exactValue.ExpectedValue,
-            UriPatternValue.Pattern patternValue => patternValue.ExpectedValue,
-            _ => throw new UnreachableException()
+            Any => "",
+            ExactValue exactValue => exactValue.value,
+            PatternValue patternValue => patternValue.pattern
         };
     }
 
-    private static string BuildContent(Pattern value, bool hasHeaders)
+    private static string BuildContent(PatternValue value, bool hasHeaders)
     {
         string[] content = value.pattern.Split(['\n']);
 

@@ -79,10 +79,10 @@ internal static class UriPatternParser
         {
             return scheme switch
             {
-                [] => UriPatternValue.CreateAny(),
-                ['*'] => UriPatternValue.CreateAny(),
-                _ when scheme.IndexOf('*') != -1 => UriPatternValue.CreatePattern(scheme.ToString()),
-                _ => UriPatternValue.CreateExact(scheme.ToString())
+                [] => new Any(),
+                ['*'] => new Any(),
+                _ when scheme.IndexOf('*') != -1 => new PatternValue(scheme.ToString()),
+                _ => new ExactValue(scheme.ToString())
             };
         }
 
@@ -90,10 +90,10 @@ internal static class UriPatternParser
         {
             return host switch
             {
-                [] => UriPatternValue.CreateAny(),
-                ['*'] => UriPatternValue.CreateAny(),
-                _ when host.IndexOf('*') != -1 => UriPatternValue.CreatePattern(host.ToString()),
-                _ => UriPatternValue.CreateExact(host.ToString())
+                [] => new Any(),
+                ['*'] => new Any(),
+                _ when host.IndexOf('*') != -1 => new PatternValue(host.ToString()),
+                _ => new ExactValue(host.ToString())
             };
         }
 
@@ -101,11 +101,11 @@ internal static class UriPatternParser
         {
             return port switch
             {
-                [] => UriPatternValue.CreateAny(),
+                [] => new Any(),
                 [':'] => throw new UriPatternParserException("Invalid port"),
-                [':', '*'] => UriPatternValue.CreateAny(),
-                [':', .. var rest] when rest.IndexOf('*') != -1 => UriPatternValue.CreatePattern(rest.ToString()),
-                [':', .. var rest] => UriPatternValue.CreateExact(rest.ToString()),
+                [':', '*'] => new Any(),
+                [':', .. var rest] when rest.IndexOf('*') != -1 => new PatternValue(rest.ToString()),
+                [':', .. var rest] => new ExactValue(rest.ToString()),
                 _ => throw new UnreachableException()
             };
         }
@@ -114,10 +114,10 @@ internal static class UriPatternParser
         {
             return path switch
             {
-                [] => UriPatternValue.CreateAny(),
-                ['/', '*'] => UriPatternValue.CreateAny(),
-                ['/', .. var rest] when rest.IndexOf('*') != -1 => UriPatternValue.CreatePattern(path.ToString()),
-                ['/', ..] => UriPatternValue.CreateExact(path.ToString()),
+                [] => new Any(),
+                ['/', '*'] => new Any(),
+                ['/', .. var rest] when rest.IndexOf('*') != -1 => new PatternValue(path.ToString()),
+                ['/', ..] => new ExactValue(path.ToString()),
                 _ => throw new UnreachableException()
             };
         }
@@ -126,11 +126,11 @@ internal static class UriPatternParser
         {
             return query switch
             {
-                [] => UriPatternValue.CreateAny(),
-                ['?'] => UriPatternValue.CreateAny(),
-                ['?', '*'] => UriPatternValue.CreateAny(),
-                ['?', .. var rest] when rest.IndexOf('*') != -1 => UriPatternValue.CreatePattern(rest.ToString()),
-                ['?', .. var rest] => UriPatternValue.CreateExact(rest.ToString()),
+                [] => new Any(),
+                ['?'] => new Any(),
+                ['?', '*'] => new Any(),
+                ['?', .. var rest] when rest.IndexOf('*') != -1 => new PatternValue(rest.ToString()),
+                ['?', .. var rest] => new ExactValue(rest.ToString()),
                 _ => throw new UnreachableException()
             };
         }

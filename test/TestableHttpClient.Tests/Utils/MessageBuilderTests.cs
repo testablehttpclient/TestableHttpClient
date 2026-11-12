@@ -87,7 +87,7 @@ public sealed class MessageBuilderTests
             Headers = new(new HeaderList()
             {
                 ["Header1"] = new Any(),
-                ["Header2"] = new Pattern("Value2"),
+                ["Header2"] = new PatternValue("Value2"),
             })
         };
 
@@ -106,7 +106,7 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Content = new(new Pattern("test"))
+            Content = new(new PatternValue("test"))
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);
@@ -125,9 +125,9 @@ public sealed class MessageBuilderTests
         {
             Headers = new(new HeaderList()
             {
-                ["Content-Type"] = new Pattern("application/json")
+                ["Content-Type"] = new PatternValue("application/json")
             }),
-            Content = new(new Pattern("""
+            Content = new(new PatternValue("""
             {
               "test": "value"
             }

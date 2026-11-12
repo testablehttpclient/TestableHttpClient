@@ -15,7 +15,7 @@ internal static class HttpHeadersExtensions
         return headerValue switch
         {
             Any => true,
-            Pattern pattern => StringMatcher.Matches(value, pattern.pattern, false),
+            PatternValue pattern => StringMatcher.Matches(value, pattern.pattern, false),
             _ => throw new UnreachableException()
         };
     }

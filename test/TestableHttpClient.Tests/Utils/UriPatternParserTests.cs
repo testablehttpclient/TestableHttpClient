@@ -16,11 +16,11 @@ public sealed class UriPatternParserTests
     public void Parse_WildCardPattern_ReturnsAnyUriPattern(string input)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Fact]
@@ -28,11 +28,11 @@ public sealed class UriPatternParserTests
     {
         string input = "https://*";
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateExact("https"), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new ExactValue("https"), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Fact]
@@ -40,11 +40,11 @@ public sealed class UriPatternParserTests
     {
         string input = "https://httpbin.org";
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateExact("https"), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateExact("httpbin.org"), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new ExactValue("https"), result.Scheme);
+        Assert.Equal(new ExactValue("httpbin.org"), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -53,11 +53,11 @@ public sealed class UriPatternParserTests
     public void Parse_PatternScheme_ReturnsUriPatternWithPatternScheme(string input, string expectedPattern)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreatePattern(expectedPattern), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new PatternValue(expectedPattern), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -72,11 +72,11 @@ public sealed class UriPatternParserTests
     public void Parse_ExactHost_ReturnsUriPatternWithExactHost(string input, string expectedValue)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateExact(expectedValue), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new ExactValue(expectedValue), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -89,11 +89,11 @@ public sealed class UriPatternParserTests
     public void Parse_PatternHost_ReturnsUriPatternWithPatternHost(string input, string expectedPattern)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreatePattern(expectedPattern), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new PatternValue(expectedPattern), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -105,11 +105,11 @@ public sealed class UriPatternParserTests
     public void Parse_ExactPort_ReturnsUriPatternWithExactHost(string input)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateExact("8443"), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new ExactValue("8443"), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -121,11 +121,11 @@ public sealed class UriPatternParserTests
     public void Parse_PatternPort_ReturnsUriPatternWithPatternHost(string input)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreatePattern("8*"), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new PatternValue("8*"), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -137,11 +137,11 @@ public sealed class UriPatternParserTests
     public void Parse_WildCardWithCompletePath_ReturnsUriPatternWithExactPath(string input, string expectedValue)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateExact(expectedValue), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new ExactValue(expectedValue), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -150,11 +150,11 @@ public sealed class UriPatternParserTests
     public void Parse_WildCardWithPatternPath_ReturnsUriPatternWithPatternPath(string input, string expectedPattern)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreatePattern(expectedPattern), result.Path);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new PatternValue(expectedPattern), result.Path);
+        Assert.Equal(new Any(), result.Query);
     }
 
     [Theory]
@@ -162,11 +162,11 @@ public sealed class UriPatternParserTests
     public void Parse_ExactQuery_ReturnsUriPatternWithExactQuery(string input, string expectedValue)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreateExact(expectedValue), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new ExactValue(expectedValue), result.Query);
     }
 
     [Theory]
@@ -175,11 +175,11 @@ public sealed class UriPatternParserTests
     public void Parse_PatternQuery_ReturnsUriPatternWithPatternQuery(string input, string expectedPattern)
     {
         UriPattern result = UriPatternParser.Parse(input);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Scheme);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Port);
-        Assert.Equal(UriPatternValue.CreateAny(), result.Path);
-        Assert.Equal(UriPatternValue.CreatePattern(expectedPattern), result.Query);
+        Assert.Equal(new Any(), result.Scheme);
+        Assert.Equal(new Any(), result.Host);
+        Assert.Equal(new Any(), result.Port);
+        Assert.Equal(new Any(), result.Path);
+        Assert.Equal(new PatternValue(expectedPattern), result.Query);
     }
 
     [Theory]

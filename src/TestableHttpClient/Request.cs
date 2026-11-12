@@ -1,17 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TestableHttpClient;
-
-internal readonly struct Any;
-internal readonly union HttpMethodOrAny(Any, HttpMethod);
-internal readonly union VersionOrAny(Any, Version);
-
-internal record struct Pattern(string pattern);
-internal record struct ExactValue(string value);
-internal readonly union HeaderValue(Any, Pattern);
-internal sealed class HeaderList : Dictionary<string, HeaderValue> { }
-internal readonly union Headers(Any, HeaderList);
-internal readonly union Content(Any, Pattern);
 
 internal sealed record Request : IEquatable<HttpRequestMessage>
 {
@@ -37,27 +27,25 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public Request AddHeader(string headerName) => AddHeader(headerName, new Any());
 
-    public Request AddHeader(string headerName, string patternValue) => AddHeader(headerName, new Pattern(patternValue));
+    public Request AddHeader(string headerName, string patternValue) => AddHeader(headerName, new PatternValue(patternValue));
 
     public Request AddHeader(string headerName, HeaderValue headerValue)
     {
 
-        if (Headers is Any)
+        switch (Headers)
         {
-            HeaderList headerValues = new() { [headerName] = headerValue };
-            return this with { Headers = new Headers(headerValues) };
-        }
-        else if (Headers is HeaderList headerValues)
-        {
-            headerValues[headerName] = headerValue;
-            return this;
-        }
-        else
-        {
-            throw new UnreachableException();
+            case Any:
+                HeaderList newHeaderValues = new() { [headerName] = headerValue };
+                return this with { Headers = new Headers(newHeaderValues) };
+            case HeaderList headerValues:
+                headerValues[headerName] = headerValue;
+                return this;
+            default:
+                throw new UnreachableException();
         }
     }
 
+    [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
     public bool Equals(HttpRequestMessage? other)
     {
         if (other is null)
@@ -117,8 +105,8 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
         bool contentMatches = Content switch
         {
             Any => true,
-            Pattern value when stringContent is null => false,
-            Pattern value => StringMatcher.Matches(stringContent, value.pattern, false),
+            PatternValue value when stringContent is null => false,
+            PatternValue value => StringMatcher.Matches(stringContent, value.pattern, false),
             _ => throw new UnreachableException()
         };
 

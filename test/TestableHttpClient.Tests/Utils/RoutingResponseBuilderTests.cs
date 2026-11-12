@@ -37,9 +37,9 @@ public sealed class RoutingResponseBuilderTests
         builder.Map("https://httpbin.org", response);
 
         var routeDefintion = builder.RoutingResponse.ResponseMap.Keys.Single();
-        Assert.Equal(UriPatternValue.CreateExact("https"), routeDefintion.Scheme);
-        Assert.Equal(UriPatternValue.CreateExact("httpbin.org"), routeDefintion.Host);
-        Assert.Equal(UriPatternValue.CreateAny(), routeDefintion.Path);
+        Assert.Equal(new ExactValue("https"), routeDefintion.Scheme);
+        Assert.Equal(new ExactValue("httpbin.org"), routeDefintion.Host);
+        Assert.Equal(new Any(), routeDefintion.Path);
 
         var configuredResponse = builder.RoutingResponse.ResponseMap.Values.Single();
         Assert.Same(response, configuredResponse);

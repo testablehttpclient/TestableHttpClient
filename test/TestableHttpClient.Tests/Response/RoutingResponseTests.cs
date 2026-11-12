@@ -40,7 +40,7 @@ public sealed class RoutingResponseTests
         {
             ResponseMap = new()
             {
-                [UriPattern.Any] = StatusCode(HttpStatusCode.OK)
+                [new UriPattern()] = StatusCode(HttpStatusCode.OK)
             }
         };
 

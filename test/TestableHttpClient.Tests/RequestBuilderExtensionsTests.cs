@@ -4,6 +4,7 @@ using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests;
 
+[SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
 public sealed class RequestBuilderExtensionsTests
 {
     private readonly RequestBuilder sut = new(new());
@@ -61,7 +62,7 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Any(), request.Headers);
-        Assert.Equal(new Pattern("{\"hello\":1}"), request.Content);
+        Assert.Equal(new PatternValue("{\"hello\":1}"), request.Content);
     }
 
     [Fact]
@@ -86,8 +87,8 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
-        Assert.Equal(new Pattern("null"), request.Content);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new PatternValue("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new PatternValue("null"), request.Content);
     }
 
     [Fact]
@@ -98,8 +99,8 @@ public sealed class RequestBuilderExtensionsTests
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.Equal(UriPatternParser.Parse("https://localhost"), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
-        Assert.Equal(new Pattern("{\"hello\":1}"), request.Content);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new PatternValue("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new PatternValue("{\"hello\":1}"), request.Content);
     }
 
     [Fact]
@@ -116,10 +117,10 @@ public sealed class RequestBuilderExtensionsTests
         Request request = sut.WithJsonContent(null).Build();
 
         Assert.Equal(new Any(), request.Method);
-        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new UriPattern(), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
-        Assert.Equal(new Pattern("null"), request.Content);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new PatternValue("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new PatternValue("null"), request.Content);
     }
 
     [Fact]
@@ -128,10 +129,10 @@ public sealed class RequestBuilderExtensionsTests
         Request request = sut.WithJsonContent(new { hello = 1 }).Build();
 
         Assert.Equal(new Any(), request.Method);
-        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new UriPattern(), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
-        Assert.Equal(new Pattern("{\"hello\":1}"), request.Content);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new PatternValue("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new PatternValue("{\"hello\":1}"), request.Content);
     }
 
     [Fact]
@@ -145,10 +146,10 @@ public sealed class RequestBuilderExtensionsTests
         Request request = sut.WithJsonContent(new { hello = 1 }, options).Build();
 
         Assert.Equal(new Any(), request.Method);
-        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new UriPattern(), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
-        Assert.Equal(new Pattern("""
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new PatternValue("application/json*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new PatternValue("""
             {
               "hello": 1
             }
@@ -175,9 +176,9 @@ public sealed class RequestBuilderExtensionsTests
         Request request = sut.WithFormUrlEncodedContent([new KeyValuePair<string?, string?>("username", "alice")]).Build();
 
         Assert.Equal(new Any(), request.Method);
-        Assert.Equal(UriPattern.Any, request.RequestUri);
+        Assert.Equal(new UriPattern(), request.RequestUri);
         Assert.Equal(new Any(), request.Version);
-        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new Pattern("application/x-www-form-urlencoded*") }, request.Headers is HeaderList headerValues ? headerValues : null);
-        Assert.Equal(new Pattern("username=alice"), request.Content);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Type"] = new PatternValue("application/x-www-form-urlencoded*") }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new PatternValue("username=alice"), request.Content);
     }
 }
