@@ -7,13 +7,7 @@ internal readonly union HttpMethodOrAny(Any, HttpMethod);
 internal readonly union VersionOrAny(Any, Version);
 
 internal sealed class HeaderList : Dictionary<string, UriPatternValue> { }
-internal readonly struct Headers
-{
-    public readonly object? Value { get; }
-    public Headers() => Value = new Any();
-    public Headers(Any value) => Value = value;
-    public Headers(HeaderList value) => Value = value;
-}
+internal readonly union Headers(Any, HeaderList);
 
 internal record struct Pattern(string pattern);
 internal readonly union Content(Any, Pattern);
@@ -25,8 +19,9 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
         UriPatternMatchingOptions = uriPatternMatchingOptions;
 
         Method = new Any();
-        Content = new Any();
         Version = new Any();
+        Headers = new Any();
+        Content = new Any();
     }
 
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; }
@@ -35,7 +30,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
     public UriPattern RequestUri { get; init; } = new();
     public VersionOrAny Version { get; init; }
 
-    public Headers Headers { get; init; } = new();
+    public Headers Headers { get; init; }
 
     public Content Content { get; init; }
 
@@ -46,12 +41,12 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
     public Request AddHeader(string headerName, UriPatternValue headerValue)
     {
 
-        if (Headers.Value is Any)
+        if (Headers is Any)
         {
             HeaderList headerValues = new() { [headerName] = headerValue };
             return this with { Headers = new Headers(headerValues) };
         }
-        else if (Headers.Value is HeaderList headerValues)
+        else if (Headers is HeaderList headerValues)
         {
             headerValues[headerName] = headerValue;
             return this;
@@ -98,7 +93,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             return false;
         }
 
-        if (Headers.Value is HeaderList headerValues)
+        if (Headers is HeaderList headerValues)
         {
             foreach (var keyValuePair in headerValues)
             {

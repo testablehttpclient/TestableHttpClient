@@ -29,7 +29,7 @@ internal static class MessageBuilder
 
         var requestUri = BuildRequestUri(expectedRequest.RequestUri);
 
-        var headers = expectedRequest.Headers.Value switch
+        var headers = expectedRequest.Headers switch
         {
             Any => "",
             HeaderList headerValues => BuildHeaders(headerValues),
