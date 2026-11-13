@@ -41,7 +41,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Request expectedRequest = expectedRequestBuilder.Build();
         try
         {
-            actualCount = Requests.Count(expectedRequest.Matches);
+            actualCount = Requests.Count(request => RequestMatcher.Matches(expectedRequest, request, Options.UriPatternMatchingOptions));
         }
         catch (ObjectDisposedException)
         {

@@ -12,7 +12,7 @@ public sealed class RequestBuilder
     internal RequestBuilder(TestableHttpMessageHandlerOptions? options = null)
     {
         Options = options ?? new();
-        request = new(Options.UriPatternMatchingOptions);
+        request = new();
     }
 
     /// <summary>

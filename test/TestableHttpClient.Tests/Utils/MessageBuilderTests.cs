@@ -7,7 +7,7 @@ public sealed class MessageBuilderTests
     [Fact]
     public void BuildMessage_NoExpectedCountZeroActualCountDefaultExpectedRequest()
     {
-        Request request = new(new());
+        Request request = new();
         var result = MessageBuilder.BuildMessage(null, 0, request);
 
         Assert.Equal("Expected at least one request to be made, but no requests were made.", result);
@@ -19,7 +19,7 @@ public sealed class MessageBuilderTests
     [InlineData(10, "10 requests were made")]
     public void BuildMessage_NoExpectedCountVariableActualCountDefaultExpectedRequest(int actualCount, string expectedMessage)
     {
-        Request request = new(new());
+        Request request = new();
         var result = MessageBuilder.BuildMessage(null, actualCount, request);
 
         Assert.Equal($"Expected at least one request to be made, and {expectedMessage}.", result);
@@ -28,7 +28,7 @@ public sealed class MessageBuilderTests
     [Fact]
     public void BuildMessage_ZeroExpectedCountZeroActualCountDefaultExpectedRequest()
     {
-        Request request = new(new());
+        Request request = new();
         var result = MessageBuilder.BuildMessage(0, 0, request);
 
         Assert.Equal($"Expected no requests to be made, and no requests were made.", result);
@@ -40,7 +40,7 @@ public sealed class MessageBuilderTests
     [InlineData(10, "10 requests")]
     public void BuildMessage_VariableExpectedCountZeroActualCountDefaultExpectedRequest(int expectedCount, string expectedMessage)
     {
-        Request request = new(new());
+        Request request = new();
         var result = MessageBuilder.BuildMessage(expectedCount, 0, request);
 
         Assert.Equal($"Expected {expectedMessage} to be made, but no requests were made.", result);
@@ -53,7 +53,7 @@ public sealed class MessageBuilderTests
     [InlineData(10, "10 GET requests")]
     public void BuildMessage_VariableExpectedCountZeroActualCountRequestSpecifyingMethod(int? expectedCount, string expectedMessage)
     {
-        Request request = new(new())
+        Request request = new()
         {
             Method = new(HttpMethod.Get),
         };
@@ -69,7 +69,7 @@ public sealed class MessageBuilderTests
     [InlineData("/test?Hello", "/test?Hello")]
     public void BuildMessage_OnexpectedCountZeroActualCountRequestSpecifyingUri(string uri, string expectedRepresentation)
     {
-        Request request = new(new())
+        Request request = new()
         {
             RequestUri = UriPatternParser.Parse(uri)
         };
@@ -82,7 +82,7 @@ public sealed class MessageBuilderTests
     [Fact]
     public void BuildMessage_OnexpectedCountZeroActualCountRequestSpecifyingHeaders()
     {
-        Request request = new(new())
+        Request request = new()
         {
             Headers = new(new HeaderList()
             {
@@ -104,7 +104,7 @@ public sealed class MessageBuilderTests
     [Fact]
     public void BuildMessage_OnexpectedCountZeroActualCountRequestSpecifyingContent()
     {
-        Request request = new(new())
+        Request request = new()
         {
             Content = new(new PatternValue("test"))
         };
@@ -121,7 +121,7 @@ public sealed class MessageBuilderTests
     [Fact]
     public void BuildMessage_OnexpectedCountZeroActualCountRequestSpecifyingHeadersSpecifyingContent()
     {
-        Request request = new(new())
+        Request request = new()
         {
             Headers = new(new HeaderList()
             {
