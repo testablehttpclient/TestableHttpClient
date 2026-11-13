@@ -10,6 +10,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
         UriPatternMatchingOptions = uriPatternMatchingOptions;
 
         Method = new Any();
+        RequestUri = new();
         Version = new Any();
         Headers = new Any();
         Content = new Any();
@@ -17,29 +18,29 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
 
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; }
 
-    public HttpMethodOrAny Method { get; init; }
-    public UriPattern RequestUri { get; init; } = new();
-    public VersionOrAny Version { get; init; }
+    public HttpMethodOrAny Method { get; set; }
+    public UriPattern RequestUri { get; set; }
+    public VersionOrAny Version { get; set; }
 
-    public Headers Headers { get; init; }
+    public Headers Headers { get; set; }
 
-    public Content Content { get; init; }
+    public Content Content { get; set; }
 
-    public Request AddHeader(string headerName) => AddHeader(headerName, new Any());
+    public void AddHeader(string headerName) => AddHeader(headerName, new Any());
 
-    public Request AddHeader(string headerName, string patternValue) => AddHeader(headerName, new PatternValue(patternValue));
+    public void AddHeader(string headerName, string patternValue) => AddHeader(headerName, new PatternValue(patternValue));
 
-    public Request AddHeader(string headerName, HeaderValue headerValue)
+    public void AddHeader(string headerName, HeaderValue headerValue)
     {
-
         switch (Headers)
         {
             case Any:
                 HeaderList newHeaderValues = new() { [headerName] = headerValue };
-                return this with { Headers = new Headers(newHeaderValues) };
+                Headers = new Headers(newHeaderValues);
+                break;
             case HeaderList headerValues:
                 headerValues[headerName] = headerValue;
-                return this;
+                break;
             default:
                 throw new UnreachableException();
         }
