@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient;
 
-internal sealed record UriPattern
+internal readonly record struct UriPattern
 {
     public UriPattern()
     {
