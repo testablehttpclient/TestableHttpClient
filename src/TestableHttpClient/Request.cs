@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace TestableHttpClient;
 
-internal sealed record Request : IEquatable<HttpRequestMessage>
+internal sealed record Request
 {
     public Request(UriPatternMatchingOptions uriPatternMatchingOptions)
     {
@@ -47,7 +47,7 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
     }
 
     [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
-    public bool Equals(HttpRequestMessage? other)
+    public bool Matches(HttpRequestMessage? other)
     {
         if (other is null)
         {
@@ -58,7 +58,6 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
         {
             Any => true,
             HttpMethod value => other.Method == value,
-            _ => throw new UnreachableException()
         };
 
         if (!methodMatches)
@@ -75,7 +74,6 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
         {
             Any => true,
             Version value => other.Version == value,
-            _ => throw new UnreachableException()
         };
 
         if (!versionMatches)
@@ -108,7 +106,6 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             Any => true,
             PatternValue value when stringContent is null => false,
             PatternValue value => StringMatcher.Matches(stringContent, value.pattern, false),
-            _ => throw new UnreachableException()
         };
 
         if (!contentMatches)
