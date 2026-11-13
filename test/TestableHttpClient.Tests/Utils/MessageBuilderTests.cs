@@ -1,4 +1,4 @@
-﻿using TestableHttpClient.Utils;
+using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests.Utils;
 
@@ -55,7 +55,7 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Method = HttpMethod.Get,
+            Method = new(HttpMethod.Get),
         };
 
         var result = MessageBuilder.BuildMessage(expectedCount, 0, request);
@@ -84,12 +84,11 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Headers = new Dictionary<string, Value>()
+            Headers = new(new HeaderList()
             {
-                ["Header1"] = Value.Any(),
-                ["Header2"] = Value.Pattern("Value2"),
-                ["Header3"] = Value.Exact("Value3"),
-            }
+                ["Header1"] = new Any(),
+                ["Header2"] = new PatternValue("Value2"),
+            })
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);
@@ -98,7 +97,6 @@ public sealed class MessageBuilderTests
             Expected one request to be made with headers:
               Header1: <any value>
               Header2: 'Value2'
-              Header3: 'Value3'
             , but no requests were made.
             """, result);
     }
@@ -108,7 +106,7 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Content = "test"
+            Content = new(new PatternValue("test"))
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);
@@ -125,15 +123,15 @@ public sealed class MessageBuilderTests
     {
         Request request = new(new())
         {
-            Headers = new Dictionary<string, Value>()
+            Headers = new(new HeaderList()
             {
-                ["Content-Type"] = Value.Exact("application/json")
-            },
-            Content = """
+                ["Content-Type"] = new PatternValue("application/json")
+            }),
+            Content = new(new PatternValue("""
             {
               "test": "value"
             }
-            """
+            """))
         };
 
         var result = MessageBuilder.BuildMessage(1, 0, request);

@@ -2,7 +2,7 @@
 
 namespace TestableHttpClient.Utils;
 
-internal static class NetStandardPollyFill
+internal static class NetStandardPolyFill
 {
     public static Task<byte[]> ReadAsByteArrayAsync(this HttpContent content, CancellationToken cancellationToken = default)
     {

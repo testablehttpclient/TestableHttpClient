@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace TestableHttpClient.Utils;
 
 internal static class MessageBuilder
 {
+    [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
     internal static string BuildMessage(int? expectedCount, int actualCount, Request expectedRequest)
     {
         var pass = expectedCount switch
@@ -14,8 +16,8 @@ internal static class MessageBuilder
         };
         var method = expectedRequest.Method switch
         {
-            null => "",
-            _ => $"{expectedRequest.Method} "
+            Any => "",
+            HttpMethod httpMethod => $"{httpMethod} ",
         };
 
         var expectedMessage = expectedCount switch
@@ -26,39 +28,19 @@ internal static class MessageBuilder
             _ => $"{expectedCount} {method}requests"
         };
 
-        var requestUri = expectedRequest.RequestUri switch
-        {
-            null => "",
-            _ => BuildRequestUri(expectedRequest.RequestUri)
-        };
+        var requestUri = BuildRequestUri(expectedRequest.RequestUri);
 
         var headers = expectedRequest.Headers switch
         {
-            null => "",
-            _ => BuildHeaders(expectedRequest.Headers)
+            Any => "",
+            HeaderList headerValues => BuildHeaders(headerValues),
         };
 
-        string content = string.Empty;
-
-        if (!string.IsNullOrEmpty(expectedRequest.Content))
+        string content = expectedRequest.Content switch
         {
-            StringBuilder contentBuilder = new();
-            if (string.IsNullOrEmpty(headers))
-            {
-                contentBuilder.AppendLine(" with content:");
-            }
-            else
-            {
-                contentBuilder.AppendLine("and content:");
-            }
-
-            string[] splitcontent = expectedRequest.Content!.Split(['\n']);
-            foreach (var line in splitcontent)
-            {
-                contentBuilder.AppendLine(CultureInfo.InvariantCulture, $"  {line.Trim('\r')}");
-            }
-            content = contentBuilder.ToString();
-        }
+            Any => "",
+            PatternValue pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
+        };
 
         var actualMessage = actualCount switch
         {
@@ -123,13 +105,13 @@ internal static class MessageBuilder
         }
     }
 
-    private static string BuildHeaders(Dictionary<string, Value> headerValues)
+    private static string BuildHeaders(HeaderList headerValues)
     {
         StringBuilder headers = new();
 
         foreach (var header in headerValues)
         {
-            var value = BuildValue(header.Value);
+            var value = BuildHeaderValue(header.Value);
             if (string.IsNullOrEmpty(value))
             {
                 headers.AppendLine(CultureInfo.InvariantCulture, $"  {header.Key}: <any value>");
@@ -153,14 +135,43 @@ internal static class MessageBuilder
         }
     }
 
-    private static string BuildValue(Value value)
+    private static string BuildHeaderValue(HeaderValue value)
     {
         return value switch
         {
-            AnyValue => "",
-            ExactValue exactValue => exactValue.ExpectedValue,
-            PatternValue patternValue => patternValue.ExpectedValue,
+            Any => "",
+            PatternValue pattern => pattern.pattern,
             _ => throw new UnreachableException()
         };
+    }
+
+    private static string BuildValue(UriPatternValue value)
+    {
+        return value switch
+        {
+            Any => "",
+            ExactValue exactValue => exactValue.value,
+            PatternValue patternValue => patternValue.pattern
+        };
+    }
+
+    private static string BuildContent(PatternValue value, bool hasHeaders)
+    {
+        string[] content = value.pattern.Split(['\n']);
+
+        StringBuilder contentBuilder = new();
+        if (hasHeaders)
+        {
+            contentBuilder.AppendLine(" with content:");
+        }
+        else
+        {
+            contentBuilder.AppendLine("and content:");
+        }
+        foreach (var line in content)
+        {
+            contentBuilder.AppendLine(CultureInfo.InvariantCulture, $"  {line.Trim('\r')}");
+        }
+        return contentBuilder.ToString();
     }
 }

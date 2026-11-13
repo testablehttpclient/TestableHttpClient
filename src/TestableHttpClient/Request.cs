@@ -1,65 +1,89 @@
-﻿namespace TestableHttpClient;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
-internal sealed record Request : IEquatable<HttpRequestMessage>
+namespace TestableHttpClient;
+
+internal sealed record Request
 {
     public Request(UriPatternMatchingOptions uriPatternMatchingOptions)
     {
         UriPatternMatchingOptions = uriPatternMatchingOptions;
+
+        Method = new Any();
+        RequestUri = new();
+        Version = new Any();
+        Headers = new Any();
+        Content = new Any();
     }
 
     public UriPatternMatchingOptions UriPatternMatchingOptions { get; }
 
-    public HttpMethod? Method { get; init; }
-    public UriPattern? RequestUri { get; init; }
-    public Version? Version { get; init; }
+    public HttpMethodOrAny Method { get; set; }
+    public UriPattern RequestUri { get; set; }
+    public VersionOrAny Version { get; set; }
 
-    public Dictionary<string, Value>? Headers { get; init; }
+    public Headers Headers { get; set; }
 
-    public string? Content { get; init; }
+    public Content Content { get; set; }
 
-    public Request AddHeader(string headerName) => AddHeader(headerName, Value.Any());
+    public void AddHeader(string headerName) => AddHeader(headerName, new Any());
 
-    public Request AddHeader(string headerName, string headerValue) => AddHeader(headerName, Value.Pattern(headerValue));
+    public void AddHeader(string headerName, string patternValue) => AddHeader(headerName, new PatternValue(patternValue));
 
-    public Request AddHeader(string headerName, Value headerValue)
+    public void AddHeader(string headerName, HeaderValue headerValue)
     {
-        if (Headers is null)
+        switch (Headers)
         {
-            Dictionary<string, Value> headerValues = new() { [headerName] = headerValue };
-            return this with { Headers = headerValues };
-        }
-        else
-        {
-            Headers[headerName] = headerValue;
-            return this;
+            case Any:
+                HeaderList newHeaderValues = new() { [headerName] = headerValue };
+                Headers = new Headers(newHeaderValues);
+                break;
+            case HeaderList headerValues:
+                headerValues[headerName] = headerValue;
+                break;
+            default:
+                throw new UnreachableException();
         }
     }
 
-    public bool Equals(HttpRequestMessage? other)
+    [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
+    public bool Matches(HttpRequestMessage? other)
     {
         if (other is null)
         {
             return false;
         }
 
-        if (Method is not null && other.Method != Method)
+        bool methodMatches = Method switch
+        {
+            Any => true,
+            HttpMethod value => other.Method == value,
+        };
+
+        if (!methodMatches)
         {
             return false;
         }
 
-        if (RequestUri is not null && other.RequestUri is not null && !RequestUri.Matches(other.RequestUri, UriPatternMatchingOptions))
+        if (other.RequestUri is not null && !RequestUri.Matches(other.RequestUri, UriPatternMatchingOptions))
         {
             return false;
         }
 
-        if (Version is not null && other.Version != Version)
+        bool versionMatches = Version switch
+        {
+            Any => true,
+            Version value => other.Version == value,
+        };
+
+        if (!versionMatches)
         {
             return false;
         }
 
-        if (Headers is not null)
+        if (Headers is HeaderList headerValues)
         {
-            foreach (var keyValuePair in Headers)
+            foreach (var keyValuePair in headerValues)
             {
                 if (!other.Headers.HasHeader(keyValuePair.Key, keyValuePair.Value) && (other.Content is null || !other.Content.Headers.HasHeader(keyValuePair.Key, keyValuePair.Value)))
                 {
@@ -68,31 +92,26 @@ internal sealed record Request : IEquatable<HttpRequestMessage>
             }
         }
 
-        if (Content is not null)
+        string? stringContent = null;
+        if (other.Content is not null)
         {
-            if (other.Content is null)
-            {
-                return false;
-            }
-
-            var stringContent = other.Content.ReadAsStringAsync()
+            stringContent = other.Content.ReadAsStringAsync()
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
-
-            var contentMatches = Content switch
-            {
-                "" => stringContent == Content,
-                "*" => true,
-                _ => StringMatcher.Matches(stringContent, Content),
-            };
-
-            if (!contentMatches)
-            {
-                return false;
-            }
         }
 
+        bool contentMatches = Content switch
+        {
+            Any => true,
+            PatternValue value when stringContent is null => false,
+            PatternValue value => StringMatcher.Matches(stringContent, value.pattern, false),
+        };
+
+        if (!contentMatches)
+        {
+            return false;
+        }
         return true;
     }
 }

@@ -75,62 +75,62 @@ internal static class UriPatternParser
             Query = ParseQuery(queryPattern)
         };
 
-        static Value ParseScheme(ReadOnlySpan<char> scheme)
+        static UriPatternValue ParseScheme(ReadOnlySpan<char> scheme)
         {
             return scheme switch
             {
-                [] => Value.Any(),
-                ['*'] => Value.Any(),
-                _ when scheme.IndexOf('*') != -1 => Value.Pattern(scheme.ToString()),
-                _ => Value.Exact(scheme.ToString())
+                [] => new Any(),
+                ['*'] => new Any(),
+                _ when scheme.IndexOf('*') != -1 => new PatternValue(scheme.ToString()),
+                _ => new ExactValue(scheme.ToString())
             };
         }
 
-        static Value ParseHost(ReadOnlySpan<char> host)
+        static UriPatternValue ParseHost(ReadOnlySpan<char> host)
         {
             return host switch
             {
-                [] => Value.Any(),
-                ['*'] => Value.Any(),
-                _ when host.IndexOf('*') != -1 => Value.Pattern(host.ToString()),
-                _ => Value.Exact(host.ToString())
+                [] => new Any(),
+                ['*'] => new Any(),
+                _ when host.IndexOf('*') != -1 => new PatternValue(host.ToString()),
+                _ => new ExactValue(host.ToString())
             };
         }
 
-        static Value ParsePort(ReadOnlySpan<char> port)
+        static UriPatternValue ParsePort(ReadOnlySpan<char> port)
         {
             return port switch
             {
-                [] => Value.Any(),
+                [] => new Any(),
                 [':'] => throw new UriPatternParserException("Invalid port"),
-                [':', '*'] => Value.Any(),
-                [':', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
-                [':', .. var rest] => Value.Exact(rest.ToString()),
+                [':', '*'] => new Any(),
+                [':', .. var rest] when rest.IndexOf('*') != -1 => new PatternValue(rest.ToString()),
+                [':', .. var rest] => new ExactValue(rest.ToString()),
                 _ => throw new UnreachableException()
             };
         }
 
-        static Value ParsePath(ReadOnlySpan<char> path)
+        static UriPatternValue ParsePath(ReadOnlySpan<char> path)
         {
             return path switch
             {
-                [] => Value.Any(),
-                ['/', '*'] => Value.Any(),
-                ['/', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(path.ToString()),
-                ['/', ..] => Value.Exact(path.ToString()),
+                [] => new Any(),
+                ['/', '*'] => new Any(),
+                ['/', .. var rest] when rest.IndexOf('*') != -1 => new PatternValue(path.ToString()),
+                ['/', ..] => new ExactValue(path.ToString()),
                 _ => throw new UnreachableException()
             };
         }
 
-        static Value ParseQuery(ReadOnlySpan<char> query)
+        static UriPatternValue ParseQuery(ReadOnlySpan<char> query)
         {
             return query switch
             {
-                [] => Value.Any(),
-                ['?'] => Value.Any(),
-                ['?', '*'] => Value.Any(),
-                ['?', .. var rest] when rest.IndexOf('*') != -1 => Value.Pattern(rest.ToString()),
-                ['?', .. var rest] => Value.Exact(rest.ToString()),
+                [] => new Any(),
+                ['?'] => new Any(),
+                ['?', '*'] => new Any(),
+                ['?', .. var rest] when rest.IndexOf('*') != -1 => new PatternValue(rest.ToString()),
+                ['?', .. var rest] => new ExactValue(rest.ToString()),
                 _ => throw new UnreachableException()
             };
         }

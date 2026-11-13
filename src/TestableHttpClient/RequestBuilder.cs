@@ -5,7 +5,7 @@
 /// </summary>
 public sealed class RequestBuilder
 {
-    private Request request;
+    private readonly Request request;
 
     internal TestableHttpMessageHandlerOptions Options { get; }
 
@@ -24,7 +24,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(httpMethod);
 
-        request = request with { Method = httpMethod };
+        request.Method = httpMethod;
         return this;
     }
 
@@ -37,7 +37,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNullOrEmpty(pattern);
 
-        request = request with { RequestUri = UriPatternParser.Parse(pattern) };
+        request.RequestUri = UriPatternParser.Parse(pattern);
         return this;
     }
 
@@ -50,7 +50,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(httpVersion);
 
-        request = request with { Version = httpVersion };
+        request.Version = httpVersion;
         return this;
     }
 
@@ -59,7 +59,13 @@ public sealed class RequestBuilder
     /// </summary>
     /// <param name="headerName">The expected header name.</param>
     /// <returns>The request builder.</returns>
-    public RequestBuilder WithHeader(string headerName) => WithHeader(headerName, "*");
+    public RequestBuilder WithHeader(string headerName)
+    {
+        Guard.ThrowIfNullOrEmpty(headerName);
+
+        request.AddHeader(headerName);
+        return this;
+    }
 
     /// <summary>
     /// Specify the header name and value that should be present in the request, the value can be a pattern.
@@ -72,7 +78,7 @@ public sealed class RequestBuilder
         Guard.ThrowIfNullOrEmpty(headerName);
         Guard.ThrowIfNullOrEmpty(pattern);
 
-        request = request.AddHeader(headerName, Value.Pattern(pattern));
+        request.AddHeader(headerName, pattern);
         return this;
     }
 
@@ -85,7 +91,7 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(pattern);
 
-        request = request with { Content = pattern };
+        request.Content = new PatternValue(pattern);
         return this;
     }
 

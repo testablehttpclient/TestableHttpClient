@@ -1,7 +1,8 @@
-﻿using TestableHttpClient.Utils;
+using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests;
 
+[SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
 public sealed class RequestBuilderTests
 {
     private readonly RequestBuilder sut = new(new());
@@ -11,11 +12,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
-        Assert.Null(request.Headers);
-        Assert.Null(request.Content);
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equal(new Any(), request.Headers);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -30,10 +31,10 @@ public sealed class RequestBuilderTests
         Request request = sut.WithMethod(HttpMethod.Post).Build();
 
         Assert.Equal(HttpMethod.Post, request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
-        Assert.Null(request.Headers);
-        Assert.Null(request.Content);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equal(new Any(), request.Headers);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -53,11 +54,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithRequestUri("http*//test.example").Build();
 
-        Assert.Null(request.Method);
+        Assert.Equal(new Any(), request.Method);
         Assert.Equal(UriPatternParser.Parse("http*//test.example"), request.RequestUri);
-        Assert.Null(request.Version);
-        Assert.Null(request.Headers);
-        Assert.Null(request.Content);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equal(new Any(), request.Headers);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -71,11 +72,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithVersion(HttpVersion.Version11).Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
         Assert.Equal(HttpVersion.Version11, request.Version);
-        Assert.Null(request.Headers);
-        Assert.Null(request.Content);
+        Assert.Equal(new Any(), request.Headers);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -97,11 +98,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithHeader("Content-Length").Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
-        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Any() }, request.Headers);
-        Assert.Null(request.Content);
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Length"] = new Any() }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -121,11 +122,11 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithHeader("Content-Length", "*").Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
-        Assert.Equal(new Dictionary<string, Value>() { ["Content-Length"] = Value.Pattern("*") }, request.Headers);
-        Assert.Null(request.Content);
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Length"] = new Any() }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new Any(), request.Content);
     }
 
     [Fact]
@@ -139,10 +140,10 @@ public sealed class RequestBuilderTests
     {
         Request request = sut.WithContent("content").Build();
 
-        Assert.Null(request.Method);
-        Assert.Null(request.RequestUri);
-        Assert.Null(request.Version);
-        Assert.Null(request.Headers);
-        Assert.Equal("content", request.Content);
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equal(new Any(), request.Headers);
+        Assert.Equal(new PatternValue("content"), request.Content);
     }
 }
