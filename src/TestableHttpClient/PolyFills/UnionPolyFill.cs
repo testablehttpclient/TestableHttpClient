@@ -9,9 +9,6 @@ namespace System.Runtime.CompilerServices;
 // https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.iunion?view=net-11.0
 public interface IUnion
 {
-    /// <summary>
-    /// Gets the value contained in the union, or <see langword="null"/> if the union has no value.
-    /// </summary>
     public object? Value { get; }
 }
 
@@ -27,17 +24,11 @@ public sealed class UnionAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public sealed class IsClosedTypeAttribute : Attribute
 {
-    private Type[] derivedTypes = Type.EmptyTypes;
-
-    /// <summary>
-    /// Gets or sets the derived types of the closed type.
-    /// A <see langword="null"/> value is normalized to an empty array.
-    /// </summary>
     public Type[] DerivedTypes
     {
-        get => derivedTypes;
-        set => derivedTypes = value ?? Type.EmptyTypes;
-    }
+        get;
+        set => field = value ?? Type.EmptyTypes;
+    } = Type.EmptyTypes;
 }
 
 #pragma warning restore RS0016 // Add public types and members to the declared API
