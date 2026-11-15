@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace TestableHttpClient;
+namespace TestableHttpClient.Matchers;
 
-internal class RequestMatcher
+internal static class RequestMatcher
 {
     [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
     public static bool Matches(Request expected, HttpRequestMessage actual, UriPatternMatchingOptions options)
@@ -63,7 +63,7 @@ internal class RequestMatcher
         {
             Any => true,
             PatternValue value when stringContent is null => false,
-            PatternValue value => StringMatcher.Matches(stringContent, value.pattern, false),
+            PatternValue value => ValueMatcher.Matches(stringContent, value, false),
         };
 
         if (!contentMatches)
@@ -71,5 +71,20 @@ internal class RequestMatcher
             return false;
         }
         return true;
+    }
+
+    internal static bool HasHeader(this HttpHeaders headers, string headerName, HeaderValue headerValue)
+    {
+        if (!headers.TryGetValues(headerName, out var values))
+        {
+            return false;
+        }
+
+        var value = string.Join(" ", values);
+        return headerValue switch
+        {
+            Any => true,
+            PatternValue pattern => ValueMatcher.Matches(value, pattern, false),
+        };
     }
 }

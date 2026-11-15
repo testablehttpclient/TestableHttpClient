@@ -1,4 +1,6 @@
-﻿namespace TestableHttpClient;
+﻿using TestableHttpClient.Matchers;
+
+namespace TestableHttpClient;
 
 /// <summary>
 /// This class makes it easy to create assertions on a collection of <seealso cref="HttpRequestMessage"/>s.

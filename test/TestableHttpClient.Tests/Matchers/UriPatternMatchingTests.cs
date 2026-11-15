@@ -1,5 +1,6 @@
-namespace TestableHttpClient.Tests;
+using TestableHttpClient.Matchers;
 
+namespace TestableHttpClient.Tests.Matchers;
 public sealed class UriPatternMatchingTests
 {
     private readonly UriPatternMatchingOptions defaultOptions = new();

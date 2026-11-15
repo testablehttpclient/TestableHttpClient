@@ -140,7 +140,7 @@ internal static class MessageBuilder
         return value switch
         {
             Any => "",
-            PatternValue pattern => pattern.pattern,
+            PatternValue pattern => pattern.Pattern,
             _ => throw new UnreachableException()
         };
     }
@@ -150,14 +150,14 @@ internal static class MessageBuilder
         return value switch
         {
             Any => "",
-            ExactValue exactValue => exactValue.value,
-            PatternValue patternValue => patternValue.pattern
+            ExactValue exactValue => exactValue.Value,
+            PatternValue patternValue => patternValue.Pattern
         };
     }
 
     private static string BuildContent(PatternValue value, bool hasHeaders)
     {
-        string[] content = value.pattern.Split(['\n']);
+        string[] content = value.Pattern.Split(['\n']);
 
         StringBuilder contentBuilder = new();
         if (hasHeaders)

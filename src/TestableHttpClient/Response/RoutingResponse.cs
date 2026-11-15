@@ -1,4 +1,6 @@
-﻿using static System.Net.HttpStatusCode;
+﻿using TestableHttpClient.Matchers;
+
+using static System.Net.HttpStatusCode;
 using static TestableHttpClient.Responses;
 
 namespace TestableHttpClient.Response;

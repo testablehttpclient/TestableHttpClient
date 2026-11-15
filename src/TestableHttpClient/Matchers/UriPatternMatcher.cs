@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace TestableHttpClient;
+namespace TestableHttpClient.Matchers;
 
 internal static class UriPatternMatcher
 {
@@ -16,7 +16,7 @@ internal static class UriPatternMatcher
     private static bool Matches(UriPatternValue patternValue, string value, bool ignoreCase) => patternValue switch
     {
         Any => true,
-        ExactValue exactValue => exactValue.value.Equals(value, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal),
-        PatternValue expectedPattern => StringMatcher.Matches(value, expectedPattern.pattern, ignoreCase)
+        ExactValue exactValue => ValueMatcher.Matches(value, exactValue, ignoreCase),
+        PatternValue expectedPattern => ValueMatcher.Matches(value, expectedPattern, ignoreCase)
     };
 }
