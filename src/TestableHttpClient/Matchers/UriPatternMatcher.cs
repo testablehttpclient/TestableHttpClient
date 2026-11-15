@@ -16,7 +16,7 @@ internal static class UriPatternMatcher
     private static bool Matches(UriPatternValue patternValue, string value, bool ignoreCase) => patternValue switch
     {
         Any => true,
-        ExactValue exactValue => ValueMatcher.Matches(value, exactValue, ignoreCase),
-        PatternValue expectedPattern => ValueMatcher.Matches(value, expectedPattern, ignoreCase)
+        ExactValue exactValue => ValueMatcher.Matches(exactValue, value, ignoreCase),
+        PatternValue expectedPattern => ValueMatcher.Matches(expectedPattern, value, ignoreCase)
     };
 }

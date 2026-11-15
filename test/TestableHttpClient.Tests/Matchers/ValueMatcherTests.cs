@@ -4,8 +4,8 @@ namespace TestableHttpClient.Tests.Matchers;
 
 public sealed class ValueMatcherTests
 {
-    private static bool MatchesExactValueCaseSensitive(string value, ExactValue exactValue) => ValueMatcher.Matches(value, exactValue, false);
-    private static bool MatchesExactValueCaseInsensitive(string value, ExactValue exactValue) => ValueMatcher.Matches(value, exactValue, true);
+    private static bool MatchesExactValueCaseSensitive(ExactValue expected, string actual) => ValueMatcher.Matches(expected, actual, false);
+    private static bool MatchesExactValueCaseInsensitive(ExactValue expected, string actual) => ValueMatcher.Matches(expected, actual, true);
 
     [Theory]
     [InlineData("")]
@@ -13,7 +13,7 @@ public sealed class ValueMatcherTests
     [InlineData("Test")]
     public void MatchesExactValue_CaseSensitive_ReturnsTrue(string value)
     {
-        Assert.True(MatchesExactValueCaseSensitive(value, new(value)));
+        Assert.True(MatchesExactValueCaseSensitive(new(value), value));
     }
 
     [Theory]
@@ -25,7 +25,7 @@ public sealed class ValueMatcherTests
     [InlineData("Test", "*st")]
     public void MatchesExactValue_CaseSensitive_ReturnswFalse(string value, string expectedValue)
     {
-        Assert.False(MatchesExactValueCaseSensitive(value, new(expectedValue)));
+        Assert.False(MatchesExactValueCaseSensitive(new(expectedValue), value));
     }
 
     [Theory]
@@ -36,7 +36,7 @@ public sealed class ValueMatcherTests
     [InlineData("Test", "test")]
     public void MatchesExactValue_CaseInsensitive_ReturnsTrue(string value, string expectedValue)
     {
-        Assert.True(MatchesExactValueCaseInsensitive(value, new(expectedValue)));
+        Assert.True(MatchesExactValueCaseInsensitive(new(expectedValue), value));
     }
 
     [Theory]
@@ -47,11 +47,11 @@ public sealed class ValueMatcherTests
     [InlineData("Test", "*st")]
     public void MatchesExactValue_CaseInsensitive_ReturnswFalse(string value, string expectedValue)
     {
-        Assert.False(MatchesExactValueCaseInsensitive(value, new(expectedValue)));
+        Assert.False(MatchesExactValueCaseInsensitive(new(expectedValue), value));
     }
 
-    private static bool MatchesPatternValueCaseSensitive(string value, PatternValue pattern) => ValueMatcher.Matches(value, pattern, false);
-    private static bool MatchesPatternValueCaseInsensitive(string value, PatternValue pattern) => ValueMatcher.Matches(value, pattern, true);
+    private static bool MatchesPatternValueCaseSensitive(PatternValue expected, string actual) => ValueMatcher.Matches(expected, actual, false);
+    private static bool MatchesPatternValueCaseInsensitive(PatternValue expected, string actual) => ValueMatcher.Matches(expected, actual, true);
 
     public static TheoryData<string, string> CaseSensitivePatternValueHappyCases = new()
     {
@@ -160,27 +160,27 @@ public sealed class ValueMatcherTests
     [MemberData(nameof(CaseSensitivePatternValueHappyCases))]
     public void MatchesPatternValue_CaseSensitive_ReturnsTrue(string value, string pattern)
     {
-        Assert.True(MatchesPatternValueCaseSensitive(value, new(pattern)));
+        Assert.True(MatchesPatternValueCaseSensitive(new(pattern), value));
     }
 
     [Theory]
     [MemberData(nameof(CaseSensitivePatternValueUnhappyCases))]
     public void MatchesPatternValue_CaseSensitive_ReturnsFalse(string value, string pattern)
     {
-        Assert.False(MatchesPatternValueCaseSensitive(value, new(pattern)));
+        Assert.False(MatchesPatternValueCaseSensitive(new(pattern), value));
     }
 
     [Theory]
     [MemberData(nameof(CaseInsensitivePatternValueHappyCases))]
     public void MatchesPatternValue_CaseInsensitive_ReturnsTrue(string value, string pattern)
     {
-        Assert.True(MatchesPatternValueCaseInsensitive(value, new(pattern)));
+        Assert.True(MatchesPatternValueCaseInsensitive(new(pattern), value));
     }
 
     [Theory]
     [MemberData(nameof(CaseInsensitivePatternValueUnhappyCases))]
     public void MatchesPatternValue_CaseInsensitive_ReturnsFalse(string value, string pattern)
     {
-        Assert.False(MatchesPatternValueCaseInsensitive(value, new(pattern)));
+        Assert.False(MatchesPatternValueCaseInsensitive(new(pattern), value));
     }
 }

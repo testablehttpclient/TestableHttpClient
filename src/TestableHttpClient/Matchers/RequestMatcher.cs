@@ -63,7 +63,7 @@ internal static class RequestMatcher
         {
             Any => true,
             PatternValue value when stringContent is null => false,
-            PatternValue value => ValueMatcher.Matches(stringContent, value, false),
+            PatternValue value => ValueMatcher.Matches(value, stringContent, false),
         };
 
         if (!contentMatches)
@@ -84,7 +84,7 @@ internal static class RequestMatcher
         return headerValue switch
         {
             Any => true,
-            PatternValue pattern => ValueMatcher.Matches(value, pattern, false),
+            PatternValue pattern => ValueMatcher.Matches(pattern, value, false),
         };
     }
 }
