@@ -199,7 +199,7 @@ public sealed class UriPatternParserTests
     {
         UriPattern uriPattern = UriPatternParser.Parse(pattern);
 
-        Assert.True(UriPatternMatcher.Matches(uriPattern, new Uri(matchingUri), new()));
-        Assert.False(UriPatternMatcher.Matches(uriPattern, new Uri(notMatchinUri), new()));
+        Assert.True(ValueMatcher.Matches(uriPattern, new Uri(matchingUri), new()));
+        Assert.False(ValueMatcher.Matches(uriPattern, new Uri(notMatchinUri), new()));
     }
 }

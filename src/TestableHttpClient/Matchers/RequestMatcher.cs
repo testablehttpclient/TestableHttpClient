@@ -23,7 +23,7 @@ internal static class RequestMatcher
             return false;
         }
 
-        if (actual.RequestUri is not null && !UriPatternMatcher.Matches(expected.RequestUri, actual.RequestUri, options))
+        if (actual.RequestUri is not null && !ValueMatcher.Matches(expected.RequestUri, actual.RequestUri, options))
         {
             return false;
         }

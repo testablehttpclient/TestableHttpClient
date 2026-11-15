@@ -24,7 +24,7 @@ internal sealed class RoutingResponse : IResponse
 
     private IResponse GetResponseForRequest(Uri requestUri, UriPatternMatchingOptions uriPatternOptions)
     {
-        var matchingResponse = ResponseMap.FirstOrDefault(x => UriPatternMatcher.Matches(x.Key, requestUri, uriPatternOptions));
+        var matchingResponse = ResponseMap.FirstOrDefault(x => ValueMatcher.Matches(x.Key, requestUri, uriPatternOptions));
 
         return matchingResponse.Value switch
         {
