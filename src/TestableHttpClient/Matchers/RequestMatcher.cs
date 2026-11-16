@@ -7,34 +7,10 @@ internal static class RequestMatcher
     [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
     public static bool Matches(Request expected, HttpRequestMessage actual, UriPatternMatchingOptions options)
     {
-        if (actual is null)
-        {
-            return false;
-        }
-
-        bool methodMatches = expected.Method switch
-        {
-            Any => true,
-            HttpMethod value => actual.Method == value,
-        };
-
-        if (!methodMatches)
-        {
-            return false;
-        }
-
-        if (actual.RequestUri is not null && !ValueMatcher.Matches(expected.RequestUri, actual.RequestUri, options))
-        {
-            return false;
-        }
-
-        bool versionMatches = expected.Version switch
-        {
-            Any => true,
-            Version value => actual.Version == value,
-        };
-
-        if (!versionMatches)
+        if (!ValueMatcher.Matches(expected.Method, actual.Method) ||
+            !ValueMatcher.Matches(expected.RequestUri, actual.RequestUri, options) ||
+            !ValueMatcher.Matches(expected.Version, actual.Version)
+           )
         {
             return false;
         }
@@ -66,11 +42,7 @@ internal static class RequestMatcher
             PatternValue value => ValueMatcher.Matches(value, stringContent, false),
         };
 
-        if (!contentMatches)
-        {
-            return false;
-        }
-        return true;
+        return contentMatches;
     }
 
     internal static bool HasHeader(this HttpHeaders headers, string headerName, HeaderValue headerValue)

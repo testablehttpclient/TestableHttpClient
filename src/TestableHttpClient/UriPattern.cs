@@ -16,4 +16,6 @@ internal readonly record struct UriPattern
     public UriPatternValue Port { get; init; }
     public UriPatternValue Path { get; init; }
     public UriPatternValue Query { get; init; }
+
+    public bool IsAny => Scheme is Any && Host is Any && Port is Any && Path is Any && Query is Any;
 }

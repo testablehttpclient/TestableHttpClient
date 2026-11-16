@@ -200,6 +200,25 @@ public sealed class ValueMatcherTests
         Assert.True(result);
     }
 
+    [Fact]
+    public void Matches_AnyUriPattern_MatchesNullUri()
+    {
+        UriPattern pattern = new();
+        Uri? uri = null;
+
+        Assert.True(ValueMatcher.Matches(pattern, uri, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_NotAnyPattern_DoesNotMatchNullUri()
+    {
+        UriPattern pattern = new() { Host = new ExactValue("example.com") };
+        Uri? uri = null;
+
+        Assert.False(ValueMatcher.Matches(pattern, uri, defaultOptions));
+    }
+
+
     [Theory]
     [InlineData("https")]
     [InlineData("HTTPS")]
@@ -326,4 +345,78 @@ public sealed class ValueMatcherTests
         Assert.False(ValueMatcher.Matches(pattern, new Uri("https://httpbin.com/get?email=test%40example.com"), new() { DefaultQueryFormat = UriFormat.UriEscaped }));
     }
 
+    [Fact]
+    public void Matches_AnyRequest_MatchesAnyRequest()
+    {
+        Request expectedRequest = new();
+        using HttpRequestMessage actualRequest = new(HttpMethod.Options, "https://example.com:444/test?value=test");
+        actualRequest.Headers.Authorization = new("bearer", "blabla");
+        actualRequest.Content = new StringContent("test", Encoding.UTF8);
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, actualRequest, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_HttpMethod_MatchesExactHttpMethod()
+    {
+        Request expectedRequest = new() { Method = HttpMethod.Get };
+        using HttpRequestMessage matchingRequest = new(HttpMethod.Get, "https://example.com");
+        using HttpRequestMessage notMatchingRequest = new(HttpMethod.Post, "https://example.com");
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, matchingRequest, defaultOptions));
+        Assert.False(ValueMatcher.Matches(expectedRequest, notMatchingRequest, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_NullRequestUri_MatchesAny()
+    {
+        Request anyRequest = new();
+        using HttpRequestMessage requestMessage = new();
+
+        Assert.True(ValueMatcher.Matches(anyRequest, requestMessage, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_NullRequestUri_DoesNotMatchNotExactValue()
+    {
+        Request anyRequest = new() { RequestUri = new() { Host = new ExactValue("example.com") } };
+        using HttpRequestMessage requestMessage = new();
+
+        Assert.False(ValueMatcher.Matches(anyRequest, requestMessage, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_RequestUri_MatchesBasedOnOptions()
+    {
+        Request expectedRequest = new() { RequestUri = new() { Query = new ExactValue("email=test@example.com") } };
+        using HttpRequestMessage requestWithNormalUri = new(HttpMethod.Get, "https://httpbin.com/get?email=test@example.com");
+        using HttpRequestMessage requestWithEscapedUri = new(HttpMethod.Get, "https://httpbin.com/get?email=test%40example.com");
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithNormalUri, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithEscapedUri, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithNormalUri, new() { DefaultQueryFormat = UriFormat.UriEscaped }));
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithEscapedUri, new() { DefaultQueryFormat = UriFormat.UriEscaped }));
+    }
+
+    [Fact]
+    public void Matches_Version_MatchesAnyVersion()
+    {
+        Request expectedRequest = new();
+        using HttpRequestMessage requestWithVersion10 = new() { Version = HttpVersion.Version10 };
+        using HttpRequestMessage requestWithVersion11 = new() { Version = HttpVersion.Version11 };
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithVersion10, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithVersion11, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_Version_MatchesExactVersion()
+    {
+        Request expectedRequest = new() { Version = HttpVersion.Version10 };
+        using HttpRequestMessage requestWithVersion10 = new() { Version = HttpVersion.Version10 };
+        using HttpRequestMessage requestWithVersion11 = new() { Version = HttpVersion.Version11 };
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithVersion10, defaultOptions));
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithVersion11, defaultOptions));
+    }
 }
