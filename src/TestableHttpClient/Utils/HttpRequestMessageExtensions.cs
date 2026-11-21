@@ -12,7 +12,7 @@ internal static class HttpRequestMessageExtensions
     internal static string? GetStringContent(this HttpRequestMessage request)
     {
         string? content = null;
-        if(request.Content is not null)
+        if (request.Content is not null)
         {
             content = request.Content.ReadAsStringAsync()
                 .ConfigureAwait(false)
