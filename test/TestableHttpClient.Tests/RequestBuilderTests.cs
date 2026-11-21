@@ -110,6 +110,18 @@ public sealed class RequestBuilderTests
     }
 
     [Fact]
+    public void WithHeader_AfterWithoutHeaders_CreatesRequestWithHeaderWithAnyValue()
+    {
+        Request request = sut.WithoutHeaders().WithHeader("Content-Length").Build();
+
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equivalent(new Dictionary<string, HeaderValue>() { ["Content-Length"] = new Any() }, request.Headers is HeaderList headerValues ? headerValues : null);
+        Assert.Equal(new Any(), request.Content);
+    }
+
+    [Fact]
     public void WithHeader_ValidHeaderNameNoValue_CreatesRequestWithHeaderWithAnyValue()
     {
         Request request = sut.WithHeader("Content-Length").Build();
@@ -180,7 +192,7 @@ public sealed class RequestBuilderTests
     }
 
     [Fact]
-    public void WithContent_WithSingleAstrix_CreatesRequestWithAnyContent()
+    public void WithContent_WithSingleAsterix_CreatesRequestWithAnyContent()
     {
         Request request = sut.WithContent("*").Build();
 

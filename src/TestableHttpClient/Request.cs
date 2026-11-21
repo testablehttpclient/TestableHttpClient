@@ -29,6 +29,7 @@ internal sealed record Request
     {
         switch (Headers)
         {
+            case None:
             case Any:
                 HeaderList newHeaderValues = new() { [headerName] = headerValue };
                 Headers = new Headers(newHeaderValues);
@@ -36,8 +37,6 @@ internal sealed record Request
             case HeaderList headerValues:
                 headerValues[headerName] = headerValue;
                 break;
-            default:
-                throw new UnreachableException();
         }
     }
 }

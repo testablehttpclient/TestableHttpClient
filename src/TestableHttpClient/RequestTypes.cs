@@ -8,6 +8,12 @@ internal readonly union UriPatternValue(Any, ExactValue, PatternValue);
 internal record struct PatternValue(string Pattern);
 internal record struct ExactValue(string Value);
 internal readonly union HeaderValue(Any, PatternValue);
-internal sealed class HeaderList : Dictionary<string, HeaderValue> { }
+internal sealed class HeaderList : Dictionary<string, HeaderValue>
+{
+    public HeaderList()
+        : base(StringComparer.OrdinalIgnoreCase)
+    {
+    }
+}
 internal readonly union Headers(None, Any, HeaderList);
 internal readonly union Content(None, Any, PatternValue);
