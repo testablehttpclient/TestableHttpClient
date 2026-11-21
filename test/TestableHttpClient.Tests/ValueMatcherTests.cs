@@ -1,5 +1,3 @@
-using TestableHttpClient.Matchers;
-
 namespace TestableHttpClient.Tests.Matchers;
 
 public sealed class ValueMatcherTests
@@ -418,5 +416,135 @@ public sealed class ValueMatcherTests
 
         Assert.True(ValueMatcher.Matches(expectedRequest, requestWithVersion10, defaultOptions));
         Assert.False(ValueMatcher.Matches(expectedRequest, requestWithVersion11, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_Headers_MatchesAnyHeader()
+    {
+        Request expectedRequest = new() { Headers = new Any() };
+
+        using HttpRequestMessage requestWithoutHeaders = new();
+        using HttpRequestMessage requestWithHeaders = new();
+        requestWithHeaders.Headers.AcceptLanguage.Add(new("nl"));
+        requestWithHeaders.Headers.Authorization = new("Test", "blaat");
+        requestWithHeaders.Headers.Host = "localhost";
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithoutHeaders, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithHeaders, defaultOptions));
+    }
+
+    [Theory]
+    [InlineData("host")]
+    [InlineData("Host")]
+    [InlineData("HOST")]
+    public void Matches_Headers_MatchesHeaderNameAndAnyValue(string headerName)
+    {
+        Request expectedRequest = new();
+        expectedRequest.AddHeader(headerName);
+
+        using HttpRequestMessage requestWithoutHostHeader = new();
+        using HttpRequestMessage requestWithHostHeader = new();
+        requestWithHostHeader.Headers.Host = "Test";
+        using HttpRequestMessage requestWithOtherHostHeader = new();
+        requestWithOtherHostHeader.Headers.Host = "example.com";
+
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithoutHostHeader, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithHostHeader, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithOtherHostHeader, defaultOptions));
+    }
+
+    [Theory]
+    [InlineData("content-type")]
+    [InlineData("Content-Type")]
+    [InlineData("CONTENT-TYPE")]
+    public void Matches_Headers_MatchesContentHeaderNameAndAnyValue(string headerName)
+    {
+        Request expectedRequest = new();
+        expectedRequest.AddHeader(headerName);
+
+        using HttpRequestMessage requestWithoutContentTypeHeader = new();
+        using HttpRequestMessage requestWithContentTypeHeader = new()
+        {
+            Content = new StringContent("")
+        };
+        requestWithContentTypeHeader.Content.Headers.ContentType = new("application/json");
+
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithoutContentTypeHeader, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithContentTypeHeader, defaultOptions));
+    }
+
+    [Theory]
+    [InlineData("example.com")]
+    [InlineData("*.com")]
+    [InlineData("example.*")]
+    public void Matches_Headers_MatchesValueWithExactAndPatternValues(string expectedValue)
+    {
+        Request expectedRequest = new();
+        expectedRequest.AddHeader("host", expectedValue);
+
+        using HttpRequestMessage requestWithNotMatchingValue = new();
+        requestWithNotMatchingValue.Headers.Host = "Test";
+        using HttpRequestMessage requestWithMatchingValue = new();
+        requestWithMatchingValue.Headers.Host = "example.com";
+
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithNotMatchingValue, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithMatchingValue, defaultOptions));
+    }
+
+    [Theory]
+    [InlineData("example.com")]
+    [InlineData("*.com")]
+    [InlineData("example.*")]
+    public void Matches_Headers_MatchesValueCaseSensitive(string expectedValue)
+    {
+        Request expectedRequest = new();
+        expectedRequest.AddHeader("host", expectedValue);
+
+        using HttpRequestMessage requestWithNotMatchingValue = new();
+        requestWithNotMatchingValue.Headers.Host = "EXAMPLE.COM";
+
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithNotMatchingValue, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_Content_AnyMatchesAnyContent()
+    {
+        Request expectedRequest = new() { Content = new Any() };
+
+        using HttpRequestMessage requestWithoutContent = new() { Content = null };
+        using HttpRequestMessage requestWithContent = new() { Content = new StringContent("test") };
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithoutContent, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithContent, defaultOptions));
+    }
+
+    [Theory]
+    [InlineData("test")]
+    [InlineData("*st")]
+    [InlineData("te*")]
+    [InlineData("t*t")]
+    public void Matches_Content_PatternMatchesContentButNotNull(string pattern)
+    {
+        Request expectedRequest = new() { Content = new PatternValue(pattern) };
+
+        using HttpRequestMessage requestWithoutContent = new() { Content = null };
+        using HttpRequestMessage requestWithContent = new() { Content = new StringContent("test") };
+
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithoutContent, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithContent, defaultOptions));
+    }
+
+    [Theory]
+    [InlineData("Test")]
+    [InlineData("t.*t")]
+    [InlineData("T*ST")]
+    public void Matches_Content_PatternDoesNotMatchAlways(string pattern)
+    {
+
+        Request expectedRequest = new() { Content = new PatternValue(pattern) };
+
+        using HttpRequestMessage requestWithContent = new() { Content = new StringContent("test") };
+
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithContent, defaultOptions));
     }
 }

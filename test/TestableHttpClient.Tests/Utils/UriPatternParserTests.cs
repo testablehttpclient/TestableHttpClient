@@ -1,4 +1,3 @@
-using TestableHttpClient.Matchers;
 using TestableHttpClient.Utils;
 
 namespace TestableHttpClient.Tests.Utils;

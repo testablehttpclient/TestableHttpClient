@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace TestableHttpClient.Matchers;
+namespace TestableHttpClient;
 
 internal static class ValueMatcher
 {
@@ -43,7 +43,12 @@ internal static class ValueMatcher
         PatternValue expectedPattern => Matches(expectedPattern, value, ignoreCase)
     };
 
-    public static bool Matches(Request expectedRequest, HttpRequestMessage actual, UriPatternMatchingOptions options) => RequestMatcher.Matches(expectedRequest, actual, options);
+    public static bool Matches(Request expected, HttpRequestMessage actual, UriPatternMatchingOptions options) =>
+            Matches(expected.Method, actual.Method) &&
+            Matches(expected.RequestUri, actual.RequestUri, options) &&
+            Matches(expected.Version, actual.Version) &&
+            Matches(expected.Headers, actual.GetHeaders()) &&
+            Matches(expected.Content, actual.GetStringContent());
 
     [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
     internal static bool Matches(HttpMethodOrAny expected, HttpMethod actual) => expected switch
@@ -58,4 +63,33 @@ internal static class ValueMatcher
         Any => true,
         Version httpVersion => httpVersion == actual
     };
+
+    [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "https://github.com/dotnet/sdk/issues/57085")]
+    internal static bool Matches(Headers expected, Dictionary<string, string> actual)
+    {
+        return expected switch
+        {
+            Any => true,
+            HeaderList headerList => headerList.Any(x => actual.TryGetValue(x.Key, out string? value) && Matches(x.Value, value))
+        };
+    }
+
+    internal static bool Matches(HeaderValue expected, string actual)
+    {
+        return expected switch
+        {
+            Any => true,
+            PatternValue pattern => Matches(pattern, actual, false)
+        };
+    }
+
+    internal static bool Matches(Content expected, string? actual)
+    {
+        return expected switch
+        {
+            Any => true,
+            PatternValue when actual is null => false,
+            PatternValue pattern => Matches(pattern, actual, false),
+        };
+    }
 }

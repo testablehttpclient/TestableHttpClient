@@ -1,6 +1,4 @@
-﻿using TestableHttpClient.Matchers;
-
-namespace TestableHttpClient;
+﻿namespace TestableHttpClient;
 
 /// <summary>
 /// This class makes it easy to create assertions on a collection of <seealso cref="HttpRequestMessage"/>s.
@@ -43,7 +41,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
         Request expectedRequest = expectedRequestBuilder.Build();
         try
         {
-            actualCount = Requests.Count(request => RequestMatcher.Matches(expectedRequest, request, Options.UriPatternMatchingOptions));
+            actualCount = Requests.Count(request => ValueMatcher.Matches(expectedRequest, request, Options.UriPatternMatchingOptions));
         }
         catch (ObjectDisposedException)
         {
