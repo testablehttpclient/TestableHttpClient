@@ -80,7 +80,7 @@ public sealed class RequestBuilderTests
     }
 
     [Fact]
-    public void WithoutHeaders_SetsNonHeader()
+    public void WithoutHeaders_CreatesRequestWithNoneHeaders()
     {
         Request request = sut.WithoutHeaders().Build();
 
@@ -88,7 +88,7 @@ public sealed class RequestBuilderTests
     }
 
     [Fact]
-    public void WithAnyHeader_SetsAnyHeader()
+    public void WithAnyHeader_CreatesRequestWithAnyHeaders()
     {
         Request request = sut.WithoutHeaders().WithAnyHeader().Build();
 
@@ -146,7 +146,7 @@ public sealed class RequestBuilderTests
     }
 
     [Fact]
-    public void WithoutContent_CreatesRequestWithNone()
+    public void WithoutContent_CreatesRequestWithNoneContent()
     {
         Request request = sut.WithoutContent().Build();
 
@@ -154,7 +154,7 @@ public sealed class RequestBuilderTests
     }
 
     [Fact]
-    public void WithAnyContent_CreatesRequestWithAny()
+    public void WithAnyContent_CreatesRequestWithAnyContent()
     {
         Request request = sut.WithoutContent().WithAnyContent().Build();
 
@@ -177,5 +177,17 @@ public sealed class RequestBuilderTests
         Assert.Equal(new Any(), request.Version);
         Assert.Equal(new Any(), request.Headers);
         Assert.Equal(new PatternValue("content"), request.Content);
+    }
+
+    [Fact]
+    public void WithContent_WithSingleAstrix_CreatesRequestWithAnyContent()
+    {
+        Request request = sut.WithContent("*").Build();
+
+        Assert.Equal(new Any(), request.Method);
+        Assert.Equal(new UriPattern(), request.RequestUri);
+        Assert.Equal(new Any(), request.Version);
+        Assert.Equal(new Any(), request.Headers);
+        Assert.Equal(new Any(), request.Content);
     }
 }

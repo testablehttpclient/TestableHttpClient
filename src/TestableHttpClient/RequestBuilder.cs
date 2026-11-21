@@ -131,7 +131,11 @@ public sealed class RequestBuilder
     {
         Guard.ThrowIfNull(pattern);
 
-        request.Content = new PatternValue(pattern);
+        request.Content = pattern switch
+        {
+            "*" => new Any(),
+            _ => new PatternValue(pattern)
+        };
         return this;
     }
 
