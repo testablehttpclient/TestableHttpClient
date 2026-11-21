@@ -51,7 +51,7 @@ public sealed class ValueMatcherTests
     private static bool MatchesPatternValueCaseSensitive(PatternValue expected, string actual) => ValueMatcher.Matches(expected, actual, false);
     private static bool MatchesPatternValueCaseInsensitive(PatternValue expected, string actual) => ValueMatcher.Matches(expected, actual, true);
 
-    public static TheoryData<string, string> CaseSensitivePatternValueHappyCases = new()
+    public static readonly TheoryData<string, string> CaseSensitivePatternValueHappyCases = new()
     {
         // Empty pattern
         { "", "" },
@@ -77,7 +77,7 @@ public sealed class ValueMatcherTests
         { "tosti", "t*s*i" },
     };
 
-    public static TheoryData<string, string> CaseInsensitivePatternValueHappyCases = new()
+    public static readonly TheoryData<string, string> CaseInsensitivePatternValueHappyCases = new()
     {
         // Empty pattern
         { "", "" },
@@ -109,7 +109,7 @@ public sealed class ValueMatcherTests
         { "tosti", "T*s*i" },
     };
 
-    public static TheoryData<string, string> CaseSensitivePatternValueUnhappyCases = new()
+    public static readonly TheoryData<string, string> CaseSensitivePatternValueUnhappyCases = new()
     {
         // Empty pattern
         { "", "test" },
@@ -132,7 +132,7 @@ public sealed class ValueMatcherTests
         { "Tester", "*st" },
     };
 
-    public static TheoryData<string, string> CaseInsensitivePatternValueUnhappyCases = new()
+    public static readonly TheoryData<string, string> CaseInsensitivePatternValueUnhappyCases = new()
     {
         // Empty pattern
         { "", "test" },
