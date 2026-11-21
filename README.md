@@ -71,7 +71,7 @@ localhost:5000 | Matches any URL that uses localhost for the host and port 5000,
 ## Controlling the behaviour of pattern matching
 
 TestableHttpClient has several options available that let you control different parts of the library. These options can be found on
-the `TestableHttpMessageHandler.Options` and are passed to the `HttpRepsonseContext` and the `IHttpRequestMessagesCheck`.
+the `TestableHttpMessageHandler.Options` and are passed to the `HttpResponseContext` and the `IHttpRequestMessagesCheck`.
 The options include:
 - `JsonSerializerOptions` for controlling the serialization of json content
 - `UriPatternMatchingOptions` for controlling how the URI pattern matching works.

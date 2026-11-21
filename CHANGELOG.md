@@ -12,6 +12,10 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 - Support for .NET 11.0
+- New method on RequestBuilder and IHttpRequestMessagesCheck `WithoutHeaders` to assert that a request does not has headers.
+- New method on RequestBuilder `WithAnyHeader` to asser that a request can have any header.
+- New method on RequestBuilder and IHttpRequestMessagesCheck `WithoutContent` to assert that a request does not have any content.
+- New method on RequestBuilder `WithAnyContent` to asser that a request can have any content.
 
 ## [0.12] - 2026-06-06
 ### Deprecated

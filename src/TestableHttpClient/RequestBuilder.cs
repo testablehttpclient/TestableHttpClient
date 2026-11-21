@@ -12,13 +12,14 @@ public sealed class RequestBuilder
     internal RequestBuilder(TestableHttpMessageHandlerOptions? options = null)
     {
         Options = options ?? new();
-        request = new(Options.UriPatternMatchingOptions);
+        request = new();
     }
 
     /// <summary>
     /// Specify the HTTP Method of a request, if not specified any method is matched.
     /// </summary>
     /// <param name="httpMethod">The expected HTTP Method.</param>
+    /// <exception cref="ArgumentNullException">when the httpMethod is null.</exception>
     /// <returns>The request builder.</returns>
     public RequestBuilder WithMethod(HttpMethod httpMethod)
     {
@@ -32,6 +33,8 @@ public sealed class RequestBuilder
     /// Specify the expected request uri, this can be a pattern, when not given any uri is used.
     /// </summary>
     /// <param name="pattern">The expected pattern of the request uri.</param>
+    /// <exception cref="ArgumentNullException">when the pattern is null.</exception>
+    /// <exception cref="ArgumentException">when the pattern is empty.</exception>
     /// <returns>The request builder.</returns>
     public RequestBuilder WithRequestUri(string pattern)
     {
@@ -45,6 +48,7 @@ public sealed class RequestBuilder
     /// Specify the expected HTTP Version used for the request, if not specified any version is matched.
     /// </summary>
     /// <param name="httpVersion">The expected HTTP Version.</param>
+    /// <exception cref="ArgumentNullException">when the httpVersion is null.</exception>
     /// <returns>The request builder.</returns>
     public RequestBuilder WithVersion(Version httpVersion)
     {
@@ -55,9 +59,31 @@ public sealed class RequestBuilder
     }
 
     /// <summary>
+    /// Specify that there should be no headers in the request.
+    /// </summary>
+    /// <returns>The request builder.</returns>
+    public RequestBuilder WithoutHeaders()
+    {
+        request.Headers = new None();
+        return this;
+    }
+
+    /// <summary>
+    /// Specify that any header can be present in the request.
+    /// </summary>
+    /// <returns>The request builder.</returns>
+    public RequestBuilder WithAnyHeader()
+    {
+        request.Headers = new Any();
+        return this;
+    }
+
+    /// <summary>
     /// Specify the headername that should be present in the request, the value is matched with the any value.
     /// </summary>
     /// <param name="headerName">The expected header name.</param>
+    /// <exception cref="ArgumentNullException">when the header name is null.</exception>
+    /// <exception cref="ArgumentException">when the header name is empty.</exception>
     /// <returns>The request builder.</returns>
     public RequestBuilder WithHeader(string headerName)
     {
@@ -72,6 +98,8 @@ public sealed class RequestBuilder
     /// </summary>
     /// <param name="headerName">The expected header name.</param>
     /// <param name="pattern">The expected value.</param>
+    /// <exception cref="ArgumentNullException">when the header name or pattern is null.</exception>
+    /// <exception cref="ArgumentException">when the header name or pattern is empty.</exception>
     /// <returns>The request builder.</returns>
     public RequestBuilder WithHeader(string headerName, string pattern)
     {
@@ -83,15 +111,40 @@ public sealed class RequestBuilder
     }
 
     /// <summary>
+    /// Specify that no content should be present on the request.
+    /// </summary>
+    /// <returns>The request builder.</returns>
+    public RequestBuilder WithoutContent()
+    {
+        request.Content = new None();
+        return this;
+    }
+
+    /// <summary>
+    /// Specify that any content can be present in the request.
+    /// </summary>
+    /// <returns>The request builder.</returns>
+    public RequestBuilder WithAnyContent()
+    {
+        request.Content = new Any();
+        return this;
+    }
+
+    /// <summary>
     /// Specify the content that should be present in the request, if not specified any content is valid.
     /// </summary>
     /// <param name="pattern">The expected content, this can be a pattern.</param>
-    /// <returns>The request value</returns>
+    /// <exception cref="ArgumentNullException">when the pattern is null.</exception>
+    /// <returns>The request builder.</returns>
     public RequestBuilder WithContent(string pattern)
     {
         Guard.ThrowIfNull(pattern);
 
-        request.Content = new PatternValue(pattern);
+        request.Content = pattern switch
+        {
+            "*" => new Any(),
+            _ => new PatternValue(pattern)
+        };
         return this;
     }
 

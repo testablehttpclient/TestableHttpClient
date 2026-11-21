@@ -85,6 +85,19 @@ public interface IHttpRequestMessagesCheck
     public IHttpRequestMessagesCheck WithHttpVersion(Version httpVersion, int expectedNumberOfRequests);
 
     /// <summary>
+    /// Asserts whether requests were made without any headers.
+    /// </summary>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithoutHeaders();
+
+    /// <summary>
+    /// Asserts whether requests were made without any headers.
+    /// </summary>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithoutHeaders(int expectedNumberOfRequests);
+
+    /// <summary>
     /// Asserts whether requests were made with a specific header name. Values are ignored.
     /// </summary>
     /// <param name="headerName">The name of the header that is expected.</param>
@@ -115,6 +128,19 @@ public interface IHttpRequestMessagesCheck
     /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithHeader(string headerName, string headerValue, int expectedNumberOfRequests);
+
+    /// <summary>
+    /// Asserts whether requests were made without content.
+    /// </summary>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithoutContent();
+
+    /// <summary>
+    /// Asserts whether requests were made without content.
+    /// </summary>
+    /// <param name="expectedNumberOfRequests">The expected number of requests.</param>
+    /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
+    public IHttpRequestMessagesCheck WithoutContent(int expectedNumberOfRequests);
 
     /// <summary>
     /// Asserts whether requests were made with specific content.

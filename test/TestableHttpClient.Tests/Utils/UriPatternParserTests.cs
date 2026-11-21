@@ -197,7 +197,8 @@ public sealed class UriPatternParserTests
     public void RoundTripTests(string pattern, string matchingUri, string notMatchinUri)
     {
         UriPattern uriPattern = UriPatternParser.Parse(pattern);
-        Assert.True(uriPattern.Matches(new Uri(matchingUri), new()));
-        Assert.False(uriPattern.Matches(new Uri(notMatchinUri), new()));
+
+        Assert.True(ValueMatcher.Matches(uriPattern, new Uri(matchingUri), new()));
+        Assert.False(ValueMatcher.Matches(uriPattern, new Uri(notMatchinUri), new()));
     }
 }
