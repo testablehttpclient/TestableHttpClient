@@ -177,7 +177,7 @@ internal sealed class HttpRequestMessageAsserter : IHttpRequestMessagesCheck
     /// <returns>The <seealso cref="IHttpRequestMessagesCheck"/> for further assertions.</returns>
     public IHttpRequestMessagesCheck WithoutHeaders(int expectedNumberOfRequests) => WithoutHeaders((int?)expectedNumberOfRequests);
 
-    private IHttpRequestMessagesCheck WithoutHeaders(int? expectedNumberOfRequests)
+    private HttpRequestMessageAsserter WithoutHeaders(int? expectedNumberOfRequests)
     {
         expectedRequestBuilder.WithoutHeaders();
 
