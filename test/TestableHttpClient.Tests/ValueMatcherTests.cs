@@ -419,6 +419,19 @@ public sealed class ValueMatcherTests
     }
 
     [Fact]
+    public void Matches_Headers_NoneMatchesEmptyHeaders()
+    {
+        Request expectedRequest = new() { Headers = new None() };
+
+        using HttpRequestMessage requestWithoutHeaders = new();
+        using HttpRequestMessage requestWithHeaders = new();
+        requestWithHeaders.Headers.Host = "localhost";
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithoutHeaders, defaultOptions));
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithHeaders, defaultOptions));
+    }
+
+    [Fact]
     public void Matches_Headers_MatchesAnyHeader()
     {
         Request expectedRequest = new() { Headers = new Any() };
@@ -504,6 +517,22 @@ public sealed class ValueMatcherTests
         requestWithNotMatchingValue.Headers.Host = "EXAMPLE.COM";
 
         Assert.False(ValueMatcher.Matches(expectedRequest, requestWithNotMatchingValue, defaultOptions));
+    }
+
+    [Fact]
+    public void Matches_Content_NoneMatchesNullAndEmptyContent()
+    {
+        Request expectedRequest = new() { Content = new None() };
+
+        using HttpRequestMessage requestWithoutContent = new() { Content = null };
+        using HttpRequestMessage requestWithEmptyContent = new() { Content = new StringContent("") };
+        using HttpRequestMessage requestWithWhitspaceContent = new() { Content = new StringContent("  \r\n") };
+        using HttpRequestMessage requestWithContent = new() { Content = new StringContent("test") };
+
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithoutContent, defaultOptions));
+        Assert.True(ValueMatcher.Matches(expectedRequest, requestWithEmptyContent, defaultOptions));
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithWhitspaceContent, defaultOptions));
+        Assert.False(ValueMatcher.Matches(expectedRequest, requestWithContent, defaultOptions));
     }
 
     [Fact]

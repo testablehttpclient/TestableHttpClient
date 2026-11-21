@@ -69,6 +69,7 @@ internal static class ValueMatcher
     {
         return expected switch
         {
+            None => actual.Count == 0,
             Any => true,
             HeaderList headerList => headerList.Any(x => actual.TryGetValue(x.Key, out string? value) && Matches(x.Value, value))
         };
@@ -87,6 +88,7 @@ internal static class ValueMatcher
     {
         return expected switch
         {
+            None => string.IsNullOrEmpty(actual),
             Any => true,
             PatternValue when actual is null => false,
             PatternValue pattern => Matches(pattern, actual, false),

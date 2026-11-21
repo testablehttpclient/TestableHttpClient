@@ -32,14 +32,17 @@ internal static class MessageBuilder
 
         var headers = expectedRequest.Headers switch
         {
+            None => " without headers",
             Any => "",
             HeaderList headerValues => BuildHeaders(headerValues),
         };
 
+        bool hasHeaders = string.IsNullOrEmpty(headers);
         string content = expectedRequest.Content switch
         {
+            None => $"{(hasHeaders ? " " : "")}without content",
             Any => "",
-            PatternValue pattern => BuildContent(pattern, string.IsNullOrEmpty(headers)),
+            PatternValue pattern => BuildContent(pattern, hasHeaders),
         };
 
         var actualMessage = actualCount switch

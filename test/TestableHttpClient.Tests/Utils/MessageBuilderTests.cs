@@ -80,6 +80,18 @@ public sealed class MessageBuilderTests
     }
 
     [Fact]
+    public void BuildMessage_OnExpectedCountZeroActualCountRequestWithoutHeaders()
+    {
+        Request request = new() { Headers = new None() };
+
+        var result = MessageBuilder.BuildMessage(1, 0, request);
+
+        Assert.Equal("""
+            Expected one request to be made without headers, but no requests were made.
+            """, result);
+    }
+
+    [Fact]
     public void BuildMessage_OnexpectedCountZeroActualCountRequestSpecifyingHeaders()
     {
         Request request = new()
@@ -98,6 +110,21 @@ public sealed class MessageBuilderTests
               Header1: <any value>
               Header2: 'Value2'
             , but no requests were made.
+            """, result);
+    }
+
+    [Fact]
+    public void BuildMessage_OnexpectedCountZeroActualCountRequestSpecifyingNoContent()
+    {
+        Request request = new()
+        {
+            Content = new(new None())
+        };
+
+        var result = MessageBuilder.BuildMessage(1, 0, request);
+
+        Assert.Equal("""
+            Expected one request to be made without content, but no requests were made.
             """, result);
     }
 

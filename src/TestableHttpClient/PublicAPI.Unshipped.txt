@@ -1,1 +1,8 @@
-﻿
+﻿TestableHttpClient.IHttpRequestMessagesCheck.WithoutContent() -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithoutContent(int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithoutHeaders() -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.IHttpRequestMessagesCheck.WithoutHeaders(int expectedNumberOfRequests) -> TestableHttpClient.IHttpRequestMessagesCheck!
+TestableHttpClient.RequestBuilder.WithAnyContent() -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithAnyHeader() -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithoutContent() -> TestableHttpClient.RequestBuilder!
+TestableHttpClient.RequestBuilder.WithoutHeaders() -> TestableHttpClient.RequestBuilder!

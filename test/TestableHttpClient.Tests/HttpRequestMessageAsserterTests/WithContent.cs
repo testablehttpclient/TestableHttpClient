@@ -3,6 +3,66 @@
 public sealed class WithContent
 {
     [Fact]
+    public void WithoutContent_NullContentInRequest_ShouldNotThrowException()
+    {
+        using HttpRequestMessage request = new();
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        sut.WithoutContent();
+    }
+
+    [Fact]
+    public void WithoutContentWithNumberOfRequests_NullContentInRequest_ShouldNotThrowException()
+    {
+        using HttpRequestMessage request = new();
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        sut.WithoutContent(1);
+    }
+
+    [Fact]
+    public void WithoutContent_EmptyContentInReuqest_ShouldNotThrowException()
+    {
+        using HttpRequestMessage request = new() { Content = new StringContent("") };
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        sut.WithoutContent();
+    }
+
+    [Fact]
+    public void WithoutContentWithNumberOfRequests_EmptyContentInReuqest_ShouldNotThrowException()
+    {
+        using HttpRequestMessage request = new() { Content = new StringContent("") };
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        sut.WithoutContent(1);
+    }
+
+    [Fact]
+    public void WithoutContent_NoneEmptyContentInReuqest_ShouldThrowException()
+    {
+        using HttpRequestMessage request = new() { Content = new StringContent("test") };
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithoutContent());
+    }
+
+    [Fact]
+    public void WithoutContentWithNumberOfRequests_NoneEmptyContentInReuqest_ShouldThrowException()
+    {
+        using HttpRequestMessage request = new() { Content = new StringContent("test") };
+
+        HttpRequestMessageAsserter sut = new([request]);
+
+        Assert.Throws<HttpRequestMessageAssertionException>(() => sut.WithoutContent(1));
+    }
+
+    [Fact]
     public void NullContentPattern_ShouldThrowArgumentNullException()
     {
         HttpRequestMessageAsserter sut = new([]);

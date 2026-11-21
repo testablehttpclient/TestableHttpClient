@@ -55,6 +55,26 @@ public sealed class RequestBuilder
     }
 
     /// <summary>
+    /// Specify that there should be no headers in the request.
+    /// </summary>
+    /// <returns></returns>
+    public RequestBuilder WithoutHeaders()
+    {
+        request.Headers = new None();
+        return this;
+    }
+
+    /// <summary>
+    /// Specify that any header can be present in the request.
+    /// </summary>
+    /// <returns></returns>
+    public RequestBuilder WithAnyHeader()
+    {
+        request.Headers = new Any();
+        return this;
+    }
+
+    /// <summary>
     /// Specify the headername that should be present in the request, the value is matched with the any value.
     /// </summary>
     /// <param name="headerName">The expected header name.</param>
@@ -79,6 +99,26 @@ public sealed class RequestBuilder
         Guard.ThrowIfNullOrEmpty(pattern);
 
         request.AddHeader(headerName, pattern);
+        return this;
+    }
+
+    /// <summary>
+    /// Specify that no content should be present on the request.
+    /// </summary>
+    /// <returns>The request builder.</returns>
+    public RequestBuilder WithoutContent()
+    {
+        request.Content = new None();
+        return this;
+    }
+
+    /// <summary>
+    /// Specify that any content can be present in the request.
+    /// </summary>
+    /// <returns>The request builder.</returns>
+    public RequestBuilder WithAnyContent()
+    {
+        request.Content = new Any();
         return this;
     }
 
